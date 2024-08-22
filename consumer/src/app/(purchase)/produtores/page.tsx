@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
 import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
+import RedirectCart from "@consumer/app/_components/redirectCart";
 export default function Produtores() {
 
   const [cycles, setcycle] = useState([] as Cycle[]);
@@ -104,6 +105,7 @@ export default function Produtores() {
           }
         </div>
       </div>
+      <RedirectCart/>
     </>
   );
 }

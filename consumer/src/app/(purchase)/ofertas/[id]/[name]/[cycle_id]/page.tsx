@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import CardOferta from "../../../components/card-oferta";
+import RedirectCart from "@consumer/app/_components/redirectCart";
 
 export default function Ofertas() {
   const params = useParams();
@@ -74,6 +75,7 @@ export default function Ofertas() {
           {hasMore && (<div ref={ref}>Carregando...</div>)}
         </div>
       </div>
+      <RedirectCart/>
     </>
   );
 }

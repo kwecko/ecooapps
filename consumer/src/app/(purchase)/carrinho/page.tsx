@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useCartProvider } from "../../../context/cart";
-import CardProduto from "../ofertas/components/card-oferta";
 import CardProdutoCart from "./components/card-produto-cart";
+import SendTelegram from "@consumer/app/_components/sendTelegram";
 
 export default function FinalizarCompras() {
   const { cart } = useCartProvider();
@@ -60,6 +60,7 @@ export default function FinalizarCompras() {
           </div>
         </div>
       </div>
+      <SendTelegram/>
     </>
   );
 }
