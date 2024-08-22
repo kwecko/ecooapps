@@ -13,7 +13,8 @@ export default function FinalizarCompras() {
     let total = 0;
 
     cart.forEach((productCart) => {
-      total = total + productCart.price * productCart.quantity;
+
+      total = total + (productCart.price * productCart.quantity);
     });
 
     setTotalPurchase(total);

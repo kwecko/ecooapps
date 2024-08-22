@@ -20,6 +20,16 @@ export default function CardOferta({
     "WEIGHT": 100
   };
 
+  const mapPrice = {
+    "UNIT": 1,
+    "WEIGHT": 10
+  }
+
+  const mapPriceText = {
+    "UNIT": "unid.",
+    "WEIGHT": "kg"
+  };
+
   const mapTextQuantity = {
     "UNIT": `${mapQuantity["UNIT"]} Unidade`,
     "WEIGHT": `${mapQuantity["WEIGHT"]}g`
@@ -51,7 +61,7 @@ export default function CardOferta({
         id: offer.product.id,
         name: offer.product.name,
         image: offer.product.image,
-        price: offer.price,
+        price: offer.price / mapPrice[offer.product.pricing],
         pricing: offer.product.pricing,
         amount: offer.amount,
         description: offer.description,
@@ -129,7 +139,7 @@ export default function CardOferta({
           {offer.price.toLocaleString("pt-br", {
             style: "currency",
             currency: "BRL",
-          })}
+          })} / {mapPriceText[offer.product.pricing]}
         </p>
       </div>
       <div className="flex-none flex flex-col-reverse mw-[90px] h-20 m-2">

@@ -15,11 +15,17 @@ export default function Ofertas() {
   const [offers, setOffers] = useState([] as Offer[]);
   const [page, setPage] = useState(1 as number);
   const [nameFarm, setNameFarm] = useState("" as string);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
   const { ref, inView } = useInView();
 
+  const mapQuantity = {
+    "UNIT": 1,
+    "WEIGHT": 100
+  };
+  
   const searchOffers = async () => {
-
+    setIsLoading(true);
 
     const responseFarmOffers: FarmOffers | null = await fetchOffersFarm(
       params.id as string,
@@ -27,28 +33,31 @@ export default function Ofertas() {
       page
     );
 
-    const offersFarm = responseFarmOffers?.offers ?? [];
+    let offersFarm = responseFarmOffers?.offers ?? [];
+    offersFarm = offersFarm.filter((offer) => offer.amount >= mapQuantity[offer.product.pricing]);
 
     if (offersFarm.length == 0) {
-      setIsLoading(false);
+      setHasMore(false);
       return;
     }
 
     const newOffers = [...offers, ...offersFarm];
     setOffers(newOffers);
-    setPage((page) => page + 1);
+    const nextPage = page + 1;
+    setPage(nextPage);
 
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    if (inView) {
+    if (inView || (inView && !isLoading)) {
       searchOffers();
     }
-  }, [inView]);
+  }, [inView, isLoading]);
 
   return (
     <>
-      <div className="w-full overflow-y-auto">
+      <div className="w-full h-screen overflow-y-auto">
         {offers && offers.length !== 0
           ? offers.map((offer, index) => {
               return (
@@ -62,8 +71,7 @@ export default function Ofertas() {
             })
           : null}
         <div className="w-full">
-          {isLoading ? 
-          <div ref={ref}>Carregando...</div> : null}
+          {hasMore && (<div ref={ref}>Carregando...</div>)}
         </div>
       </div>
     </>

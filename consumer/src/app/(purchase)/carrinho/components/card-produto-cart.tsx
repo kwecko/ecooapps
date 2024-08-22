@@ -18,7 +18,7 @@ export default function CardProdutoCart({
     "UNIT": 1,
     "WEIGHT": 100
   };
-
+  
   const mapTextQuantity = {
     "UNIT": `${mapQuantity["UNIT"]} Unidade`,
     "WEIGHT": `${mapQuantity["WEIGHT"]}g`
