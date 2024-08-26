@@ -16,7 +16,7 @@ export default function CardProdutoCart({
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
   
   const mapTextQuantity = {

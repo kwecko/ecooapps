@@ -17,12 +17,12 @@ export default function CardOferta({
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
 
   const mapPrice = {
     "UNIT": 1,
-    "WEIGHT": 10
+    "WEIGHT": 2
   }
 
   const mapPriceText = {

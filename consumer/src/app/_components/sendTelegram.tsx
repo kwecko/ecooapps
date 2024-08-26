@@ -10,7 +10,7 @@ export default function sendTelegram() {
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
 
   useEffect(() => {

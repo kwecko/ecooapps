@@ -22,7 +22,7 @@ export default function Ofertas() {
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
   
   const searchOffers = async () => {
