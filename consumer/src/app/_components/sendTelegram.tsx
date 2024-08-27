@@ -25,8 +25,8 @@ export default function sendTelegram() {
     const tg = (window as any).Telegram.WebApp;
 
     tg.MainButton.setParams({
-      text: "Concluir",
-      color: "#545F71",
+      text: "Fazer Pedido",
+      color: "#00735E",
     });
   });
 
