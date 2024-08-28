@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
 import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
+import RedirectCart from "@consumer/app/_components/redirectCart";
 export default function Produtores() {
 
   const [cycles, setcycle] = useState([] as Cycle[]);
@@ -60,7 +61,8 @@ export default function Produtores() {
 
   return (
     <>
-      <div className="w-full h-screen overflow-y-auto">
+      <div className="flex flex-col h-full">
+        <div className="overflow-y-auto">
         {producers && producers.length !== 0
           ? producers.map((producer) => {
               return (
@@ -103,6 +105,10 @@ export default function Produtores() {
             </div>: null
           }
         </div>
+      </div>
+      <div className="min-h-[70px]">
+        <RedirectCart/>
+      </div>
       </div>
     </>
   );

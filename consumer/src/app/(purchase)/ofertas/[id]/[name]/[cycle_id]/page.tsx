@@ -8,6 +8,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import CardOferta from "../../../components/card-oferta";
+import RedirectCart from "@consumer/app/_components/redirectCart";
 
 export default function Ofertas() {
   const params = useParams();
@@ -21,7 +22,7 @@ export default function Ofertas() {
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
   
   const searchOffers = async () => {
@@ -57,7 +58,8 @@ export default function Ofertas() {
 
   return (
     <>
-      <div className="w-full h-screen overflow-y-auto">
+    <div className="flex flex-col h-full">
+      <div className="overflow-y-auto">
         {offers && offers.length !== 0
           ? offers.map((offer, index) => {
               return (
@@ -70,9 +72,13 @@ export default function Ofertas() {
               );
             })
           : null}
-        <div className="w-full">
+        <div className="w-full text-center p-2">
           {hasMore && (<div ref={ref}>Carregando...</div>)}
         </div>
+      </div>
+      <div className="min-h-[70px]">
+        <RedirectCart/>
+      </div>
       </div>
     </>
   );

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import RedirectCart from "../../_components/redirectCart";
 
 
 export default function Inicio() {
@@ -64,6 +65,7 @@ export default function Inicio() {
 
       </div>
     </div>
+    <RedirectCart/>
     </>
   );
 }

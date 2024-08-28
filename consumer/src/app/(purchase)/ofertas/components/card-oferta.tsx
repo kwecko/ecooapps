@@ -17,12 +17,12 @@ export default function CardOferta({
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
 
   const mapPrice = {
     "UNIT": 1,
-    "WEIGHT": 10
+    "WEIGHT": 2
   }
 
   const mapPriceText = {
@@ -184,13 +184,13 @@ export default function CardOferta({
             <>
               <div className="flex flex-row-reverse">
                 <div className="w-5 h-5">
-                  <Image
+                  <img
                     src="/trash.png"
                     onClick={deleteProductCart}
                     alt="trash"
                     width={15}
                     height={15}
-                  ></Image>
+                  ></img>
                 </div>
               </div>
             </>

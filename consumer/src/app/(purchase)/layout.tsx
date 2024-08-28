@@ -8,9 +8,10 @@ export default function Produtores({ children }: React.PropsWithChildren) {
   return (
     <>
       <CartProvider>
-        <SendTelegram/>
-        <Header />
-        <div className="flex flex-col w-full h-full">{children}</div>
+        <div className="w-full h-screen overflow-hidden">
+          <Header />
+          {children}
+        </div>
       </CartProvider>
     </>
   );
