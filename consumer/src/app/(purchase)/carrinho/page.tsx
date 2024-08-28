@@ -1,11 +1,12 @@
 "use client";
 
+import SendTelegram from "@consumer/app/_components/sendTelegram";
 import { useEffect, useState } from "react";
 import { useCartProvider } from "../../../context/cart";
 import CardProdutoCart from "./components/card-produto-cart";
-import SendTelegram from "@consumer/app/_components/sendTelegram";
 
 export default function FinalizarCompras() {
+  
   const { cart } = useCartProvider();
   const [totalPurchase, setTotalPurchase] = useState(0);
 
@@ -22,7 +23,7 @@ export default function FinalizarCompras() {
   return (
     <>
       <div className="flex flex-col h-full">
-        <div className="overflow-y-auto">
+        <div className="flex-grow overflow-y-auto">
           {cart && cart.length !== 0
             ? cart.map((product, index) => {
                 return (
@@ -35,7 +36,10 @@ export default function FinalizarCompras() {
               })
             : null}
         </div>
-        <div className="sticky bottom-0 min-h-[49px] bg-[#F7F7F7] flex flex-col">
+        {/* <div className="flex-grow">
+          <button className="w-[200px] h-[40px] rounded-md text-center mr-[92px] ml-[92px] bg-[#545F71] text-white font-poppins text-xs font-semibold">Adicionar Produtos</button>
+        </div> */}
+        <div className="sticky bottom-0 h-[49px] bg-[#F7F7F7] flex flex-col">
           {/* <div className="w-full font-inter text-xs">
           <span className="w-1/2 text-left p-2 inline-block">Subtotal:</span>
           <span className="w-1/2 text-right p-2 inline-block">R$23,90</span>
