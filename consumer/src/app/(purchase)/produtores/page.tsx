@@ -61,7 +61,8 @@ export default function Produtores() {
 
   return (
     <>
-      <div className="w-full h-screen overflow-y-auto">
+      <div className="flex flex-col h-full">
+        <div className="overflow-y-auto">
         {producers && producers.length !== 0
           ? producers.map((producer) => {
               return (
@@ -105,7 +106,10 @@ export default function Produtores() {
           }
         </div>
       </div>
-      <RedirectCart/>
+      <div className="min-h-[70px]">
+        <RedirectCart/>
+      </div>
+      </div>
     </>
   );
 }

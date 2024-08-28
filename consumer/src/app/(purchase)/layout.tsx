@@ -10,7 +10,7 @@ export default function Produtores({ children }: React.PropsWithChildren) {
       <CartProvider>
         <div className="w-full h-screen overflow-hidden">
           <Header />
-          <div className="flex flex-col">{children}</div>
+          {children}
         </div>
       </CartProvider>
     </>

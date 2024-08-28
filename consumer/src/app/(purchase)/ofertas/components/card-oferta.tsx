@@ -184,13 +184,13 @@ export default function CardOferta({
             <>
               <div className="flex flex-row-reverse">
                 <div className="w-5 h-5">
-                  <Image
+                  <img
                     src="/trash.png"
                     onClick={deleteProductCart}
                     alt="trash"
                     width={15}
                     height={15}
-                  ></Image>
+                  ></img>
                 </div>
               </div>
             </>

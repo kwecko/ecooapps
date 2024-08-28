@@ -21,8 +21,8 @@ export default function FinalizarCompras() {
 
   return (
     <>
-      <div className="flex flex-col w-full min-h-screen">
-        <div className="flex-grow overflow-y-auto">
+      <div className="flex flex-col h-full">
+        <div className="overflow-y-auto">
           {cart && cart.length !== 0
             ? cart.map((product, index) => {
                 return (
@@ -57,7 +57,7 @@ export default function FinalizarCompras() {
             </span>
           </div>
         </div>
-        <div>
+        <div className="min-h-[70px]">
           <SendTelegram />
         </div>
       </div>

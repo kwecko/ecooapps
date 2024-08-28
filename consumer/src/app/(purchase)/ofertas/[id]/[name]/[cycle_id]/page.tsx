@@ -58,7 +58,8 @@ export default function Ofertas() {
 
   return (
     <>
-      <div className="w-full h-screen overflow-y-auto">
+    <div className="flex flex-col h-full">
+      <div className="overflow-y-auto">
         {offers && offers.length !== 0
           ? offers.map((offer, index) => {
               return (
@@ -71,11 +72,14 @@ export default function Ofertas() {
               );
             })
           : null}
-        <div className="w-full">
+        <div className="w-full text-center p-2">
           {hasMore && (<div ref={ref}>Carregando...</div>)}
         </div>
       </div>
-      <RedirectCart/>
+      <div className="min-h-[70px]">
+        <RedirectCart/>
+      </div>
+      </div>
     </>
   );
 }
