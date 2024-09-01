@@ -19,14 +19,14 @@ export default function Aprovar() {
         <div className="w-full h-1/5 pb-2 bg-red flex flex-col justify-end gap-4">
           <Link href={"/"}>
             <Button
-              className="w-full rounded-lg font-semibold text-slate-gray border-slate-gray border-2 py-[10px]"
+              className="w-full rounded-lg font-semibold text-walnut-brown border-walnut-brown border-2 py-[10px]"
             >
               Voltar para a tela inicial
             </Button>
           </Link>
           <Link href={"/ofertas"}>
             <Button
-              className="w-full px-2 py-3 font-semibold rounded-lg text-white border-0 p-2 bg-theme-default"
+              className="w-full px-2 py-3 font-semibold rounded-lg text-white border-0 p-2 bg-walnut-brown"
             >
               Verificar outra oferta
             </Button>

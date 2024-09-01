@@ -2,10 +2,10 @@
 
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
-import { toast } from "sonner";
 import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
 import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
 import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import { toast } from "sonner";
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
@@ -22,9 +22,9 @@ export default function Home() {
 
     const cycle = useGetLocalStorage('selected-cycle')
 
-    if (!cycle) {
-      toast.warning("Selecione um ciclo para começar uma oferta!");
-      return;
+    if(!cycle){
+      toast.error("Selecione um ciclo para ver os pedidos!")
+      return
     }
 
     const { id } = cycle;
@@ -35,11 +35,11 @@ export default function Home() {
       name: ""
     });
 
-    if (nextPageData.length > 0) {
+    if (nextPageData.data && nextPageData.data.length > 0) {
       setPage((prev) => prev + 1);
     } else {
       setHasNextPage(false);
-    }
+    }    
   };
 
   return (

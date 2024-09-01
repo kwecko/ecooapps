@@ -1,75 +1,106 @@
 'use client'
 
-import { FarmOrders, fetchFarmOrders } from "@cdd/app/_actions/farm/fetch-farm-orders";
-import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
-import Modal from "@cdd/components/Modal";
-import dayjs from "dayjs";
-import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import { fetchFarmOrders } from "@cdd/app/_actions/farm/fetch-farm-orders";
+import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
+import Modal from "@cdd/components/Modal";
+import RedirectModal from "@cdd/components/SessionExpiredModal";
+import dayjs from "dayjs";
+import { notFound, useParams, useRouter } from "next/navigation";
+import { FarmOrders } from "@cdd/interfaces/farm-orders";
+import TableSkeleton from "@cdd/components/TableSkeleton";
+import { useHandleError } from "@cdd/app/hooks/useHandleError";
 
 export default function FarmOrdersTable() {
   const router = useRouter();
-
-  const [farmOrders, setFarmOrders] = useState<FarmOrders | null>(null);
-  const [isLoading, setIsLoading] = useState(true)
-
   const { farm_id } = useParams();
 
-  if(!farm_id){
-    notFound()
+  const [farmOrders, setFarmOrders] = useState<FarmOrders | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [sessionExpired, setSessionExpired] = useState(false);
+
+  const { handleError } = useHandleError()
+
+  if (!farm_id) {
+    notFound();
   }
-
-  const cycle = useGetLocalStorage('selected-cycle')
-
-  if(!cycle){
-    notFound()
-  }
-
-  const { id } = cycle
 
   useEffect(() => {
     (async () => {
-      const response = await fetchFarmOrders({ 
+      const cycle = useGetLocalStorage('selected-cycle');
+
+      if (!cycle) {
+        toast.error("Selecione um ciclo para receber ofertas!");
+      }
+
+      const { id } = cycle;
+
+      await fetchFarmOrders({
         cycle_id: id,
         farm_id: farm_id as string
-      });
+      })
+        .then((response) => {
+          if (response.message) {
+            const messageError = response.message as string
 
-      if(response.message){
-        router.push('/404')
-        return
-      }
+            handleError(messageError)
+          } else if (response.data) {
+            setFarmOrders(response.data);
+            setIsLoading(false);
+            return;
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          toast.error(error)
+        })
+    })();
+  }, [farm_id]);
 
-      if(response.data){
-        setFarmOrders(response.data)
-      }
-
-      setIsLoading(false)
-    })()
-  }, [])
-
+  if (sessionExpired) {
+    return (
+      <RedirectModal
+        titleContentModal="Sessão Expirada"
+        contentModal="Sua sessão expirou. Por favor, faça login novamente."
+        buttonLabel="Ir para o Login"
+        bgButton="#00735E"
+        redirectTo={() => router.push('/api/auth/logout')}
+      />
+    );
+  }
 
   const handleStatusOrder = async (status: "RECEIVED" | "CANCELLED") => {
-    try {
-      const cycle = useGetLocalStorage('selected-cycle')
-
-      const { id } = cycle
-
-      await handleOrderDelivery({
-        cycle_id: id,
-        farm_id: farm_id as string,
-        status
-      });
-
-      if (status === "RECEIVED") {
-        router.push(`/ofertas/${farm_id}/aprovar`);
-      } else if (status === "CANCELLED") {
-        router.push(`/ofertas/${farm_id}/rejeitar`);
-      }
-    } catch (error) {
-      toast.error("Erro ao atualizar status do pedido.");
+    if (farmOrders?.orders.length === 0) {
+      toast.error("Não é possível receber ofertas sem conteúdo!");
+      return;
     }
+
+    const cycle = useGetLocalStorage('selected-cycle');
+    const { id } = cycle;
+
+    await handleOrderDelivery({
+      cycle_id: id,
+      farm_id: farm_id as string,
+      status,
+    })
+      .then((response) => {
+        if (response.message) {
+          const messageError = response.message as string
+
+          handleError(messageError)
+        } else {
+          if (status === "RECEIVED") {
+            router.push(`/ofertas/${farm_id}/aprovar`);
+          } else if (status === "CANCELLED") {
+            router.push(`/ofertas/${farm_id}/rejeitar`);
+          }
+        }
+      })
+      .catch(() => {
+        toast.error("Erro desconhecido.")
+      })
   };
 
   const getNextSaturdayDate = () => {
@@ -86,7 +117,7 @@ export default function FarmOrdersTable() {
   return (
     <>
       {isLoading ? (
-        <></>
+        <TableSkeleton />
       ) : (
         <div className="w-full h-full flex flex-col justify-between">
           <div className="w-full mx-auto bg-white rounded-lg">
@@ -113,24 +144,27 @@ export default function FarmOrdersTable() {
           </div>
           <div className="w-full h-[10%] flex gap-2 justify-center items-end">
             <Modal
-              openButton="Rejeitar"
-              title="Você tem certeza?"
-              description="Após rejeitar a entrega essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
-              approvalButtons={true}
-              textButton1="Cancelar"
-              textButton2="Rejeitar"
-              bgButton2="#FF7070"
-              onClick={() => handleStatusOrder("CANCELLED")}
+              titleContentModal="Você tem certeza?"
+              contentModal="Após rejeitar a entrega essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
+              titleCloseModal="Cancelar"
+              titleConfirmModal="Rejeitar"
+              titleOpenModal="Rejeitar"
+              bgOpenModal="#FF7070"
+              bgConfirmModal="#FF7070"
+              bgCloseModal="#EEF1F4"
+              modalAction={() => handleStatusOrder("CANCELLED")}
             />
+
             <Modal
-              openButton="Aprovar"
-              title="Você tem certeza?"
-              description="Após aprovar a oferta essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
-              approvalButtons={true}
-              textButton1="Cancelar"
-              textButton2="Aprovar"
-              bgButton2="#00735E"
-              onClick={() => handleStatusOrder("RECEIVED")}
+              titleContentModal="Você tem certeza?"
+              contentModal="Após aprovar a oferta essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
+              titleCloseModal="Cancelar"
+              titleConfirmModal="Aprovar"
+              titleOpenModal="Aprovar"
+              bgOpenModal="#00735E"
+              bgConfirmModal="#00735E"
+              bgCloseModal="#EEF1F4"
+              modalAction={() => handleStatusOrder("RECEIVED")}
             />
           </div>
         </div>

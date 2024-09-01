@@ -1,11 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Farm, fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
+import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { HiOutlineSearch, HiX } from "react-icons/hi";
+import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import Loader from "@shared/components/Loader";
+import { Farm } from "@cdd/interfaces/farm";
+import { useHandleError } from "@cdd/app/hooks/useHandleError";
 
 interface FarmsProps {
   page: number;
@@ -17,6 +21,9 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const [farms, setFarms] = useState<Farm[]>([]);
   const [selectedStatus, setSelectedStatus] = useState("todos");
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { handleError } = useHandleError()
 
   const handleStatusFilterClick = (status: string) => {
     setSelectedStatus(status);
@@ -30,31 +37,44 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
   useEffect(() => {
     (async () => {
-      const cycle_idString = localStorage.getItem("selected-cycle") as string;
+      setIsLoading(true);
+      const cycle = useGetLocalStorage("selected-cycle");
 
-      if (!cycle_idString) {
-        toast.warning("Selecione um ciclo para começar uma oferta!");
+      if (!cycle) {
+        toast.error("Selecione um ciclo para ver os pedidos!");
         return;
       }
 
-      const { id } = JSON.parse(cycle_idString);
+      const { id } = cycle;
 
-      const farms = await fecthFarmsWithOrders({
+      await fecthFarmsWithOrders({
         cycle_id: id,
         page,
-        name
-      });
+        name,
+      })
+        .then((response) => {
+          if (response.message) {
+            const messageError = response.message as string
 
-      setFarms(farms);
+            handleError(messageError)
+          } else if (response.data) {
+            setFarms(response.data);
+            setIsLoading(false);
+            return;
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
     })();
   }, [page, name]);
 
   const getNextSaturdayDate = () => {
     const today = dayjs();
-    const dayOfWeek = dayjs().get('day') + 1;
+    const dayOfWeek = dayjs().get("day") + 1;
 
     const daysUntilSaturday = 7 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, 'day');
+    const nextSaturday = today.add(daysUntilSaturday, "day");
 
     return nextSaturday.format("DD/MM/YYYY");
   };
@@ -87,40 +107,56 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         <div className="w-full flex gap-2 mb-4 flex-wrap">
           <button
             disabled
-            onClick={() => handleStatusFilterClick('Todas')}
-            className={`${selectedStatus === 'Todas' ? 'bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]' : 'bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]'}`}
+            onClick={() => handleStatusFilterClick("Todas")}
+            className={`${selectedStatus === "Todas"
+                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              }`}
           >
             Todas
-            {selectedStatus === 'Todas' && <HiX className="ml-1" />}
+            {selectedStatus === "Todas" && <HiX className="ml-1" />}
           </button>
           <button
             disabled
-            onClick={() => handleStatusFilterClick('Pendente')}
-            className={`${selectedStatus === 'Pendente' ? 'bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]' : 'bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]'}`}
+            onClick={() => handleStatusFilterClick("Pendente")}
+            className={`${selectedStatus === "Pendente"
+                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              }`}
           >
             Pendentes
-            {selectedStatus === 'Pendente' && <HiX className="ml-1" />}
+            {selectedStatus === "Pendente" && <HiX className="ml-1" />}
           </button>
           <button
             disabled
-            onClick={() => handleStatusFilterClick('Concluída')}
-            className={`${selectedStatus === 'Concluída' ? 'bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]' : 'bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]'}`}
+            onClick={() => handleStatusFilterClick("Concluída")}
+            className={`${selectedStatus === "Concluída"
+                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              }`}
           >
             Concluídas
-            {selectedStatus === 'Concluída' && <HiX className="ml-1" />}
+            {selectedStatus === "Concluída" && <HiX className="ml-1" />}
           </button>
           <button
             disabled
-            onClick={() => handleStatusFilterClick('Rejeitada')}
-            className={`${selectedStatus === 'Rejeitada' ? 'bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items=center h-[22px]' : 'bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]'}`}
+            onClick={() => handleStatusFilterClick("Rejeitada")}
+            className={`${selectedStatus === "Rejeitada"
+                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items=center h-[22px]"
+                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              }`}
           >
             Rejeitadas
-            {selectedStatus === 'Rejeitada' && <HiX className="ml-1" />}
+            {selectedStatus === "Rejeitada" && <HiX className="ml-1" />}
           </button>
         </div>
       </div>
-      {farms.length === 0 ? (
-        <span className="text-center mt-6 text-slate-gray">{name === "" ? "Ainda não há pedidos." : "Nenhum produtor encontrado."}</span>
+      {isLoading ? (
+        <Loader className="w-8 h-8 border-walnut-brown mt-3" />
+      ) : !isLoading && farms.length === 0 ? (
+        <span className="text-center mt-3 text-slate-gray">
+          {name === "" ? "Ainda não há pedidos." : "Nenhum produtor encontrado."}
+        </span>
       ) : (
         <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
           <thead className="w-full">
@@ -138,8 +174,15 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           </thead>
           <tbody>
             {farms.map((farm) => (
-              <tr onClick={() => handleClick(farm.id)} key={farm.admin_id} className="text-center cursor-pointer">
-                <td onClick={getNextSaturdayDate} className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
+              <tr
+                onClick={() => handleClick(farm.id)}
+                key={farm.admin_id}
+                className="text-center cursor-pointer"
+              >
+                <td
+                  onClick={getNextSaturdayDate}
+                  className="border-b-[1px] truncate text-[#545F71] px-2 py-3"
+                >
                   {getNextSaturdayDate()}
                 </td>
                 <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">

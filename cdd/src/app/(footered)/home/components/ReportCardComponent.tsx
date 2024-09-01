@@ -8,7 +8,7 @@ export function ReportCardComponent() {
 
   return (
     <CardComponent
-      title="Gerar relatório"
+      title="Gerar relatórios"
       link={`/api/reports/delivery?cycle_id=${cycle?.id}`}
     />
   );
