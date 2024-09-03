@@ -14,7 +14,7 @@
   "dependencies": {
     "@fontsource/inter": "^5.0.18",
     "@formkit/auto-animate": "^0.7.0",
-    "@headlessui/react": "^1.7.17",
+    "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.1",
     "@radix-ui/react-form": "^0.0.3",
     "@radix-ui/react-visually-hidden": "^1.0.3",

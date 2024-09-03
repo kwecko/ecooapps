@@ -1,11 +1,15 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Bag, listBags } from "@cdd/app/_actions/bag/list-bags";
+import { listBags } from "@cdd/app/_actions/bag/list-bags";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { HiOutlineSearch } from "react-icons/hi";
 import Button from "@shared/components/Button";
+import { Bag } from "@cdd/interfaces/bag";
+import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import Loader from "@shared/components/Loader";
+import { useHandleError } from "@cdd/app/hooks/useHandleError";
 
 interface BagsProps {
   page: number;
@@ -16,6 +20,9 @@ export default function BagsTable({ page }: BagsProps) {
 
   const [bags, setBags] = useState<Bag[]>([]);
   const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { handleError } = useHandleError()
 
   const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setTimeout(() => {
@@ -25,32 +32,59 @@ export default function BagsTable({ page }: BagsProps) {
 
   useEffect(() => {
     (async () => {
-      const cycle_idString = localStorage.getItem("selected-cycle") as string;
+      setIsLoading(true)
+      const cycle = useGetLocalStorage("selected-cycle");
 
-      if (!cycle_idString) {
-        toast.warning("Selecione um ciclo para começar uma oferta!");
+      if (!cycle) {
+        toast.error("Selecione um ciclo para montar uma sacola!");
         return;
       }
 
-      const { id } = JSON.parse(cycle_idString);
+      const { id } = cycle;
 
-      const bagsPending = await listBags({
+      await listBags({
         cycle_id: id,
         page,
         status: "PENDING",
         name
-      });
+      })
+        .then((response) => {
+          if (response.message) {
+            const messageError = response.message as string
 
-      const bagsSepareted = await listBags({
+            handleError(messageError)
+          } else if (response.data) {
+            setBags(response.data);
+            return;
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
+
+      await listBags({
         cycle_id: id,
         page,
         status: "SEPARATED",
         name
-      });
+      })
+        .then((response) => {
+          if (response.message) {
+            const messageError = response.message as string
 
-      setBags([...bagsPending, ...bagsSepareted]);
+            handleError(messageError)
+          } else if (response.data) {
+            setBags(prevBags => [...prevBags, ...response.data]);
+            setIsLoading(false);
+            return;
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
     })();
   }, [page, name]);
+
 
   const handleClick = (id: string) => {
     const path = `/montar-sacola/${id}`;
@@ -78,8 +112,12 @@ export default function BagsTable({ page }: BagsProps) {
           </div>
         </div>
       </div>
-      {bags.length === 0 ? (
-        <span className="text-center mt-6 text-slate-gray">{name === "" ? "Ainda não há sacolas." : "Nenhum cliente encontrado."}</span>
+      {isLoading ? (
+        <Loader className="w-8 h-8 border-walnut-brown mt-3" />
+      ) : !isLoading && bags.length === 0 ? (
+        <span className="text-center mt-3 text-slate-gray">
+          {name === "" ? "Ainda não há sacolas para serem montadas." : "Nenhum cliente encontrado."}
+        </span>
       ) : (
         <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
           <thead className="w-full">
@@ -114,7 +152,6 @@ export default function BagsTable({ page }: BagsProps) {
                     <Button className="w-full bg-theme-background px-3 py-2 rounded-3xl">Pronta</Button>
                   </td>
                 )}
-
               </tr>
             ))}
           </tbody>

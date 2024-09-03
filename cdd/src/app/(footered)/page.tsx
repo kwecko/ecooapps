@@ -5,6 +5,7 @@ import SelectCycle from "@cdd/components/SelectCycle";
 import { Header } from "./home/components/Header";
 import CardComponent from "./home/components/CardComponent";
 import { ReportCardComponent } from "./home/components/ReportCardComponent";
+import { contentLinksHomePage } from "./home/data";
 
 export default function Cdd() {
   return (
@@ -12,21 +13,16 @@ export default function Cdd() {
       <Header />
       <div>
         <SelectCycle />
-        <CardComponent
-          isSelectedCycle={true}
-          title="Receber ofertas"
-          link="/ofertas"
-        />
-        <CardComponent
-          isSelectedCycle={true}
-          title="Montar sacola"
-          link="/montar-sacola"
-        />
-        <CardComponent
-          isSelectedCycle={true}
-          title="Enviar sacola"
-          link="/enviar-sacola"
-        />
+        {contentLinksHomePage.map((content) => {
+          return (
+            <CardComponent
+              hasNotification={content.hasNotification}
+              isSelectedCycle={content.isSelectedCycle}
+              title={content.title}
+              link={content.link}
+            />
+          )
+        })}
         <ReportCardComponent />
       </div>
     </div>

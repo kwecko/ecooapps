@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 import SendBagTable from "./components/SendBagTable";
+import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
@@ -19,26 +20,26 @@ export default function Home() {
   const nextPage = async () => {
     if (!hasNextPage) return;
 
-    const cycle_idString = localStorage.getItem("selected-cycle") as string;
+    const cycle = useGetLocalStorage('selected-cycle')
 
-    if (!cycle_idString) {
-      toast.warning("Selecione um ciclo para começar uma oferta!");
-      return;
+    if(!cycle){
+      toast.error("Selecione um ciclo para enviar sacolas!")
+      return
     }
 
-    const { id } = JSON.parse(cycle_idString);
+    const { id } = cycle;
 
-    const response = await listBags({
+    const nextPageData = await listBags({
       page: page + 1,
       cycle_id: id,
       status: "SEPARATED",
     });
 
-    if (response.length > 0) {
+    if (nextPageData.data && nextPageData.data.length > 0) {
       setPage((prev) => prev + 1);
     } else {
       setHasNextPage(false);
-    }
+    }   
   };
 
   return (

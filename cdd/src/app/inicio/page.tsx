@@ -29,12 +29,6 @@ export default function Inicio() {
             Entrar
           </Button>
         </Link>
-        {/* <Link href={"/cadastrar"}>
-          <OldButton
-            className="text-white text border-2 border-white"
-            title="Cadastrar"
-          />
-        </Link> */}
       </div>
 
       <div className="h-3/5 w-full flex items-end mt-4">

@@ -14,18 +14,18 @@ import { useSetLocalStorage } from "@cdd/app/hooks/useSetLocalStorage";
 
 export default function SelectCycle() {
   const [cycles, setCycles] = useState<CycleData[]>();
-  const [cycle, setCycle] = useState<CycleData | null>()
+  const [cycle, setCycle] = useState<CycleData | null>();
 
   const router = useRouter();
 
   useEffect(() => {
     (async () => {
-      const savedCycle = useGetLocalStorage('selected-cycle')
+      const savedCycle = useGetLocalStorage('selected-cycle');
       if (savedCycle) {
-        setCycle(savedCycle)
+        setCycle(savedCycle);
       }
 
-      const getCycles = await getCyclesAction({})
+      const getCycles = await getCyclesAction({});
 
       if (getCycles) {
         setCycles(getCycles);
@@ -34,8 +34,8 @@ export default function SelectCycle() {
   }, []);
 
   const handleCycleChange = (newCycle: CycleData) => {
-    setCycle(newCycle)
-    useSetLocalStorage('selected-cycle', newCycle)
+    setCycle(newCycle);
+    useSetLocalStorage('selected-cycle', newCycle);
   };
 
   const handleClickButton = () => {
@@ -64,7 +64,7 @@ export default function SelectCycle() {
           <>
             <div className="relative mt-1">
               <Listbox.Button
-                className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${
+                className={`relative w-full py-3 cursor-default outline-none ring-0 rounded-2xl bg-white pl-3 pr-10 text-left ${
                   open ? "ring-2 ring-slate-gray" : ""
                 }`}
               >
@@ -86,12 +86,12 @@ export default function SelectCycle() {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                <Listbox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
                   {cycles?.map((cycle) => (
                     <Listbox.Option
                       key={cycle.id}
                       className={({ selected }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                        `relative cursor-default select-none py-3 pl-10 pr-4 ${
                           selected
                             ? "text-slate-gray bg-theme-background"
                             : "bg-white"
