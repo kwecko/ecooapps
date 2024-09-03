@@ -6,15 +6,15 @@ import { toast } from "sonner";
 
 interface CustomToastErrorProps {
   error: string;
-  labelButton: string;
-  redirectTo: string;
+  labelButton?: string;
+  redirectTo?: string;
 }
 
-export default function CustomToastError({ error, labelButton, redirectTo }: CustomToastErrorProps) {
+export default function CustomToastError({ error }: CustomToastErrorProps) {
   const router = useRouter();
 
   const handleRedirectClick = () => {
-    router.push(redirectTo);
+    router.push("/");
     toast.dismiss();
   };
 
@@ -39,7 +39,7 @@ export default function CustomToastError({ error, labelButton, redirectTo }: Cus
           cursor: 'pointer',
         }}
       >
-        {labelButton}
+        Voltar para a tela inicial
       </button>
     </div>
   );
