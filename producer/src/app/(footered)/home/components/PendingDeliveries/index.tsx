@@ -58,9 +58,9 @@ export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
 
   return (
     <div
-      className={`mt-5 w-full pl-3 pr-4 rounded-2xl bg-white flex flex-col justify-around gap-4`}
+      className={`mt-5 w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4`}
     >
-      <div className="flex justify-between items-start mt-[23px]">
+      <div className="flex justify-between items-start">
         <div className="flex flex-col">
           <span className="text-theme-default">Entregas pendentes</span>
           <div>
