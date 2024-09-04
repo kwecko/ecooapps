@@ -1,106 +1,119 @@
-"use client";
-import { ReactNode, useState } from "react";
-import { Dialog } from "@headlessui/react";
-
-export interface StatusContent {
-  subtitle: string;
-  buttonTitle: string;
-  buttonColor: string;
-  modalLink: string;
-  modalComponent: any;
-  modalDescription: string;
-  updateStatus: string;
-}
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
 
 interface ModalProps {
-  openButton: ReactNode;
-  title: string;
-  description: string;
-  approvalButtons: boolean;
-  textButton1: string;
-  textButton2: string;
-  bgButton2: string;
-  onClick?: () => void;
+  titleOpenModal?: string
+  titleContentModal?: string
+  contentModal?: string
+  titleConfirmModal?: string
+  titleCloseModal?: string
+  bgOpenModal?: string
+  bgConfirmModal?: string
+  bgCloseModal?: string
+  modalAction?: () => void
 }
 
-export default function Modal({
-  openButton,
-  title,
-  description,
-  approvalButtons,
-  textButton1,
-  textButton2,
-  bgButton2,
-  onClick,
+export default function Modal({ 
+  titleOpenModal, 
+  titleContentModal, 
+  contentModal, 
+  titleConfirmModal,
+  titleCloseModal,
+  bgOpenModal, 
+  bgConfirmModal, 
+  bgCloseModal,
+  modalAction 
 }: ModalProps) {
-  let [isOpen, setIsOpen] = useState(false);
+  let [isOpen, setIsOpen] = useState(false)
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  function closeModal() {
+    setIsOpen(false)
+  }
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
+  function openModal() {
+    setIsOpen(true)
+  }
 
-  const handleButtonClick = () => {
+  const handleActionModal = () => {
     closeModal();
-    if (onClick) onClick();
+    if (modalAction) modalAction();
   };
 
   return (
     <>
-      <div
-        className={`cursor-pointer w-full px-4 py-3 flex justify-center items-center bg-[${bgButton2}] rounded-md text-white font-semibold font-inter text-[15.67px]`}
-        aria-label="Abrir Modal"
-        onClick={openModal}
-      >
-        {openButton}
-      </div>
-      <Dialog
-        as="div"
-        open={isOpen}
-        onClose={closeModal}
-        className="fixed inset-10 h-fit overflow-y-auto text-center"
-      >
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div
-          className="fixed grid place-items-center inset-0"
-          aria-hidden="true"
+      <div className="w-full flex">
+        <button
+        style={{ backgroundColor: bgOpenModal }}
+          type="button"
+          onClick={openModal}
+          className={`rounded-md px-3 py-4 font-medium text-white w-full`}
         >
-          <Dialog.Panel className="bg-white z-10 rounded-3xl w-[83.35%] max-w-[300px] min-h-[300px] flex flex-col justify-between align-center px-4 py-7">
-            <Dialog.Title>
-              <div
-                className={`font-semibold text-2xl mt-5 leading-5 max-h-[25px] text-[20px] text-slate-gray
-                font-poppins
-                `}
-              >
-                {title}
-              </div>
-            </Dialog.Title>
-            <Dialog.Description className="text-theme-primary text-[15.67px] max-w-[241px] min-h-[100px] font-normal font-inter leading-5 overflow-y-auto self-center">
-              {description}
-            </Dialog.Description>
-            {approvalButtons && (
-              <div className="gap-2 h-[41.14px] flex flex-row justify-stretch items-center w-full font-inter font-semibold text-[15.67px]">
-                <button
-                  onClick={closeModal}
-                  className="w-[50%] h-[inherit] bg-[#EEF1F4] text-[#455154] rounded-md"
-                >
-                  {textButton1}
-                </button>
+          {titleOpenModal}
+        </button>
+      </div>
 
-                <button
-                  onClick={handleButtonClick}
-                  className={`w-[50%] h-[inherit] bg-[${bgButton2}] rounded-md text-white`}
-                >
-                  {textButton2}
-                </button>
-              </div>
-            )}
-          </Dialog.Panel>
-        </div>
-      </Dialog>
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg text-center font-medium leading-6 text-slate-gray"
+                  >
+                    {titleContentModal}
+                  </Dialog.Title>
+                  <div className="mt-8 mb-8">
+                    <p className="text-center text-theme-primary">
+                      {contentModal}
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center gap-3 mt-4">
+                    <button
+                      style={{ backgroundColor: bgCloseModal }}
+                      type="button"
+                      className={`w-full text-[#455154] inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-3 py-4 font-medium`}
+                      onClick={closeModal}
+                    >
+                      {titleCloseModal}
+                    </button>
+                    <button
+                      style={{ backgroundColor: bgConfirmModal }}
+                      type="button"
+                      className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium`}
+                      onClick={handleActionModal}
+                    >
+                      {titleConfirmModal}
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
     </>
-  );
+  )
 }

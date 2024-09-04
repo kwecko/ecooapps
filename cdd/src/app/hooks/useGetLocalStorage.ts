@@ -1,11 +1,13 @@
-'use client'
+export function useGetLocalStorage(key: string) {
+  if (typeof window !== 'undefined') {
+    const result = window.localStorage.getItem(key);
 
-export function useGetLocalStorage(key: string){
-  const result = window.localStorage.getItem(key)
+    if (!result) {
+      return;
+    }
 
-  if(!result){
-    return null;
+    return JSON.parse(result);
   }
 
-  return JSON.parse(result)
+  return null;
 }

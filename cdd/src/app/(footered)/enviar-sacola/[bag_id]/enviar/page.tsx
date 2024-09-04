@@ -27,7 +27,7 @@ export default async function Home({ params }: { params: { id: string } }) {
         <div className="justify-self-end">
           <Link href={"/"} className="w-full">
             <Button
-              className="w-full bg-[#F7F7F7] rounded-md h-12 mb-[12px] text-[#4F4743] border-2 border-[#4F4743] font-semibold"
+              className="w-full bg-[#F7F7F7] rounded-md h-12 mb-[12px] text-walnut-brown border-2 border-walnut-brown font-semibold"
               href={"/"}
             >
               Voltar para a tela inicial
@@ -35,7 +35,7 @@ export default async function Home({ params }: { params: { id: string } }) {
           </Link>
           <Link href={"/enviar-sacola"} className="w-full">
             <Button
-              className="w-full bg-[#4F4743] rounded-md h-12 text-white font-semibold"
+              className="w-full bg-walnut-brown rounded-md h-12 text-white font-semibold"
               href={"/montar-sacola"}
             >
               Enviar outra sacola

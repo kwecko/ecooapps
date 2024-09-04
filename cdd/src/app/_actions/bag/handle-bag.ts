@@ -1,7 +1,6 @@
 "use server"
 
-import axios from "axios";
-import { cookies } from "next/headers";
+import ApiService from "@cdd/service/index"
 
 interface ListBagsRequest {
   bag_id: string
@@ -9,17 +8,10 @@ interface ListBagsRequest {
 }
 
 export async function handleBag({ bag_id, status }: ListBagsRequest) {
-  const token = cookies().get("token")?.value as string;
+  const response = ApiService.PATCH({
+    url: `/bags/${bag_id}`,
+    data: { status }
+  })
 
-  const config = {
-    headers: { Authorization: `Bearer ${token}` },
-  };
-
-  const data = await axios.patch(
-    `${process.env.API_URL}/bags/${bag_id}`,
-    { status },
-    config
-  );
-
-  return data.data;
+  return response;
 }
