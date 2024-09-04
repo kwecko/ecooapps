@@ -1,6 +1,6 @@
 "use client";
 
-import { Catalog, Farm, fetchCatalog } from "@consumer/app/_actions/fetch-catalog";
+import { Catalog, Farm, fetchCatalogs } from "@consumer/app/_actions/fetch-catalogs";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -36,12 +36,10 @@ export default function Produtores() {
 
     setCycleId(cycleId as string);
 
-    const catalog: Catalog[] = await fetchCatalog(cycleId, page);
+    const catalogs: Catalog[] = await fetchCatalogs(cycleId, page);
 
-    const farms: Farm[] = catalog.map((catalog) => catalog.farm);
-
-    let newProducers = farms.map((farm) => {
-      return { id: farm.id, name: farm.name };
+    let newProducers = catalogs.map((catalog) => {
+      return { id: catalog.id, name: catalog.farm.name };
     });
 
     if(newProducers.length == 0){

@@ -1,7 +1,7 @@
 "use server";
 
 import axios from "axios";
-
+import { Farm } from "./fetch-catalogs";
 
 export interface Product {
   id: string
@@ -14,7 +14,7 @@ export interface Product {
 
 export interface Offer {
   id: string
-  farm_id: string
+  catalog_id: string
   cycle_id: string
   price: number
   amount: number
@@ -24,27 +24,24 @@ export interface Offer {
   updated_at: string
 }
 
-export interface FarmOffers {
-  id: string
-  name: string
-  caf: string
-  tax: number
-  admin_id: string
-  active: boolean
-  offers: Offer[]
+export interface CatalogOffers {
+  id: string,
+  cycle_id: string,
+  farm: Farm,
   created_at: string
   updated_at: string
+  offers: Offer[]
+
 }
 
 
-
-export async function fetchOffersFarm(farm_id: string | undefined, cycle_id: string | undefined, page: number = 1, product: string = "") {
+export async function fetchCatologsById(catalog_id: string | undefined, cycle_id: string | undefined, page: number = 1, product: string = "") {
 
   if (!cycle_id) 
     return null;
 
   const response = await axios.get(
-    `${process.env.API_URL}/offers/${farm_id}?cycle_id=${cycle_id}&product=${product}&page=${page}`,
+    `${process.env.API_URL}/catalogs/${catalog_id}?cycle_id=${cycle_id}&product=${product}&page=${page}`,
   ).catch((error) => {
     console.error("error")
     console.error(error)
@@ -55,5 +52,5 @@ export async function fetchOffersFarm(farm_id: string | undefined, cycle_id: str
   }
 
 
-  return response.data as FarmOffers | null;
+  return response.data as CatalogOffers | null;
 }

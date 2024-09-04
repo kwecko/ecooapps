@@ -1,9 +1,9 @@
 "use client";
 import {
-  FarmOffers,
+  CatalogOffers,
   Offer,
-  fetchOffersFarm,
-} from "@consumer/app/_actions/fetch-offers-farm";
+  fetchCatologsById,
+} from "@consumer/app/_actions/fetch-catalogs-by-id";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -28,13 +28,13 @@ export default function Ofertas() {
   const searchOffers = async () => {
     setIsLoading(true);
 
-    const responseFarmOffers: FarmOffers | null = await fetchOffersFarm(
+    const responseFarmCatalogs: CatalogOffers | null = await fetchCatologsById(
       params.id as string,
       params.cycle_id as string,
       page
     );
 
-    let offersFarm = responseFarmOffers?.offers ?? [];
+    let offersFarm = responseFarmCatalogs?.offers ?? [];
     offersFarm = offersFarm.filter(
       (offer) => offer.amount >= mapQuantity[offer.product.pricing]
     );

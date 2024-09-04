@@ -34,7 +34,7 @@ export interface Catalog {
 }
 
 
-export async function fetchCatalog(cycle_id: string | undefined, page: number = 1, product: string = "") {
+export async function fetchCatalogs(cycle_id: string | undefined, page: number = 1, product: string = "") {
 
   if(!cycle_id) return [];
   
