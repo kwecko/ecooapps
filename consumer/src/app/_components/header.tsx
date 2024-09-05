@@ -1,5 +1,6 @@
 "use client";
 import { useCartProvider } from "@consumer/context/cart";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -29,13 +30,13 @@ export default function Header() {
           <div className="flex items-center justify-center overflow-hidden w-10 h-10 ml-3  bg-[#545F71] rounded-[112px]">
             <Link href={linkBack}>
               {/* <div className="w-5 h-5"> */}
-              <img
+              <Image
                 src="/back.png"
                 alt="back"
-                className="object-cover"
-                width={15}
-                height={11.7}
-              ></img>
+                className="h-3 w-4 object-cover"
+                width={100}
+                height={100}
+              />
               {/* </div> */}
             </Link>
           </div>
@@ -47,7 +48,7 @@ export default function Header() {
         {/* <div> */}
         <div className="relative flex items-center justify-center w-10 h-10 mr-3  bg-[#545F71] rounded-[112px]">
           <Link href={"/carrinho"}>
-            <img src="/cart.png" alt="cart" width={15} height={15} className="object-cover"></img>
+            <Image src="/cart.png" alt="cart" className="h-4 w-4 object-cover" width={100} height={100}/>
           </Link>
 
             {cart.length > 0 ? (
