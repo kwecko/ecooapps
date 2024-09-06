@@ -1,5 +1,3 @@
-// "use client";
-
 import { Offer } from "@consumer/app/_actions/fetch-catalogs-by-id";
 import Image, { ImageLoader } from "next/image";
 import { useEffect, useState } from "react";
@@ -7,11 +5,9 @@ import { useCartProvider } from "../../../../context/cart";
 
 export default function CardOferta({
   offer,
-  // nameFarm,
   exclude,
 }: {
   offer: Offer;
-  // nameFarm: string;
   exclude: boolean;
 }) {
 
@@ -67,7 +63,6 @@ export default function CardOferta({
         description: offer.description,
         quantity: count + 1,
         offerId: offer.id,
-        // nameFarm: nameFarm
       });
       setCount(count + 1);
       setCart(newCart);

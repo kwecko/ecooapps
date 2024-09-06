@@ -68,7 +68,6 @@ export default function Ofertas() {
                 <CardOferta
                   key={index}
                   offer={offer}
-                  // nameFarm={nameFarm}
                   exclude={false}
                 ></CardOferta>
               );

@@ -1,16 +1,12 @@
-// "use client";
-
 import Image, { ImageLoader } from "next/image";
 import { useEffect, useState } from "react";
 import { ProductCart, useCartProvider } from "../../../../context/cart";
 
 export default function CardProdutoCart({
   product,
-  // nameFarm,
   exclude,
 }: {
   product: ProductCart;
-  // nameFarm: string;
   exclude: boolean;
 }) {
 
@@ -55,7 +51,6 @@ export default function CardProdutoCart({
         description: product.description,
         quantity: count + 1,
         offerId: product.offerId,
-        // nameFarm: nameFarm
       });
       setCount(count + 1);
       setCart(newCart);

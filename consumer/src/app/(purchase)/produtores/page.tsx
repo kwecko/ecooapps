@@ -25,9 +25,6 @@ export default function Produtores() {
   
   const searchProducers = async () => {
 
-    // const getDay = new Date().getDay() + 1;
-    // const typeCycle = getDay != 5 ? "semanal": "diario";
-
     const typeCycle = process.env.NEXT_PUBLIC_ENV == "dev" || process.env.NEXT_PUBLIC_ENV == "homolog" ? "livre" : "semanal";
     
     const cycleId = cycles.find(
