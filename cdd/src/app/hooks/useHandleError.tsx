@@ -12,10 +12,11 @@ export function useHandleError() {
   const handleError = useCallback((errorCode: string) => {
     if (errorCode in errorsMapper) {
       if (errorCode === "Sessão expirada.") {
-        console.log("Sessão expirada");
         setSessionExpired(true);
       } else if (errorCode === "💥 Ocorreu um erro interno.") {
-        showErrorToast("Ocorreu um erro interno de servidor.", "Voltar à tela inicial", "/");
+        showErrorToast(errorCode);
+      } else if(errorCode === "Erro desconhecido") {
+        showErrorToast(errorCode);
       } else {
         toast.error(errorCode);
       }
@@ -23,9 +24,9 @@ export function useHandleError() {
       const words = errorCode.split(" ");
 
       if (errorCode === `Ciclo ${words[1]} não existe.`) {
-        showErrorToast(`Ciclo "${words[1]}" não existe.`, "Voltar à tela inicial", "/");
+        showErrorToast(errorCode);
       } else if (errorCode === `Fazenda ${words[1]} não existe.`) {
-        showErrorToast(`Fazenda "${words[1]}" não existe.`, "Voltar à tela inicial", "/");
+        showErrorToast(errorCode);
       }
     }
   }, [setSessionExpired]);

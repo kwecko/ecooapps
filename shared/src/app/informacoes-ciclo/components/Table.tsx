@@ -4,7 +4,7 @@ import React from "react";
 import { getWeekDays } from "../../../utils/index";
 import { useEffect, useState } from "react";
 
-export default function Table({ appID }: { appID: AppID }) {
+export default function Table() {
   const [offer, setoffer] = useState<number[]>();
   const [order, setorder] = useState<number[]>();
   const [deliver, setdeliver] = useState<number[]>();
