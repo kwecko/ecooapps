@@ -29,7 +29,6 @@ export default function Header() {
         {linkBack ? (
           <div className="flex items-center justify-center overflow-hidden w-10 h-10 ml-3  bg-[#545F71] rounded-[112px]">
             <Link href={linkBack}>
-              {/* <div className="w-5 h-5"> */}
               <Image
                 src="/back.png"
                 alt="back"
@@ -37,7 +36,6 @@ export default function Header() {
                 width={100}
                 height={100}
               />
-              {/* </div> */}
             </Link>
           </div>
         ) : (
@@ -45,7 +43,6 @@ export default function Header() {
         )}
         <div className="grow text-center text-base font-inter font-bold text-[#2F4A4D] m-2">{title}</div>
 
-        {/* <div> */}
         <div className="relative flex items-center justify-center w-10 h-10 mr-3  bg-[#545F71] rounded-[112px]">
           <Link href={"/carrinho"}>
             <Image src="/cart.png" alt="cart" className="h-4 w-4 object-cover" width={100} height={100}/>
@@ -58,7 +55,6 @@ export default function Header() {
             ) : null}
         </div>
       </div>
-      {/* </div> */}
     </>
   );
 }

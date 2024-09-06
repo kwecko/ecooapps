@@ -84,14 +84,13 @@ export default function Produtores() {
                         </span>
                       </div>
                       <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-                        {/* <div className="w-6 h-6"> */}
                         <Image
                           src="/arrow.png"
                           alt="arrow"
-                          width={10}
-                          height={7}
+                          className="w-3 h-2"
+                          width={100}
+                          height={100}
                         />
-                        {/* </div> */}
                       </div>
                     </div>
                   </Link>

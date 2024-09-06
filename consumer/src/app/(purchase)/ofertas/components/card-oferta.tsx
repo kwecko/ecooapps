@@ -132,9 +132,6 @@ export default function CardOferta({
         <p className="w-full text-left font-poppins text-xs text-[#2F4A4D]">
           Quantidade: {mapTextQuantity[offer.product.pricing]}
         </p>
-        {/* <p className="w-full text-left font-poppins text-xs">
-          Produtor: {nameFarm}
-        </p> */}
         <p className="w-full text-left font-poppins text-[16px] text-[#2F4A4D] pt-3">
           {offer.price.toLocaleString("pt-br", {
             style: "currency",

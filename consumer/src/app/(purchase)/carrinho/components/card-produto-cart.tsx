@@ -121,9 +121,6 @@ export default function CardProdutoCart({
         <p className="w-full text-left font-poppins text-xs">
           Quantidade: {mapTextQuantity[product.pricing]}
         </p>
-        {/* <p className="w-full text-left font-poppins text-xs">
-          Produtor: {nameFarm}
-        </p> */}
         <p className="w-full text-left font-poppins text-[16px] pt-3">
           {product.price.toLocaleString("pt-br", {
               style: "currency",
