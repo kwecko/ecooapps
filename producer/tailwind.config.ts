@@ -46,9 +46,6 @@ const config: Config = {
       },
       spacing: {
         '5.5': '22px'
-      },
-      borderColor: {
-        'custom-gray': '#F7F7F7'
       }
     },
   },

@@ -9,7 +9,6 @@ import { ProductMenu } from "./home/components/ProductMenu";
 import SelectCycle from "@shared/components/SelectCycle";
 
 export default function Home() {
-  const FourItems = 4;
 
   return (
     <div className="px-8 pb-10 pt-10">
@@ -19,7 +18,7 @@ export default function Home() {
           <SelectCycle />
           <CycloInformaiton />
           <ProductMenu />
-          <PendingDeliveries numberOfItems={FourItems} />
+          <PendingDeliveries />
         </div>
       </CycleProvider>
     </div>

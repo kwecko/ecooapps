@@ -1,18 +1,25 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip, Button, notification } from "antd";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 import { PendingDeliveriesTable } from "./Table";
+import { getBoxes } from "@producer/app/_actions/get-boxes";
+import { GetCycles } from "@producer/app/_actions/products/GetCycles";
 
-interface PendingDeliveriesProps {
-  numberOfItems: number;
+export interface IPendingDeliveries {
+  id: number;
+  quantidade: string;
+  dataVenda: string;
+  produto: string;
+  situacao: string;
 }
 
-export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
+export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[]>([]);
 
   const handleCopyAddress = () => {
     const address =
@@ -56,6 +63,16 @@ export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
     </div>
   );
 
+  useEffect(() => {
+    // IIFE
+    (async () => {
+      const cycles = await GetCycles()
+      const cycle = cycles?.reply.find((item: any) => item.alias === "Semanal");
+      const data = await getBoxes({ cycle_id: cycle.id, page: 0 })
+      setPendingDeliveries(data)
+    })()
+  }, [])
+
   return (
     <div
       className={`mt-5 w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4`}
@@ -78,7 +95,7 @@ export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
           <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
         </button>
       </div>
-      <PendingDeliveriesTable numberOfItems={numberOfItems} />
+      <PendingDeliveriesTable pendingDeliveries={pendingDeliveries} />
     </div>
   );
 }
