@@ -2,10 +2,10 @@
 
 import { fetchBag } from "@cdd/app/_actions/bag/fetch-bag";
 import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
-import Modal from "@cdd/components/Modal";
-import TableSkeleton from "@cdd/components/TableSkeleton";
-import { BagOrder } from "@cdd/interfaces/bag-order";
-import { useHandleError } from "@cdd/app/hooks/useHandleError";
+import Modal from "@shared/components/Modal";
+import TableSkeleton from "@shared/components/TableSkeleton";
+import { BagOrder } from "@shared/interfaces/bag-order"
+import { useHandleError } from "@shared/hooks/useHandleError";
 import dayjs from "dayjs";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -83,7 +83,6 @@ export default function SendBagMiniTable() {
       {isLoading ? (
         <TableSkeleton />
       ) : (
-
         <div className="w-full h-full flex flex-col justify-between">
           <div className="max-w-sm mx-auto bg-white rounded-lg">
             <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">

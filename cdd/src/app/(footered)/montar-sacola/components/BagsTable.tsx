@@ -6,10 +6,10 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { HiOutlineSearch } from "react-icons/hi";
 import Button from "@shared/components/Button";
-import { Bag } from "@cdd/interfaces/bag";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import { Bag } from "@shared/interfaces/bag"
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import Loader from "@shared/components/Loader";
-import { useHandleError } from "@cdd/app/hooks/useHandleError";
+import { useHandleError } from "@shared/hooks/useHandleError";
 
 interface BagsProps {
   page: number;
@@ -23,6 +23,7 @@ export default function BagsTable({ page }: BagsProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { handleError } = useHandleError()
+  const { getFromStorage } = useLocalStorage()
 
   const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setTimeout(() => {
@@ -33,7 +34,7 @@ export default function BagsTable({ page }: BagsProps) {
   useEffect(() => {
     (async () => {
       setIsLoading(true)
-      const cycle = useGetLocalStorage("selected-cycle");
+      const cycle = getFromStorage("selected-cycle");
 
       if (!cycle) {
         toast.error("Selecione um ciclo para montar uma sacola!");

@@ -1,9 +1,9 @@
 'use client';
 
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
 import { useRouter } from "next/navigation";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { toast } from "sonner";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 interface CardComponentProps {
   title: string,
@@ -16,8 +16,10 @@ interface CardComponentProps {
 export default function CardComponent({ title, link, linkIcon, isSelectedCycle, hasNotification }: CardComponentProps) {
   const router = useRouter();
 
+  const { getFromStorage } = useLocalStorage()
+
   const handleClickSelectedCycle = () => {
-    const cycle = useGetLocalStorage('selected-cycle')
+    const cycle = getFromStorage('selected-cycle')
 
     if (!cycle) {
       toast.warning("Selecione um ciclo para continuar!");

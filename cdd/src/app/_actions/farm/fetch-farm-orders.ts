@@ -1,6 +1,6 @@
 "use server";
 
-import ApiService from "@cdd/service/index"
+import ApiService from "@shared/service/index"
 
 interface FetchFarmOrdersRequest {
   farm_id: string;

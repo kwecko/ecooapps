@@ -8,8 +8,8 @@ import { setAppID } from "@shared/next/library/set-app-id";
 import { getAppID } from "@shared/next/library/get-app-id";
 
 import styles from "@shared/app/styles.module.css";
-import { SessionExpiredWrapper } from "@cdd/context";
-import SessionExpiredModal from "@cdd/components/SessionExpiredModal";
+import { SessionExpiredWrapper } from "@shared/context/session";
+import SessionExpiredModal from "@shared/components/SessionExpiredModal"
 import Head from "next/head";
 
 const poppins = Poppins({

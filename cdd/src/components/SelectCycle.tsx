@@ -8,19 +8,19 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Button from "@shared/components/Button";
 import { getCyclesAction } from "@shared/_actions/cycles";
-import { CycleData } from "@cdd/interfaces/cycle-data";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
-import { useSetLocalStorage } from "@cdd/app/hooks/useSetLocalStorage";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { CycleData } from "@shared/interfaces/cycle-data";
 
 export default function SelectCycle() {
   const [cycles, setCycles] = useState<CycleData[]>();
   const [cycle, setCycle] = useState<CycleData | null>();
 
   const router = useRouter();
+  const { getFromStorage, setInStorage } = useLocalStorage()
 
   useEffect(() => {
     (async () => {
-      const savedCycle = useGetLocalStorage('selected-cycle');
+      const savedCycle = getFromStorage('selected-cycle');
       if (savedCycle) {
         setCycle(savedCycle);
       }
@@ -35,7 +35,7 @@ export default function SelectCycle() {
 
   const handleCycleChange = (newCycle: CycleData) => {
     setCycle(newCycle);
-    useSetLocalStorage('selected-cycle', newCycle);
+    setInStorage('selected-cycle', newCycle);
   };
 
   const handleClickButton = () => {
@@ -64,9 +64,8 @@ export default function SelectCycle() {
           <>
             <div className="relative mt-1">
               <Listbox.Button
-                className={`relative w-full py-3 cursor-default outline-none ring-0 rounded-2xl bg-white pl-3 pr-10 text-left ${
-                  open ? "ring-2 ring-slate-gray" : ""
-                }`}
+                className={`relative w-full py-3 cursor-default outline-none ring-0 rounded-2xl bg-white pl-3 pr-10 text-left ${open ? "ring-2 ring-slate-gray" : ""
+                  }`}
               >
                 <span className="block truncate text-slate-gray">
                   {cycle === undefined
@@ -91,10 +90,9 @@ export default function SelectCycle() {
                     <Listbox.Option
                       key={cycle.id}
                       className={({ selected }) =>
-                        `relative cursor-default select-none py-3 pl-10 pr-4 ${
-                          selected
-                            ? "text-slate-gray bg-theme-background"
-                            : "bg-white"
+                        `relative cursor-default select-none py-3 pl-10 pr-4 ${selected
+                          ? "text-slate-gray bg-theme-background"
+                          : "bg-white"
                         }`
                       }
                       value={cycle}

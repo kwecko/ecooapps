@@ -1,6 +1,4 @@
-"use client"
-
-import { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode } from "react";
+import React, { createContext, useContext, useState, Dispatch, SetStateAction, ReactNode } from "react";
 
 interface SessionExpiredContextProps {
   sessionExpired: boolean;

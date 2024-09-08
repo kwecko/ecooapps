@@ -6,10 +6,10 @@ import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { HiOutlineSearch, HiX } from "react-icons/hi";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
 import Loader from "@shared/components/Loader";
-import { Farm } from "@cdd/interfaces/farm";
-import { useHandleError } from "@cdd/app/hooks/useHandleError";
+import { Farm } from "@shared/interfaces/farm";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 interface FarmsProps {
   page: number;
@@ -24,6 +24,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { handleError } = useHandleError()
+  const { getFromStorage } = useLocalStorage()
 
   const handleStatusFilterClick = (status: string) => {
     setSelectedStatus(status);
@@ -38,7 +39,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   useEffect(() => {
     (async () => {
       setIsLoading(true);
-      const cycle = useGetLocalStorage("selected-cycle");
+      const cycle = getFromStorage("selected-cycle");
 
       if (!cycle) {
         toast.error("Selecione um ciclo para ver os pedidos!");
@@ -109,8 +110,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             disabled
             onClick={() => handleStatusFilterClick("Todas")}
             className={`${selectedStatus === "Todas"
-                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
               }`}
           >
             Todas
@@ -120,8 +121,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             disabled
             onClick={() => handleStatusFilterClick("Pendente")}
             className={`${selectedStatus === "Pendente"
-                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
               }`}
           >
             Pendentes
@@ -131,8 +132,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             disabled
             onClick={() => handleStatusFilterClick("Concluída")}
             className={`${selectedStatus === "Concluída"
-                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
               }`}
           >
             Concluídas
@@ -142,8 +143,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             disabled
             onClick={() => handleStatusFilterClick("Rejeitada")}
             className={`${selectedStatus === "Rejeitada"
-                ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items=center h-[22px]"
-                : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
+              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items=center h-[22px]"
+              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
               }`}
           >
             Rejeitadas

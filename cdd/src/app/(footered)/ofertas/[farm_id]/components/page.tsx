@@ -2,16 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { fetchFarmOrders } from "@cdd/app/_actions/farm/fetch-farm-orders";
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
-import Modal from "@cdd/components/Modal";
-import RedirectModal from "@cdd/components/SessionExpiredModal";
+import Modal from "@shared/components/Modal";
 import dayjs from "dayjs";
 import { notFound, useParams, useRouter } from "next/navigation";
-import { FarmOrders } from "@cdd/interfaces/farm-orders";
-import TableSkeleton from "@cdd/components/TableSkeleton";
-import { useHandleError } from "@cdd/app/hooks/useHandleError";
+import { FarmOrders } from "@shared/interfaces/farm-orders";
+import TableSkeleton from "@shared/components/TableSkeleton";
+import { useHandleError } from "@shared/hooks/useHandleError";
 
 export default function FarmOrdersTable() {
   const router = useRouter();
@@ -19,9 +18,9 @@ export default function FarmOrdersTable() {
 
   const [farmOrders, setFarmOrders] = useState<FarmOrders | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [sessionExpired, setSessionExpired] = useState(false);
 
   const { handleError } = useHandleError()
+  const { getFromStorage } = useLocalStorage()
 
   if (!farm_id) {
     notFound();
@@ -29,7 +28,7 @@ export default function FarmOrdersTable() {
 
   useEffect(() => {
     (async () => {
-      const cycle = useGetLocalStorage('selected-cycle');
+      const cycle = getFromStorage('selected-cycle');
 
       if (!cycle) {
         toast.error("Selecione um ciclo para receber ofertas!");
@@ -59,25 +58,13 @@ export default function FarmOrdersTable() {
     })();
   }, [farm_id]);
 
-  if (sessionExpired) {
-    return (
-      <RedirectModal
-        titleContentModal="Sessão Expirada"
-        contentModal="Sua sessão expirou. Por favor, faça login novamente."
-        buttonLabel="Ir para o Login"
-        bgButton="#00735E"
-        redirectTo={() => router.push('/api/auth/logout')}
-      />
-    );
-  }
-
   const handleStatusOrder = async (status: "RECEIVED" | "CANCELLED") => {
     if (farmOrders?.orders.length === 0) {
       toast.error("Não é possível receber ofertas sem conteúdo!");
       return;
     }
 
-    const cycle = useGetLocalStorage('selected-cycle');
+    const cycle = getFromStorage('selected-cycle');
     const { id } = cycle;
 
     await handleOrderDelivery({
@@ -111,8 +98,6 @@ export default function FarmOrdersTable() {
 
     return nextSaturday.format("DD/MM/YYYY");
   };
-
-  if (!farm_id) return null;
 
   return (
     <>

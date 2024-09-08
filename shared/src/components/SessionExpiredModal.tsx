@@ -1,22 +1,20 @@
-import { useSessionExpiredContext } from '@cdd/context'
+import { useSessionExpiredContext } from '../context/session/index'
 import { Dialog, Transition } from '@headlessui/react'
 import { useRouter } from 'next/navigation'
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 
 interface ModalProps {
-  redirectTo?: () => void
   titleContentModal?: string
   contentModal?: string
   buttonLabel?: string
   bgButton?: string
 }
 
-export default function SessionExpiredModal({ 
-  titleContentModal, 
-  contentModal, 
+export default function SessionExpiredModal({
+  titleContentModal,
+  contentModal,
   buttonLabel,
-  bgButton, 
-  redirectTo
+  bgButton,
 }: ModalProps) {
   const router = useRouter()
 
@@ -29,7 +27,7 @@ export default function SessionExpiredModal({
 
   return (
     <Transition appear show={sessionExpired} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={() => {}}>
+      <Dialog as="div" className="relative z-10" onClose={() => { }}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
