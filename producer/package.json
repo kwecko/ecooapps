@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.4.0",
     "@formkit/auto-animate": "^0.7.0",
     "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.1",
