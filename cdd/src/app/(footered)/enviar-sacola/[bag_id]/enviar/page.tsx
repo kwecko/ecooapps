@@ -8,7 +8,6 @@ export default async function Home({ params }: { params: { id: string } }) {
   let selectedOrder = {} as any;
   const customerName: string = `${selectedOrder.customer.first_name} ${selectedOrder.customer.last_name}`;
 
-
   return (
     <div className="text-slate-gray flex flex-col bg-theme-background p-5 justify-start h-full">
       <div className="flex flex-col items-center justify-between h-full">

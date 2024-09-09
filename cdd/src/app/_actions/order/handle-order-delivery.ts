@@ -1,6 +1,6 @@
 "use server"
 
-import ApiService from "@cdd/service/index"
+import ApiService from "@shared/service/index"
 
 interface HandleOrderDeliveryRequest {
   cycle_id: string;
@@ -8,7 +8,7 @@ interface HandleOrderDeliveryRequest {
   status: "RECEIVED" | "CANCELLED";
 }
 
-export async function handleOrderDelivery({ cycle_id, farm_id, status }: HandleOrderDeliveryRequest){
+export async function handleOrderDelivery({ cycle_id, farm_id, status }: HandleOrderDeliveryRequest) {
   const response = ApiService.PATCH({
     url: '/orders',
     data: { cycle_id, farm_id, status }

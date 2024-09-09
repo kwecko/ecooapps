@@ -5,11 +5,13 @@ import { toast } from "sonner";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 import SendBagTable from "./components/SendBagTable";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+
+  const { getFromStorage } = useLocalStorage()
 
   const backPage = () => {
     if (page > 1) {
@@ -20,9 +22,9 @@ export default function Home() {
   const nextPage = async () => {
     if (!hasNextPage) return;
 
-    const cycle = useGetLocalStorage('selected-cycle')
+    const cycle = getFromStorage('selected-cycle')
 
-    if(!cycle){
+    if (!cycle) {
       toast.error("Selecione um ciclo para enviar sacolas!")
       return
     }
@@ -39,7 +41,7 @@ export default function Home() {
       setPage((prev) => prev + 1);
     } else {
       setHasNextPage(false);
-    }   
+    }
   };
 
   return (

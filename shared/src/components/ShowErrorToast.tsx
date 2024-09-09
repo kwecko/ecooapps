@@ -5,8 +5,8 @@ import CustomToastError from './CustomToastError';
 
 export function showErrorToast(error: string) {
   toast.error(
-    <CustomToastError 
-      error={error} 
+    <CustomToastError
+      error={error}
     />,
     {
       duration: Infinity,

@@ -1,9 +1,9 @@
 'use client'
 
 import { toast } from "sonner";
-import { errorsMapper } from "../../../errors";
-import { showErrorToast } from "@cdd/components/ShowErrorToast";
-import { useSessionExpiredContext } from "@cdd/context";
+import { errorsMapper } from "../errors";
+import { showErrorToast } from "../components/ShowErrorToast";
+import { useSessionExpiredContext } from "../context/session/index";
 import { useCallback } from "react";
 
 export function useHandleError() {
@@ -15,7 +15,7 @@ export function useHandleError() {
         setSessionExpired(true);
       } else if (errorCode === "💥 Ocorreu um erro interno.") {
         showErrorToast(errorCode);
-      } else if(errorCode === "Erro desconhecido") {
+      } else if (errorCode === "Erro desconhecido") {
         showErrorToast(errorCode);
       } else {
         toast.error(errorCode);

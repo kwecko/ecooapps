@@ -1,78 +1,119 @@
-"use client";
-
-import React, { ReactNode, useState } from "react";
-import { Dialog } from "@headlessui/react";
-
+import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react'
 
 interface ModalProps {
-  openButton?: ReactNode;
-  title?: string;
-  description?: string;
-  approvalButtons?: boolean;
-  textButton1?: string;
-  textButton2?: string;
-  classNameButton1: string;
-  classNameButton2: string;
-  onClickButton?: () => void;
+  titleOpenModal?: string
+  titleContentModal?: string
+  contentModal?: string
+  titleConfirmModal?: string
+  titleCloseModal?: string
+  bgOpenModal?: string
+  bgConfirmModal?: string
+  bgCloseModal?: string
+  modalAction?: () => void
 }
 
-export default function Modal({
-  openButton,
-  title,
-  description,
-  textButton1,
-  textButton2,
-  classNameButton1,
-  classNameButton2,
-  onClickButton,
+export default function Modal({ 
+  titleOpenModal, 
+  titleContentModal, 
+  contentModal, 
+  titleConfirmModal,
+  titleCloseModal,
+  bgOpenModal, 
+  bgConfirmModal, 
+  bgCloseModal,
+  modalAction 
 }: ModalProps) {
-  let [isOpen, setIsOpen] = useState(false);
+  let [isOpen, setIsOpen] = useState(false)
 
-  const openModal = () => {
-    setIsOpen(true);
-  };
+  function closeModal() {
+    setIsOpen(false)
+  }
 
-  const closeModal = () => {
-    setIsOpen(false);
+  function openModal() {
+    setIsOpen(true)
+  }
+
+  const handleActionModal = () => {
+    closeModal();
+    if (modalAction) modalAction();
   };
 
   return (
-    <div>
-      <div onClick={openModal}>{openButton}</div>
-      <Dialog
-        as="div"
-        open={isOpen}
-        onClose={closeModal}
-        className="fixed inset-10 h-fit w-10/12 overflow-y-auto text-center"
-      >
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
-        <div className="fixed inset-0 flex w-screen items-center justify-center px-2">
-          <Dialog.Panel className="bg-white z-10 rounded-3xl py pt-12 pb-7 px-4">
-            <Dialog.Title>
-              <div className={`font-semibold text-2xl mb-4 text-[20px]`}>
-                {title}
-              </div>
-            </Dialog.Title>
-            <Dialog.Description className="text-theme-primary px-[20px]">
-              {description}
-            </Dialog.Description>
-            <div className="mt-20 w-full flex">
-              <button
-                onClick={closeModal}
-                className={`h-11 w-full ml-auto p-2 rounded-md font-semibold ${classNameButton1}`}
+    <>
+      <div className="w-full flex">
+        <button
+        style={{ backgroundColor: bgOpenModal }}
+          type="button"
+          onClick={openModal}
+          className={`rounded-md px-3 py-4 font-medium text-white w-full`}
+        >
+          {titleOpenModal}
+        </button>
+      </div>
+
+      <Transition appear show={isOpen} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-black/25" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4 text-center">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
               >
-                {textButton1}
-              </button>
-              <button
-                onClick={onClickButton}
-                className={`h-11 w-full ml-2 p-2 rounded-md font-semibold ${classNameButton2}`}
-              >
-                {textButton2}
-              </button>
+                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                  <Dialog.Title
+                    as="h3"
+                    className="text-lg text-center font-medium leading-6 text-slate-gray"
+                  >
+                    {titleContentModal}
+                  </Dialog.Title>
+                  <div className="mt-8 mb-8">
+                    <p className="text-center text-theme-primary">
+                      {contentModal}
+                    </p>
+                  </div>
+
+                  <div className="flex justify-center gap-3 mt-4">
+                    <button
+                      style={{ backgroundColor: bgCloseModal }}
+                      type="button"
+                      className={`w-full text-[#455154] inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-3 py-4 font-medium`}
+                      onClick={closeModal}
+                    >
+                      {titleCloseModal}
+                    </button>
+                    <button
+                      style={{ backgroundColor: bgConfirmModal }}
+                      type="button"
+                      className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium`}
+                      onClick={handleActionModal}
+                    >
+                      {titleConfirmModal}
+                    </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
-          </Dialog.Panel>
-        </div>
-      </Dialog>
-    </div>
-  );
+          </div>
+        </Dialog>
+      </Transition>
+    </>
+  )
 }

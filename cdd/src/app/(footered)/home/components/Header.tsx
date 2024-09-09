@@ -1,21 +1,16 @@
 "use client";
 
 import { getUser } from "@cdd/app/_actions/user/get-user";
-import { useHandleError } from "@cdd/app/hooks/useHandleError";
-import RedirectModal from "@cdd/components/SessionExpiredModal";
-import SkeletonLoader from "@cdd/components/SkeletonLoader";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import SkeletonLoader from "@shared/components/SkeletonLoader";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiOutlineBell } from "react-icons/hi";
 import { toast } from "sonner";
 
 export function Header() {
-  const router = useRouter()
-
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(true)
-  const [sessionExpired, setSessionExpired] = useState(false);
 
   const { handleError } = useHandleError()
 
@@ -38,18 +33,6 @@ export function Header() {
         })
     })()
   }, [])
-
-  if (sessionExpired) {
-    return (
-      <RedirectModal
-        titleContentModal="Sessão Expirada"
-        contentModal="Sua sessão expirou. Por favor, faça login novamente."
-        buttonLabel="Ir para o Login"
-        bgButton="#00735E"
-        redirectTo={() => router.push('/api/auth/logout')}
-      />
-    );
-  }
 
   return (
     <header className="flex items-center mb-4">

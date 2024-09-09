@@ -4,12 +4,14 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
 import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
-import { useGetLocalStorage } from "@cdd/app/hooks/useGetLocalStorage";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { toast } from "sonner";
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
   const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+
+  const { getFromStorage } = useLocalStorage()
 
   const backPage = () => {
     if (page > 1) {
@@ -20,9 +22,9 @@ export default function Home() {
   const nextPage = async () => {
     if (!hasNextPage) return;
 
-    const cycle = useGetLocalStorage('selected-cycle')
+    const cycle = getFromStorage('selected-cycle')
 
-    if(!cycle){
+    if (!cycle) {
       toast.error("Selecione um ciclo para ver os pedidos!")
       return
     }
@@ -39,7 +41,7 @@ export default function Home() {
       setPage((prev) => prev + 1);
     } else {
       setHasNextPage(false);
-    }    
+    }
   };
 
   return (

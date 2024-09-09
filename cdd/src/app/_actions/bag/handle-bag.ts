@@ -1,6 +1,6 @@
 "use server"
 
-import ApiService from "@cdd/service/index"
+import ApiService from "@shared/service/index"
 
 interface ListBagsRequest {
   bag_id: string
