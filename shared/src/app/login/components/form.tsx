@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
@@ -14,7 +14,7 @@ import { AppID } from "../../../library/types/app-id";
 
 import { loginAgribusinessAction } from "@shared/next/_actions/account/login-agribusiness";
 import { loginCDDAction } from "../../../_actions/account/login-cdd";
-import Button from "@shared/next/components/Button";
+import Loader from "../../../components/Loader"
 
 const schema = yup.object({
   email: yup
@@ -26,6 +26,7 @@ const schema = yup.object({
 
 export default function FormLogin({ appID }: { appID: AppID }) {
   const resolver = yupResolver(schema);
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const {
@@ -34,16 +35,22 @@ export default function FormLogin({ appID }: { appID: AppID }) {
     handleSubmit,
   } = useForm({ resolver });
 
-  const onSubmit = async ({ email, password }: any) =>
+  const onSubmit = async ({ email, password }: any) => {
+    setIsLoading(true)
+
     await callServer(appID === "CDD" ? loginCDDAction : loginAgribusinessAction)
       .after(() => {
         toast.success("Login efetuado com sucesso.");
         router.push("/");
+        setIsLoading(false)
       })
       .run({
         email,
         password,
-      });
+      })
+
+      setIsLoading(false)
+    }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -59,15 +66,21 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           type="password"
           icon={<AiFillEye />}
           register={{ ...register("password") }}
-          // error={errors.password?.message}
+          error={errors.password?.message}
         />
       </div>
-      <Button
+      <button
+        disabled={isLoading}
         type="submit"
-        className="w-full px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
+        className="w-full flex justify-center items-center px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
+        style={{ minHeight: "50px" }} // Define um tamanho mínimo para o botão
       >
-        Entrar
-      </Button>
+        {isLoading ? (
+          <Loader className="w-6 h-6 border-white" />
+        ) : (
+          <>Entrar</>
+        )}
+      </button>
     </form>
   );
 }

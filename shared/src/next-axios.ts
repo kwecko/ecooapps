@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-// import { redirect } from "next/navigation";
 import { toast } from "sonner";
 
 import { UI_WARNINGS } from "@shared/warnings";
@@ -12,6 +11,7 @@ const isAbsoluteUrl = (url: string): boolean => {
 };
 
 const setTokenCookie = (token: string) => {
+  cookies().delete("token");
   cookies().set("token", token);
 };
 

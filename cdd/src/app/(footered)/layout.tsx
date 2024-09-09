@@ -12,11 +12,11 @@ const HAS_PREVIOUS_PAGE = {
   "/montar-sacola/[id]": true,
   "/montar-sacola/[id]/alterar": false,
   "/montar-sacola/[id]/aprovar": false,
-  "/pedidos": true,
-  "/pedidos/[id]": true,
-  "/pedidos/[id]/aprovar": false,
-  "/pedidos/[id]/justificativa": true,
-  "/pedidos/[id]/justificativa/rejeitar": false,
+  "/ofertas": true,
+  "/ofertas/[id]": true,
+  "/ofertas/[id]/aprovar": false,
+  "/ofertas/[id]/justificativa": true,
+  "/ofertas/[id]/rejeitar": false,
   "/em-construcao": true,
 };
 
@@ -32,11 +32,11 @@ const HAS_HELP_BUTTON = {
   "/montar-sacola/[id]": true,
   "/montar-sacola/[id]/alterar": true,
   "/montar-sacola/[id]/aprovar": true,
-  "/pedidos": false,
-  "/pedidos/[id]": true,
-  "/pedidos/[id]/aprovar": true,
-  "/pedidos/[id]/justificativa": true,
-  "/pedidos/[id]/justificativa/rejeitar": true,
+  "/ofertas": false,
+  "/ofertas/[id]": true,
+  "/ofertas/[id]/aprovar": true,
+  "/ofertas/[id]/justificativa": true,
+  "/ofertas/[id]/rejeitar": true,
   "/em-construcao": false,
 };
 
@@ -47,8 +47,8 @@ const RETURN_URLS = {
   "/login": "/",
   "/montar-sacola": "/",
   "/montar-sacola/[id]": "/montar-sacola",
-  "/pedidos": "/",
-  "/pedidos/[id]": "/pedidos",
+  "/ofertas": "/",
+  "/ofertas/[id]": "/ofertas",
   "/em-construcao": "/",
 };
 

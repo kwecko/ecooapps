@@ -1,22 +1,18 @@
-// "use client";
-
 import Image, { ImageLoader } from "next/image";
 import { useEffect, useState } from "react";
 import { ProductCart, useCartProvider } from "../../../../context/cart";
 
 export default function CardProdutoCart({
   product,
-  // nameFarm,
   exclude,
 }: {
   product: ProductCart;
-  // nameFarm: string;
   exclude: boolean;
 }) {
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
   
   const mapTextQuantity = {
@@ -55,7 +51,6 @@ export default function CardProdutoCart({
         description: product.description,
         quantity: count + 1,
         offerId: product.offerId,
-        // nameFarm: nameFarm
       });
       setCount(count + 1);
       setCart(newCart);
@@ -121,9 +116,6 @@ export default function CardProdutoCart({
         <p className="w-full text-left font-poppins text-xs">
           Quantidade: {mapTextQuantity[product.pricing]}
         </p>
-        {/* <p className="w-full text-left font-poppins text-xs">
-          Produtor: {nameFarm}
-        </p> */}
         <p className="w-full text-left font-poppins text-[16px] pt-3">
           {product.price.toLocaleString("pt-br", {
               style: "currency",
@@ -165,13 +157,14 @@ export default function CardProdutoCart({
             <>
               <div className="flex flex-row-reverse">
                 <div className="w-5 h-5">
-                  <Image
+                 <Image
                     src="/trash.png"
                     onClick={deleteProductCart}
                     alt="trash"
-                    width={15}
-                    height={15}
-                  ></Image>
+                    className="h-4 w-4 object-cover" 
+                    width={100} 
+                    height={100}
+                  />
                 </div>
               </div>
             </>

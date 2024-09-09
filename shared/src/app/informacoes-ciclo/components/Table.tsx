@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import getWeekDays from "../../../utils/get.week.days";
+import { getWeekDays } from "../../../utils/index";
 import { useEffect, useState } from "react";
 
 export default function Table() {

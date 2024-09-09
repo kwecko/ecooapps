@@ -19,6 +19,7 @@ const handleExceptions = (error: {
 
     if (status) {
       if (status === 400) error.message = USE_CASE_EXCEPTIONS["general-1"];
+      if (status === 401) error.message = USE_CASE_EXCEPTIONS["general-5"];
       if (status === 403) error.message = USE_CASE_EXCEPTIONS["general-2"];
       if (status === 409) error.message = USE_CASE_EXCEPTIONS["general-3"];
     }
@@ -60,6 +61,7 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
 
     return { data: response.data, status: 201 };
   }),
+
   authenticateUser: defineServiceMethod<"authenticateUser">(
     async (user_data) => {
       const response = await axios.post(
@@ -79,6 +81,7 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
       return { data: response.data, status: 200 };
     }
   ),
+
   getUser: defineServiceMethod<"getUser">(async (access_token) => {
     const response = await axios.get(`${process.env.API_URL}/me`, {
       headers: {
@@ -89,6 +92,7 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
 
     return { data: response.data, status: 200 };
   }),
+
   getCycles: defineServiceMethod<"getCycles">(async (access_token) => {
     const response = await axios.get(`${process.env.API_URL}/cycles`, {
       headers: {
@@ -102,6 +106,7 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
       status: 200,
     };
   }),
+
   getProducts: defineServiceMethod<"getProducts">(async (access_token) => {
     const response = await axios.get(`${process.env.API_URL}/products/`, {
       headers: {
@@ -112,6 +117,7 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
 
     return { data: response.data, status: 200 };
   }),
+
   registerAgribusiness: defineServiceMethod<"registerAgribusiness">(
     async (agribusiness_data, access_token) => {
       const response = await axios.post(
@@ -131,45 +137,26 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
     }
   ),
 
-  listOrders: defineServiceMethod<"listOrders">(
-    async (access_token, cycle_id, page, status: string) => {
-      const response = await axios.get(
-        `${process.env.API_URL}/orders?cycle_id=${cycle_id}&page=${page}&status=${status}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      return { data: response.data, status: 200 };
-    }
-  ),
-
-  viewOrder: defineServiceMethod<"viewOrder">(
-    async (access_token, order_id) => {
-      const response = await axios.get(
-        `${process.env.API_URL}/orders/${order_id}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${access_token}`,
-          },
-        }
-      );
-
-      return { data: response.data, status: 200 };
-    }
-  ),
-
-  updateOrderStatus: defineServiceMethod<"updateOrderStatus">(
-    async (access_token, order_id, status) => {
-      const response = await axios.patch(
-        `${process.env.API_URL}/orders/${order_id}`,
-        {
-          status,
+  searchOfferingFarms: defineServiceMethod<"searchOfferingFarms">(
+    async (cycle_id, page, product) => {
+      const response = await axios.get(`${process.env.API_URL}/offers`, {
+        params: {
+          cycle_id,
+          page,
+          product,
         },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return { data: response.data, status: 200 };
+    }
+  ),
+
+  listFarmsWithOrders: defineServiceMethod<"listFarmsWithOrders">(
+    async (access_token, cycle_id, page: number, name) => {
+      const response = await axios.get(
+        `${process.env.API_URL}/orders?cycle_id=${cycle_id}&page=${page}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -179,6 +166,41 @@ export const ecooAPIHTTPProvider: IEcooAPI = {
       );
 
       return { data: response.data, status: 200 };
+    }
+  ),
+
+  listFarmOrders: defineServiceMethod<"listFarmOrders">(
+    async (access_token, farm_id, cycle_id) => {
+      const response = await axios.get(
+        `${process.env.API_URL}/orders/${farm_id}?cycle_id=${cycle_id}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${access_token}`,
+          },
+        }
+      );
+      return { data: response.data, status: 200 };
+    }
+  ),
+
+  handleOrdersDelivery: defineServiceMethod<"handleOrdersDelivery">(
+    async (access_token, body) => {
+      try {
+        const response = await axios.patch(
+          `${process.env.API_URL}/orders`,
+          body, // Ensure this is the correct payload
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${access_token}`,
+            },
+          }
+        );
+        return { data: response.data, status: 204 };
+      } catch (error) {
+        throw error;
+      }
     }
   ),
 };

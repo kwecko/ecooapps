@@ -1,7 +1,9 @@
 "use client";
 import { OfferProducts } from "@producer/app/_actions/products/OfferProducts";
 import Button from "@shared/components/Button";
+import Loader from "@shared/components/Loader";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { LuChevronLeft } from "react-icons/lu";
 import { toast } from "sonner";
 
@@ -21,11 +23,13 @@ interface offerProductData {
 }
 
 export default function Step4({ goNextClick, goBackClick }: FormProps) {
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const savedOfferProductsDataString = localStorage.getItem(
     "offer-products-data"
   );
+
   const {
     id,
     name,
@@ -40,7 +44,8 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
 
   const displayValue = quantity !== "" ? `${quantity} unidades` : `${weigth} g`;
 
-  const onSubmitTest = async () => {
+  const onSubmit = async () => {
+    setIsLoading(true)
     const priceFormat = priceString.replace(/[^\d,.]/g, "");
     const priceNoFormat = parseFloat(priceFormat.replace(",", "."));
 
@@ -52,20 +57,22 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
     const price = priceNoFormat
     const description = describe    
 
-    const result = await OfferProducts({ product_id, cycle_id, amount, price, description});
-
-    const message = result?.reply.message;
-
-    if (message) {
-      toast.error(message);
-      return;
-    } else {
-      toast.success("Produto ofertado com sucesso.");
-      goNextClick();
-    }
-
-    localStorage.removeItem("offer-product-step");
-    localStorage.removeItem("offer-products-data");
+    await OfferProducts({ product_id, cycle_id, amount, price, description})
+      .then((response) => {
+        if(response?.reply.message){
+          toast.error(response?.reply.message);
+          return;
+        } else {
+            toast.success("Produto ofertado com sucesso.");
+            goNextClick();
+        }
+      })
+      .catch((error) => {
+        toast.error(error)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   };
 
   const handleCancelButton = () => {
@@ -102,7 +109,7 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
               </tr>
               <tr>
                 <td className="w-1/4 p-3">Preço:</td>
-                <td className="w-3/4 p-3">{priceString} / kg</td>
+                <td className="w-3/4 p-3">{priceString} / {weigth}</td>
               </tr>
               <tr>
                 <td className="w-1/4 p-3">Descrição:</td>
@@ -110,12 +117,19 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
               </tr>
             </tbody>
           </table>
-          <Button
+          <button
+            disabled={isLoading}
             className="w-full px-2 py-3 font-semibold rounded-lg text-white border-0 p-2 bg-theme-default"
-            onClick={onSubmitTest}
+            onClick={onSubmit}
           >
-            Confirmar e colocar a venda
-          </Button>
+            {isLoading ? (
+              <Loader className="w-6 h-6 border-white" />
+            ) : (
+              <>
+                Confirmar e colocar a venda
+              </>
+            )}
+          </button>
         </div>
       </div>
       <div className="w-full flex items-center justify-between h-[5%] mt-8">

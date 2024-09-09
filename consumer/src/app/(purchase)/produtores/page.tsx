@@ -1,11 +1,12 @@
 "use client";
 
-import { Farm, fetchFarms } from "@consumer/app/_actions/fetch-farms";
+import { Catalog, Farm, fetchCatalogs } from "@consumer/app/_actions/fetch-catalogs";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useInView } from 'react-intersection-observer';
 import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
+import RedirectCart from "@consumer/app/_components/redirectCart";
 export default function Produtores() {
 
   const [cycles, setcycle] = useState([] as Cycle[]);
@@ -24,9 +25,6 @@ export default function Produtores() {
   
   const searchProducers = async () => {
 
-    // const getDay = new Date().getDay() + 1;
-    // const typeCycle = getDay != 5 ? "semanal": "diario";
-
     const typeCycle = process.env.NEXT_PUBLIC_ENV == "dev" || process.env.NEXT_PUBLIC_ENV == "homolog" ? "livre" : "semanal";
     
     const cycleId = cycles.find(
@@ -35,10 +33,10 @@ export default function Produtores() {
 
     setCycleId(cycleId as string);
 
-    const farms: Farm[] = await fetchFarms(cycleId, page);
+    const catalogs: Catalog[] = await fetchCatalogs(cycleId, page);
 
-    let newProducers = farms.map((farm) => {
-      return { id: farm.id, name: farm.name };
+    let newProducers = catalogs.map((catalog) => {
+      return { id: catalog.id, name: catalog.farm.name };
     });
 
     if(newProducers.length == 0){
@@ -60,7 +58,8 @@ export default function Produtores() {
 
   return (
     <>
-      <div className="w-full h-screen overflow-y-auto">
+      <div className="flex flex-col h-full">
+        <div className="overflow-y-auto">
         {producers && producers.length !== 0
           ? producers.map((producer) => {
               return (
@@ -82,14 +81,13 @@ export default function Produtores() {
                         </span>
                       </div>
                       <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-                        {/* <div className="w-6 h-6"> */}
                         <Image
                           src="/arrow.png"
                           alt="arrow"
-                          width={10}
-                          height={7}
-                        ></Image>
-                        {/* </div> */}
+                          className="w-3 h-2"
+                          width={100}
+                          height={100}
+                        />
                       </div>
                     </div>
                   </Link>
@@ -103,6 +101,10 @@ export default function Produtores() {
             </div>: null
           }
         </div>
+      </div>
+      <div className="min-h-[70px]">
+        <RedirectCart/>
+      </div>
       </div>
     </>
   );

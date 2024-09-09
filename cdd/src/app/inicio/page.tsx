@@ -1,9 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
 
-import Button from "@shared/components/Button";
+import Button from "@shared/next/components/Button";
 import Link from "next/link";
 
 export default function Inicio() {
@@ -29,12 +27,6 @@ export default function Inicio() {
             Entrar
           </Button>
         </Link>
-        {/* <Link href={"/cadastrar"}>
-          <OldButton
-            className="text-white text border-2 border-white"
-            title="Cadastrar"
-          />
-        </Link> */}
       </div>
 
       <div className="h-3/5 w-full flex items-end mt-4">

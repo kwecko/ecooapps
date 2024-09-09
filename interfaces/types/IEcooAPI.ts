@@ -1,6 +1,9 @@
 import { User } from "@shared/domain/entities/user";
+import { FarmDTO } from "@shared/domain/dtos/farm-dto";
+import { OrderCompleteDTO } from "@shared/domain/dtos/order-complete-dto";
+import { CycleDTO } from "@shared/domain/dtos/cycle-dto";
 
-export type GenericStatusCodes = 400 | 403 | 409;
+export type GenericStatusCodes = 400 | 401 | 403 | 409;
 
 export type EcooAPIRouteParams = {
   registerUser: [
@@ -21,14 +24,22 @@ export type EcooAPIRouteParams = {
     agribusiness_data: { caf: string; name: string },
     access_token: string
   ];
-  listOrders: [
+  searchOfferingFarms: [cycle_id: string, page: number, product?: string];
+  listFarmsWithOrders: [
     access_token: string,
     cycle_id: string,
     page: number,
-    status: string
+    name?: string
   ];
-  viewOrder: [access_token: string, order_id: string];
-  updateOrderStatus: [access_token: string, order_id: string, status: string];
+  listFarmOrders: [access_token: string, farm_id: string, cycle_id: string];
+  handleOrdersDelivery: [
+    access_token: string,
+    body: {
+      cycle_id: string;
+      farm_id: string;
+      status: "RECEIVED" | "CANCELLED";
+    }
+  ];
 };
 
 export interface IEcooAPI {
@@ -57,13 +68,20 @@ export interface IEcooAPI {
   registerAgribusiness: (
     ...params: EcooAPIRouteParams["registerAgribusiness"]
   ) => Promise<{ status: 201; data: any }>;
-  listOrders: (
-    ...params: EcooAPIRouteParams["listOrders"]
+  searchOfferingFarms: (
+    ...params: EcooAPIRouteParams["searchOfferingFarms"]
   ) => Promise<{ status: 200; data: any }>;
-  viewOrder: (
-    ...params: EcooAPIRouteParams["viewOrder"]
-  ) => Promise<{ status: 200; data: any }>;
-  updateOrderStatus: (
-    ...params: EcooAPIRouteParams["updateOrderStatus"]
-  ) => Promise<{ status: 200; data: any }>;
+  listFarmsWithOrders: (
+    ...params: EcooAPIRouteParams["listFarmsWithOrders"]
+  ) => Promise<{ status: 200; data: FarmDTO[] }>;
+  listFarmOrders: (...params: EcooAPIRouteParams["listFarmOrders"]) => Promise<{
+    status: 200;
+    data: {
+      farm: FarmDTO;
+      orders: OrderCompleteDTO[];
+    };
+  }>;
+  handleOrdersDelivery: (
+    ...params: EcooAPIRouteParams["handleOrdersDelivery"]
+  ) => Promise<{ status: 204; data: any }>;
 }

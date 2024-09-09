@@ -10,12 +10,14 @@ import { useRouter } from "next/navigation";
 import Button from "./Button";
 import { useCycleProvider } from "../context";
 
-interface CycleData {
+export interface CycleData {
   id: string;
   alias: string;
   offer: number[];
   order: number[];
   deliver: number[];
+  created_at: Date;
+  updated_at: Date | null
 }
 
 export default function SelectCycle() {

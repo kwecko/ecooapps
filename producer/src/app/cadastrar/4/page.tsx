@@ -1,5 +1,5 @@
 "use client";
-import { maskCAF } from "@shared/utils";
+import { maskCAF } from "@shared/utils/index";
 
 import Input from "../components/Input";
 import { registerStep4FieldsSchema } from "../schemas";

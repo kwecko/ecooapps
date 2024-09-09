@@ -8,10 +8,11 @@ import { loginCDD } from "./login-cdd";
 import { loginAgribusiness } from "./login-agribusiness";
 import { registerAgribusiness } from "./register-agribusiness";
 import { loginGeneric } from "./login-generic";
-import { listOrders } from "./list-orders";
-import { viewOrder } from "./view-order";
-import { updateOrderStatus } from "./update-order-status";
 import { getCycles } from "./get-cycles";
+import { searchOfferingFarms } from "./offers/search-offering-farms";
+import { listFarmsWithOrders } from "./orders/list-farms-with-orders";
+import { listFarmOrders } from "./orders/list-farm-orders";
+import { handleOrdersDelivery } from "./orders/handle-orders-delivery";
 
 const HANDLERS = {
   "create-user": createAccount,
@@ -21,9 +22,10 @@ const HANDLERS = {
   "login-agribusiness": loginAgribusiness,
   "login-generic": loginGeneric,
   "register-agribusiness": registerAgribusiness,
-  "list-orders": listOrders,
-  "view-order": viewOrder,
-  "update-order-status": updateOrderStatus,
+  "search-offering-farms": searchOfferingFarms,
+  "list-farms-with-orders": listFarmsWithOrders,
+  "list-farm-orders": listFarmOrders,
+  "handle-orders-delivery": handleOrdersDelivery,
 };
 
 const defineStubbedCases = (): Record<string, boolean> => {

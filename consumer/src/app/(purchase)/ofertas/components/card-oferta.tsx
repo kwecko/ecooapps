@@ -1,28 +1,24 @@
-// "use client";
-
-import { Offer } from "@consumer/app/_actions/fetch-offers-farm";
+import { Offer } from "@consumer/app/_actions/fetch-catalogs-by-id";
 import Image, { ImageLoader } from "next/image";
 import { useEffect, useState } from "react";
 import { useCartProvider } from "../../../../context/cart";
 
 export default function CardOferta({
   offer,
-  // nameFarm,
   exclude,
 }: {
   offer: Offer;
-  // nameFarm: string;
   exclude: boolean;
 }) {
 
   const mapQuantity = {
     "UNIT": 1,
-    "WEIGHT": 100
+    "WEIGHT": 500
   };
 
   const mapPrice = {
     "UNIT": 1,
-    "WEIGHT": 10
+    "WEIGHT": 2
   }
 
   const mapPriceText = {
@@ -67,7 +63,6 @@ export default function CardOferta({
         description: offer.description,
         quantity: count + 1,
         offerId: offer.id,
-        // nameFarm: nameFarm
       });
       setCount(count + 1);
       setCart(newCart);
@@ -132,9 +127,6 @@ export default function CardOferta({
         <p className="w-full text-left font-poppins text-xs text-[#2F4A4D]">
           Quantidade: {mapTextQuantity[offer.product.pricing]}
         </p>
-        {/* <p className="w-full text-left font-poppins text-xs">
-          Produtor: {nameFarm}
-        </p> */}
         <p className="w-full text-left font-poppins text-[16px] text-[#2F4A4D] pt-3">
           {offer.price.toLocaleString("pt-br", {
             style: "currency",
@@ -188,9 +180,10 @@ export default function CardOferta({
                     src="/trash.png"
                     onClick={deleteProductCart}
                     alt="trash"
-                    width={15}
-                    height={15}
-                  ></Image>
+                    className="h-4 w-4 object-cover" 
+                    width={100} 
+                    height={100}
+                  />
                 </div>
               </div>
             </>

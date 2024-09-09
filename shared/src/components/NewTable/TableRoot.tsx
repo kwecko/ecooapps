@@ -1,13 +1,12 @@
 import React, { HTMLAttributes, ReactNode, useState } from "react";
 import { twMerge } from "tailwind-merge";
 import styles from "./Table.module.css";
-import { Order } from "@shared/domain/use-cases/list-orders";
 
 interface TableRootProps extends Omit<HTMLAttributes<HTMLTableElement>, 'children'> {
   children: (currentItems: any[]) => ReactNode;
-  data: Order[];
+  data: any[];
   paginate: boolean;
-  itemsPerPage: number;
+  itemsPerPage?: number;
 }
 
 interface PaginationProps {
@@ -81,16 +80,21 @@ export default function TableRoot({
   children,
   data,
   paginate,
-  itemsPerPage,
+  itemsPerPage = 10,
   ...rest
 }: TableRootProps) {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(data.length / itemsPerPage);
 
-  const currentItems = data.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  let currentItems = data;
+  let totalPages = 1;
+
+  if (paginate) {
+    totalPages = Math.ceil(data.length / itemsPerPage);
+    currentItems = data.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }
 
   const handlePageChange = (newPage: number) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -107,10 +111,10 @@ export default function TableRoot({
           rest.className
         )}
       >
-        {children(currentItems)}
+        {typeof children === 'function' ? children(currentItems) : children}
       </table>
       {paginate && (
-        <div className="h-[2.75rem] flex justify-center items-center w-full overflow-x-auto">
+        <div className="h-[2.75rem] flex justify-center items-start w-full overflow-x-auto">
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

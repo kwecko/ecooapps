@@ -5,9 +5,11 @@ import { cookies } from "next/headers";
 interface CycleData {
   id: string;
   alias: string;
-  offering: number[];
-  ordering: number[];
-  dispatching: number[];
+  offer: number[];
+  order: number[];
+  deliver: number[];
+  created_at: Date;
+  updated_at: Date | null;
 };
 
 export const getCycles: ActionHandler<

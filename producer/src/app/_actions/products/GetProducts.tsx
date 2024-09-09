@@ -1,30 +1,47 @@
-'use server';
+"use server";
 import { cookies } from "next/headers";
 
-interface GetProducts {
+export interface Products {
+  id: string;
+  name: string;
+  image: string;
+  pricing: string;
+}
+
+interface GetProductsProps {
   product: string;
   page: number;
 }
 
-export async function GetProducts({ product, page }: GetProducts) {
-  const token = cookies().get('token')?.value;
+export async function GetProducts({
+  product,
+  page,
+}: GetProductsProps): Promise<{ data: Products[] }> {
+  const token = cookies().get("token")?.value;
 
-  if (token) {      
+  if (token) {
     try {
-      const response = await fetch(`${process.env.API_URL}/products?name=${product}&page=${page}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `${process.env.API_URL}/products?page=${page}&product=${product}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      const data = await response.json()
+      const data = await response.json();
 
       return {
-        data
-      }
+        data: data as Products[],
+      };
     } catch (error) {
       console.error("Erro ao fazer a chamada à API:", error);
     }
   }
+
+  return {
+    data: [] as Products[],
+  };
 }

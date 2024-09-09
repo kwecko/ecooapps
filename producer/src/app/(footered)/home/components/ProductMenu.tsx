@@ -19,9 +19,11 @@ export function ProductMenu() {
   const [isOfferingDay, setIsOfferingDay] = useState<boolean>(false);
 
   useEffect(() => {
-    if(cycle !== undefined){
+    if (cycle !== undefined) {
       const diaAtual = new Date().getDay() + 1;
       const { offer } = cycle
+
+      setIsOfferingDay(false)
 
       if (Array.isArray(offer) && offer.includes(diaAtual)) {
         setIsOfferingDay(true);
@@ -32,13 +34,13 @@ export function ProductMenu() {
   const handleClickOfferProductButton = () => {
     const cycle_idString = localStorage.getItem("selected-cycle") as string
 
-    if(!cycle_idString){
-        toast.warning("Selecione um ciclo para começar uma oferta!")
-        return
+    if (!cycle_idString) {
+      toast.warning("Selecione um ciclo para começar uma oferta!")
+      return
     }
 
     const { id } = JSON.parse(cycle_idString)
-  
+
     localStorage.setItem("offer-products-data",
       JSON.stringify({
         cycle_id: id
@@ -63,7 +65,7 @@ export function ProductMenu() {
           onClick={handleClickOfferProductButton}
           className="w-full bg-theme-default rounded-md h-12 mb-[12px] text-white font-semibold"
           disabled={
-             isUnderConstruction("/produtos/vender")
+            !isOfferingDay || isUnderConstruction("/produtos/vender")
           }
           href="/"
         >
@@ -72,7 +74,8 @@ export function ProductMenu() {
         <Link href={"/produtos/meus"}>
           <Button
             className="w-full bg-transparent rounded-md h-12 mb-[20px] text-[#3E5155] border-2 border-[#3E5155] font-semibold"
-            disabled={isUnderConstruction("/produtos/meus")}
+            //disabled={isUnderConstruction("/produtos/meus")}
+            disabled={true}
             href={"/produtos/meus"}
           >
             Ofertas vigentes

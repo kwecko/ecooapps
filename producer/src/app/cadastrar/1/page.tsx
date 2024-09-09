@@ -3,7 +3,8 @@ import { LuEye } from "react-icons/lu";
 import { Tooltip } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
 
-import { maskCellphone } from "@shared/utils";
+// import { maskCellphone } from "@shared/utils";
+import { maskCellphone } from "@shared/utils/index"
 
 import Input from "../components/Input";
 import { registerStep1FieldsSchema } from "../schemas";
