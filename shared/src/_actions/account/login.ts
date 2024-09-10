@@ -51,7 +51,7 @@ export async function login({ email, password, appID }: LoginRequest) {
 
   const validation = appValidation[appID];
 
-  if (validation && !roles.some(role => validation.allowedRoles.includes(role))) {
+  if (validation && !roles.some((role: string) => validation.allowedRoles.includes(role))) {
     return {
       message: validation.errorMessage,
     };
