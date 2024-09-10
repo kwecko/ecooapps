@@ -1,6 +1,6 @@
 "use client";
 
-import { getUser } from "@cdd/app/_actions/user/get-user";
+import { getUser } from "@shared/_actions/account/get-user"
 import { useHandleError } from "@shared/hooks/useHandleError";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
 import Link from "next/link";
@@ -36,7 +36,7 @@ export function Header() {
 
   return (
     <header className="flex items-center mb-4">
-      <span className="flex items-center gap-2 text-lg">
+      <span className="flex items-center gap-2 text-lg text-slate-gray">
         {isLoading ? (
           <>
             Olá, <SkeletonLoader />
