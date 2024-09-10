@@ -5,11 +5,11 @@ import Loader from "@shared/components/Loader";
 import OfferCard from "./OfferCard";
 import { twMerge } from "tailwind-merge";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { listOffers } from "@producer/app/_actions/offers/list-offers";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { toast } from "sonner";
 import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
 import { useRouter } from "next/navigation";
+import { fetchLastCatalog } from "@producer/app/_actions/catalogs/fetch-last-catalog";
 
 interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
 }
@@ -38,7 +38,7 @@ export default function OffersList({ ...rest }: OffersListProps) {
       try {
         const { id } = cycle;
 
-        const response = await listOffers({
+        const response = await fetchLastCatalog({
           cycle_id: id as string,
         });
 
