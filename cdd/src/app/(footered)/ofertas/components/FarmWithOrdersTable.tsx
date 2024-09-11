@@ -10,6 +10,9 @@ import Loader from "@shared/components/Loader";
 import { Farm } from "@shared/interfaces/farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { fakeFarms } from "@cdd/app/_actions/farm/data";
+
+import { IoIosCheckmarkCircle } from "react-icons/io";
 
 interface FarmsProps {
   page: number;
@@ -18,7 +21,7 @@ interface FarmsProps {
 export function FarmWithOrdersTable({ page }: FarmsProps) {
   const router = useRouter();
 
-  const [farms, setFarms] = useState<Farm[]>([]);
+  const [farms, setFarms] = useState<Farm[]>();
   const [selectedStatus, setSelectedStatus] = useState("todos");
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -48,25 +51,29 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
       const { id } = cycle;
 
-      await fecthFarmsWithOrders({
-        cycle_id: id,
-        page,
-        name,
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+      setFarms(fakeFarms);
 
-            handleError(messageError)
-          } else if (response.data) {
-            setFarms(response.data);
-            setIsLoading(false);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
+      setIsLoading(false);
+
+      // await fecthFarmsWithOrders({
+      //   cycle_id: id,
+      //   page,
+      //   name,
+      // })
+      //   .then((response) => {
+      //     if (response.message) {
+      //       const messageError = response.message as string
+
+      //       handleError(messageError)
+      //     } else if (response.data) {
+      //       setFarms(response.data);
+      //       setIsLoading(false);
+      //       return;
+      //     }
+      //   })
+      //   .catch(() => {
+      //     toast.error("Erro desconhecido.")
+      //   })
     })();
   }, [page, name]);
 
@@ -154,7 +161,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       </div>
       {isLoading ? (
         <Loader className="w-8 h-8 border-walnut-brown mt-3" />
-      ) : !isLoading && farms.length === 0 ? (
+      ) : !isLoading && farms?.length === 0 ? (
         <span className="text-center mt-3 text-slate-gray">
           {name === "" ? "Ainda não há pedidos." : "Nenhum produtor encontrado."}
         </span>
@@ -174,7 +181,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             </tr>
           </thead>
           <tbody>
-            {farms.map((farm) => (
+            {farms?.map((farm) => (
               <tr
                 onClick={() => handleClick(farm.id)}
                 key={farm.admin_id}
@@ -184,13 +191,25 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
                   onClick={getNextSaturdayDate}
                   className="border-b-[1px] truncate text-[#545F71] px-2 py-3"
                 >
-                  {getNextSaturdayDate()}
+                  {/* {getNextSaturdayDate()} */}
+                  11/09/24
                 </td>
                 <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
                   {farm.name}
                 </td>
                 <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  #
+                  <div className="flex justify-center">
+                    {
+                      farm.status === 'APPROVED' ?
+                        (
+                          <IoIosCheckmarkCircle size={18} color="#00735E" />) :
+                        (
+                          <p className="w-4 h-4 flex items-center justify-center bg-red-400 text-white rounded-full text-xs">
+                            {farm.status}
+                          </p>
+                        )
+                    }
+                  </div>
                 </td>
               </tr>
             ))}
