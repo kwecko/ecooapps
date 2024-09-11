@@ -3,11 +3,7 @@ import { IoCheckmarkCircle } from "react-icons/io5";
 
 import Button from "@shared/components/Button";
 
-export default async function Home({ params }: { params: { id: string } }) {
-  // const selectedOrder: OrderWithItems = await fetchViewOrder(params.id);
-  let selectedOrder = {} as any;
-  const customerName: string = `${selectedOrder.customer.first_name} ${selectedOrder.customer.last_name}`;
-
+export default async function Home() {
   return (
     <div className="text-slate-gray flex flex-col bg-theme-background p-5 justify-start h-full">
       <div className="flex flex-col items-center justify-between h-full">
@@ -19,8 +15,8 @@ export default async function Home({ params }: { params: { id: string } }) {
             A sacola foi <br /> enviada!
           </span>
           <span className="mt-4 text-center text-sm font-medium">
-            A sacola #{selectedOrder?.id} está a caminho<br />do cliente {" "}
-            {customerName}.
+            A sacola #12345 está a caminho<br />do cliente {" "}
+            Eduardo Teixeira.
           </span>
         </div>
         <div className="justify-self-end">

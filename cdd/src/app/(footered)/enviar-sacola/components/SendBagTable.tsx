@@ -1,19 +1,24 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { listBags } from "@cdd/app/_actions/bag/list-bags";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { HiOutlineSearch } from "react-icons/hi";
 import Button from "@shared/components/Button";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
-import { Bag } from "@shared/interfaces/bag"
 import Loader from "@shared/components/Loader";
-import { useHandleError } from "@shared/hooks/useHandleError";
 
 interface BagsProps {
   page: number;
+}
+
+interface Bag {
+  id: string;
+  user: {
+    first_name: string;
+    last_name: string;
+  };
+  status: string;
 }
 
 export default function SendBagTable({ page }: BagsProps) {
@@ -23,9 +28,6 @@ export default function SendBagTable({ page }: BagsProps) {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { handleError } = useHandleError()
-  const { getFromStorage } = useLocalStorage()
-
   const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
     setTimeout(() => {
       setName(e.target.value);
@@ -33,69 +35,44 @@ export default function SendBagTable({ page }: BagsProps) {
   };
 
   useEffect(() => {
-    (async () => {
-      setIsLoading(true);
-      const cycle = getFromStorage("selected-cycle");
+    setIsLoading(true);
 
-      if (!cycle) {
-        toast.error("Selecione um ciclo para ver os pedidos!");
-        return;
-      }
-
-      const { id } = cycle;
-
-      await listBags({
-        cycle_id: id,
-        page,
+    // Simulando dados ao invés de fazer uma requisição real
+    const fakeBags: Bag[] = [
+      {
+        id: "12345",
+        user: { first_name: "João", last_name: "Silva" },
         status: "SEPARATED",
-        name
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
-
-            handleError(messageError)
-          } else if (response.data) {
-            setBags(response.data);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-
-      await listBags({
-        cycle_id: id,
-        page,
+      },
+      {
+        id: "12346",
+        user: { first_name: "Maria", last_name: "Oliveira" },
         status: "DISPATCHED",
-        name
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+      },
+      {
+        id: "12347",
+        user: { first_name: "Carlos", last_name: "Pereira" },
+        status: "SEPARATED",
+      },
+      {
+        id: "12348",
+        user: { first_name: "Ana", last_name: "Souza" },
+        status: "DISPATCHED",
+      },
+    ];
 
-            handleError(messageError)
-          } else if (response.data) {
-            setBags(prevBags => [...prevBags, ...response.data]);
-            setIsLoading(false);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })();
+    // Filtrando dados simulados com base no nome
+    const filteredBags = fakeBags.filter((bag) =>
+      `${bag.user.first_name} ${bag.user.last_name}`
+        .toLowerCase()
+        .includes(name.toLowerCase())
+    );
+
+    setTimeout(() => {
+      setBags(filteredBags);
+      setIsLoading(false);
+    }, 1000); // Simulando tempo de carregamento
   }, [page, name]);
-
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = today.day();
-
-    const daysUntilSaturday = 6 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, 'day');
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
 
   const handleClick = (id: string) => {
     const path = `/enviar-sacola/${id}`;
@@ -148,7 +125,6 @@ export default function SendBagTable({ page }: BagsProps) {
             {bags.map((bag) => (
               <tr onClick={() => handleClick(bag.id)} key={bag.id} className="text-center cursor-pointer">
                 <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  {/* {getNextSaturdayDate()} */}
                   {bag.id}
                 </td>
                 <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
@@ -163,7 +139,6 @@ export default function SendBagTable({ page }: BagsProps) {
                     <Button className="w-full bg-theme-background px-3 py-2 rounded-3xl">Enviada</Button>
                   </td>
                 )}
-
               </tr>
             ))}
           </tbody>
