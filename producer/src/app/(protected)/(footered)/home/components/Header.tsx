@@ -1,12 +1,14 @@
 "use client";
 
-import { getUser } from "@cdd/app/_actions/user/get-user";
+import { getUser } from "@shared/_actions/account/get-user"
 import { useHandleError } from "@shared/hooks/useHandleError";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiOutlineBell } from "react-icons/hi";
 import { toast } from "sonner";
+
+const handleLogout = () => {};
 
 export function Header() {
   const [name, setName] = useState('');
@@ -35,8 +37,8 @@ export function Header() {
   }, [])
 
   return (
-    <header className="flex items-center mb-4">
-      <span className="flex items-center gap-2 text-lg">
+    <header className="flex items-center mb-4 ">
+      <span className="flex items-center gap-2 text-lg text-slate-gray">
         {isLoading ? (
           <>
             Olá, <SkeletonLoader />
@@ -52,6 +54,7 @@ export function Header() {
           <HiOutlineBell />
         </button>
         <Link
+          onClick={handleLogout}
           href={"/api/auth/logout"}
           className="text-theme-primary md:text-lg"
         >

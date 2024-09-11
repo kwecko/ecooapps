@@ -3,7 +3,7 @@
 import ApiService from "@shared/service/index"
 
 interface FetchBagRequest {
-  bag_id: string
+  bag_id: string;
 }
 
 export async function fetchBag({ bag_id }: FetchBagRequest) {
