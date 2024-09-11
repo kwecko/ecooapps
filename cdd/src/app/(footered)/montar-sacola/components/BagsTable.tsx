@@ -10,7 +10,6 @@ import { Bag } from "@shared/interfaces/bag"
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import Loader from "@shared/components/Loader";
 import { useHandleError } from "@shared/hooks/useHandleError";
-
 interface BagsProps {
   page: number;
 }
@@ -86,6 +85,114 @@ export default function BagsTable({ page }: BagsProps) {
     })();
   }, [page, name]);
 
+  const fakeData = [
+    {
+      id: "205004",
+      user: {
+        first_name: "Eduardo",
+        last_name: "Teixeira"
+      },
+      status: "PENDING"
+    },
+    {
+      id: "998324",
+      user: {
+        first_name: "Maria",
+        last_name: "Souza"
+      },
+      status: "PENDING"
+    },
+    {
+      id: "279941",
+      user: {
+        first_name: "José",
+        last_name: "Oliveira"
+      },
+      status: "PENDING"
+    },
+    {
+      id: "278501",
+      user: {
+        first_name: "Ana",
+        last_name: "Santos"
+      },
+      status: "PENDING"
+    },
+    {
+      id: "712948",
+      user: {
+        first_name: "Carlos",
+        last_name: "Silva"
+      },
+      status: "PENDING"
+    },
+    {
+      id: "712049",
+      user: {
+        first_name: "Mariana",
+        last_name: "Souza"
+      },
+      status: "PENDING"
+    },
+    {
+      id: "712050",
+      user: {
+        first_name: "José",
+        last_name: "Oliveira"
+      },
+      status: "SEPARATED"
+    },
+    {
+      id: "712053",
+      user: {
+        first_name: "Ana",
+        last_name: "Santos"
+      },
+      status: "SEPARATED"
+    },
+    {
+      id: "712078",
+      user: {
+        first_name: "Carlos",
+        last_name: "Silva"
+      },
+      status: "SEPARATED"
+    },
+    {
+      id: "570190",
+      user: {
+        first_name: "Mariana",
+        last_name: "Souza"
+      },
+      status: "SEPARATED"
+    },
+    {
+      id: "570191",
+      user: {
+        first_name: "Guilherme",
+        last_name: "Santos"
+      },
+      status: "SEPARATED"
+    },
+    {
+      id: "570192",
+      user: {
+        first_name: "Paulo",
+        last_name: "Cardoso"
+      },
+      status: "SEPARATED"
+    },
+  ];
+
+  console.log(localStorage)
+
+  const id = localStorage.getItem("bag_id");
+  if (id !== null) {
+    const bag = fakeData.find((bag) => bag.id === id);
+    if (bag) {
+      bag.status = "SEPARATED";
+    }
+  }
 
   const handleClick = (id: string) => {
     const path = `/montar-sacola/${id}`;
@@ -115,7 +222,7 @@ export default function BagsTable({ page }: BagsProps) {
       </div>
       {isLoading ? (
         <Loader className="w-8 h-8 border-walnut-brown mt-3" />
-      ) : !isLoading && bags.length === 0 ? (
+      ) : !isLoading && fakeData.length === 0 ? (
         <span className="text-center mt-3 text-slate-gray">
           {name === "" ? "Ainda não há sacolas para serem montadas." : "Nenhum cliente encontrado."}
         </span>
@@ -135,7 +242,7 @@ export default function BagsTable({ page }: BagsProps) {
             </tr>
           </thead>
           <tbody>
-            {bags.map((bag) => (
+            {fakeData.map((bag) => (
               <tr onClick={() => handleClick(bag.id)} key={bag.id} className="text-center cursor-pointer">
                 <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
                   {/* {getNextSaturdayDate()} */}
