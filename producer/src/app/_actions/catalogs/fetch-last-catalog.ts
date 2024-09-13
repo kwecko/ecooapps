@@ -8,7 +8,7 @@ interface FetchLastCatalogRequest {
 
 export async function fetchLastCatalog({ cycle_id }: FetchLastCatalogRequest) {
     const response = ApiService.GET({
-        url: `/catalogs/current/${cycle_id}`,
+        url: `/catalogs/last/${cycle_id}`,
     })
 
     return response;
