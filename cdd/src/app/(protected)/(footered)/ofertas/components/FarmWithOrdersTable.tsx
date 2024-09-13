@@ -35,26 +35,26 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const statuses: IStatus[] = [
     {
       name: "Todas",
-      key: "ALL"
+      key: "ALL",
     },
     {
       name: "Pendentes",
-      key: "PENDING"
+      key: "PENDING",
     },
     {
       name: "Concluídas",
-      key: "RECEIVED"
+      key: "RECEIVED",
     },
     {
       name: "Rejeitadas",
-      key: "CANCELLED"
-    }
+      key: "CANCELLED",
+    },
   ];
 
   const [selectedStatus, setSelectedStatus] = useState("ALL");
   const [isLoading, setIsLoading] = useState(false);
   const [farms, setFarms] = useState<Boxes[]>([]);
-  const [farmsFiltered, setFarmFiltered] = useState<Boxes[]>([])
+  const [farmsFiltered, setFarmFiltered] = useState<Boxes[]>([]);
   const [name, setName] = useState("");
 
   const { handleError } = useHandleError();
@@ -67,7 +67,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       return;
     }
 
-    setFarmFiltered(() => farms.filter((item => item.status === status.key)))
+    setFarmFiltered(() => farms.filter((item) => item.status === status.key));
     setSelectedStatus(status.key);
   };
 
@@ -100,7 +100,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             handleError(messageError);
           } else if (response.data) {
             setFarms(response.data);
-            setFarmFiltered(response.data)
+            setFarmFiltered(response.data);
             return;
           }
         })
@@ -132,15 +132,15 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
     const colorStatus = {
       PENDING: "bg-battleship-gray",
       CANCELLED: "bg-error",
-      RECEIVED: "bg-rain-forest"
-    }
+      RECEIVED: "bg-rain-forest",
+    };
 
     return (
       <div
-        className={
-          twMerge('flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full',
-            `${colorStatus[status]}`
-          )}
+        className={twMerge(
+          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full",
+          `${colorStatus[status]}`
+        )}
       >
         <span className="text-white text-xs" />
       </div>
@@ -173,15 +173,18 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
         />
       </div>
-      {isLoading ? (
-        <Loader className="w-8 h-8 border-walnut-brown mt-3" />
-      ) : isLoading && farmsFiltered?.length === 0 ? (
+
+      {isLoading && <Loader className="w-8 h-8 border-walnut-brown mt-3" />}
+
+      {farmsFiltered?.length === 0 && (
         <span className="text-center mt-3 text-slate-gray">
           {name === ""
             ? "Ainda não há pedidos."
             : "Nenhum produtor encontrado."}
         </span>
-      ) : (
+      )}
+
+      {farmsFiltered && (
         <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
           <thead className="w-full">
             <tr className="text-[rgb(84,95,113)]">
@@ -192,8 +195,14 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           </thead>
           <tbody>
             {farmsFiltered?.map((farm) => (
-              <tr key={farm.id} onClick={() => handleClick(farm.id)} className="text-center cursor-pointer">
-                <td onClick={getNextSaturdayDate} className={styles.itemBody}>{getNextSaturdayDate()}</td>
+              <tr
+                key={farm.id}
+                onClick={() => handleClick(farm.id)}
+                className="text-center cursor-pointer"
+              >
+                <td onClick={getNextSaturdayDate} className={styles.itemBody}>
+                  {getNextSaturdayDate()}
+                </td>
                 <td className={styles.itemBody}>{farm.catalog.farm.name}</td>
                 <td className={styles.itemBody}>{getStatus(farm.status)}</td>
               </tr>
