@@ -5,29 +5,70 @@ import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-ord
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { HiOutlineSearch, HiX } from "react-icons/hi";
+import { HiOutlineSearch } from "react-icons/hi";
 import Loader from "@shared/components/Loader";
-import { Farm } from "@shared/interfaces/farm";
+import { Boxes } from "@shared/interfaces/farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+
+import StatusFilterButtons from "./StatusFilterButton";
+import { twMerge } from "tailwind-merge";
 
 interface FarmsProps {
   page: number;
 }
 
+export interface IStatus {
+  name: string;
+  key: string;
+}
+
+const styles = {
+  itemHeader:
+    "truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center",
+  itemBody: "border-b-[1px] truncate text-[#545F71] px-2 py-3",
+};
+
 export function FarmWithOrdersTable({ page }: FarmsProps) {
   const router = useRouter();
 
-  const [farms, setFarms] = useState<Farm[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState("todos");
-  const [name, setName] = useState("");
+  const statuses: IStatus[] = [
+    {
+      name: "Todas",
+      key: "ALL"
+    },
+    {
+      name: "Pendentes",
+      key: "PENDING"
+    },
+    {
+      name: "Concluídas",
+      key: "RECEIVED"
+    },
+    {
+      name: "Rejeitadas",
+      key: "CANCELLED"
+    }
+  ];
+
+  const [selectedStatus, setSelectedStatus] = useState("ALL");
   const [isLoading, setIsLoading] = useState(false);
+  const [farms, setFarms] = useState<Boxes[]>([]);
+  const [farmsFiltered, setFarmFiltered] = useState<Boxes[]>([])
+  const [name, setName] = useState("");
 
-  const { handleError } = useHandleError()
-  const { getFromStorage } = useLocalStorage()
+  const { handleError } = useHandleError();
+  const { getFromStorage } = useLocalStorage();
 
-  const handleStatusFilterClick = (status: string) => {
-    setSelectedStatus(status);
+  const handleStatusFilterClick = (status: IStatus) => {
+    if (selectedStatus === status.key || status.key === "ALL") {
+      setSelectedStatus("ALL");
+      setFarmFiltered(farms);
+      return;
+    }
+
+    setFarmFiltered(() => farms.filter((item => item.status === status.key)))
+    setSelectedStatus(status.key);
   };
 
   const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,20 +94,22 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         page,
         name,
       })
-        .then((response) => {
+        .then((response: any) => {
           if (response.message) {
-            const messageError = response.message as string
-
-            handleError(messageError)
+            const messageError = response.message as string;
+            handleError(messageError);
           } else if (response.data) {
             setFarms(response.data);
-            setIsLoading(false);
+            setFarmFiltered(response.data)
             return;
           }
         })
         .catch(() => {
-          toast.error("Erro desconhecido.")
+          toast.error("Erro desconhecido.");
         })
+        .finally(() => {
+          setIsLoading(false);
+        });
     })();
   }, [page, name]);
 
@@ -83,6 +126,25 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const handleClick = (id: string) => {
     const path = `/ofertas/${id}`;
     router.push(path);
+  };
+
+  const getStatus = (status: "PENDING" | "CANCELLED" | "RECEIVED") => {
+    const colorStatus = {
+      PENDING: "bg-battleship-gray",
+      CANCELLED: "bg-error",
+      RECEIVED: "bg-rain-forest"
+    }
+
+    return (
+      <div
+        className={
+          twMerge('flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full',
+            `${colorStatus[status]}`
+          )}
+      >
+        <span className="text-white text-xs" />
+      </div>
+    );
   };
 
   return (
@@ -105,93 +167,35 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
             </form>
           </div>
         </div>
-        <div className="w-full flex gap-2 mb-4 flex-wrap">
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Todas")}
-            className={`${selectedStatus === "Todas"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Todas
-            {selectedStatus === "Todas" && <HiX className="ml-1" />}
-          </button>
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Pendente")}
-            className={`${selectedStatus === "Pendente"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Pendentes
-            {selectedStatus === "Pendente" && <HiX className="ml-1" />}
-          </button>
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Concluída")}
-            className={`${selectedStatus === "Concluída"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Concluídas
-            {selectedStatus === "Concluída" && <HiX className="ml-1" />}
-          </button>
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Rejeitada")}
-            className={`${selectedStatus === "Rejeitada"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items=center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Rejeitadas
-            {selectedStatus === "Rejeitada" && <HiX className="ml-1" />}
-          </button>
-        </div>
+        <StatusFilterButtons
+          statuses={statuses}
+          selectedStatus={selectedStatus}
+          handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+        />
       </div>
       {isLoading ? (
         <Loader className="w-8 h-8 border-walnut-brown mt-3" />
-      ) : !isLoading && farms.length === 0 ? (
+      ) : isLoading && farmsFiltered?.length === 0 ? (
         <span className="text-center mt-3 text-slate-gray">
-          {name === "" ? "Ainda não há pedidos." : "Nenhum produtor encontrado."}
+          {name === ""
+            ? "Ainda não há pedidos."
+            : "Nenhum produtor encontrado."}
         </span>
       ) : (
         <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
           <thead className="w-full">
             <tr className="text-[rgb(84,95,113)]">
-              <th className="truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Prazo
-              </th>
-              <th className="truncate w-1/2 text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Produtor
-              </th>
-              <th className="truncate w-1/5 text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Status
-              </th>
+              <th className={twMerge("w-[30%]", styles.itemHeader)}>Prazo</th>
+              <th className={twMerge("w-1/2", styles.itemHeader)}>Produtor</th>
+              <th className={twMerge("w-1/5", styles.itemHeader)}>Status</th>
             </tr>
           </thead>
           <tbody>
-            {farms.map((farm) => (
-              <tr
-                onClick={() => handleClick(farm.id)}
-                key={farm.admin_id}
-                className="text-center cursor-pointer"
-              >
-                <td
-                  onClick={getNextSaturdayDate}
-                  className="border-b-[1px] truncate text-[#545F71] px-2 py-3"
-                >
-                  {getNextSaturdayDate()}
-                </td>
-                <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  {farm.name}
-                </td>
-                <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  #
-                </td>
+            {farmsFiltered?.map((farm) => (
+              <tr key={farm.id} onClick={() => handleClick(farm.id)} className="text-center cursor-pointer">
+                <td onClick={getNextSaturdayDate} className={styles.itemBody}>{getNextSaturdayDate()}</td>
+                <td className={styles.itemBody}>{farm.catalog.farm.name}</td>
+                <td className={styles.itemBody}>{getStatus(farm.status)}</td>
               </tr>
             ))}
           </tbody>

@@ -52,8 +52,9 @@ export default function FarmOrdersTable() {
           }
         })
         .catch((error) => {
-          console.log(error)
           toast.error(error)
+        }).finally(() => {
+          setIsLoading(false);
         })
     })();
   }, [farm_id]);
