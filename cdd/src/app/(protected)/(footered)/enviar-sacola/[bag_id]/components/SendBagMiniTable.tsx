@@ -6,10 +6,10 @@ import Modal from "@shared/components/Modal";
 import TableSkeleton from "@shared/components/TableSkeleton";
 import { BagOrder } from "@shared/interfaces/bag-order"
 import { useHandleError } from "@shared/hooks/useHandleError";
-import dayjs from "dayjs";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
 export default function SendBagMiniTable() {
   const router = useRouter()
@@ -67,16 +67,6 @@ export default function SendBagMiniTable() {
         toast.error("Erro desconhecido.")
       })
   }
-
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = today.day();
-
-    const daysUntilSaturday = 6 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, 'day');
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
 
   return (
     <>

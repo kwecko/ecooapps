@@ -52,7 +52,6 @@ export default function FarmOrdersTable() {
           }
         })
         .catch((error) => {
-          console.log(error)
           toast.error(error)
         })
     })();

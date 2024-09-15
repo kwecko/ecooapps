@@ -123,7 +123,11 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
             onClick={onSubmit}
           >
             {isLoading ? (
-              <Loader className="w-6 h-6 border-white" />
+              <Loader 
+                className="mt-3" 
+                appId="PRODUCER"
+                loaderType="component"
+              />
             ) : (
               <>
                 Confirmar e colocar a venda

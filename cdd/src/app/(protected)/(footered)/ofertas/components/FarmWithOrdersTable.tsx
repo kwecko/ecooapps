@@ -153,7 +153,11 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         </div>
       </div>
       {isLoading ? (
-        <Loader className="w-8 h-8 border-walnut-brown mt-3" />
+        <Loader 
+          className="mt-3"
+          appId="CDD"
+          loaderType="component"
+        />
       ) : !isLoading && farms.length === 0 ? (
         <span className="text-center mt-3 text-slate-gray">
           {name === "" ? "Ainda não há pedidos." : "Nenhum produtor encontrado."}
