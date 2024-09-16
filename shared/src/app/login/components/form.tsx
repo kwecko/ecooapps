@@ -64,8 +64,11 @@ export default function FormLogin({ appID }: { appID: AppID }) {
 
   useEffect(() => {
     const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(event.target.name, event.target.value);
-      trigger(event.target.name);
+      const { name, value } = event.target;
+      if (name === "email" || name === "password") {
+        setValue(name as "email" | "password", value);
+        trigger(name as "email" | "password");
+      }
     };
 
     const emailInput = document.querySelector("input[name='email']");
@@ -83,6 +86,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
       }
     };
   }, [setValue, trigger]);
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
