@@ -99,28 +99,6 @@ class ApiService {
     }
   }
 
-  public async DELETE({ url }: RequestProps) {
-    try {
-      const response = await this.axiosInstance.delete(url)
-
-      return {
-        data: response.data
-      }
-    } catch(error) {
-      if(axios.isAxiosError(error)){
-        const apiErrorMessage = error.response?.data?.message || 'Erro desconhecido';
-
-        return {
-          message: apiErrorMessage
-        }
-      } else {
-        return {
-          message: `Erro desconhecido ${error}`
-        }
-      }
-    }
-  }
-
   public async PUT({ url, data }: RequestProps) {
     try {
       const response = await this.axiosInstance.put(url, data)

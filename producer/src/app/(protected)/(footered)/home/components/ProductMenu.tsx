@@ -6,13 +6,13 @@ import { useEffect, useState } from "react";
 
 import { isUnderConstruction } from "@shared/next/library/is-under-construction";
 import Button from "@shared/components/Button";
-import Card from "@shared/components/Card";
+import Card from "@shared/components/Card"
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useCycleProvider } from "@shared/context";
 
 export function ProductMenu() {
-  const router = useRouter();
+  const router = useRouter()
 
   const { cycle } = useCycleProvider();
 
@@ -21,7 +21,9 @@ export function ProductMenu() {
   useEffect(() => {
     if (cycle !== undefined) {
       const diaAtual = new Date().getDay() + 1;
-      const { offer } = cycle;
+      const { offer } = cycle
+
+      setIsOfferingDay(false)
 
       if (Array.isArray(offer) && offer.includes(diaAtual)) {
         setIsOfferingDay(true);
@@ -33,24 +35,23 @@ export function ProductMenu() {
   }, [cycle]);
 
   const handleClickOfferProductButton = () => {
-    const cycle_idString = localStorage.getItem("selected-cycle") as string;
+    const cycle_idString = localStorage.getItem("selected-cycle") as string
 
     if (!cycle_idString) {
-      toast.warning("Selecione um ciclo para começar uma oferta!");
-      return;
+      toast.warning("Selecione um ciclo para começar uma oferta!")
+      return
     }
 
-    const { id } = JSON.parse(cycle_idString);
+    const { id } = JSON.parse(cycle_idString)
 
-    localStorage.setItem(
-      "offer-products-data",
+    localStorage.setItem("offer-products-data",
       JSON.stringify({
-        cycle_id: id,
+        cycle_id: id
       })
-    );
+    )
 
-    router.push("/oferta");
-  };
+    router.push("/produtos/vender")
+  }
 
   return (
     <Card className="mt-5 gap-4">
@@ -66,17 +67,21 @@ export function ProductMenu() {
         <Button
           onClick={handleClickOfferProductButton}
           className="w-full bg-theme-default rounded-md h-12 mb-[12px] text-white font-semibold"
-          disabled={!isOfferingDay || isUnderConstruction("/oferta")}
+          disabled={
+            !isOfferingDay || isUnderConstruction("/produtos/vender")
+          }
           href="/"
         >
-          Fazer uma oferta
+          Colocar a venda
         </Button>
-        <Link href={"/"}>
+        <Link href={"/produtos/meus"}>
           <Button
             className="w-full bg-transparent rounded-md h-12 mb-[20px] text-[#3E5155] border-2 border-[#3E5155] font-semibold"
+            //disabled={isUnderConstruction("/produtos/meus")}
             disabled={true}
+            href={"/produtos/meus"}
           >
-            Gerar relatórios
+            Ofertas vigentes
           </Button>
         </Link>
       </div>

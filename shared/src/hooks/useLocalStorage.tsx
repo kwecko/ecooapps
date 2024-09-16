@@ -6,16 +6,13 @@ export function useLocalStorage() {
   }
 
   const getFromStorage = (key: string) => {
-    if (typeof window !== 'undefined') {
-      const result = window.localStorage.getItem(key);
+    const result = window.localStorage.getItem(key);
 
-      if (!result) {
-        return;
-      }
-
-      return JSON.parse(result);
+    if (!result) {
+      return;
     }
-    return null;
+
+    return JSON.parse(result);
   }
 
   return {

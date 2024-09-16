@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
@@ -23,7 +23,7 @@ const schema = yup.object({
 
 export default function FormLogin({ appID }: { appID: AppID }) {
   const resolver = yupResolver(schema);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
   const { handleError } = useHandleError();
 
@@ -38,7 +38,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
   });
 
   const onSubmit = async ({ email, password }: any) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     await login({
       email,
@@ -66,21 +66,21 @@ export default function FormLogin({ appID }: { appID: AppID }) {
     const handleInput = (event: Event) => {
       const target = event.target as HTMLInputElement;
       const { name, value } = target;
-  
+
       if (name === "email" || name === "password") {
         setValue(name as "email" | "password", value);
         trigger(name as "email" | "password");
       }
     };
-  
+
     const emailInput = document.querySelector("input[name='email']");
     const passwordInput = document.querySelector("input[name='password']");
-  
+
     if (emailInput && passwordInput) {
       emailInput.addEventListener("input", handleInput);
       passwordInput.addEventListener("input", handleInput);
     }
-  
+
     return () => {
       if (emailInput && passwordInput) {
         emailInput.removeEventListener("input", handleInput);
@@ -88,7 +88,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
       }
     };
   }, [setValue, trigger]);
-  
+
 
 
   return (
@@ -99,7 +99,6 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           label="Email"
           register={{ ...register("email") }}
           error={errors.email?.message}
-          autoComplete="email"
         />
         <Input
           label="Senha"
@@ -107,7 +106,6 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           icon={<AiFillEye />}
           register={{ ...register("password") }}
           error={errors.password?.message}
-          autoComplete="password"
         />
       </div>
       <button
