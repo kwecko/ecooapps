@@ -8,6 +8,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { toast } from "sonner";
 import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { CatalogDTO } from "@shared/domain/dtos/catalog-dto";
 import { useRouter } from "next/navigation";
 import { fetchLastCatalog } from "@producer/app/_actions/catalogs/fetch-last-catalog";
 
@@ -45,8 +46,11 @@ export default function OffersList({ ...rest }: OffersListProps) {
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
-          const dataOffers: OfferWithProductDTO[] = response.data;
-          setOffers(dataOffers);
+          const dataOffers: {
+            catalog: CatalogDTO;
+            offers: OfferWithProductDTO[];
+          } = response.data;
+          setOffers(dataOffers.offers);
         }
       } catch {
         handleError("Erro desconhecido.");
