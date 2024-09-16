@@ -1,17 +1,13 @@
 import React, { ReactNode } from "react";
-import { twMerge } from "tailwind-merge";
 import styles from "./MiniTable.module.css";
 
-interface MiniTableRootProps extends React.HTMLAttributes<HTMLDivElement> {
-  className?: string;
+interface MiniTableRootProps {
   children: ReactNode;
 }
 
-export default function MiniTableRoot({ children, className, ...rest }: MiniTableRootProps) {
+export default function MiniTableRoot({ children }: MiniTableRootProps) {
   return (
-    <div
-      {...rest}
-      className={twMerge("w-full h-full overflow-y-auto rounded-xl", className)}>
+    <div className="w-full h-full overflow-y-auto rounded-xl">
       <table
         className={`${styles.table} p-2 pt-1 text-[#545F71] w-full self-center`}
       >

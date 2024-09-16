@@ -10,31 +10,21 @@ interface ModalProps {
   bgOpenModal?: string
   bgConfirmModal?: string
   bgCloseModal?: string
-  buttonOpenModal?: React.ReactNode
-  isOpen?: boolean
-  setIsOpen?: (value: boolean) => void
   modalAction?: () => void
 }
 
-export default function Modal({
-  titleOpenModal,
-  titleContentModal,
-  contentModal,
+export default function Modal({ 
+  titleOpenModal, 
+  titleContentModal, 
+  contentModal, 
   titleConfirmModal,
   titleCloseModal,
-  bgOpenModal,
-  bgConfirmModal,
+  bgOpenModal, 
+  bgConfirmModal, 
   bgCloseModal,
-  buttonOpenModal,
-  isOpen: externalIsOpen,
-  setIsOpen: externalSetIsOpen,
-  modalAction
+  modalAction 
 }: ModalProps) {
-
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
-
-  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
-  const setIsOpen = externalSetIsOpen !== undefined ? externalSetIsOpen : setInternalIsOpen;
+  let [isOpen, setIsOpen] = useState(false)
 
   function closeModal() {
     setIsOpen(false)
@@ -51,21 +41,17 @@ export default function Modal({
 
   return (
     <>
-      {buttonOpenModal ? (
-        buttonOpenModal
-      ) : (
-        <div className="w-full flex">
-          <button
-            style={{ backgroundColor: bgOpenModal }}
-            type="button"
-            onClick={openModal}
-            className={`rounded-md px-3 py-4 font-medium text-white w-full`}
-          >
-            {titleOpenModal}
-          </button>
-        </div>
-      )
-      }
+      <div className="w-full flex">
+        <button
+        style={{ backgroundColor: bgOpenModal }}
+          type="button"
+          onClick={openModal}
+          className={`rounded-md px-3 py-4 font-medium text-white w-full`}
+        >
+          {titleOpenModal}
+        </button>
+      </div>
+
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
