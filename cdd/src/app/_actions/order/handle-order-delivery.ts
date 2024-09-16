@@ -1,18 +1,20 @@
-"use server"
+"use server";
 
-import ApiService from "@shared/service/index"
+import ApiService from "@shared/service/index";
 
 interface HandleOrderDeliveryRequest {
-  cycle_id: string;
-  farm_id: string
+  box_id: string;
   status: "RECEIVED" | "CANCELLED";
 }
 
-export async function handleOrderDelivery({ cycle_id, farm_id, status }: HandleOrderDeliveryRequest) {
+export async function handleOrderDelivery({
+  box_id,
+  status,
+}: HandleOrderDeliveryRequest) {
   const response = ApiService.PATCH({
-    url: '/orders',
-    data: { cycle_id, farm_id, status }
-  })
+    url: `/boxes/${box_id}`,
+    data: { box_id, status },
+  });
 
-  return response
+  return response;
 }

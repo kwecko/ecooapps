@@ -2,22 +2,20 @@
 
 import ApiService from "@shared/service/index";
 
-import data from "@cdd/app/(protected)/(footered)/ofertas/components/farms.json";
-
-interface FecthFarmsWithOrdersRequest {
+interface FetchFarmsWithOrdersRequest {
   cycle_id: string;
   page: number;
   name?: string;
 }
 
-export async function fecthFarmsWithOrders({
+export async function fetchFarmsWithOrders({
   cycle_id,
   page,
   name,
-}: FecthFarmsWithOrdersRequest) {
-  // const response = ApiService.GET({
-  //   url: `/boxes?cycle_id=${cycle_id}&page=${page}&name=${name}`
-  // })
+}: FetchFarmsWithOrdersRequest) {
+  const response = ApiService.GET({
+    url: `/boxes?cycle_id=${cycle_id}&page=${page}&name=${name}`,
+  });
 
-  return { data: data };
+  return response;
 }
