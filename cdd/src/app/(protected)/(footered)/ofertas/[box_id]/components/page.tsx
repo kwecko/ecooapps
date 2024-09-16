@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { fetchFarmOrders } from "@cdd/app/_actions/farm/fetch-farm-orders";
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import Modal from "@shared/components/Modal";
 import dayjs from "dayjs";
@@ -17,12 +16,6 @@ import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 
 import { convertUnit } from "@shared/utils/convert-unit";
 import { convertStatus } from "@shared/utils/convert-status";
-
-const styles = {
-  itemHeader:
-    "truncate text-[#979797] font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
-  itemBody: "border-b-[1px] truncate text-[#545F71] p-3 text-left",
-};
 
 export default function FarmOrdersTable() {
   const router = useRouter();
