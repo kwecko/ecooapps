@@ -3,13 +3,14 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
-import { toast } from "sonner";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import Input from "@shared/next/components/Input";
-import { callServer } from "@shared/next/callServer";
-
+import { login } from "../../../_actions/account/login";
+import Loader from "../../../components/Loader";
+import { useHandleError } from "../../../hooks/useHandleError";
+import { toast } from "sonner";
 import { AppID } from "../../../library/types/app-id";
 
 import { loginAgribusinessAction } from "@shared/next/_actions/account/login-agribusiness";
@@ -28,6 +29,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
   const resolver = yupResolver(schema);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const { handleError } = useHandleError();
 
   const {
     register,

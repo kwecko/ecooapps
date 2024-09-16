@@ -11,14 +11,14 @@ export function useHandleError() {
 
   const handleError = useCallback((errorCode: string) => {
     if (errorCode in errorsMapper) {
+      const errorMessage = errorsMapper[errorCode];
+
       if (errorCode === "Sessão expirada.") {
         setSessionExpired(true);
-      } else if (errorCode === "💥 Ocorreu um erro interno.") {
-        showErrorToast(errorCode);
-      } else if (errorCode === "Erro desconhecido") {
-        showErrorToast(errorCode);
+      } else if (errorCode === "💥 Ocorreu um erro interno." || errorCode === "Erro desconhecido") {
+        showErrorToast(errorMessage);
       } else {
-        toast.error(errorCode);
+        toast.error(errorMessage);
       }
     } else {
       const words = errorCode.split(" ");

@@ -11,9 +11,10 @@ interface CardComponentProps {
   linkIcon?: string,
   isSelectedCycle?: boolean
   hasNotification?: boolean
+  disabled?: boolean
 }
 
-export default function CardComponent({ title, link, linkIcon, isSelectedCycle, hasNotification }: CardComponentProps) {
+export default function CardComponent({ title, link, linkIcon, isSelectedCycle, hasNotification , disabled = false }: CardComponentProps) {
   const router = useRouter();
 
   const { getFromStorage } = useLocalStorage()
@@ -32,7 +33,12 @@ export default function CardComponent({ title, link, linkIcon, isSelectedCycle, 
   return (
     <div className="w-full h-full items-center mt-5 p-4 rounded-2xl bg-white flex gap-4">
       <div className="w-[90%] h-full flex items-center">
-        <button onClick={handleClickSelectedCycle} className="w-full bg-[#4A403A] rounded-md p-4 text-white font-semibold relative">
+        <button 
+          onClick={handleClickSelectedCycle} 
+          disabled={disabled}
+          className={`w-full rounded-md p-4 text-white font-semibold relative 
+            ${disabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#4A403A] cursor-pointer'}`}
+        >
           {title}
           {hasNotification && (
             <span className="absolute top-0 right-0 mt-[-10px] mr-[-10px] flex h-5 w-5">
@@ -42,8 +48,11 @@ export default function CardComponent({ title, link, linkIcon, isSelectedCycle, 
         </button>
       </div>
       <div className="w-[10%] h-full flex justify-center items-center">
-        <button disabled className="rounded-full p-2">
-          <HiOutlineInformationCircle size={24} className="text-[#7B7B7B]" />
+        <button 
+          disabled={disabled} 
+          className={`rounded-full p-2 ${disabled ? 'text-gray-400' : 'text-[#7B7B7B]'}`}
+        >
+          <HiOutlineInformationCircle size={24} />
         </button>
       </div>
     </div>

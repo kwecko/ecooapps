@@ -12,7 +12,7 @@ export default function Home() {
   const FourItems = 4;
 
   return (
-    <div className="px-8 pb-10 pt-10">
+    <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)]">
       <CycleProvider>
         <div>
           <Header />

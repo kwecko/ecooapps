@@ -16,7 +16,7 @@ export default function Login({ appID }: { appID: AppID }) {
       </div>
       <div className="w-full h-[55%] flex flex-col justify-center">
         <FormLogin appID={appID} />
-
+        
         <div className="mt-6 flex justify-center">
           <span className="text-sm font-medium text-slate-gray">
             Esqueceu a senha? <Link href={"/recuperarsenha"}>Clique aqui</Link>
