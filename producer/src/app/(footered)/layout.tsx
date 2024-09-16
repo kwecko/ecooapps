@@ -3,20 +3,20 @@ import Footer from "@shared/components/Footer";
 const HAS_PREVIOUS_PAGE = {
   "/": false,
   "/login": true,
-  "/oferta": true,
+  "/produtos/vender": true,
   "/em-construcao": true,
 };
 
 const HAS_HELP_BUTTON = {
   "/": true,
   "/login": false,
-  "/oferta": true,
+  "/produtos/vender": true,
   "/em-construcao": false,
 };
 
 const RETURN_URLS = {
   "/login": "/",
-  "/oferta": "/",
+  "/produtos/vender": "/",
   "/em-construcao": "/",
 };
 

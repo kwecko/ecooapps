@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
@@ -14,7 +14,7 @@ import { AppID } from "../../../library/types/app-id";
 
 import { loginAgribusinessAction } from "@shared/next/_actions/account/login-agribusiness";
 import { loginCDDAction } from "../../../_actions/account/login-cdd";
-import Loader from "../../../components/Loader";
+import Loader from "../../../components/Loader"
 
 const schema = yup.object({
   email: yup
@@ -26,57 +26,31 @@ const schema = yup.object({
 
 export default function FormLogin({ appID }: { appID: AppID }) {
   const resolver = yupResolver(schema);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter();
 
   const {
     register,
     formState: { errors },
     handleSubmit,
-    setValue,
-    trigger, 
-  } = useForm({
-    resolver,
-  });
+  } = useForm({ resolver });
 
   const onSubmit = async ({ email, password }: any) => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     await callServer(appID === "CDD" ? loginCDDAction : loginAgribusinessAction)
       .after(() => {
         toast.success("Login efetuado com sucesso.");
         router.push("/");
-        setIsLoading(false);
+        setIsLoading(false)
       })
       .run({
         email,
         password,
-      });
+      })
 
-    setIsLoading(false);
-  };
-
-  useEffect(() => {
-    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValue(event.target.name, event.target.value);
-      trigger(event.target.name);
-    };
-
-    const emailInput = document.querySelector("input[name='email']");
-    const passwordInput = document.querySelector("input[name='password']");
-
-    if (emailInput && passwordInput) {
-      emailInput.addEventListener("input", handleInput);
-      passwordInput.addEventListener("input", handleInput);
+      setIsLoading(false)
     }
-
-    return () => {
-      if (emailInput && passwordInput) {
-        emailInput.removeEventListener("input", handleInput);
-        passwordInput.removeEventListener("input", handleInput);
-      }
-    };
-  }, [setValue, trigger]); 
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -86,7 +60,6 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           label="Email"
           register={{ ...register("email") }}
           error={errors.email?.message}
-          autoComplete="email"
         />
         <Input
           label="Senha"
@@ -94,16 +67,19 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           icon={<AiFillEye />}
           register={{ ...register("password") }}
           error={errors.password?.message}
-          autoComplete="password"
         />
       </div>
       <button
         disabled={isLoading}
         type="submit"
         className="w-full flex justify-center items-center px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
-        style={{ minHeight: "50px" }} 
+        style={{ minHeight: "50px" }} // Define um tamanho mínimo para o botão
       >
-        {isLoading ? <Loader className="w-6 h-6 border-white" /> : <>Entrar</>}
+        {isLoading ? (
+          <Loader className="w-6 h-6 border-white" />
+        ) : (
+          <>Entrar</>
+        )}
       </button>
     </form>
   );

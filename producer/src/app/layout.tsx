@@ -27,7 +27,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${getAppID()} w-screen h-dvh ${poppins.className}`}>
+      <body className={`${getAppID()} w-screen h-screen ${poppins.className}`}>
         <div className="flex flex-row justify-center w-full h-full">
           <Toaster richColors position="top-right" />
           <div className="relative max-w-md w-full h-full">{children}</div>
