@@ -26,8 +26,6 @@ export default function Sucess() {
     }
   }, []);
 
-  console.log(data)
-
   if (Object.keys(data).length === 0) {
     console.log('ta aqui')
     return (
