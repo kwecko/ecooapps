@@ -13,10 +13,6 @@ import { useHandleError } from "../../../hooks/useHandleError";
 import { toast } from "sonner";
 import { AppID } from "../../../library/types/app-id";
 
-import { loginAgribusinessAction } from "@shared/next/_actions/account/login-agribusiness";
-import { loginCDDAction } from "../../../_actions/account/login-cdd";
-import Loader from "../../../components/Loader";
-
 const schema = yup.object({
   email: yup
     .string()
@@ -36,7 +32,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
     formState: { errors },
     handleSubmit,
     setValue,
-    trigger, 
+    trigger,
   } = useForm({
     resolver,
   });
@@ -44,18 +40,26 @@ export default function FormLogin({ appID }: { appID: AppID }) {
   const onSubmit = async ({ email, password }: any) => {
     setIsLoading(true);
 
-    await callServer(appID === "CDD" ? loginCDDAction : loginAgribusinessAction)
-      .after(() => {
-        toast.success("Login efetuado com sucesso.");
-        router.push("/");
-        setIsLoading(false);
+    await login({
+      email,
+      password,
+      appID
+    })
+      .then((response) => {
+        if (response.message) {
+          const messageError = response.message as string;
+          handleError(messageError);
+          setIsLoading(false);
+        } else {
+          toast.success("Login efetuado com sucesso!");
+          setIsLoading(false);
+          router.push("/");
+        }
       })
-      .run({
-        email,
-        password,
+      .catch((error) => {
+        toast.error("Erro ao efetuar login");
+        setIsLoading(false);
       });
-
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -78,7 +82,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
         passwordInput.removeEventListener("input", handleInput);
       }
     };
-  }, [setValue, trigger]); 
+  }, [setValue, trigger]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -103,7 +107,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
         disabled={isLoading}
         type="submit"
         className="w-full flex justify-center items-center px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
-        style={{ minHeight: "50px" }} 
+        style={{ minHeight: "50px" }}
       >
         {isLoading ? <Loader className="w-6 h-6 border-white" /> : <>Entrar</>}
       </button>
