@@ -11,6 +11,7 @@ export interface ProductCart {
   description: string;
   quantity: number;
   offerId: string;
+  expandDescription?: boolean;
 }
 
 interface CartContextProps {
