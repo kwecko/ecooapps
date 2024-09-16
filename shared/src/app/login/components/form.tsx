@@ -63,22 +63,24 @@ export default function FormLogin({ appID }: { appID: AppID }) {
   };
 
   useEffect(() => {
-    const handleInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = event.target;
+    const handleInput = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const { name, value } = target;
+  
       if (name === "email" || name === "password") {
         setValue(name as "email" | "password", value);
         trigger(name as "email" | "password");
       }
     };
-
+  
     const emailInput = document.querySelector("input[name='email']");
     const passwordInput = document.querySelector("input[name='password']");
-
+  
     if (emailInput && passwordInput) {
       emailInput.addEventListener("input", handleInput);
       passwordInput.addEventListener("input", handleInput);
     }
-
+  
     return () => {
       if (emailInput && passwordInput) {
         emailInput.removeEventListener("input", handleInput);
@@ -86,6 +88,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
       }
     };
   }, [setValue, trigger]);
+  
 
 
   return (
