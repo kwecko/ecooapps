@@ -84,9 +84,8 @@ export default function Produtores() {
                         <Image
                           src="/arrow.png"
                           alt="arrow"
-                          className="w-3 h-2"
-                          width={100}
-                          height={100}
+                          width={10}
+                          height={7}
                         />
                       </div>
                     </div>
