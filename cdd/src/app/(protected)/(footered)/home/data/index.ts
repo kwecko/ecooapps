@@ -26,9 +26,9 @@ export const contentLinksHomePage = [
   },
   {
     title: "Gerar relatórios",
-    link: "/extrato-entregas",
+    link: "/relatorios",
     isSelectedCycle: true,
     hasNotification: false,
-    disabled: true
+    disabled: false
   },
 ]

@@ -37,7 +37,7 @@ export default function CardComponent({ title, link, linkIcon, isSelectedCycle, 
           onClick={handleClickSelectedCycle} 
           disabled={disabled}
           className={`w-full rounded-md p-4 text-white font-semibold relative 
-            ${disabled ? 'bg-gray-300 cursor-not-allowed' : 'bg-[#4A403A] cursor-pointer'}`}
+            ${disabled ? 'bg-[#4A403A] opacity-50 cursor-not-allowed' : 'bg-[#4A403A] cursor-pointer'}`}
         >
           {title}
           {hasNotification && (
