@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
+import { fetchFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -13,6 +13,8 @@ import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 
 import StatusFilterButtons from "./StatusFilterButton";
 import { twMerge } from "tailwind-merge";
+import Table from "./table";
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
 interface FarmsProps {
   page: number;
@@ -23,10 +25,10 @@ export interface IStatus {
   key: string;
 }
 
-const styles = {
-  itemHeader:
+const classes = {
+  header:
     "truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center",
-  itemBody: "border-b-[1px] truncate text-[#545F71] px-2 py-3",
+  body: "border-b-[1px] truncate text-[#545F71] px-2 py-3",
 };
 
 export function FarmWithOrdersTable({ page }: FarmsProps) {
@@ -42,8 +44,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       key: "PENDING",
     },
     {
-      name: "Concluídas",
-      key: "RECEIVED",
+      name: "Aprovadas",
+      key: "VERIFIED",
     },
     {
       name: "Rejeitadas",
@@ -89,7 +91,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
       const { id } = cycle;
 
-      await fecthFarmsWithOrders({
+      await getBoxesWithOrders({
         cycle_id: id,
         page,
         name,
@@ -128,11 +130,11 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
     router.push(path);
   };
 
-  const getStatus = (status: "PENDING" | "CANCELLED" | "RECEIVED") => {
+  const getStatus = (status: "PENDING" | "CANCELLED" | "VERIFIED") => {
     const colorStatus = {
       PENDING: "bg-battleship-gray",
       CANCELLED: "bg-error",
-      RECEIVED: "bg-rain-forest",
+      VERIFIED: "bg-rain-forest",
     };
 
     return (
@@ -146,6 +148,21 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       </div>
     );
   };
+
+  const headers = [
+    { label: 'Prazo', style: 'w-[30%]' },
+    { label: 'Produtor', style: 'w-1/2' },
+    { label: 'Status', style: 'w-1/5 text-center' },
+  ];
+
+  const info = farmsFiltered?.map((farm) => ({
+    id: farm.id,
+    data: [
+      { detail: getNextSaturdayDate() },  // Prazo
+      { detail: farm.catalog.farm.name },  // Produtor
+      { detail: getStatus(farm.status) },  // Status
+    ]
+  }));
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -185,30 +202,11 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       )}
 
       {farmsFiltered && (
-        <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
-          <thead className="w-full">
-            <tr className="text-[rgb(84,95,113)]">
-              <th className={twMerge("w-[30%]", styles.itemHeader)}>Prazo</th>
-              <th className={twMerge("w-1/2", styles.itemHeader)}>Produtor</th>
-              <th className={twMerge("w-1/5", styles.itemHeader)}>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {farmsFiltered?.map((farm) => (
-              <tr
-                key={farm.id}
-                onClick={() => handleClick(farm.id)}
-                className="text-center cursor-pointer"
-              >
-                <td onClick={getNextSaturdayDate} className={styles.itemBody}>
-                  {getNextSaturdayDate()}
-                </td>
-                <td className={styles.itemBody}>{farm.catalog.farm.name}</td>
-                <td className={styles.itemBody}>{getStatus(farm.status)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table
+          headers={headers}
+          info={info}
+          onRowClick={handleClick}
+        />
       )}
     </div>
   );
