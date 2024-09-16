@@ -1,6 +1,5 @@
 "use client";
 
-import { listOffers } from "@producer/app/_actions/offers/list-offers";
 import Loader from "@shared/components/Loader";
 import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -16,43 +15,43 @@ export default function OffersList() {
 
 	const { handleError } = useHandleError();
 
-	useEffect(() => {
-		if (!cycle) {
-		setOffers(null);
-		toast.error("Selecione um ciclo para ver os pedidos!");
-		setIsLoading(false);
-		return;
-		}
+	// useEffect(() => {
+	// 	if (!cycle) {
+	// 	setOffers(null);
+	// 	toast.error("Selecione um ciclo para ver os pedidos!");
+	// 	setIsLoading(false);
+	// 	return;
+	// 	}
 
-		const fetchListOffers = async () => {
-			setIsLoading(true);
+	// 	const fetchListOffers = async () => {
+	// 		setIsLoading(true);
 
-			try {
-				const { id } = cycle;
+	// 		try {
+	// 			const { id } = cycle;
 
-				const response = await listOffers({
-						cycle_id: id as string,
-				});
+	// 			const response = await listOffers({
+	// 					cycle_id: id as string,
+	// 			});
 
-				if (response.message) {
-						handleError(response.message as string);
-						setOffers(null);
-				} else if (response.data) {
-						const dataOffers: OfferWithProductDTO[] = response.data;
-						setOffers(dataOffers);
-				} else {
-						setOffers([]);
-				}
-			} catch {
-				handleError("Erro desconhecido.");
-				setOffers(null);
-			} finally {
-				setIsLoading(false);
-			}
-		};
+	// 			if (response.message) {
+	// 					handleError(response.message as string);
+	// 					setOffers(null);
+	// 			} else if (response.data) {
+	// 					const dataOffers: OfferWithProductDTO[] = response.data;
+	// 					setOffers(dataOffers);
+	// 			} else {
+	// 					setOffers([]);
+	// 			}
+	// 		} catch {
+	// 			handleError("Erro desconhecido.");
+	// 			setOffers(null);
+	// 		} finally {
+	// 			setIsLoading(false);
+	// 		}
+	// 	};
 
-		fetchListOffers();
-	}, [cycle, handleError]);
+	// 	fetchListOffers();
+	// }, [cycle, handleError]);
 
 	return (
 		<>
