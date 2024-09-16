@@ -16,6 +16,5 @@ export async function UpdateOffer({ offer_id, amount, price }: UpdateOfferReques
             price
         }
     })
-    console.log(response)
     return response;
 }
