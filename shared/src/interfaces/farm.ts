@@ -1,6 +1,6 @@
 export interface Boxes {
   id: string;
-  status: string;
+  status: "PENDING" | "CANCELLED" | "VERIFIED";
   catalog: Catalog;
   created_at: string;
   updated_at: any;

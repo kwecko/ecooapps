@@ -1,10 +1,18 @@
 export interface FarmOrders {
   id: string;
+  status: "PENDING" | "CANCELLED" | "VERIFIED";
+  catalog: Catalog;
+  created_at: string;
+  updated_at: any;
+  orders: Order[];
+}
+
+export interface Catalog {
+  id: string;
   cycle_id: string;
   farm: Farm;
   created_at: string;
   updated_at: any;
-  offers: Offer[];
 }
 
 export interface Farm {
@@ -25,7 +33,17 @@ export interface Admin {
   email: string;
   phone: string;
   created_at: string;
-  updated_at: string;
+  updated_at: any;
+}
+
+export interface Order {
+  id: string;
+  bag_id: string;
+  offer: Offer;
+  status: string;
+  amount: number;
+  created_at: string;
+  updated_at: any;
 }
 
 export interface Offer {
