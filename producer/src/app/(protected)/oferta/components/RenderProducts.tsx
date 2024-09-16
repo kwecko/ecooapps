@@ -156,7 +156,11 @@ export default function RenderProducts({ setProductId, setProductName, setPricin
         </div>
         {isLoading && (
           <div className="mt-2 flex justify-center w-full col-span-2">
-            <Loader className="w-8 h-8 border-slate-gray" />{" "}
+            <Loader
+              className="mt-3" 
+              appId="PRODUCER"
+              loaderType="component"
+            />{" "}
           </div>
         )}
       </div>

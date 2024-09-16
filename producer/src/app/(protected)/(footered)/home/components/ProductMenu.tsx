@@ -25,7 +25,10 @@ export function ProductMenu() {
 
       if (Array.isArray(offer) && offer.includes(diaAtual)) {
         setIsOfferingDay(true);
+        return;
       }
+
+      setIsOfferingDay(false)
     }
   }, [cycle]);
 

@@ -56,7 +56,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           router.push("/");
         }
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Erro ao efetuar login");
         setIsLoading(false);
       });
@@ -116,7 +116,10 @@ export default function FormLogin({ appID }: { appID: AppID }) {
         className="w-full flex justify-center items-center px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
         style={{ minHeight: "50px" }}
       >
-        {isLoading ? <Loader className="w-6 h-6 border-white" /> : <>Entrar</>}
+        {isLoading ? <Loader
+          appId="PRODUCER"
+          loaderType="login"
+        /> : <>Entrar</>}
       </button>
     </form>
   );

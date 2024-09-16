@@ -71,7 +71,10 @@ export default function OffersList({ ...rest }: OffersListProps) {
       {twMerge(`flex flex-col gap-2 w-full m-0 overflow-y-auto`, rest.className)}>
       {isLoading ? (
         <div className="w-full h-20 flex items-center justify-center">
-          <Loader className="w-6 h-6 border-black" />
+          <Loader 
+            appId="PRODUCER"
+            loaderType="component"
+          />
         </div>
       ) : (
         offers.length > 0 ? (

@@ -5,12 +5,8 @@ interface OfferListHeadingProps extends React.HTMLAttributes<HTMLDivElement> {
   rest?: any;
 }
 export default function OfferListHeading({ title, ...rest }: OfferListHeadingProps) {
-
-  
-
   return (
-    <div className={twMerge("flex flex-row items-center justify-center w-full gap-2", rest.className)}>
-  
+    <div className={twMerge("flex flex-row items-center pb-2 justify-center w-full gap-2", rest.className)}>
       <hr
         className="w-16 text-[#D1D1D6] bg-[#D1D1D6] h-0.5"
       />
