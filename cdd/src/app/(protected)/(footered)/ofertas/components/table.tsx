@@ -3,8 +3,8 @@ import { twMerge } from "tailwind-merge";
 
 const styles = {
   itemHeader:
-    "truncate text-[#979797] font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
-  itemBody: "border-b-[1px] truncate text-[#545F71] p-3 text-left",
+    "truncate text-battleship-gray font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
+  itemBody: "border-b-[1px] truncate text-grayish-blue p-3 text-left",
 };
 
 interface ITableProps {
@@ -20,7 +20,7 @@ const Table = ({ headers, info, onRowClick }: ITableProps) => {
   return (
     <table className="bg-white text-theme-primary leading-7 w-full table-fixed rounded-lg mt-3 mb-auto">
       <thead className="w-full">
-        <tr className="text-[rgb(84,95,113)]">
+        <tr>
           {headers.map((header, index) => (
             <th
               key={index}

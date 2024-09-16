@@ -16,6 +16,7 @@ const config: Config = {
           secondary: "var(--color-secondary)",
           background: "var(--color-background)",
         },
+        "grayish-blue": "#545F71",
         "french-gray": "#D1D1D6",
         "slate-blue": "#507080",
         "slate-gray": "#2F4A4D",
