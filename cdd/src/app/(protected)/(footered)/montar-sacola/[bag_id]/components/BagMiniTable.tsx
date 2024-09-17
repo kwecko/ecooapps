@@ -37,7 +37,6 @@ export default function BagMiniTable() {
             handleError(messageError)
           } else if (response.data) {
             setBagOrder(response.data)
-            console.log(JSON.stringify(response.data))
             setIsLoading(false)
             return;
           }
