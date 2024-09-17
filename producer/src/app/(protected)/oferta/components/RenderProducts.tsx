@@ -13,7 +13,6 @@ import { toast } from "sonner";
 import { ProductDTO } from "@shared/domain/dtos/product-dto";
 
 export interface RenderProductsProps {
-  // setProductId is a state setter function coming from the parent component
   setProductId: (id: string) => void;
   setProductName: (name: string) => void;
   setPricing: (pricing: "WEIGHT" | "UNIT") => void;
@@ -51,10 +50,10 @@ export default function RenderProducts({ setProductId, setProductName, setPricin
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
-        const product = await GetProducts({ product: query, page: page });
+        const products: ProductDTO[] = (await GetProducts({ product: query, page: page })).data;
         if (isMounted) {
           setProducts((prevProducts) =>
-            page === 1 ? product?.data : [...prevProducts, ...product?.data]
+            page === 1 ? products : [...prevProducts, ...products]
           );
         }
       } catch (error) {
@@ -117,12 +116,12 @@ export default function RenderProducts({ setProductId, setProductName, setPricin
           </button>
         </form>
       </div>
-      <div className="w-full flex flex-col justify-between overflow-y-scroll h-[calc(100%-3rem)]">
-        <div className="grid grid-cols-2 justify-items-start gap-3 w-full mt-4 p-4">
+      <div className="w-full flex flex-col justify-between h-[calc(100%-3rem)]">
+        <div className="grid grid-cols-2 justify-items-start gap-3 w-full mt-4 p-4 snap-y snap-mandatory overflow-y-auto">
           {Array.isArray(products as ProductDTO[]) && products.length > 0
             ? products.map((product, index) => (
               <button
-                className="flex flex-col items-center rounded-2xl w-full h-[160px] p-2.5 bg-white"
+                className="snap-start flex flex-col items-center rounded-2xl w-full h-[160px] p-2.5 bg-white"
                 key={product.id}
                 ref={products.length === index + 1 ? lastProductRef : null}
                 onClick={() =>
