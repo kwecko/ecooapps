@@ -3,20 +3,20 @@ import Footer from "@shared/components/Footer";
 const HAS_PREVIOUS_PAGE = {
   "/": false,
   "/login": true,
-  "/produtos/vender": true,
+  "/oferta": true,
   "/em-construcao": true,
 };
 
 const HAS_HELP_BUTTON = {
   "/": true,
   "/login": false,
-  "/produtos/vender": true,
+  "/oferta": true,
   "/em-construcao": false,
 };
 
 const RETURN_URLS = {
   "/login": "/",
-  "/produtos/vender": "/",
+  "/oferta": "/",
   "/em-construcao": "/",
 };
 
@@ -34,7 +34,7 @@ export default function LayoutWithFooter({
         <Footer
           hasPreviousPagePaths={HAS_PREVIOUS_PAGE}
           hasHelpButtonPaths={HAS_HELP_BUTTON}
-          bgColor={"#3E5155"}
+          bgColor={"#4F4743"}
           returnUrls={RETURN_URLS}
         />
       </div>

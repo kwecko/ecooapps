@@ -1,11 +1,11 @@
 "use client";
 
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
-import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { toast } from "sonner";
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+import PagingButton from "@shared/components/PagingButton";
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
@@ -31,7 +31,7 @@ export default function Home() {
 
     const { id } = cycle;
 
-    const nextPageData = await fecthFarmsWithOrders({
+    const nextPageData = await getBoxesWithOrders({
       cycle_id: id,
       page: page + 1,
       name: ""
@@ -56,15 +56,7 @@ export default function Home() {
         <FarmWithOrdersTable page={page} />
       </div>
       <div className="w-full h-[10%] flex justify-center items-end">
-        <div className="gap-4 flex">
-          <button onClick={backPage}>
-            <IoIosArrowBack />
-          </button>
-          {page}
-          <button onClick={nextPage}>
-            <IoIosArrowForward />
-          </button>
-        </div>
+        <PagingButton value={page} nextPage={nextPage} backPage={backPage} />
       </div>
     </div>
   );

@@ -2,15 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
-import dayjs from "dayjs";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { HiOutlineSearch } from "react-icons/hi";
 import Button from "@shared/components/Button";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { Bag } from "@shared/interfaces/bag"
 import Loader from "@shared/components/Loader";
 import { useHandleError } from "@shared/hooks/useHandleError";
+import SearchInput from "@shared/components/SearchInput";
+import { useDebounce } from "@shared/hooks/useDebounce";
 
 interface BagsProps {
   page: number;
@@ -23,14 +23,9 @@ export default function SendBagTable({ page }: BagsProps) {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const debounceSearch = useDebounce(name)
   const { handleError } = useHandleError()
   const { getFromStorage } = useLocalStorage()
-
-  const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeout(() => {
-      setName(e.target.value);
-    }, 300);
-  };
 
   useEffect(() => {
     (async () => {
@@ -48,7 +43,7 @@ export default function SendBagTable({ page }: BagsProps) {
         cycle_id: id,
         page,
         status: "SEPARATED",
-        name
+        name: debounceSearch
       })
         .then((response) => {
           if (response.message) {
@@ -68,7 +63,7 @@ export default function SendBagTable({ page }: BagsProps) {
         cycle_id: id,
         page,
         status: "DISPATCHED",
-        name
+        name: debounceSearch
       })
         .then((response) => {
           if (response.message) {
@@ -87,16 +82,6 @@ export default function SendBagTable({ page }: BagsProps) {
     })();
   }, [page, name]);
 
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = today.day();
-
-    const daysUntilSaturday = 6 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, 'day');
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
-
   const handleClick = (id: string) => {
     const path = `/enviar-sacola/${id}`;
     router.push(path);
@@ -106,25 +91,15 @@ export default function SendBagTable({ page }: BagsProps) {
     <div className="w-full h-full flex flex-col">
       <div>
         <div className="w-full flex gap-2 items-center mt-4 mb-4">
-          <div className="w-full relative">
-            <form>
-              <input
-                onChange={handleChangeSearchInput}
-                className="border border-french-gray rounded-md h-12 p-4 pr-10 text-base inter-font w-full"
-                type="text"
-              />
-              <button disabled>
-                <HiOutlineSearch
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-                  size={24}
-                />
-              </button>
-            </form>
-          </div>
+          <SearchInput onChange={setName} />
         </div>
       </div>
       {isLoading ? (
-        <Loader className="w-8 h-8 border-walnut-brown mt-3" />
+        <Loader 
+          className="mt-3" 
+          appId="CDD"
+          loaderType="component"
+        />
       ) : !isLoading && bags.length === 0 ? (
         <span className="text-center mt-3 text-slate-gray">
           {name === "" ? "Ainda não há sacolas para serem enviadas." : "Nenhum cliente encontrado."}
@@ -163,7 +138,6 @@ export default function SendBagTable({ page }: BagsProps) {
                     <Button className="w-full bg-theme-background px-3 py-2 rounded-3xl">Enviada</Button>
                   </td>
                 )}
-
               </tr>
             ))}
           </tbody>
