@@ -21,8 +21,8 @@ export default function SessionExpiredModal({
   const { sessionExpired, setSessionExpired } = useSessionExpiredContext()
 
   const handleClickButton = () => {
-    setSessionExpired(false)
     router.push('/api/auth/logout')
+    setSessionExpired(false)
   }
 
   return (
