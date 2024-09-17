@@ -22,7 +22,7 @@ export default function BagsTable({ page }: BagsProps) {
   const [bags, setBags] = useState<Bag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const debounceSearch = useDebounce(name)
   const { handleError } = useHandleError()
   const { getFromStorage } = useLocalStorage()
@@ -95,8 +95,8 @@ export default function BagsTable({ page }: BagsProps) {
         </div>
       </div>
       {isLoading ? (
-        <Loader 
-          className="mt-3" 
+        <Loader
+          className="mt-3"
           appId="CDD"
           loaderType="component"
         />

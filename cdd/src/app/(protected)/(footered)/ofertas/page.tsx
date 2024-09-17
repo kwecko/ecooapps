@@ -1,11 +1,10 @@
 "use client";
 
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useState } from "react";
 import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
-import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { toast } from "sonner";
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 import PagingButton from "@shared/components/PagingButton";
 
 export default function Home() {
@@ -32,7 +31,7 @@ export default function Home() {
 
     const { id } = cycle;
 
-    const nextPageData = await fecthFarmsWithOrders({
+    const nextPageData = await getBoxesWithOrders({
       cycle_id: id,
       page: page + 1,
       name: ""
