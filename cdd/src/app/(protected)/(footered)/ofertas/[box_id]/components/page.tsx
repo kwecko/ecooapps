@@ -153,8 +153,6 @@ export default function FarmOrdersTable() {
     ],
   }));
 
-  console.log(JSON.stringify(farmOrders));
-
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <HeaderDetail
