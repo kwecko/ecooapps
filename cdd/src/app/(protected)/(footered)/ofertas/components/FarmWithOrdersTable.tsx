@@ -45,11 +45,11 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       key: "PENDING",
     },
     {
-      name: "Aprovadas",
+      name: "Verificados",
       key: "VERIFIED",
     },
     {
-      name: "Rejeitadas",
+      name: "Cancelados",
       key: "CANCELLED",
     },
   ];

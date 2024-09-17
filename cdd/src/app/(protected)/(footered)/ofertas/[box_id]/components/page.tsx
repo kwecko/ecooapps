@@ -149,17 +149,17 @@ export default function FarmOrdersTable() {
         detail: detail.amount + convertUnit(detail.offer.product.pricing), // quant.
       },
       { detail: detail.offer.product.name }, // produto
-      { detail: "-", style: "text-center" }, // status
+      { detail: convertStatus(detail.status).icon, style: "text-center" }, // status
     ],
-  }));
+  }))
 
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <HeaderDetail
         id={farmOrders?.id.split("-", 1).toString().toUpperCase()}
+        status={convertStatus(farmOrders.status).name}
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
-        status={convertStatus(farmOrders.status)}
       />
 
       <Table headers={headers} info={info} />
