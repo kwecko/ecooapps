@@ -16,7 +16,6 @@ const config: Config = {
           secondary: "var(--color-secondary)",
           background: "var(--color-background)",
         },
-        "grayish-blue": "#545F71",
         "french-gray": "#D1D1D6",
         "slate-blue": "#507080",
         "slate-gray": "#2F4A4D",
@@ -28,7 +27,6 @@ const config: Config = {
         "blanched-almoad": "#FFEDCC",
         platinum: "#EAE7E3",
         "walnut-brown": "#4F4743",
-        error: "#FF7070",
         "ghost-white": {
           base: "#FAFCFF",
           100: "#FAFCFF",

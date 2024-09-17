@@ -27,7 +27,6 @@ export default function Sucess() {
   }, []);
 
   if (Object.keys(data).length === 0) {
-    console.log('ta aqui')
     return (
       <Loading />
     )
@@ -48,14 +47,14 @@ export default function Sucess() {
         <div className="w-full h-1/5 pb-2 bg-red flex flex-col justify-end gap-4">
           <Link href={data?.button?.secundary}>
             <Button
-              className="w-full rounded-lg font-semibold text-walnut-brown border-walnut-brown border-2 py-[10px]"
+              className="w-full rounded-lg font-semibold text-walnut-brown border-walnut-brown border-2 py-3"
             >
               Voltar para a tela inicial
             </Button>
           </Link>
           <Link href={data?.button?.primary}>
             <Button
-              className="w-full px-2 py-3 font-semibold rounded-lg text-white border-0 p-2 bg-walnut-brown"
+              className="w-full px-2 py-3 font-semibold rounded-lg text-white border-0 p-3 bg-walnut-brown"
             >
               Verificar outra oferta
             </Button>

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { AiFillEye } from "react-icons/ai";
@@ -31,7 +31,11 @@ export default function FormLogin({ appID }: { appID: AppID }) {
     register,
     formState: { errors },
     handleSubmit,
-  } = useForm({ resolver });
+    setValue,
+    trigger,
+  } = useForm({
+    resolver,
+  });
 
   const onSubmit = async ({ email, password }: any) => {
     setIsLoading(true);
@@ -52,11 +56,40 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           router.push("/");
         }
       })
-      .catch((error) => {
+      .catch(() => {
         toast.error("Erro ao efetuar login");
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    const handleInput = (event: Event) => {
+      const target = event.target as HTMLInputElement;
+      const { name, value } = target;
+  
+      if (name === "email" || name === "password") {
+        setValue(name as "email" | "password", value);
+        trigger(name as "email" | "password");
+      }
+    };
+  
+    const emailInput = document.querySelector("input[name='email']");
+    const passwordInput = document.querySelector("input[name='password']");
+  
+    if (emailInput && passwordInput) {
+      emailInput.addEventListener("input", handleInput);
+      passwordInput.addEventListener("input", handleInput);
+    }
+  
+    return () => {
+      if (emailInput && passwordInput) {
+        emailInput.removeEventListener("input", handleInput);
+        passwordInput.removeEventListener("input", handleInput);
+      }
+    };
+  }, [setValue, trigger]);
+  
+
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -66,6 +99,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           label="Email"
           register={{ ...register("email") }}
           error={errors.email?.message}
+          autoComplete="email"
         />
         <Input
           label="Senha"
@@ -73,15 +107,19 @@ export default function FormLogin({ appID }: { appID: AppID }) {
           icon={<AiFillEye />}
           register={{ ...register("password") }}
           error={errors.password?.message}
+          autoComplete="password"
         />
       </div>
       <button
         disabled={isLoading}
         type="submit"
         className="w-full flex justify-center items-center px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
-        style={{ minHeight: "50px" }} // Define um tamanho mínimo para o botão
+        style={{ minHeight: "50px" }}
       >
-        {isLoading ? <Loader className="w-6 h-6 border-white" /> : <>Entrar</>}
+        {isLoading ? <Loader
+          appId="PRODUCER"
+          loaderType="login"
+        /> : <>Entrar</>}
       </button>
     </form>
   );

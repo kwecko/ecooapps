@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
-import { HiOutlineSearch } from "react-icons/hi";
+import { FaCheck } from "react-icons/fa6";
 import Loader from "@shared/components/Loader";
 import { Boxes } from "@shared/interfaces/farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -14,6 +14,8 @@ import StatusFilterButtons from "./StatusFilterButton";
 import { twMerge } from "tailwind-merge";
 import Table from "./table";
 import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+import SearchInput from "@shared/components/SearchInput";
+import { useDebounce } from "@shared/hooks/useDebounce";
 
 interface FarmsProps {
   page: number;
@@ -60,6 +62,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
   const { handleError } = useHandleError();
   const { getFromStorage } = useLocalStorage();
+  const debounceSearch = useDebounce(name, 1000)
 
   const handleStatusFilterClick = (status: IStatus) => {
     if (selectedStatus === status.key || status.key === "ALL") {
@@ -70,12 +73,6 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
     setFarmFiltered(() => farms.filter((item) => item.status === status.key));
     setSelectedStatus(status.key);
-  };
-
-  const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeout(() => {
-      setName(e.target.value);
-    }, 300);
   };
 
   useEffect(() => {
@@ -93,7 +90,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       await getBoxesWithOrders({
         cycle_id: id,
         page,
-        name,
+        name: debounceSearch,
       })
         .then((response: any) => {
           if (response.message) {
@@ -112,7 +109,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           setIsLoading(false);
         });
     })();
-  }, [page, name]);
+  }, [page, debounceSearch]);
 
   const getNextSaturdayDate = () => {
     const today = dayjs();
@@ -143,7 +140,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           `${colorStatus[status]}`
         )}
       >
-        <span className="text-white text-xs" />
+        {status === 'VERIFIED' && (<FaCheck color="white" />)}
       </div>
     );
   };
@@ -167,21 +164,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
     <div className="w-full h-full flex flex-col">
       <div>
         <div className="w-full flex gap-2 items-center mt-4 mb-4">
-          <div className="w-full relative">
-            <form>
-              <input
-                onChange={handleChangeSearchInput}
-                className="border border-french-gray active:border-none rounded-md h-12 p-4 pr-10 text-base inter-font w-full"
-                type="text"
-              />
-              <button disabled>
-                <HiOutlineSearch
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500"
-                  size={24}
-                />
-              </button>
-            </form>
-          </div>
+          <SearchInput onChange={setName} />
         </div>
         <StatusFilterButtons
           statuses={statuses}
@@ -190,7 +173,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         />
       </div>
 
-      {isLoading && <Loader className="w-8 h-8 border-walnut-brown mt-3" />}
+      {isLoading && <Loader className="mt-3" appId="CDD" loaderType="component" />}
 
       {farmsFiltered?.length === 0 && (
         <span className="text-center mt-3 text-slate-gray">

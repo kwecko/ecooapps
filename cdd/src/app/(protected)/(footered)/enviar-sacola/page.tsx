@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 import SendBagTable from "./components/SendBagTable";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import PagingButton from "@shared/components/PagingButton";
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
@@ -56,15 +56,7 @@ export default function Home() {
         <SendBagTable page={page} />
       </div>
       <div className="w-full h-[10%] flex justify-center items-end">
-        <div className="gap-4 flex">
-          <button onClick={backPage}>
-            <IoIosArrowBack />
-          </button>
-          {page}
-          <button onClick={nextPage}>
-            <IoIosArrowForward />
-          </button>
-        </div>
+        <PagingButton nextPage={nextPage} backPage={backPage} value={page} />
       </div>
     </div>
   );

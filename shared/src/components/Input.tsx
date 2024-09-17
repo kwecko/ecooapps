@@ -6,7 +6,7 @@ import {
   UseFormRegisterReturn,
 } from "react-hook-form";
 
-interface InputProps {
+interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   icon?: ReactNode;
   label?: string;
@@ -16,8 +16,15 @@ interface InputProps {
   onChange?: (
     event: ChangeEvent<HTMLInputElement>
   ) => void | string | undefined;
-  value?: string;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  value?: string | number;
+  defaultValue?: string;
   maxLength?: number;
+  minLength?: number;
+  step?: number;
+  pattern?: string;
+  required?: boolean;
+  autoComplete?: string;
 }
 
 export default function Input({
@@ -28,8 +35,16 @@ export default function Input({
   type,
   className,
   onChange,
+  onFocus,
   value,
+  defaultValue,
   maxLength,
+  minLength,
+  step,
+  pattern,
+  required,
+  autoComplete,
+  ...rest
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -47,19 +62,29 @@ export default function Input({
       </label>
       <div className="relative">
         <input
+          {...rest}
           {...register}
           className={`z-0 w-full mt-2 p-3 border border-theme-primary rounded-lg inter-font font-normal ${className}`}
           type={inputType}
           onChange={onChange}
+          onFocus={onFocus}
+          defaultValue={defaultValue}
           value={value}
           maxLength={maxLength}
+          minLength={minLength}
+          autoComplete={autoComplete}
+          step={step}
+          pattern={pattern}
+          required={required}
         />
-        <div
-          onClick={handleIconClick}
-          className="cursor-pointer absolute text-xl top-[5px] right-0 pr-3 flex items-center h-full z-50"
-        >
-          {icon}
-        </div>
+        {icon && (
+          <div
+            onClick={handleIconClick}
+            className="cursor-pointer absolute text-xl top-[5px] right-0 pr-3 flex items-center h-full z-50"
+          >
+            {icon}
+          </div>
+        )}
       </div>
       {typeof error === "string" && (
         <div className="text-red-500 text-sm mt-1">{error}</div>
