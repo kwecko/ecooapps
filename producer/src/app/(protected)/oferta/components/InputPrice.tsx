@@ -37,7 +37,7 @@ export default function InputPrice({ handleNextStep, price, setPrice }: InputPri
         e.preventDefault();
 
         if (!price) {
-            toast.error("Você deve preencher o campo acima!");
+            toast.error("O preço não pode ser vazio. Por favor, insira um valor válido.");
             return;
         }
 
