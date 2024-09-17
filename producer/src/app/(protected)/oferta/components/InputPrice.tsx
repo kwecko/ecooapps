@@ -50,13 +50,18 @@ export default function InputPrice({ handleNextStep, price, setPrice }: InputPri
             onSubmit={handleSubmit}
             className="h-full flex flex-col items-stretch justify-between pt-14"
         >
-            <Input
-                onChange={handleChange}
-                className="text-theme-primary text-sm"
-                type="text"
-                value={formatPrice(price * 100)}
-                label="Preço"
-            />
+            <div className="flex flex-col items-stretch justify-start w-full">
+                <Input
+                    onChange={handleChange}
+                    className="text-theme-primary text-sm"
+                    type="text"
+                    value={formatPrice(price * 100)}
+                    label="Preço"
+                />
+                <span className="text-xs text-gray-500 pt-1 pl-2">
+                   Preço + taxa: {formatPrice(price*100 + price*100 * 0.2)}
+                </span>
+            </div>
             <Button className="px-2 py-3 bg-theme-default rounded-lg text-white
             font-semibold border-0">
                 Continuar
