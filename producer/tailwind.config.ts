@@ -27,6 +27,7 @@ const config: Config = {
         "blanched-almoad": "#FFEDCC",
         platinum: "#EAE7E3",
         "walnut-brown": "#4F4743",
+        error: "#FF7070",
         "ghost-white": {
           base: "#FAFCFF",
           100: "#FAFCFF",
