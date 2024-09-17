@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from "react";
 import { toast } from "sonner";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { listBags } from "@cdd/app/_actions/bag/list-bags";
+import { useState } from "react";
 import BagsTable from "./components/BagsTable";
+import { listBags } from "@cdd/app/_actions/bag/list-bags";
+
+import PagingButton from "@shared/components/PagingButton";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 export default function Home() {
@@ -29,7 +30,7 @@ export default function Home() {
       return
     }
 
-    const { id } = cycle;
+    const { id } = cycle
 
     const nextPageData = await listBags({
       page: page + 1,
@@ -56,15 +57,7 @@ export default function Home() {
         <BagsTable page={page} />
       </div>
       <div className="w-full h-[10%] flex justify-center items-end">
-        <div className="gap-4 flex">
-          <button onClick={backPage}>
-            <IoIosArrowBack />
-          </button>
-          {page}
-          <button onClick={nextPage}>
-            <IoIosArrowForward />
-          </button>
-        </div>
+        <PagingButton nextPage={nextPage} backPage={backPage} value={page} />
       </div>
     </div>
   );

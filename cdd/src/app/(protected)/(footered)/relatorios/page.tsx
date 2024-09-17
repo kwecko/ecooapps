@@ -1,52 +1,49 @@
 "use client";
 
+import axios from "axios";
+import { toast } from "sonner";
 import { useState } from "react";
-import DateInput from '@cdd/components/DateInput';
+import DateInput from '@shared/components/DateInput';
+
 import ButtonV2 from "@shared/components/ButtonV2";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { ListBagsReport } from "@cdd/app/_actions/report/list-bags-report";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { toast } from "sonner";
 
 export default function Home() {
   const [initialDate, setInitialDate] = useState('');
   const [finalDate, setFinalDate] = useState('');
 
   const { getFromStorage } = useLocalStorage();
-  const { handleError } = useHandleError();
 
   const handleClickButtonReport = async (name: string) => {
     const cycle = getFromStorage('selected-cycle');
-    const { id } = cycle;
 
-    if (name === "list-bags") {
-      try {
-        const response = await ListBagsReport(id);
-        
-        if (response.message) {
-          const messageError = response.message as string;
-          console.log(messageError);
-          handleError(messageError);
-        } else if (response.data) {
-          console.log(response.data);
-          const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+    if (!cycle) {
+      toast.error("Selecione um ciclo para ver os pedidos!");
+      return;
+    }
 
-          const pdfBlobUrl = URL.createObjectURL(pdfBlob);
-          window.open(pdfBlobUrl);
+    const { id } = cycle
 
-          const downloadLink = document.createElement('a');
-          downloadLink.href = pdfBlobUrl;
-          downloadLink.download = 'relatorio_sacolas.pdf';
-          downloadLink.click();
-
-          URL.revokeObjectURL(pdfBlobUrl);
-        }
-      } catch (error) {
-        toast.error('Erro ao gerar o relatório');
-        console.error(error);
-      }
-    } else {
-      console.log("Relatório não implementado");
+    if(name === "list-bags"){
+      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bags/report/${id}`,
+        {
+          responseType: 'arraybuffer',
+          headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/pdf'
+          }
+        })
+        .then((response) => {
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'file.pdf');
+            document.body.appendChild(link);
+            link.click();
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        });
     }
   };
 
@@ -64,11 +61,13 @@ export default function Home() {
             label="Data inicial"
             value={initialDate}
             onChange={setInitialDate}
+            disabled={true}
           />
           <DateInput
             label="Data final"
             value={finalDate}
             onChange={setFinalDate}
+            disabled={true}
           />
         </div>
         <div>

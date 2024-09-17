@@ -1,43 +1,70 @@
 "use client";
 
+import { FaCheck, FaBoxOpen } from "react-icons/fa6";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fecthFarmsWithOrders } from "@cdd/app/_actions/farm/fetch-farm-with-orders";
-import dayjs from "dayjs";
-import { ChangeEvent, useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
-import { HiOutlineSearch, HiX } from "react-icons/hi";
+import Table from "./table";
+import StatusFilterButtons from "./StatusFilterButton";
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+
 import Loader from "@shared/components/Loader";
-import { Farm } from "@shared/interfaces/farm";
+import { Boxes } from "@shared/interfaces/farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import SearchInput from "@shared/components/SearchInput";
+import { useDebounce } from "@shared/hooks/useDebounce";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
 
 interface FarmsProps {
   page: number;
 }
 
+export interface IStatus {
+  name: string;
+  key: string;
+}
+
+const classes = {
+  header:
+    "truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center",
+  body: "border-b-[1px] truncate text-[#545F71] px-2 py-3",
+};
+
 export function FarmWithOrdersTable({ page }: FarmsProps) {
   const router = useRouter();
 
-  const [farms, setFarms] = useState<Farm[]>([]);
-  const [selectedStatus, setSelectedStatus] = useState("todos");
-  const [name, setName] = useState("");
+  const statuses: IStatus[] = [
+    { name: "Todas", key: "ALL" },
+    { name: "Pendentes", key: "PENDING" },
+    { name: "Aprovadas", key: "VERIFIED" },
+    { name: "Rejeitadas", key: "CANCELLED" },
+  ];
+
+  const [selectedStatus, setSelectedStatus] = useState("ALL");
   const [isLoading, setIsLoading] = useState(false);
+  const [farms, setFarms] = useState<Boxes[]>([]);
+  const [farmsFiltered, setFarmFiltered] = useState<Boxes[]>([]);
+  const [name, setName] = useState("");
 
-  const { handleError } = useHandleError()
-  const { getFromStorage } = useLocalStorage()
+  const { handleError } = useHandleError();
+  const { getFromStorage } = useLocalStorage();
+  const debounceSearch = useDebounce(name, 1000);
 
-  const handleStatusFilterClick = (status: string) => {
-    setSelectedStatus(status);
-  };
+  const handleStatusFilterClick = (status: IStatus) => {
+    if (selectedStatus === status.key || status.key === "ALL") {
+      setSelectedStatus("ALL");
+      setFarmFiltered(farms);
+      return;
+    }
 
-  const handleChangeSearchInput = (e: ChangeEvent<HTMLInputElement>) => {
-    setTimeout(() => {
-      setName(e.target.value);
-    }, 300);
+    setFarmFiltered(() => farms.filter((item) => item.status === status.key));
+    setSelectedStatus(status.key);
   };
 
   useEffect(() => {
-    (async () => {
+    (() => {
       setIsLoading(true);
       const cycle = getFromStorage("selected-cycle");
 
@@ -46,156 +73,100 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         return;
       }
 
-      const { id } = cycle;
+      const { id } = cycle
 
-      await fecthFarmsWithOrders({
+      getBoxesWithOrders({
         cycle_id: id,
         page,
-        name,
+        name: debounceSearch,
       })
-        .then((response) => {
+        .then((response: any) => {
           if (response.message) {
-            const messageError = response.message as string
-
-            handleError(messageError)
+            const messageError = response.message as string;
+            handleError(messageError);
           } else if (response.data) {
             setFarms(response.data);
-            setIsLoading(false);
-            return;
+            setFarmFiltered(response.data);
           }
         })
         .catch(() => {
-          toast.error("Erro desconhecido.")
+          toast.error("Erro desconhecido.");
         })
+        .finally(() => {
+          setIsLoading(false);
+        });
     })();
-  }, [page, name]);
-
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = dayjs().get("day") + 1;
-
-    const daysUntilSaturday = 7 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, "day");
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
+  }, [page, debounceSearch]);
 
   const handleClick = (id: string) => {
-    const path = `/ofertas/${id}`;
-    router.push(path);
+    router.push(`/ofertas/${id}`);
   };
+
+  const getStatus = (status: "PENDING" | "CANCELLED" | "VERIFIED") => {
+    const colorStatus = {
+      PENDING: "bg-battleship-gray",
+      CANCELLED: "bg-error",
+      VERIFIED: "bg-rain-forest",
+    };
+
+    return (
+      <div
+        className={twMerge(
+          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full",
+          `${colorStatus[status]}`
+        )}
+      >
+        {status === "VERIFIED" && <FaCheck color="white" />}
+      </div>
+    );
+  };
+
+  const headers = [
+    { label: "Prazo", style: "w-[30%]" },
+    { label: "Produtor", style: "w-1/2" },
+    { label: "Status", style: "w-1/5 text-center" },
+  ];
+
+  const info =
+    farmsFiltered.length > 0
+      ? farmsFiltered.map((farm) => ({
+          id: farm.id,
+          data: [
+            { detail: getNextSaturdayDate() }, // Prazo
+            { detail: farm.catalog.farm.name }, // Produtor
+            { detail: getStatus(farm.status) }, // Status
+          ],
+        }))
+      : [];
 
   return (
     <div className="w-full h-full flex flex-col">
       <div>
         <div className="w-full flex gap-2 items-center mt-4 mb-4">
-          <div className="w-full relative">
-            <form>
-              <input
-                onChange={handleChangeSearchInput}
-                className="border border-french-gray active:border-none rounded-md h-12 p-4 pr-10 text-base inter-font w-full"
-                type="text"
-              />
-              <button disabled>
-                <HiOutlineSearch
-                  className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500"
-                  size={24}
-                />
-              </button>
-            </form>
-          </div>
+          <SearchInput onChange={setName} />
         </div>
-        <div className="w-full flex gap-2 mb-4 flex-wrap">
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Todas")}
-            className={`${selectedStatus === "Todas"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Todas
-            {selectedStatus === "Todas" && <HiX className="ml-1" />}
-          </button>
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Pendente")}
-            className={`${selectedStatus === "Pendente"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Pendentes
-            {selectedStatus === "Pendente" && <HiX className="ml-1" />}
-          </button>
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Concluída")}
-            className={`${selectedStatus === "Concluída"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Concluídas
-            {selectedStatus === "Concluída" && <HiX className="ml-1" />}
-          </button>
-          <button
-            disabled
-            onClick={() => handleStatusFilterClick("Rejeitada")}
-            className={`${selectedStatus === "Rejeitada"
-              ? "bg-[#3E5055] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items=center h-[22px]"
-              : "bg-[#979797] text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]"
-              }`}
-          >
-            Rejeitadas
-            {selectedStatus === "Rejeitada" && <HiX className="ml-1" />}
-          </button>
-        </div>
+        <StatusFilterButtons
+          statuses={statuses}
+          selectedStatus={selectedStatus}
+          handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+        />
       </div>
-      {isLoading ? (
-        <Loader className="w-8 h-8 border-walnut-brown mt-3" />
-      ) : !isLoading && farms.length === 0 ? (
-        <span className="text-center mt-3 text-slate-gray">
-          {name === "" ? "Ainda não há pedidos." : "Nenhum produtor encontrado."}
-        </span>
-      ) : (
-        <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
-          <thead className="w-full">
-            <tr className="text-[rgb(84,95,113)]">
-              <th className="truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Prazo
-              </th>
-              <th className="truncate w-1/2 text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Produtor
-              </th>
-              <th className="truncate w-1/5 text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {farms.map((farm) => (
-              <tr
-                onClick={() => handleClick(farm.id)}
-                key={farm.admin_id}
-                className="text-center cursor-pointer"
-              >
-                <td
-                  onClick={getNextSaturdayDate}
-                  className="border-b-[1px] truncate text-[#545F71] px-2 py-3"
-                >
-                  {getNextSaturdayDate()}
-                </td>
-                <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  {farm.name}
-                </td>
-                <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  #
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+      {isLoading && (
+        <div className="flex justify-center mt-3">
+          <Loader className="mt-3" appId="CDD" loaderType="component" />
+        </div>
+      )}
+
+      {!isLoading && farmsFiltered.length === 0 && (
+        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
+          <FaBoxOpen className="text-walnut-brown" size={64} />
+          <span className="text-center">Nenhum pedido < br/> encontrado!</span>
+        </div>
+      )}
+
+      {!isLoading && farmsFiltered.length > 0 && (
+        <Table headers={headers} info={info} onRowClick={handleClick} />
       )}
     </div>
   );
