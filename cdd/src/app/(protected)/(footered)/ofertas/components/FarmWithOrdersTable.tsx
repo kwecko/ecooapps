@@ -36,10 +36,22 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const router = useRouter();
 
   const statuses: IStatus[] = [
-    { name: "Todas", key: "ALL" },
-    { name: "Pendentes", key: "PENDING" },
-    { name: "Aprovadas", key: "VERIFIED" },
-    { name: "Rejeitadas", key: "CANCELLED" },
+    {
+      name: "Todas",
+      key: "ALL",
+    },
+    {
+      name: "Pendentes",
+      key: "PENDING",
+    },
+    {
+      name: "Verificados",
+      key: "VERIFIED",
+    },
+    {
+      name: "Cancelados",
+      key: "CANCELLED",
+    },
   ];
 
   const [selectedStatus, setSelectedStatus] = useState("ALL");
