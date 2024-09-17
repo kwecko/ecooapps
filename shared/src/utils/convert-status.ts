@@ -1,7 +1,8 @@
 export const convertStatus = (status: string) => {
   const statuses: Record<string, string> = {
     PENDING: "Pendente",
-    VERIFIED: "Aprovados",
+    VERIFIED: "Aprovado",
+    CANCELLED: "Cancelado",
   };
 
   return statuses[status];
