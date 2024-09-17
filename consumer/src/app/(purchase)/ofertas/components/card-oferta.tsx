@@ -13,8 +13,6 @@ export default function CardOferta({
   const [isExpanded, setIsExpanded] = useState(false);
 
 
-  const desc = "LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM LOREM IPSUM "
-
   const toggleDescription = (offer: any) => {
     offer.expandDescription = !offer.expandDescription;
     setIsExpanded(!isExpanded);
@@ -45,7 +43,6 @@ export default function CardOferta({
 
   useEffect(() => {
     offer.expandDescription = false;
-    offer.description = desc;
     let indexProductCart = cart.findIndex((productCart) => {
       return (
         productCart.id == offer.product.id && productCart.offerId == offer.id
@@ -118,7 +115,7 @@ export default function CardOferta({
           height={100}
           alt={`${offer.product.name.toLowerCase()}.jpg`}
         />
-        <div className="absolute flex justify-center bottom-0 right-0 bg-[#00735E] text-white items-center w-12 h-5 rounded-tl-xl text-xs font-semibold">
+        <div className="absolute flex justify-center bottom-0 right-0 bg-[#3E5155] text-white items-center w-12 h-5 rounded-tl-xl rounded-br-xl text-xs">
           {mapTextQuantity[offer.product.pricing]}
         </div>
       </div>
