@@ -5,7 +5,7 @@ import DeleteOfferButton from "./DeleteOfferButton";
 
 interface OfferCardProps {
   offer: OfferWithProductDTO;
-  onDeleteCard: (offerId: string) => void;
+  onDeleteCard?: (offerId: string) => void;
 }
 
 export default function OfferCard({ offer, onDeleteCard }: OfferCardProps) {
@@ -52,7 +52,11 @@ export default function OfferCard({ offer, onDeleteCard }: OfferCardProps) {
         </div>
         <div className="flex flex-row justify-end shrink-0 grow-0 basis-16 gap-2 align-start h-full pt-3">
           <EditOfferButton offer={offer} />
-          <DeleteOfferButton offerId={offer.id} productName={offer.product.name} onDeleteCard={onDeleteCard} />
+          {
+            onDeleteCard && (
+              <DeleteOfferButton offerId={offer.id} productName={offer.product.name} onDeleteCard={onDeleteCard} />
+            )
+          }
         </div>
       </div>
     </>
