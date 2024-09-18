@@ -1,36 +1,17 @@
 "use client";
 
-import axios from "axios";
 import { toast } from "sonner";
 import { useState } from "react";
 import DateInput from '@shared/components/DateInput';
-
 import ButtonV2 from "@shared/components/ButtonV2";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { ListBagsReport } from "@cdd/app/_actions/report/list-bags-report"; // Ação do servidor
 
 export default function Home() {
   const [initialDate, setInitialDate] = useState('');
   const [finalDate, setFinalDate] = useState('');
 
   const { getFromStorage } = useLocalStorage();
-
-  const generateCurrentTime = () => {
-    const date = new Date();
-
-    const dateFormatted = new Intl.DateTimeFormat('pt-BR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).format(date);
-
-    const hourFormatted = new Intl.DateTimeFormat('pt-BR', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    }).format(date);
-
-    return `${dateFormatted}-${hourFormatted}`
-  }
 
   const handleClickButtonReport = async (name: string) => {
     const cycle = getFromStorage('selected-cycle');
@@ -40,28 +21,21 @@ export default function Home() {
       return;
     }
 
-    const { id } = cycle
+    const { id } = cycle;
 
     if (name === "list-bags") {
-      axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bags/report/${id}`,
-        {
-          responseType: 'arraybuffer',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/pdf'
-          }
-        })
-        .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement('a');
-          link.href = url;
-          link.setAttribute('download', `relatorio-de-entrega-${generateCurrentTime()}.pdf`);
-          document.body.appendChild(link);
-          link.click();
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        });
+      try {
+        const response = await ListBagsReport(id);
+        const url = window.URL.createObjectURL(new Blob([response]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'relatorio_sacolas.pdf');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        toast.error("Erro ao gerar o relatório.");
+      }
     }
   };
 
