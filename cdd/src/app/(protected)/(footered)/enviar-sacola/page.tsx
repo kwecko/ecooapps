@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from "react";
 import { toast } from "sonner";
-import { listBags } from "@cdd/app/_actions/bag/list-bags";
+import { useState } from "react";
 import SendBagTable from "./components/SendBagTable";
+import { listBags } from "@cdd/app/_actions/bag/list-bags";
+
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import PagingButton from "@shared/components/PagingButton";
 
@@ -46,13 +47,13 @@ export default function Home() {
 
   return (
     <div className="w-full h-full p-5 pb-6 flex items-center flex-col">
-      <div className="flex flex-col h-[18%] w-full items-center justify-end mt-4">
-        <h1 className="text-3xl font-medium text-slate-gray mb-4 text-center">Enviar sacolas</h1>
-        <span className="text-sm font-medium text-slate-gray mb-6 text-center">
+      <div className="flex flex-col h-1/5 w-full items-center justify-end mb-6">
+        <h1 className="text-3xl font-medium text-slate-gray mb-6 text-center">Enviar sacolas</h1>
+        <span className="text-sm font-medium text-slate-gray text-center">
           Envie as sacolas abaixo
         </span>
       </div>
-      <div className="w-full h-[72%] overflow-y-auto">
+      <div className="w-full h-[70%] overflow-y-auto">
         <SendBagTable page={page} />
       </div>
       <div className="w-full h-[10%] flex justify-center items-end">

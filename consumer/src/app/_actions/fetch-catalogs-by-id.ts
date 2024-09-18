@@ -22,6 +22,7 @@ export interface Offer {
   description: string
   created_at: string
   updated_at: string
+  expandDescription?: boolean
 }
 
 export interface CatalogOffers {

@@ -1,21 +1,21 @@
 "use client";
 
+import { FaCheck, FaBoxOpen } from "react-icons/fa6";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import dayjs from "dayjs";
-import { ChangeEvent, useEffect, useState } from "react";
+import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
-import { FaCheck } from "react-icons/fa6";
+import Table from "./table";
+import StatusFilterButtons from "./StatusFilterButton";
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+
 import Loader from "@shared/components/Loader";
 import { Boxes } from "@shared/interfaces/farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-
-import StatusFilterButtons from "./StatusFilterButton";
-import { twMerge } from "tailwind-merge";
-import Table from "./table";
-import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
 
 interface FarmsProps {
   page: number;
@@ -45,11 +45,11 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       key: "PENDING",
     },
     {
-      name: "Aprovadas",
+      name: "Verificados",
       key: "VERIFIED",
     },
     {
-      name: "Rejeitadas",
+      name: "Cancelados",
       key: "CANCELLED",
     },
   ];
@@ -62,7 +62,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
   const { handleError } = useHandleError();
   const { getFromStorage } = useLocalStorage();
-  const debounceSearch = useDebounce(name, 1000)
+  const debounceSearch = useDebounce(name, 1000);
 
   const handleStatusFilterClick = (status: IStatus) => {
     if (selectedStatus === status.key || status.key === "ALL") {
@@ -76,7 +76,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   };
 
   useEffect(() => {
-    (async () => {
+    (() => {
       setIsLoading(true);
       const cycle = getFromStorage("selected-cycle");
 
@@ -85,9 +85,9 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         return;
       }
 
-      const { id } = cycle;
+      const { id } = cycle
 
-      await getBoxesWithOrders({
+      getBoxesWithOrders({
         cycle_id: id,
         page,
         name: debounceSearch,
@@ -99,7 +99,6 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           } else if (response.data) {
             setFarms(response.data);
             setFarmFiltered(response.data);
-            return;
           }
         })
         .catch(() => {
@@ -111,19 +110,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
     })();
   }, [page, debounceSearch]);
 
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = dayjs().get("day") + 1;
-
-    const daysUntilSaturday = 7 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, "day");
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
-
   const handleClick = (id: string) => {
-    const path = `/ofertas/${id}`;
-    router.push(path);
+    router.push(`/ofertas/${id}`);
   };
 
   const getStatus = (status: "PENDING" | "CANCELLED" | "VERIFIED") => {
@@ -140,25 +128,28 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
           `${colorStatus[status]}`
         )}
       >
-        {status === 'VERIFIED' && (<FaCheck color="white" />)}
+        {status === "VERIFIED" && <FaCheck color="white" />}
       </div>
     );
   };
 
   const headers = [
-    { label: 'Prazo', style: 'w-[30%]' },
-    { label: 'Produtor', style: 'w-1/2' },
-    { label: 'Status', style: 'w-1/5 text-center' },
+    { label: "Prazo", style: "w-[30%]" },
+    { label: "Produtor", style: "w-1/2" },
+    { label: "Status", style: "w-1/5 text-center" },
   ];
 
-  const info = farmsFiltered?.map((farm) => ({
-    id: farm.id,
-    data: [
-      { detail: getNextSaturdayDate() },  // Prazo
-      { detail: farm.catalog.farm.name },  // Produtor
-      { detail: getStatus(farm.status) },  // Status
-    ]
-  }));
+  const info =
+    farmsFiltered.length > 0
+      ? farmsFiltered.map((farm) => ({
+          id: farm.id,
+          data: [
+            { detail: getNextSaturdayDate() }, // Prazo
+            { detail: farm.catalog.farm.name }, // Produtor
+            { detail: getStatus(farm.status) }, // Status
+          ],
+        }))
+      : [];
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -173,22 +164,21 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         />
       </div>
 
-      {isLoading && <Loader className="mt-3" appId="CDD" loaderType="component" />}
-
-      {farmsFiltered?.length === 0 && (
-        <span className="text-center mt-3 text-slate-gray">
-          {name === ""
-            ? "Ainda não há pedidos."
-            : "Nenhum produtor encontrado."}
-        </span>
+      {isLoading && (
+        <div className="flex justify-center mt-3">
+          <Loader className="mt-3" appId="CDD" loaderType="component" />
+        </div>
       )}
 
-      {farmsFiltered && (
-        <Table
-          headers={headers}
-          info={info}
-          onRowClick={handleClick}
-        />
+      {!isLoading && farmsFiltered.length === 0 && (
+        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
+          <FaBoxOpen className="text-walnut-brown" size={64} />
+          <span className="text-center">Nenhum pedido < br/> encontrado!</span>
+        </div>
+      )}
+
+      {!isLoading && farmsFiltered.length > 0 && (
+        <Table headers={headers} info={info} onRowClick={handleClick} />
       )}
     </div>
   );

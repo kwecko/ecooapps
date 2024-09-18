@@ -15,22 +15,22 @@ export function Header() {
   const { handleError } = useHandleError()
 
   useEffect(() => {
-    (async () => {
-      await getUser()
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message;
+    (() => {
+      getUser()
+      .then((response) => {
+        if (response.message) {
+          const messageError = response.message;
 
-            handleError(messageError)
-          } else if (response.data) {
-            const { first_name, last_name } = response.data;
-            setName(`${first_name} ${last_name}`);
-            setIsLoading(false)
-          }
-        })
-        .catch((error) => {
-          toast.error(error)
-        })
+          handleError(messageError)
+        } else if (response.data) {
+          const { first_name, last_name } = response.data;
+          setName(`${first_name} ${last_name}`);
+          setIsLoading(false)
+        }
+      })
+      .catch((error) => {
+        toast.error(error)
+      })
     })()
   }, [])
 

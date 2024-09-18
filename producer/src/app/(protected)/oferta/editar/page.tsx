@@ -47,7 +47,7 @@ export default function Home() {
       setProductId(offerData.product_id);
       setProductName(offerData.product.name);
       setAmount(offerData.product.pricing === "UNIT" ? (offerData.amount) : (offerData.amount / 1000));
-      setPrice(offerData.price);
+      setPrice((offerData.price*10)/12);
       setDescription(offerData.description ? offerData.description : "");
       setPricing(offerData.product.pricing);
       setCurrentStep(1);

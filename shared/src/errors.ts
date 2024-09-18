@@ -6,5 +6,9 @@
     "Erro de validação.": "Erro de validação.",
     "Você está tentando acessar um app apenas para administradores!": "Você está tentando acessar um app apenas para administradores!",
     "Você está tentando acessar um app apenas para administradores ou produtores!": "Você está tentando acessar um app apenas para administradores ou produtores!",
-    "Você está tentando acessar um app apenas para administradores ou consumidores!": "Você está tentando acessar um app apenas para administradores ou consumidores!"
+    "Você está tentando acessar um app apenas para administradores ou consumidores!": "Você está tentando acessar um app apenas para administradores ou consumidores!",
+    "O usuário não está verificado.": "Seu usuário não está autenticado.",
+    "Não autorizado": "Acesso não autorizado.",
+    "O agronegócio não está ativo.": "O seu agronegócio não está ativo! Por favor entre em contato com o CDD.",
+    "Essa conta não tem uma senha definida.": "Sua conta não possui uma senha definida.",
   };

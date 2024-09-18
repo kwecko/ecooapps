@@ -1,21 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
-import Modal from "@shared/components/Modal";
-import dayjs from "dayjs";
 import { notFound, useParams, useRouter } from "next/navigation";
-import { FarmOrders } from "@shared/interfaces/farm-orders";
-import TableSkeleton from "@shared/components/TableSkeleton";
-import { useHandleError } from "@shared/hooks/useHandleError";
+import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
 import Table from "../../components/table";
+import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import Modal from "@shared/components/Modal";
 import { convertUnit } from "@shared/utils/convert-unit";
 import { convertStatus } from "@shared/utils/convert-status";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { FarmOrders } from "@shared/interfaces/farm-orders";
+import TableSkeleton from "@shared/components/TableSkeleton";
 
 export default function FarmOrdersTable() {
   const router = useRouter();
@@ -33,11 +33,14 @@ export default function FarmOrdersTable() {
 
   useEffect(() => {
     (async () => {
-      const cycle = getFromStorage("selected-cycle");
+      const cycle= getFromStorage("selected-cycle");
 
       if (!cycle) {
         toast.error("Selecione um ciclo para receber ofertas!");
+        return;
       }
+
+      const { id } = cycle
 
       await getBoxOrders({
         box_id: box_id as string,
@@ -61,17 +64,8 @@ export default function FarmOrdersTable() {
     })();
   }, [box_id]);
 
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = today.day();
-    const daysUntilSaturday = 6 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, "day");
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
-
-  const approveBox = async () => {
-    await handleOrderDelivery({
+  const approveBox = () => {
+    handleOrderDelivery({
       box_id: box_id as string,
       status: "RECEIVED",
     })
@@ -84,14 +78,14 @@ export default function FarmOrdersTable() {
             "data-sucess",
             JSON.stringify({
               title: "A oferta foi aprovada!",
-              description: "A oferta do produtor José da Silva foi aprovada.",
+              description: "A oferta do produtor foi aprovada.",
               button: {
                 secundary: "/",
                 primary: "/ofertas",
               },
             })
           );
-          router.push("/sucess");
+          router.push("/success");
         }
       })
       .catch(() => {
@@ -99,8 +93,8 @@ export default function FarmOrdersTable() {
       });
   };
 
-  const cancelBox = async () => {
-    await handleOrderDelivery({
+  const cancelBox = () => {
+    handleOrderDelivery({
       box_id: box_id as string,
       status: "CANCELLED",
     })
@@ -113,14 +107,14 @@ export default function FarmOrdersTable() {
             "data-sucess",
             JSON.stringify({
               title: "A oferta foi Reprovada!",
-              description: "A oferta do produtor José da Silva foi REPROVADA.",
+              description: "A oferta do produtor foi REPROVADA.",
               button: {
                 secundary: "/",
                 primary: "/ofertas",
               },
             })
           );
-          router.push("/sucess");
+          router.push("/success");
         }
       })
       .catch(() => {
@@ -149,19 +143,17 @@ export default function FarmOrdersTable() {
         detail: detail.amount + convertUnit(detail.offer.product.pricing), // quant.
       },
       { detail: detail.offer.product.name }, // produto
-      { detail: "-", style: "text-center" }, // status
+      { detail: convertStatus(detail.status).icon, style: "text-center" }, // status
     ],
   }));
-
-  console.log(JSON.stringify(farmOrders));
 
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <HeaderDetail
         id={farmOrders?.id.split("-", 1).toString().toUpperCase()}
+        status={convertStatus(farmOrders.status).name}
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
-        status={convertStatus(farmOrders.status)}
       />
 
       <Table headers={headers} info={info} />

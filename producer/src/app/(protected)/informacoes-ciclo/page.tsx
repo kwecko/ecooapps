@@ -1,5 +1,5 @@
 import InformacoesCiclo from '@shared/next/app/informacoes-ciclo/page'
 
-const InformacoesCicloPage = () => <InformacoesCiclo appID='PRODUCER' />;
+const InformacoesCicloPage = () => <InformacoesCiclo bgColor='#3E5155' />;
 
 export default InformacoesCicloPage

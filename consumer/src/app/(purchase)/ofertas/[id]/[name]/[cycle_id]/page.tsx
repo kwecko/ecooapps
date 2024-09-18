@@ -60,8 +60,8 @@ export default function Ofertas() {
 
   return (
     <>
-      <div className="flex flex-col h-full">
-        <div className="overflow-y-auto">
+      <div className="flex flex-col h-full ">
+        <div className="pt-3.5 w-full overflow-y-auto flex flex-col items-center gap-3.5">
           {offers && offers.length !== 0 ? (
             offers.map((offer, index) => {
               return (
@@ -69,7 +69,7 @@ export default function Ofertas() {
                   key={index}
                   offer={offer}
                   exclude={false}
-                ></CardOferta>
+                />
               );
             })
           ) : (
