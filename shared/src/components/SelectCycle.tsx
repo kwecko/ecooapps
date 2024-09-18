@@ -61,7 +61,7 @@ export default function SelectCycle() {
 
   return (
     <div>
-      <span className="text-sm font-inter text-slate-gray">
+      <span className="text-sm text-slate-gray">
         Para começar, selecione o{" "}
         <Button
           className="underline font-bold"
@@ -76,9 +76,8 @@ export default function SelectCycle() {
           <>
             <div className="relative mt-1">
               <Listbox.Button
-                className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${
-                  open ? "ring-2 ring-slate-gray" : ""
-                }`}
+                className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${open ? "ring-2 ring-slate-gray" : ""
+                  }`}
               >
                 <span className="block truncate text-slate-gray">
                   {cycle === undefined
@@ -103,10 +102,9 @@ export default function SelectCycle() {
                     <Listbox.Option
                       key={cycle.id}
                       className={({ selected }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                          selected
-                            ? "text-slate-gray bg-theme-background"
-                            : "bg-white"
+                        `relative cursor-default select-none py-2 pl-10 pr-4 ${selected
+                          ? "text-slate-gray bg-theme-background"
+                          : "bg-white"
                         }`
                       }
                       value={cycle}
