@@ -11,6 +11,7 @@ import { BagOrder } from "@shared/interfaces/bag-order"
 import TableSkeleton from "@shared/components/TableSkeleton";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
+import { convertUnit } from "@shared/utils/convert-unit";
 
 export default function SendBagMiniTable() {
   const router = useRouter()
@@ -107,7 +108,7 @@ export default function SendBagMiniTable() {
             <div className="pl-3 pb-3 text-theme-primary">
               {bagOrder?.orders.map(order => (
                 <div key={order.id}>
-                  {`${order.offer.amount}${order.offer.product.pricing === 'WEIGHT' ? 'g' : 'un'} - ${order.offer.product.name}`}
+                  {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name}`}
                 </div>
               ))}
             </div>
