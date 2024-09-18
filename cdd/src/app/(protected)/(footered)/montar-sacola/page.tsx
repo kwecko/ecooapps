@@ -1,12 +1,12 @@
 'use client'
 
-import { useState } from "react";
 import { toast } from "sonner";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { listBags } from "@cdd/app/_actions/bag/list-bags";
+import { useState } from "react";
 import BagsTable from "./components/BagsTable";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { listBags } from "@cdd/app/_actions/bag/list-bags";
+
 import PagingButton from "@shared/components/PagingButton";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
@@ -30,7 +30,7 @@ export default function Home() {
       return
     }
 
-    const { id } = cycle;
+    const { id } = cycle
 
     const nextPageData = await listBags({
       page: page + 1,
@@ -47,13 +47,13 @@ export default function Home() {
 
   return (
     <div className="w-full h-full p-5 pb-6 flex items-center flex-col">
-      <div className="flex flex-col h-[18%] w-full items-center justify-end mt-4">
-        <h1 className="text-3xl font-medium text-slate-gray mb-4 text-center">Montar sacolas</h1>
-        <span className="text-sm font-medium text-slate-gray mb-6 text-center">
+      <div className="flex flex-col h-1/5 w-full items-center justify-end mb-6">
+        <h1 className="text-3xl font-medium text-slate-gray mb-6 text-center">Montar sacolas</h1>
+        <span className="w-64 text-sm font-medium text-slate-gray text-center">
           Monte as sacolas abaixo
         </span>
       </div>
-      <div className="w-full h-[72%] overflow-y-auto">
+      <div className="w-full h-[70%] overflow-y-auto">
         <BagsTable page={page} />
       </div>
       <div className="w-full h-[10%] flex justify-center items-end">

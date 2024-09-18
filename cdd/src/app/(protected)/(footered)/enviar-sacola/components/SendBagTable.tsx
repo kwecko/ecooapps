@@ -1,16 +1,18 @@
 "use client";
 
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { FaBoxOpen } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import Button from "@shared/components/Button";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+
 import { Bag } from "@shared/interfaces/bag"
+import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
-import { useHandleError } from "@shared/hooks/useHandleError";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 interface BagsProps {
   page: number;
@@ -28,7 +30,7 @@ export default function SendBagTable({ page }: BagsProps) {
   const { getFromStorage } = useLocalStorage()
 
   useEffect(() => {
-    (async () => {
+    (() => {
       setIsLoading(true);
       const cycle = getFromStorage("selected-cycle");
 
@@ -37,9 +39,9 @@ export default function SendBagTable({ page }: BagsProps) {
         return;
       }
 
-      const { id } = cycle;
+      const { id } = cycle
 
-      await listBags({
+      listBags({
         cycle_id: id,
         page,
         status: "SEPARATED",
@@ -51,6 +53,8 @@ export default function SendBagTable({ page }: BagsProps) {
 
             handleError(messageError)
           } else if (response.data) {
+            console.log(response.data)
+
             setBags(response.data);
             return;
           }
@@ -59,7 +63,7 @@ export default function SendBagTable({ page }: BagsProps) {
           toast.error("Erro desconhecido.")
         })
 
-      await listBags({
+      listBags({
         cycle_id: id,
         page,
         status: "DISPATCHED",
@@ -80,11 +84,10 @@ export default function SendBagTable({ page }: BagsProps) {
           toast.error("Erro desconhecido.")
         })
     })();
-  }, [page, name]);
+  }, [page, debounceSearch]);
 
   const handleClick = (id: string) => {
-    const path = `/enviar-sacola/${id}`;
-    router.push(path);
+    router.push(`/enviar-sacola/${id}`);
   };
 
   return (
@@ -101,9 +104,10 @@ export default function SendBagTable({ page }: BagsProps) {
           loaderType="component"
         />
       ) : !isLoading && bags.length === 0 ? (
-        <span className="text-center mt-3 text-slate-gray">
-          {name === "" ? "Ainda não há sacolas para serem enviadas." : "Nenhum cliente encontrado."}
-        </span>
+        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
+          <FaBoxOpen className="text-walnut-brown" size={64} />
+          <span className="text-center">Nenhuma sacola < br/> encontrada!</span>
+        </div>
       ) : (
         <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
           <thead className="w-full">

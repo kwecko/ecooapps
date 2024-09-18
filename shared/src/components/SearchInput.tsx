@@ -13,7 +13,7 @@ export default function SearchInput({ onChange, placeholder }: SearchInputProps)
         type="text"
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="border border-french-gray rounded-md h-12 p-4 pr-10 text-base inter-font w-full"
+        className="border border-french-gray rounded-md h-12 p-4 pr-10 text-base inter-font w-full focus:border-slate-gray"
       />
       <HiOutlineSearch
         className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 cursor-pointer"

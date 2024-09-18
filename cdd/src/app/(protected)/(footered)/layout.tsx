@@ -22,7 +22,7 @@ const HAS_PREVIOUS_PAGE = {
 
 const HAS_HELP_BUTTON = {
   "/": true,
-  "/extrato-entregas": true,
+  "/relatorios": true,
   "/enviar-sacola": true,
   "/enviar-sacola/[id]": true,
   "/enviar-sacola/[id]/alterar": true,
@@ -41,7 +41,7 @@ const HAS_HELP_BUTTON = {
 };
 
 const RETURN_URLS = {
-  "/extrato-entregas": "/",
+  "/relatorios": "/",
   "/enviar-sacola": "/",
   "/enviar-sacola/[id]": "/enviar-sacola",
   "/login": "/",

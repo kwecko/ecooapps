@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { IoIosHelp } from "react-icons/io";
 import { LuChevronLeft } from "react-icons/lu";
+import { twMerge } from "tailwind-merge";
 
 import Button from "./Button";
 
@@ -55,10 +56,11 @@ export default function Footer({
 
   const ReturnButton = () => (
     <Link href={returnUrl ? returnUrl : "#"} className="flex items-center">
-      <LuChevronLeft className={`w-[30px] h-[30px] text-[${bgColor}]`} />
+      <LuChevronLeft style={{ color: bgColor }} className={"w-[30px] h-[30px]"} />
       <Button
-        className={`flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto`}
+        className={"flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto"}
         onClick={handleReturn}
+        style={{ color: bgColor }}
       >
         Voltar
       </Button>

@@ -16,7 +16,7 @@ export interface IDataSessionStorage {
   }
 }
 
-export default function Sucess() {
+export default function Success() {
   const [data, setData] = useState<IDataSessionStorage>({} as IDataSessionStorage);
 
   useEffect(() => {
