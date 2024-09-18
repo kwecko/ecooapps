@@ -5,10 +5,8 @@ import axios from "axios";
 export interface Cycle {
   id: string;
   alias: string;
-  offering: number[];
-  ordering: number[];
-  dispatching: number[];
-  duration: number;
+  offer: number[];
+  order: number[];
 }
 
 export async function fetchCycles() {

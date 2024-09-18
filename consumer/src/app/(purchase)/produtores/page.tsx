@@ -36,7 +36,7 @@ export default function Produtores() {
     const catalogs: Catalog[] = await fetchCatalogs(cycleId, page);
 
     let newProducers = catalogs.map((catalog) => {
-      return { id: catalog.id, name: catalog.farm.name };
+      return { id: catalog.id, name: catalog.farm.name, caf: catalog.farm.caf };
     });
 
     if(newProducers.length == 0){
@@ -67,8 +67,8 @@ export default function Produtores() {
                   <Link href={`/ofertas/${producer?.id}/${producer?.name}/${cycleId}`}>
                     <div className="min-w-[350px] h-[100px] bg-[rgb(246,246,246)] flex rounded-2xl m-[10px]">
                       <div className="flex w-20 h-20 ml-[10px] mt-[10px] mb-[10px] mr-[20px] bg-[#00735E] rounded-[11px]">
-                      <Image
-                          src={"/produtor.jpg"}
+                       <Image
+                          src={ producer.caf != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
                           className="w-full h-full object-cover rounded-[10px]"
                           width={80}
                           height={80}
@@ -84,9 +84,8 @@ export default function Produtores() {
                         <Image
                           src="/arrow.png"
                           alt="arrow"
-                          className="w-3 h-2"
-                          width={100}
-                          height={100}
+                          width={10}
+                          height={7}
                         />
                       </div>
                     </div>

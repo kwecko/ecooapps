@@ -55,7 +55,9 @@ export default function ReviewOffer(props: ReviewOfferProps) {
                     </MiniTable.Row>
                     <MiniTable.Row>
                         <MiniTable.HeaderCell>Taxa:</MiniTable.HeaderCell>
-                        <MiniTable.Cell className="col-span-2">20%</MiniTable.Cell>
+                        <MiniTable.Cell className="col-span-2">+20% = {formatPrice((props.price * 100 * 0.2)+props.price * 100)}
+
+                        </MiniTable.Cell>
                     </MiniTable.Row>
                     <MiniTable.Row>
                         <MiniTable.HeaderCell>Descrição:</MiniTable.HeaderCell>

@@ -47,7 +47,7 @@ export default function OfferCard({ offer, onDeleteCard }: OfferCardProps) {
             {new Intl.NumberFormat("pt-BR", {
               style: "currency",
               currency: "BRL",
-            }).format(offer.price)}
+            }).format((offer.price*10)/12)} +20%
           </div>
         </div>
         <div className="flex flex-row justify-end shrink-0 grow-0 basis-16 gap-2 align-start h-full pt-3">

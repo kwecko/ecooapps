@@ -29,7 +29,7 @@ export const convertStatus = (status: string) => {
       >
         {status === 'VERIFIED' || status === "RECEIVED" && (<FaCheck color="white" />)}
         {status === "CANCELLED" && (<IoCloseSharp color="white" />)}
-        {status === "PENDING" && (<FaExclamation color="white" />)}
+        {status === "PENDING" && (<FaExclamation size={10} color="white" />)}
       </div>
     );
   }
