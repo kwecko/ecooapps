@@ -124,7 +124,7 @@ export default function BagMiniTable() {
             <div className="pl-3 pb-3 text-theme-primary">
               {bagOrder?.orders.map(order => (
                 <div key={order.id}>
-                  {`${order.offer.amount}${order.offer.product.pricing === 'WEIGHT' ? 'g' : 'un'} - ${order.offer.product.name}`}
+                  {`${order.amount}${order.offer.product.pricing === 'WEIGHT' ? 'g' : 'un'} - ${order.offer.product.name}`}
                 </div>
               ))}
             </div>
