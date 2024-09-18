@@ -144,30 +144,39 @@ export default function RenderProducts({
         </form>
       </div>
       <div className="w-full flex flex-col justify-between h-[calc(100%-3rem)]">
-        <div className="grid grid-cols-2 justify-items-start gap-3 w-full mt-4 p-4 snap-y snap-mandatory overflow-y-auto">
+        <div className="grid grid-cols-2 gap-x-0 justify-start items-start gap-y-3 w-full mt-4 snap-y snap-mandatory overflow-y-auto">
           {Array.isArray(products) && products.length > 0 ? (
             products.map((product, index) => (
               <button
-                className="snap-start flex flex-col items-center rounded-2xl w-full h-[160px] p-2.5 bg-white"
+                className="snap-start flex flex-col items-center rounded-2xl h-[160px] w-[150px] bg-white"
                 key={product.id}
                 ref={products.length === index + 1 ? lastProductRef : null}
                 onClick={() => handleSelectProduct(product)}
               >
-                <div className="relative w-full min-w-[130px] h-[100px] rounded-[10px]">
+                <div className="relative w-full h-full">
                   <Image
-                    className="rounded-[10px]"
+                    className="rounded-t-2xl"
                     loader={imageLoader}
                     src={product.image}
                     alt={`${product.name.toLowerCase()}.jpg`}
                     quality={256}
                     fill={true}
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 256px"
-                    style={{ objectFit: "contain" }}
+                    style={{ objectFit: "cover" }}
                   />
+                  <div className="absolute bottom-0 left-0 right-0 m-auto
+                   w-[50px] h-[20px] bg-slate-gray rounded-t-[10px] flex justify-center items-center">
+                    <span className="text-white text-[11px] leading-[14px] tracking-tight h-5 flex items-center">
+                      {product.pricing === "WEIGHT" ? "kg" : "unid."}
+                    </span>
+                  </div>
                 </div>
-                <span className="pt-2.5 text-base leading-[22px] tracking-tight text-slate-gray">
-                  {product.name}
-                </span>
+                <div className="flex justify-center items-stretch w-full h-[40px] border-t border-[#F6F6F6]">
+                  <span className="flex justify-center items-center w-full
+                  text-[12px] leading-[16px] tracking-tight text-slate-gray h-[inherit]">
+                    {product.name}
+                  </span>
+                </div>
               </button>
             ))
           ) : (

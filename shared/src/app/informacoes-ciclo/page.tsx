@@ -9,7 +9,11 @@ import { IoIosHelp } from 'react-icons/io';
 
 import { AppID } from "../../library/types/app-id";
 
-export default function InformacoesCiclo({ appID }: { appID: AppID }) {
+interface InformacoesCicloProps {
+  bgColor: string
+}
+
+export default function InformacoesCiclo({ bgColor }: InformacoesCicloProps) {
   return (
     <div className="w-full h-screen  bg-theme-background">
       <div className='w-full h-[90%] p-5 flex items-center flex-col'>
@@ -24,7 +28,7 @@ export default function InformacoesCiclo({ appID }: { appID: AppID }) {
         </div>
         <div className="w-full h-[65%] flex flex-col justify-between">
           <div className='overflow-y-auto mb-6'>
-            <Table />
+            <Table bgColor={bgColor} />
           </div>
           <Button className="w-full px-2 py-3 font-semibold rounded-lg text-white border-0 p-2 bg-theme-default">
             <Link href={'/'}>
@@ -35,14 +39,19 @@ export default function InformacoesCiclo({ appID }: { appID: AppID }) {
       </div>
       <div className='w-full h-[10%] flex justify-between items-center p-5'>
         <Link href={"/"} className="flex items-center">
-          <LuChevronLeft className="w-[30px] h-[30px] text-[${bgColor}]" />
-          <Button className="flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto"
+          <LuChevronLeft 
+            style={{ color: bgColor }}
+            className="w-[30px] h-[30px]" />
+          <Button 
+            style={{ color: bgColor }}
+            className="flex items-center gap-2 text-sm font-medium w-auto"
           >
             Voltar
           </Button>
         </Link>
         <IoIosHelp
-          className="w-[50px] h-[50px] rounded-full border-0 text-white bg-slate-gray"
+          style={{ backgroundColor: bgColor }}
+          className="w-[50px] h-[50px] rounded-full border-0 text-white "
         />
       </div>
     </div>

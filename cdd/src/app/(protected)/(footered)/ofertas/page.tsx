@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { toast } from "sonner";
+import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
 import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import PagingButton from "@shared/components/PagingButton";
 
 export default function Home() {
@@ -46,8 +47,8 @@ export default function Home() {
 
   return (
     <div className="w-full h-full p-5 pb-6 flex items-center flex-col">
-      <div className="flex flex-col h-[18%] w-full items-center justify-end mt-4">
-        <h1 className="text-3xl font-medium text-slate-gray mb-4 text-center">Lista de ofertas</h1>
+      <div className="flex flex-col h-auto mt-16 w-full items-center justify-end">
+        <h1 className="text-3xl font-medium text-slate-gray mb-6 text-center">Lista de ofertas</h1>
         <span className="text-sm font-medium text-slate-gray mb-6 text-center">
           Aprove ou rejeite as ofertas abaixo:
         </span>
