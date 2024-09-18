@@ -14,6 +14,24 @@ export default function Home() {
 
   const { getFromStorage } = useLocalStorage();
 
+  const generateCurrentTime = () => {
+    const date = new Date();
+
+    const dateFormatted = new Intl.DateTimeFormat('pt-BR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    }).format(date);
+
+    const hourFormatted = new Intl.DateTimeFormat('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    }).format(date);
+
+    return `${dateFormatted}-${hourFormatted}`
+  }
+
   const handleClickButtonReport = async (name: string) => {
     const cycle = getFromStorage('selected-cycle');
 
@@ -24,22 +42,22 @@ export default function Home() {
 
     const { id } = cycle
 
-    if(name === "list-bags"){
+    if (name === "list-bags") {
       axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bags/report/${id}`,
         {
           responseType: 'arraybuffer',
           headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/pdf'
+            'Content-Type': 'application/json',
+            'Accept': 'application/pdf'
           }
         })
         .then((response) => {
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', 'file.pdf');
-            document.body.appendChild(link);
-            link.click();
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement('a');
+          link.href = url;
+          link.setAttribute('download', `relatorio-de-entrega-${generateCurrentTime()}.pdf`);
+          document.body.appendChild(link);
+          link.click();
         })
         .catch(() => {
           toast.error("Erro desconhecido.")
