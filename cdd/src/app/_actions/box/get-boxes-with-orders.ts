@@ -11,7 +11,7 @@ interface FetchFarmsWithOrdersRequest {
 export async function getBoxesWithOrders({
   cycle_id,
   page,
-  name,
+  name = "",
 }: FetchFarmsWithOrdersRequest) {
   const response = ApiService.GET({
     url: `/boxes?cycle_id=${cycle_id}&page=${page}&name=${name}`,

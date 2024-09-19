@@ -7,7 +7,7 @@ import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
 import Table from "./table";
 import StatusFilterButtons from "./StatusFilterButton";
-import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+import { getBoxesWithOrders } from "@shared/_actions/box/get-boxes-with-orders";
 
 import Loader from "@shared/components/Loader";
 import { Boxes } from "@shared/interfaces/farm";
@@ -142,13 +142,13 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const info =
     farmsFiltered.length > 0
       ? farmsFiltered.map((farm) => ({
-          id: farm.id,
-          data: [
-            { detail: getNextSaturdayDate() }, // Prazo
-            { detail: farm.catalog.farm.name }, // Produtor
-            { detail: getStatus(farm.status) }, // Status
-          ],
-        }))
+        id: farm.id,
+        data: [
+          { detail: getNextSaturdayDate() }, // Prazo
+          { detail: farm.catalog.farm.name }, // Produtor
+          { detail: getStatus(farm.status) }, // Status
+        ],
+      }))
       : [];
 
   return (
@@ -173,7 +173,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
       {!isLoading && farmsFiltered.length === 0 && (
         <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
           <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center">Nenhum pedido < br/> encontrado!</span>
+          <span className="text-center">Nenhum pedido < br /> encontrado!</span>
         </div>
       )}
 

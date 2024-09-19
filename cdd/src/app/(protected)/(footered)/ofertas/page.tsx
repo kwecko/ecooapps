@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
-import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+import { getBoxesWithOrders } from "@shared/_actions/box/get-boxes-with-orders";
 
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import PagingButton from "@shared/components/PagingButton";

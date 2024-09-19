@@ -71,7 +71,7 @@ export default function OffersList({ ...rest }: OffersListProps) {
       {twMerge(`flex flex-col gap-2 w-full m-0 overflow-y-auto`, rest.className)}>
       {isLoading ? (
         <div className="w-full h-20 flex items-center justify-center">
-          <Loader 
+          <Loader
             appId="PRODUCER"
             loaderType="component"
           />
@@ -89,8 +89,6 @@ export default function OffersList({ ...rest }: OffersListProps) {
             text-center text-sm text-gray-500">Nenhuma oferta encontrada! Faça uma nova oferta.</p>
           </div>
         ))}
-
-
     </div>
   );
 }
