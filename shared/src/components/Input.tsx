@@ -5,10 +5,12 @@ import {
   Merge,
   UseFormRegisterReturn,
 } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
+
 
 interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
-  icon?: ReactNode;
+  icon?: any;
   label?: string;
   register?: UseFormRegisterReturn;
   type?: "email" | "password" | "text" | "number" | "date";
@@ -25,6 +27,7 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   pattern?: string;
   required?: boolean;
   autoComplete?: string;
+  labelClassName?: string;
 }
 
 export default function Input({
@@ -44,6 +47,7 @@ export default function Input({
   pattern,
   required,
   autoComplete,
+  labelClassName,
   ...rest
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -57,14 +61,16 @@ export default function Input({
 
   return (
     <div className="relative flex flex-col text-slate-gray">
-      <label className="text-sm inter-font font-normal text-theme-primary">
-        {label}
+      <label className={twMerge("text-sm inter-font font-normal text-theme-primary pb-2 flex flex-row items-center justify-start gap-2", labelClassName)} htmlFor={label}>
+        {label} {typeof error === "string" && (
+          <div className="text-red-500 text-[12px] tracking-tighter">{error}</div>
+        )}
       </label>
       <div className="relative">
         <input
           {...rest}
           {...register}
-          className={`z-0 w-full mt-2 p-3 border border-theme-primary rounded-lg inter-font font-normal ${className}`}
+          className={`z-0 w-full p-3 border border-theme-primary rounded-lg inter-font font-normal ${className}`}
           type={inputType}
           onChange={onChange}
           onFocus={onFocus}
@@ -77,18 +83,15 @@ export default function Input({
           pattern={pattern}
           required={required}
         />
-        {icon && (
+        {icon ? (
           <div
             onClick={handleIconClick}
-            className="cursor-pointer absolute text-xl top-[5px] right-0 pr-3 flex items-center h-full z-50"
+            className="cursor-pointer absolute text-xl my-auto top-0 bottom-0 right-0 pr-3 flex items-center h-full z-50"
           >
             {icon}
           </div>
-        )}
+        ) : (null)}
       </div>
-      {typeof error === "string" && (
-        <div className="text-red-500 text-sm mt-1">{error}</div>
-      )}
     </div>
   );
 }

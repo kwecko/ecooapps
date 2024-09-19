@@ -24,7 +24,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Painel e-COO",
+  title: "Painel e-COO | CDD",
   description: "Administração para cooperados",
 };
 
@@ -41,9 +41,9 @@ export default function RootLayout({
         className={`${getAppID()} w-screen h-screen 
         ${styles.fontInter} ${poppins.className}`}
       >
-        <div className="flex flex-row justify-center w-full h-full">
+        <div className="flex flex-row justify-center w-full h-[inherit]">
           <Toaster richColors position="top-right" />
-          <div className="relative max-w-md w-full h-full">{children}</div>
+          <div className="relative max-w-md w-full h-[inherit]">{children}</div>
         </div>
       </body>
     </html>
