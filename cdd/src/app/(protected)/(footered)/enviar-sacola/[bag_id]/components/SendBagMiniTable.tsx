@@ -1,15 +1,17 @@
 'use client'
 
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { fetchBag } from "@cdd/app/_actions/bag/fetch-bag";
 import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
+
 import Modal from "@shared/components/Modal";
-import TableSkeleton from "@shared/components/TableSkeleton";
 import { BagOrder } from "@shared/interfaces/bag-order"
+import TableSkeleton from "@shared/components/TableSkeleton";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
+import { convertUnit } from "@shared/utils/convert-unit";
 
 export default function SendBagMiniTable() {
   const router = useRouter()
@@ -26,9 +28,9 @@ export default function SendBagMiniTable() {
   }
 
   useEffect(() => {
-    (async () => {
+    (() => {
       setIsLoading(true)
-      await fetchBag({
+      fetchBag({
         bag_id: bag_id as string
       })
         .then((response) => {
@@ -49,7 +51,7 @@ export default function SendBagMiniTable() {
   }, [bag_id]);
 
   const handleStatusBag = async (bag_id: string, status: "SEPARATED") => {
-    await handleBag({
+    handleBag({
       bag_id,
       status: "DISPATCHED"
     })
@@ -59,7 +61,18 @@ export default function SendBagMiniTable() {
 
           handleError(messageError)
         } else {
-          router.push(`/enviar-sacola/${bag_id}/alterar`);
+          sessionStorage.setItem(
+            "data-sucess",
+            JSON.stringify({
+              title: "A oferta foi Reprovada!",
+              description: "A sacola do cliente foi enviada.",
+              button: {
+                secundary: "/",
+                primary: "/enviar-sacola",
+              },
+            })
+          );
+          router.push(`/success`);
           return;
         }
       })
@@ -95,7 +108,7 @@ export default function SendBagMiniTable() {
             <div className="pl-3 pb-3 text-theme-primary">
               {bagOrder?.orders.map(order => (
                 <div key={order.id}>
-                  {`${order.offer.amount}${order.offer.product.pricing === 'WEIGHT' ? 'g' : 'un'} - ${order.offer.product.name}`}
+                  {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name}`}
                 </div>
               ))}
             </div>

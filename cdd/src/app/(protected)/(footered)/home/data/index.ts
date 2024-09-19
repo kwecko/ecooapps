@@ -3,7 +3,7 @@ export const contentLinksHomePage = [
     title: "Receber ofertas",
     link: "/ofertas",
     isSelectedCycle: true,
-    hasNotification: true
+    hasNotification: false
   },
   {
     title: "Montar sacola",
@@ -21,14 +21,14 @@ export const contentLinksHomePage = [
     title: "Aprovar produtores",
     link: "/",
     isSelectedCycle: true,
-    hasNotification: true,
+    hasNotification: false,
     disabled: true
   },
   {
     title: "Gerar relatórios",
-    link: "/extrato-entregas",
+    link: "/relatorios",
     isSelectedCycle: true,
     hasNotification: false,
-    disabled: true
+    disabled: false
   },
 ]

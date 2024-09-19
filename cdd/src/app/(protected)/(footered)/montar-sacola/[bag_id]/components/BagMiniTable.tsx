@@ -1,15 +1,17 @@
 'use client'
 
+import { toast } from "sonner";
+import { useEffect, useState } from "react";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { fetchBag } from "@cdd/app/_actions/bag/fetch-bag";
 import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
+
 import Modal from "@shared/components/Modal";
-import TableSkeleton from "@shared/components/TableSkeleton";
 import { BagOrder } from "@shared/interfaces/bag-order";
+import TableSkeleton from "@shared/components/TableSkeleton";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import dayjs from "dayjs";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
+import { convertUnit } from "@shared/utils/convert-unit";
 
 export default function BagMiniTable() {
   const router = useRouter()
@@ -25,9 +27,9 @@ export default function BagMiniTable() {
   }
 
   useEffect(() => {
-    (async () => {
+    (() => {
       setIsLoading(true)
-      await fetchBag({
+      fetchBag({
         bag_id: bag_id as string
       })
         .then((response) => {
@@ -47,9 +49,9 @@ export default function BagMiniTable() {
     })()
   }, [bag_id]);
 
-  const handleStatusBag = async (bag_id: string, status: "PENDING" | "SEPARATED") => {
+  const handleStatusBag = (bag_id: string, status: "PENDING" | "SEPARATED") => {
     if (status === 'PENDING') {
-      await handleBag({
+      handleBag({
         bag_id,
         status: "SEPARATED"
       })
@@ -59,7 +61,19 @@ export default function BagMiniTable() {
 
             handleError(messageError)
           } else {
-            router.push(`/montar-sacola/${bag_id}/aprovar`);
+            sessionStorage.setItem(
+              "data-sucess",
+              JSON.stringify({
+                title: "A sacola está pronta!",
+                description: "A sacola do cliente está pronta.",
+                button: {
+                  secundary: "/",
+                  primary: "/montar-sacola",
+                },
+              })
+            );
+
+            router.push("/success");
             return;
           }
         })
@@ -67,7 +81,7 @@ export default function BagMiniTable() {
           toast.error("Erro desconhecido.")
         })
     } else if (status === "SEPARATED") {
-      await handleBag({
+      handleBag({
         bag_id,
         status: "PENDING"
       })
@@ -77,7 +91,19 @@ export default function BagMiniTable() {
 
             handleError(messageError)
           } else {
-            router.push(`/montar-sacola/${bag_id}/alterar`);
+            sessionStorage.setItem(
+              "data-sucess",
+              JSON.stringify({
+                title: "A sacola foi alterada!",
+                description: "A sacola do cliente está pendente para ser montada",
+                button: {
+                  secundary: "/",
+                  primary: "/montar-sacola",
+                },
+              })
+            );
+
+            router.push("/success");
             return;
           }
         })
@@ -86,16 +112,6 @@ export default function BagMiniTable() {
         })
     }
   }
-
-  const getNextSaturdayDate = () => {
-    const today = dayjs();
-    const dayOfWeek = today.day();
-
-    const daysUntilSaturday = 6 - dayOfWeek;
-    const nextSaturday = today.add(daysUntilSaturday, 'day');
-
-    return nextSaturday.format("DD/MM/YYYY");
-  };
 
   return (
     <>
@@ -124,7 +140,7 @@ export default function BagMiniTable() {
             <div className="pl-3 pb-3 text-theme-primary">
               {bagOrder?.orders.map(order => (
                 <div key={order.id}>
-                  {`${order.offer.amount}${order.offer.product.pricing === 'WEIGHT' ? 'g' : 'un'} - ${order.offer.product.name}`}
+                  {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name}`}
                 </div>
               ))}
             </div>
