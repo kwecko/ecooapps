@@ -12,6 +12,7 @@ const config: Config = {
       colors: {
         theme: {
           default: "var(--color-default)",
+          "home-bg": "var(--color-home-background)",
           primary: "var(--color-primary)",
           secondary: "var(--color-secondary)",
           background: "var(--color-background)",

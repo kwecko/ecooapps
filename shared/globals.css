@@ -4,7 +4,8 @@
 
 :root {
   --footer-height: 7.5vh;
-  --min-page-height: calc(100vh - var(--footer-height));
+  --max-page-height: 100vh;
+  --min-page-height: calc(var(--max-page-height) - var(--footer-height));
   --max-w-md: 28rem;
 }
 
@@ -27,13 +28,15 @@ a {
 
 .PRODUCER {
   --color-default: #3E5155;
+  --color-home-background: #2F4A4D;
   --color-primary: #545F71;
   --color-secondary: #eef1f4;
   --color-background: #F7F7F7;
 }
 
 .CDD {
-  --color-default: #3E5155;
+  --color-default: #4F4743;
+  --color-home-background: var(--color-default);
   --color-primary: #545F71;
   --color-secondary: #eef1f4;
   --color-background: #F7F7F7;
