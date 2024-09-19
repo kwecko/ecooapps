@@ -6,20 +6,48 @@ import { Tooltip, Button, notification } from "antd";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 import { PendingDeliveriesTable } from "./Table";
-import { getBoxes } from "@producer/app/_actions/get-boxes";
-import { GetCycles } from "@producer/app/_actions/products/GetCycles";
+import Loader from "@shared/components/Loader";
+
+import { getCycleSelected } from "@shared/utils/getCycleSelected";
+import { getBoxesWithOrders } from "@shared/_actions/box/get-boxes-with-orders";
+import { getBoxOrders } from "@shared/_actions/box/get-box-orders";
+import { getUser } from "@shared/_actions/account/get-user"
 
 export interface IPendingDeliveries {
-  id: number;
-  quantidade: string;
-  dataVenda: string;
-  produto: string;
-  situacao: string;
+  id: string
+  bag_id: string
+  offer: Offer
+  status: string
+  amount: number
+  created_at: string
+  updated_at: any
 }
+
+export interface Offer {
+  id: string
+  amount: number
+  price: number
+  description: any
+  catalog_id: string
+  product: Product
+  created_at: string
+  updated_at: any
+}
+
+export interface Product {
+  id: string
+  name: string
+  image: string
+  pricing: string
+  created_at: string
+  updated_at: any
+}
+
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const handleCopyAddress = () => {
     const address =
@@ -66,16 +94,34 @@ export function PendingDeliveries() {
   useEffect(() => {
     // IIFE
     (async () => {
-      const cycles = await GetCycles()
-      const cycle = cycles?.reply.find((item: any) => item.alias === "Semanal");
-      const data = await getBoxes({ cycle_id: cycle.id, page: 0 })
-      setPendingDeliveries(data)
+      try {
+
+        const cycleSelected = await getCycleSelected();
+        const user = await getUser()
+        const dataBoxes = await getBoxesWithOrders({ cycle_id: cycleSelected.id, page: 0, name: user.data.first_name })
+        const caixa = await getBoxOrders({ box_id: dataBoxes.data[0].id })
+        setPendingDeliveries(caixa.data.orders)
+      } catch (error) {
+        console.log('error')
+      } finally {
+        setIsLoading(false);
+      }
     })()
-  }, [])
+  }, []);
+
+  if (isLoading) {
+    return (
+      <Loader
+        appId="PRODUCER"
+        loaderType="page"
+        className="mt-10"
+      />
+    )
+  }
 
   return (
     <div
-      className={`mt-5 w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4`}
+      className={`mt-5 w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
     >
       <div className="flex justify-between items-start">
         <div className="flex flex-col">
