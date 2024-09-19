@@ -105,7 +105,7 @@ export default function SendBagMiniTable() {
             <div className="pl-3 pb-3 text-theme-primary">
               {bagOrder?.orders.map(order => (
                 <div key={order.id}>
-                  {`${order.offer.amount}${order.offer.product.pricing === 'WEIGHT' ? 'g' : 'un'} - ${order.offer.product.name}`}
+                  {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name}`}
                 </div>
               ))}
             </div>
