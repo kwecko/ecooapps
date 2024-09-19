@@ -5,37 +5,41 @@ import Button from "@shared/components/Button";
 
 export default function Inicio() {
   return (
-    <div className="h-screen bg-slate-gray w-full flex pl-3 pr-3 pt-3 flex-col">
-      <div className="w-full h-1/4 flex items-center flex-col justify-end gap-5 mt-3">
+    <div className="h-[inherit] bg-theme-home-bg w-full flex pl-3 pr-3 pt-3 flex-col justify-center items-center gap-12 overflow-hidden">
+      <div className="w-full flex flex-col items-center justify-end gap-4 pt-20 pb-1">
         <Image
           src="/logo/light.svg"
           width={180}
           height={60}
           alt="e-COO"
-          className=""
+          className="pt-1.5"
         />
-        <span className="text-center text-white font-medium text-sm">
-          Inovação e tecnologia social para o <br /> fortalecimento da
+        <span className="text-center text-white font-medium text-sm leading-[1.375rem]">
+          Inovação e tecnologia social para o<br />fortalecimento da
           agricultura familiar
         </span>
       </div>
 
-      <div className="flex h-1/5 flex-col w-full justify-center space-y-[10px] mt-10 text-center">
+      <div className="w-full flex flex-col gap-4 px-1 pt-0.5">
         <Link href={"/login"}>
-          <Button className="w-full px-3 py-4 font-semibold rounded-lg text-base text-slate-gray border-0 p-2 bg-white">Entrar</Button>
+          <Button className="w-full h-12 flex flex-col items-center justify-center font-semibold rounded-md text-base leading-[22px] text-slate-gray border-0 bg-white">Entrar</Button>
         </Link>
         <Link href={"/cadastrar"}>
-          <Button className="w-full px-3 py-4 font-semibold rounded-lg text-base text-white p-2 border-white border-2">Cadastrar</Button>
+          <Button className="w-full h-12 flex flex-col items-center justify-center font-semibold rounded-md text-base leading-[22px] text-white border-white border-2 box-border">Cadastrar</Button>
         </Link>
       </div>
 
-      <div className="h-[55%] w-full flex justify-center items-end mt-4">
+      <div className="flex-grow flex justify-center items-end h-full">
         <Image
-          src="/bag.png"
+          src="/bag_wo_shadow.png"
           alt="bag"
           width={279}
           height={349}
-          className="mr-14 w-full object-contain"
+          quality={100}
+          className="object-contain"
+          style={{
+            filter: "drop-shadow(-50px 20px 30px rgba(0, 0, 0, 0.25))",
+          }}
         />
       </div>
     </div>
