@@ -41,3 +41,7 @@ next-env.d.ts
 
 # Sentry Config File
 .sentryclirc
+
+# Shared generated files
+src/app/globals.css
+tailwind.config.ts
