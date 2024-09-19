@@ -12,6 +12,7 @@ const config: Config = {
       colors: {
         theme: {
           default: "var(--color-default)",
+          "home-bg": "var(--color-home-background)",
           primary: "var(--color-primary)",
           secondary: "var(--color-secondary)",
           background: "var(--color-background)",
@@ -45,9 +46,6 @@ const config: Config = {
         poppins: ["Poppins", "sans"],
         inter: ["Inter", "sans"],
       },
-      spacing: {
-        '5.5': '22px'
-      }
     },
   },
 };
