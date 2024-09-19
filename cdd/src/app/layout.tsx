@@ -1,5 +1,3 @@
-"use client"
-
 import "./globals.css";
 import { Poppins, Inter } from "next/font/google";
 import { Toaster } from "sonner";
@@ -8,9 +6,7 @@ import { setAppID } from "@shared/next/library/set-app-id";
 import { getAppID } from "@shared/next/library/get-app-id";
 
 import styles from "@shared/app/styles.module.css";
-import { SessionExpiredWrapper } from "@cdd/context";
-import SessionExpiredModal from "@cdd/components/SessionExpiredModal";
-import Head from "next/head";
+import { Metadata } from "next";
 
 const poppins = Poppins({
   weight: ["400", "500", "600", "700"],
@@ -27,6 +23,11 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
+export const metadata: Metadata = {
+  title: "Painel e-COO",
+  description: "Administração para cooperados",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -36,25 +37,14 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <Head>
-        <title>Painel e-COO</title>
-        <meta name="description" content="Administração para cooperados" />
-      </Head>
-      <body className={`${getAppID()} w-screen h-screen 
-      ${styles.fontInter}
-      ${poppins.className}`}>
-        <SessionExpiredWrapper>
-          <SessionExpiredModal
-            titleContentModal="Sessão Expirada"
-            contentModal="Sua sessão expirou. Por favor, faça login novamente."
-            buttonLabel="Ir para o Login"
-            bgButton="#00735E"
-          />
-          <div className="flex flex-row justify-center w-full h-full relative">
-            <Toaster richColors position="top-right" />
-            <div className={`relative max-w-md w-full h-full`}>{children}</div>
-          </div>
-        </SessionExpiredWrapper>
+      <body
+        className={`${getAppID()} w-screen h-screen 
+        ${styles.fontInter} ${poppins.className}`}
+      >
+        <div className="flex flex-row justify-center w-full h-full">
+          <Toaster richColors position="top-right" />
+          <div className="relative max-w-md w-full h-full">{children}</div>
+        </div>
       </body>
     </html>
   );

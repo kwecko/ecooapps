@@ -1,9 +1,9 @@
 "use client";
 import {
-  FarmOffers,
+  CatalogOffers,
   Offer,
-  fetchOffersFarm,
-} from "@consumer/app/_actions/fetch-offers-farm";
+  fetchCatologsById,
+} from "@consumer/app/_actions/fetch-catalogs-by-id";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -28,13 +28,13 @@ export default function Ofertas() {
   const searchOffers = async () => {
     setIsLoading(true);
 
-    const responseFarmOffers: FarmOffers | null = await fetchOffersFarm(
+    const responseFarmCatalogs: CatalogOffers | null = await fetchCatologsById(
       params.id as string,
       params.cycle_id as string,
       page
     );
 
-    let offersFarm = responseFarmOffers?.offers ?? [];
+    let offersFarm = responseFarmCatalogs?.offers ?? [];
     offersFarm = offersFarm.filter(
       (offer) => offer.amount >= mapQuantity[offer.product.pricing]
     );
@@ -60,17 +60,16 @@ export default function Ofertas() {
 
   return (
     <>
-      <div className="flex flex-col h-full">
-        <div className="overflow-y-auto">
+      <div className="flex flex-col h-full ">
+        <div className="pt-3.5 w-full overflow-y-auto flex flex-col items-center gap-3.5">
           {offers && offers.length !== 0 ? (
             offers.map((offer, index) => {
               return (
                 <CardOferta
                   key={index}
                   offer={offer}
-                  // nameFarm={nameFarm}
                   exclude={false}
-                ></CardOferta>
+                />
               );
             })
           ) : (

@@ -1,8 +1,8 @@
 "use server"
 
-import ApiService from "@cdd/service/index"
+import ApiService from "@shared/service/index"
 
-export async function getUser(){
+export async function getUser() {
   const response = ApiService.GET({
     url: '/me'
   })

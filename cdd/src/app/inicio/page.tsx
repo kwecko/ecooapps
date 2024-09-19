@@ -1,9 +1,7 @@
 "use client";
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import axios from "axios";
 
-import Button from "@shared/components/Button";
+import Button from "@shared/next/components/Button";
 import Link from "next/link";
 
 export default function Inicio() {

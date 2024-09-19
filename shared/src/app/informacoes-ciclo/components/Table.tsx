@@ -4,7 +4,11 @@ import React from "react";
 import { getWeekDays } from "../../../utils/index";
 import { useEffect, useState } from "react";
 
-export default function Table() {
+interface TableProps {
+  bgColor: string
+}
+
+export default function Table({ bgColor }: TableProps) {
   const [offer, setoffer] = useState<number[]>();
   const [order, setorder] = useState<number[]>();
   const [deliver, setdeliver] = useState<number[]>();
@@ -30,7 +34,7 @@ export default function Table() {
             <td className="py-2 px-4 text-theme-primary text-base w-1/2">
               Duração do ciclo:
             </td>
-            <td className="py-2 px-4 font-bold text-slate-gray w-1/2">
+            <td style={{ color: bgColor }} className="py-2 px-4 font-bold w-1/2">
               7 dias
             </td>
           </tr>
@@ -38,7 +42,7 @@ export default function Table() {
             <td className="py-2 px-4 text-theme-primary text-base w-1/2">
               Ofertas:
             </td>
-            <td className="py-2 px-4 font-bold text-slate-gray w-1/2">
+            <td style={{ color: bgColor }} className="py-2 px-4 font-bold w-1/2">
               {getWeekDays({
                 array: offer,
                 short: true,
@@ -49,7 +53,7 @@ export default function Table() {
             <td className="py-2 px-4 text-theme-primary text-base w-1/2">
               Pedidos:
             </td>
-            <td className="py-2 px-4 font-bold text-slate-gray w-1/2">
+            <td style={{ color: bgColor }} className="py-2 px-4 font-bold w-1/2">
               {getWeekDays({
                 array: order,
                 short: true,
@@ -60,7 +64,7 @@ export default function Table() {
             <td className="py-2 px-4 text-theme-primary text-base w-1/2">
               Entregas:
             </td>
-            <td className="py-2 px-4 font-bold text-slate-gray w-1/2">
+            <td style={{ color: bgColor }} className="py-2 px-4 font-bold w-1/2">
               {getWeekDays({
                 array: deliver,
                 short: true,
@@ -71,13 +75,13 @@ export default function Table() {
             <td className="py-2 px-4 text-theme-primary text-base w-1/2">
               Manutenção:
             </td>
-            <td className="py-2 px-4 font-bold text-slate-gray w-1/2">****</td>
+            <td style={{ color: bgColor }} className="py-2 px-4 font-bold w-1/2">****</td>
           </tr>
           <tr>
             <td className="py-2 px-4 text-theme-primary text-base w-1/2">
               Próximo feriado:
             </td>
-            <td className="py-2 px-4 font-bold text-slate-gray w-1/2">****</td>
+            <td style={{ color: bgColor }} className="py-2 px-4 font-bold w-1/2">****</td>
           </tr>
         </tbody>
       </table>

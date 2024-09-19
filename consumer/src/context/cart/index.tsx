@@ -11,7 +11,7 @@ export interface ProductCart {
   description: string;
   quantity: number;
   offerId: string;
-  // nameFarm: string;
+  expandDescription?: boolean;
 }
 
 interface CartContextProps {

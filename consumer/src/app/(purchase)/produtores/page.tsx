@@ -1,6 +1,6 @@
 "use client";
 
-import { Farm, fetchFarms } from "@consumer/app/_actions/fetch-farms";
+import { Catalog, Farm, fetchCatalogs } from "@consumer/app/_actions/fetch-catalogs";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -25,9 +25,6 @@ export default function Produtores() {
   
   const searchProducers = async () => {
 
-    // const getDay = new Date().getDay() + 1;
-    // const typeCycle = getDay != 5 ? "semanal": "diario";
-
     const typeCycle = process.env.NEXT_PUBLIC_ENV == "dev" || process.env.NEXT_PUBLIC_ENV == "homolog" ? "livre" : "semanal";
     
     const cycleId = cycles.find(
@@ -36,10 +33,10 @@ export default function Produtores() {
 
     setCycleId(cycleId as string);
 
-    const farms: Farm[] = await fetchFarms(cycleId, page);
+    const catalogs: Catalog[] = await fetchCatalogs(cycleId, page);
 
-    let newProducers = farms.map((farm) => {
-      return { id: farm.id, name: farm.name };
+    let newProducers = catalogs.map((catalog) => {
+      return { id: catalog.id, name: catalog.farm.name, caf: catalog.farm.caf };
     });
 
     if(newProducers.length == 0){
@@ -70,8 +67,8 @@ export default function Produtores() {
                   <Link href={`/ofertas/${producer?.id}/${producer?.name}/${cycleId}`}>
                     <div className="min-w-[350px] h-[100px] bg-[rgb(246,246,246)] flex rounded-2xl m-[10px]">
                       <div className="flex w-20 h-20 ml-[10px] mt-[10px] mb-[10px] mr-[20px] bg-[#00735E] rounded-[11px]">
-                      <Image
-                          src={"/produtor.jpg"}
+                       <Image
+                          src={ producer.caf != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
                           className="w-full h-full object-cover rounded-[10px]"
                           width={80}
                           height={80}
@@ -84,14 +81,12 @@ export default function Produtores() {
                         </span>
                       </div>
                       <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-                        {/* <div className="w-6 h-6"> */}
                         <Image
                           src="/arrow.png"
                           alt="arrow"
                           width={10}
                           height={7}
-                        ></Image>
-                        {/* </div> */}
+                        />
                       </div>
                     </div>
                   </Link>

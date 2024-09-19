@@ -12,6 +12,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.4.0",
     "@formkit/auto-animate": "^0.7.0",
     "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.1",
@@ -25,6 +26,7 @@
     "chart.js": "^4.4.0",
     "chartjs-plugin-datalabels": "^2.2.0",
     "crypto": "^1.0.1",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.0.6",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -38,6 +40,7 @@
     "react-icons": "^4.10.1",
     "sharp": "^0.33.4",
     "sonner": "^1.4.2",
+    "tailwind-merge": "^2.5.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
     "yup": "^1.2.0",
