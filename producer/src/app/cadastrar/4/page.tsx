@@ -21,9 +21,9 @@ export default function RegisterStep4() {
       />
       <Input
         name="caf"
-        placeholder="12.345678910"
+        placeholder="Talão"
         type="text"
-        label="CAF"
+        label="Número do talão"
         mask={maskCAF}
         initialValue={formData?.caf || null}
         validationSchema={registerStep4FieldsSchema.caf}

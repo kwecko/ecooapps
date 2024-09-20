@@ -44,9 +44,9 @@ export function Header() {
             Olá, <SkeletonLoader />
           </>
         ) : (
-          <>
-            Olá , <strong className="font-semibold">{name}</strong>
-          </>
+            <>
+            Olá, <Link href={"/alterar-cadastro"}><strong className="font-semibold hover:underline">{name}</strong></Link>
+            </>
         )}
       </span>
       <div className="flex ml-auto">
