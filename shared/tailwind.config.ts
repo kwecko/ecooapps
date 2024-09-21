@@ -46,6 +46,20 @@ const config: Config = {
         poppins: ["Poppins", "sans"],
         inter: ["Inter", "sans"],
       },
+      spacing: {
+        4.1: "1.0625rem",
+        4.5: "1.125rem",
+        5.5: "1.375rem",
+        7.5: "1.875rem",
+      },
+      lineHeight: {
+        4.5: "1.125rem",
+        5.5: "1.375rem",
+      },
+      // tracking
+      letterSpacing: {
+        "tight-2-percent": "-2%",
+      },
     },
   },
 };
