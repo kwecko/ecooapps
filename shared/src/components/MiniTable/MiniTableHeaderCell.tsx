@@ -1,9 +1,21 @@
 import React, { ReactNode } from "react";
+import { twMerge } from "tailwind-merge";
 
-interface MiniTableHeaderCellProps {
-    children: ReactNode;
+interface MiniTableHeaderCellProps
+  extends React.ThHTMLAttributes<HTMLTableCellElement> {
+  className?: string;
+  children: ReactNode;
 }
 
-export default function MiniTableHeaderCell({ children }: MiniTableHeaderCellProps) {
-    return <th className="text-left font-normal">{children}</th>;
+export default function MiniTableHeaderCell({ children,
+  className,
+  ...rest }: MiniTableHeaderCellProps) {
+  return (
+    <th
+      {...rest}
+      className={twMerge("text-left font-normal", className)}
+    >
+      {children}
+    </th>
+  );
 }
