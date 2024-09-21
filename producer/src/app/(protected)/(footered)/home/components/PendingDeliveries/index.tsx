@@ -57,25 +57,23 @@ export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
   );
 
   return (
-    <div
-      className={`mt-5 w-full pl-3 pr-4 rounded-2xl bg-white flex flex-col justify-around gap-4`}
-    >
-      <div className="flex justify-between items-start mt-[23px]">
-        <div className="flex flex-col">
-          <span className="text-theme-default">Entregas pendentes</span>
-          <div>
+    <div className="w-full p-5 pt-5 pr-5 pl-5 rounded-2xl bg-white flex flex-col justify-around gap-8">
+      <div className="flex justify-between items-start pr-0 pl-1">
+        <div className="flex flex-col gap-1.5">
+          <span className="pt-0.5 text-base leading-5.5 tracking-tight">Entregas pendentes</span>
+          <div className="flex items-center gap-2">
             <span className="text-xs text-battleship-gray">
-              CDD - FURG{"   "}
-              <Tooltip title={tooltipContent} trigger="click">
-                <button className="font-semibold bg-battleship-gray text-white text-[12px] rounded-md h-[18px] w-24">
-                  ver endereço
-                </button>
-              </Tooltip>
+              CDD - FURG
             </span>
+            <Tooltip title={tooltipContent} trigger="click">
+              <button className="font-semibold bg-battleship-gray text-white text-[12px] rounded-md px-2.5">
+                ver endereço
+              </button>
+            </Tooltip>
           </div>
         </div>
         <button>
-          <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
+          <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
         </button>
       </div>
       <PendingDeliveriesTable numberOfItems={numberOfItems} />

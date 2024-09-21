@@ -38,23 +38,21 @@ export default function CycloInformation() {
   }, [cycle]);
 
   return (
-    <div className="mt-5 w-full h-fit py-5 rounded-2xl bg-white p-4">
-      <div className="flex justify-between items-center">
-        {cycle ? (
-          <p className="text-default text-[16px]">
-            É hora de:{" "}
-            <span className="text-[#00735E] font-bold">{message}</span>
-          </p>
-        ) : (
-          <p className="text-theme-primary text-[16px]">
-            Selecione um ciclo para ver a etapa atual.
-          </p>
-        )}
+    <div className="font-poppins w-full rounded-2xl bg-white text-theme-default py-5 pl-6 pr-5 tracking-tight leading-5.5 text-base flex flex-row justify-between items-center">
+      {cycle ? (
+        <p>
+          É hora de:{" "}
+          <span className="text-rain-forest font-extrabold tracking-normal">{message}</span>
+        </p>
+      ) : (
+        <p className="text-theme-primary">
+          Selecione um ciclo para ver a etapa atual.
+        </p>
+      )}
 
-        <Button onClick={handleClickButton} type="button">
-          <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
-        </Button>
-      </div>
+      <Button onClick={handleClickButton} type="button">
+        <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
+      </Button>
     </div>
   );
 }
