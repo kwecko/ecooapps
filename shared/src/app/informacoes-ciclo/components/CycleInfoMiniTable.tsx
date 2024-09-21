@@ -4,6 +4,7 @@ import React from "react";
 import { getWeekDays } from "@shared/utils/index";
 import { useEffect, useState } from "react";
 import { MiniTable } from "@shared/components/MiniTable";
+import { useLocalStorage } from "@shared/shared/src/hooks/useLocalStorage";
 
 export default function CycleInfoMiniTable() {
 
@@ -11,8 +12,10 @@ export default function CycleInfoMiniTable() {
     const [order, setorder] = useState<number[]>();
     const [deliver, setdeliver] = useState<number[]>();
 
+    const { getFromStorage } = useLocalStorage();
+    
     useEffect(() => {
-        const savedCycleString = localStorage.getItem("selected-cycle");
+        const savedCycleString = getFromStorage("selected-cycle");
         const savedCycleData = savedCycleString
             ? JSON.parse(savedCycleString)
             : null;
