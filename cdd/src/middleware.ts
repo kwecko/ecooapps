@@ -2,10 +2,13 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 const PROTECTED_PAGES = [ "",
-  "/pedidos",
+  "/ofertas",
+  "/relatorios",
   "/entregas",
   "/enviar-sacola",
   "/montar-sacola",
+  "/informacoes-ciclo",
+  "/success"
 ];
 
 const PAGES_IN_CONSTRUCTION =
@@ -37,9 +40,12 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     "/",
-    "/pedidos/:path*",
+    "/ofertas/:path*",
     "/entregas/:path*",
     "/enviar-sacola/:path*",
     "/montar-sacola/:path*",
+    "/relatorios/:path*",
+    "/informacoes-ciclo/:path*",
+    "/success/:path*"
   ],
 };

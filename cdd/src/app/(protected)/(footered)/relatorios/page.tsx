@@ -5,13 +5,14 @@ import { useState } from "react";
 import DateInput from '@shared/components/DateInput';
 import ButtonV2 from "@shared/components/ButtonV2";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { ListBagsReport } from "@cdd/app/_actions/report/list-bags-report"; // Ação do servidor
+import { useReportGenerator } from "./hooks/useReportGenerator"; 
 
 export default function Home() {
   const [initialDate, setInitialDate] = useState('');
   const [finalDate, setFinalDate] = useState('');
 
   const { getFromStorage } = useLocalStorage();
+  const { generateReport } = useReportGenerator()
 
   const handleClickButtonReport = async (name: string) => {
     const cycle = getFromStorage('selected-cycle');
@@ -23,20 +24,7 @@ export default function Home() {
 
     const { id } = cycle;
 
-    if (name === "list-bags") {
-      try {
-        const response = await ListBagsReport(id);
-        const url = window.URL.createObjectURL(new Blob([response]));
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'relatorio_sacolas.pdf');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        toast.error("Erro ao gerar o relatório.");
-      }
-    }
+    generateReport(name, id)
   };
 
   return (
@@ -65,14 +53,14 @@ export default function Home() {
         <div>
           <ButtonV2
             variant="default"
-            onClick={() => handleClickButtonReport("list-offers")}
+            onClick={() => handleClickButtonReport("listar-ofertas")}
             disabled
           >
             Lista de ofertas
           </ButtonV2>
           <ButtonV2
             variant="default"
-            onClick={() => handleClickButtonReport("list-bags")}
+            onClick={() => handleClickButtonReport("listar-sacolas")}
           >
             Lista de sacolas
           </ButtonV2>
