@@ -54,7 +54,7 @@ export function ProductMenu() {
 
   return (
     <Card className="gap-3.5 font-poppins p-5 pt-5 pr-5 pl-5 w-full">
-      <div className="flex justify-between items-start pr-0 pl-1">
+      <div className="flex justify-between gap-2 items-start pr-0 pl-1">
         <span className="pt-1 font-normal text-base leading-5.5 tracking-tight">
           Ofereça os seus produtos clicando no botão abaixo
         </span>
