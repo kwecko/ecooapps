@@ -4,7 +4,9 @@ import React from "react";
 import { getWeekDays } from "@shared/utils/index";
 import { useEffect, useState } from "react";
 import { MiniTable } from "@shared/components/MiniTable";
-import { useLocalStorage } from "@shared/shared/src/hooks/useLocalStorage";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function CycleInfoMiniTable() {
 
@@ -13,14 +15,18 @@ export default function CycleInfoMiniTable() {
     const [deliver, setdeliver] = useState<number[]>();
 
     const { getFromStorage } = useLocalStorage();
-    
-    useEffect(() => {
-        const savedCycleString = getFromStorage("selected-cycle");
-        const savedCycleData = savedCycleString
-            ? JSON.parse(savedCycleString)
-            : null;
+    const router = useRouter();
 
-        const { offer, order, deliver } = savedCycleData;
+    useEffect(() => {
+        const cycle = getFromStorage("selected-cycle");
+
+        if (!cycle) {
+            toast.error("Selecione um ciclo para ver mais informações sobre ele!");
+            router.push("/");
+            return;
+        }
+
+        const { offer, order, deliver } = cycle;
 
         setoffer(offer);
         setorder(order);
