@@ -6,74 +6,93 @@ import { MiniTable } from "@shared/components/MiniTable";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "./InputPrice";
 import { useHandleError } from "@shared/hooks/useHandleError";
+import { ModelPage } from "@shared/components/ModelPage";
 
+import pageSettings from "./page-settings";
 
 interface ReviewOfferProps {
-    cycleId: string;
-    productId: string;
-    productName: string;
-    amount: number;
-    price: number;
-    pricing: "UNIT" | "WEIGHT" | undefined;
-    submitAction: () => void;
-    description?: string;
+  cycleId: string;
+  productId: string;
+  productName: string;
+  amount: number;
+  price: number;
+  pricing: "UNIT" | "WEIGHT" | undefined;
+  submitAction: () => void;
+  description?: string;
 }
 
 export default function ReviewOffer(props: ReviewOfferProps) {
-    const router = useRouter();
+  const { title, subtitle } = pageSettings.review;
 
-    const { handleError } = useHandleError();
+  const router = useRouter();
 
-    const pricing = props.pricing === "UNIT" ? (
-        props.amount === 1 ? "unidade" :
-            "unidades"
-    ) : ("kg");
+  const { handleError } = useHandleError();
 
-    
+  const pricing =
+    props.pricing === "UNIT"
+      ? props.amount === 1
+        ? "unidade"
+        : "unidades"
+      : "kg";
 
-    return (
-        <div className="h-full flex flex-col items-stretch justify-between pt-14">
-            <MiniTable.Root>
-                <MiniTable.Body>
-                    <MiniTable.Row>
-                        <MiniTable.HeaderCell>Produto:</MiniTable.HeaderCell>
-                        <MiniTable.Cell className="col-span-2">{props.productName}</MiniTable.Cell>
-                    </MiniTable.Row>
-                    <MiniTable.Row>
-                        <MiniTable.HeaderCell>
-                            {props.pricing === "UNIT" ? "Quantidade" : "Peso"}:
-                        </MiniTable.HeaderCell>
-                        <MiniTable.Cell className="col-span-2">
-                            {`${props.amount} ${pricing}`}
-                        </MiniTable.Cell>
-                    </MiniTable.Row>
-                    <MiniTable.Row>
-                        <MiniTable.HeaderCell>Preço:</MiniTable.HeaderCell>
-                        <MiniTable.Cell className="col-span-2">
-                            {`${formatPrice(props.price * 100)} / ${props.pricing === "UNIT" ? "unidade" : "kg"}`}
-                        </MiniTable.Cell>
-                    </MiniTable.Row>
-                    <MiniTable.Row>
-                        <MiniTable.HeaderCell>Taxa:</MiniTable.HeaderCell>
-                        <MiniTable.Cell className="col-span-2">+20% = {formatPrice((props.price * 100 * 0.2)+props.price * 100)}
+  const rows = [
+    {
+      header: "Produto:",
+      content: props.productName,
+    },
+    {
+      header: props.pricing === "UNIT" ? "Quantidade" : "Peso:",
+      content: `${props.amount} ${pricing}`,
+    },
+    {
+      header: "Preço:",
+      content: `${formatPrice(props.price * 100)} / ${
+        props.pricing === "UNIT" ? "unidade" : "kg"
+      }`,
+    },
+    {
+      header: "Taxa:",
+      content: `+20% = ${formatPrice(
+        props.price * 100 * 0.2 + props.price * 100
+      )}`,
+    },
+    {
+      header: "Descrição:",
+      content: props.description || "Sem descrição",
+    },
+  ];
 
-                        </MiniTable.Cell>
-                    </MiniTable.Row>
-                    <MiniTable.Row>
-                        <MiniTable.HeaderCell>Descrição:</MiniTable.HeaderCell>
-                        <MiniTable.Cell className="col-span-2">
-                            {props.description || "Sem descrição"}
-                        </MiniTable.Cell>
-                    </MiniTable.Row>
-                </MiniTable.Body>
-            </MiniTable.Root>
-            <Button
-                title="Confirmar a oferta"
-                onClick={props.submitAction}
-                className="px-2 py-3 bg-theme-default rounded-lg text-white
-            font-semibold border-0">
-                Confirmar a oferta
-            </Button>
-        </div>
-    );
+  return (
+    <ModelPage
+      title={title}
+      titleGap="gap-5"
+      titleClassName="px-3"
+      subtitleClassName="px-4"
+      subtitle={subtitle}
+      buttonArea={
+        <Button
+          title="Confirmar a oferta"
+          onClick={props.submitAction}
+          className="w-full h-12 bg-theme-default rounded-md text-white font-semibold text-base leading-5.5"
+        >
+          Confirmar a oferta
+        </Button>
+      }
+    >
+      <div className="w-full h-full flex flex-col items-stretch justify-between pt-7">
+        <MiniTable.Root>
+          <MiniTable.Body>
+            {rows.map((row, index) => (
+              <MiniTable.Row key={index}>
+                <MiniTable.HeaderCell>{row.header}</MiniTable.HeaderCell>
+                <MiniTable.Cell className="col-span-2">
+                  {row.content}
+                </MiniTable.Cell>
+              </MiniTable.Row>
+            ))}
+          </MiniTable.Body>
+        </MiniTable.Root>
+      </div>
+    </ModelPage>
+  );
 }
