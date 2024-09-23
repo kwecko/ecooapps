@@ -52,6 +52,8 @@ const config: Config = {
         4.5: "1.125rem",
         5.5: "1.375rem",
         7.5: "1.875rem",
+        8.5: "2.125rem",
+        38: "9.5rem",
       },
       lineHeight: {
         4.5: "1.125rem",
