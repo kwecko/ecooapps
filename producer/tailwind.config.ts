@@ -46,6 +46,9 @@ const config: Config = {
         poppins: ["Poppins", "sans"],
         inter: ["Inter", "sans"],
       },
+      spacing: {
+        "5.5": "22px",
+      },
     },
   },
 };
