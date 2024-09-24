@@ -9,9 +9,8 @@ import { PendingDeliveriesTable } from "./Table";
 import Loader from "@shared/components/Loader";
 
 import { getCycleSelected } from "@shared/utils/getCycleSelected";
-import { getBoxesWithOrders } from "@shared/_actions/box/get-boxes-with-orders";
-import { getBoxOrders } from "@shared/_actions/box/get-box-orders";
-import { getUser } from "@shared/_actions/account/get-user"
+import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
+import { toast } from "sonner";
 
 export interface IPendingDeliveries {
   id: string
@@ -95,14 +94,11 @@ export function PendingDeliveries() {
     // IIFE
     (async () => {
       try {
-
         const cycleSelected = await getCycleSelected();
-        const user = await getUser()
-        const dataBoxes = await getBoxesWithOrders({ cycle_id: cycleSelected.id, page: 0, name: user.data.first_name })
-        const caixa = await getBoxOrders({ box_id: dataBoxes.data[0].id })
-        setPendingDeliveries(caixa.data.orders)
-      } catch (error) {
-        console.log('error')
+        const response = await getBoxeCurrent({ cycle_id: cycleSelected.id });
+        setPendingDeliveries(response.data.orders);
+      } catch {
+        toast.error('Erro desconhecido');
       } finally {
         setIsLoading(false);
       }
