@@ -1,6 +1,6 @@
 import React from "react";
 
-import { IPendingDeliveries } from ".";
+import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { FaBoxOpen } from "react-icons/fa6";
 
 import { convertUnit } from '@shared/utils/convert-unit';
@@ -11,11 +11,11 @@ const style = {
 }
 
 interface IPendingDeliveriesTableProps {
-  pendingDeliveries: IPendingDeliveries[]
+  pendingDeliveries: IPendingDeliveries[] | undefined;
 }
 
 export function PendingDeliveriesTable({ pendingDeliveries }: IPendingDeliveriesTableProps) {
-  if (!pendingDeliveries) {
+  if (pendingDeliveries?.length === 0 || !pendingDeliveries) {
     return (
       <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
         <FaBoxOpen className="text-walnut-brown" size={64} />

@@ -8,45 +8,16 @@ import { HiOutlineInformationCircle } from "react-icons/hi";
 import { PendingDeliveriesTable } from "./Table";
 import Loader from "@shared/components/Loader";
 
-import { getCycleSelected } from "@shared/utils/getCycleSelected";
 import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
+import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
-
-export interface IPendingDeliveries {
-  id: string
-  bag_id: string
-  offer: Offer
-  status: string
-  amount: number
-  created_at: string
-  updated_at: any
-}
-
-export interface Offer {
-  id: string
-  amount: number
-  price: number
-  description: any
-  catalog_id: string
-  product: Product
-  created_at: string
-  updated_at: any
-}
-
-export interface Product {
-  id: string
-  name: string
-  image: string
-  pricing: string
-  created_at: string
-  updated_at: any
-}
-
+import { useCycleProvider } from "@shared/context";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[]>([]);
+  const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[] | undefined>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { cycle } = useCycleProvider();
 
   const handleCopyAddress = () => {
     const address =
@@ -94,8 +65,14 @@ export function PendingDeliveries() {
     // IIFE
     (async () => {
       try {
-        const cycleSelected = await getCycleSelected();
-        const response = await getBoxeCurrent({ cycle_id: cycleSelected.id });
+        setIsLoading(true);
+
+        if (!cycle) {
+          setPendingDeliveries(undefined);
+          setIsLoading(false);
+          return;
+        }
+        const response = await getBoxeCurrent({ cycle_id: cycle.id });
         setPendingDeliveries(response.data.orders);
       } catch {
         toast.error('Erro desconhecido');
@@ -103,7 +80,7 @@ export function PendingDeliveries() {
         setIsLoading(false);
       }
     })()
-  }, []);
+  }, [cycle]);
 
   if (isLoading) {
     return (
