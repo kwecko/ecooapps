@@ -5,26 +5,28 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 export function useReportGenerator() {
   const { handleError } = useHandleError();
 
+  const reportActions: Record<string, (id: string) => Promise<any>> = {
+    "listar-sacolas": (id: string) => ListBagsReport(id),
+    "listar-ofertas": () => {
+      return Promise.resolve();
+    },
+    "cash-flow": () => {
+      return Promise.resolve();
+    },
+  };
+
   const generateReport = async (type: string, id: string) => {
     try {
-      let response;
-
-      switch (type) {
-        case "listar-sacolas":
-          response = await ListBagsReport(id);
-          break;
-        case "listar-ofertas":
-          console.log("listar-ofertas")
-          break;
-        case "cash-flow":
-          console.log("cash-flow")
-          break;
-        default:
-          toast.error("Tipo de relatório desconhecido.");
-          return;
+      const action = reportActions[type];
+      
+      if (!action) {
+        toast.error("Tipo de relatório desconhecido.");
+        return;
       }
 
-      if (response.message) {
+      const response = await action(id);
+
+      if (response?.message) {
         const messageError = response.message as string;
         handleError(messageError);
       } else {

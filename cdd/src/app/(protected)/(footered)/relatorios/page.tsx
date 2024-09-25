@@ -6,6 +6,7 @@ import DateInput from '@shared/components/DateInput';
 import ButtonV2 from "@shared/components/ButtonV2";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useReportGenerator } from "./hooks/useReportGenerator"; 
+import { reportaButtonData } from "./data";
 
 export default function Home() {
   const [initialDate, setInitialDate] = useState('');
@@ -51,26 +52,17 @@ export default function Home() {
           />
         </div>
         <div>
-          <ButtonV2
-            variant="default"
-            onClick={() => handleClickButtonReport("listar-ofertas")}
-            disabled
-          >
-            Lista de ofertas
-          </ButtonV2>
-          <ButtonV2
-            variant="default"
-            onClick={() => handleClickButtonReport("listar-sacolas")}
-          >
-            Lista de sacolas
-          </ButtonV2>
-          <ButtonV2
-            variant="default"
-            onClick={() => handleClickButtonReport("cash-flow")}
-            disabled
-          >
-            Fluxo de caixa
-          </ButtonV2>
+          {reportaButtonData.map((data) => {
+            return (
+              <ButtonV2
+              variant="default"
+              onClick={() => handleClickButtonReport(data.onClick)}
+              disabled={data.disabled}
+            >
+              {data.name}
+            </ButtonV2>
+            )
+          })}
         </div>
       </div>
     </div>
