@@ -31,7 +31,7 @@ export function PendingDeliveriesTable({ pendingDeliveries }: IPendingDeliveries
           pendingDeliveries?.map((item: IPendingDeliveries) => {
             return (
               <tr key={item.id} className="text-left">
-                <td className={style.row}>{item.offer.amount}{convertUnit(item.offer.product.pricing)}</td>
+                <td className={style.row}>{item.amount}{convertUnit(item.offer.product.pricing)}</td>
                 <td className={style.row}>{item.offer.product.name}</td>
                 <td className={style.row}>{getNextSaturdayDate().split('/').slice(0, 2).join('/')}</td>
               </tr>

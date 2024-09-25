@@ -13,6 +13,7 @@ const config: Config = {
         theme: {
           default: "var(--color-default)",
           "home-bg": "var(--color-home-background)",
+          highlight: "var(--color-highlight)",
           primary: "var(--color-primary)",
           secondary: "var(--color-secondary)",
           background: "var(--color-background)",
@@ -47,8 +48,18 @@ const config: Config = {
         inter: ["Inter", "sans"],
       },
       spacing: {
-        "4.5": "18px",
-        "5.5": "22px",
+        4.1: "1.0625rem",
+        4.5: "1.125rem",
+        5.5: "1.375rem",
+        7.5: "1.875rem",
+      },
+      lineHeight: {
+        4.5: "1.125rem",
+        5.5: "1.375rem",
+        8.5: "2.125rem",
+      },
+      letterSpacing: {
+        "tight-2-percent": "-2%",
       },
     },
   },
