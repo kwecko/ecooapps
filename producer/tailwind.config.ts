@@ -47,6 +47,7 @@ const config: Config = {
         inter: ["Inter", "sans"],
       },
       spacing: {
+        "4.5": "18px",
         "5.5": "22px",
       },
     },

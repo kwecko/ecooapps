@@ -103,7 +103,7 @@ export function PendingDeliveries() {
             <span className="text-xs text-battleship-gray">
               CDD - FURG{"   "}
               <Tooltip title={tooltipContent} trigger="click">
-                <button className="font-semibold bg-battleship-gray text-white text-[12px] rounded-md h-[18px] w-24">
+                <button className="font-semibold bg-battleship-gray text-white text-xs rounded-md h-4.5 w-24">
                   ver endereço
                 </button>
               </Tooltip>
@@ -111,7 +111,7 @@ export function PendingDeliveries() {
           </div>
         </div>
         <button>
-          <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
+          <HiOutlineInformationCircle className="text-2xl text-slate-blue" />
         </button>
       </div>
       <PendingDeliveriesTable pendingDeliveries={pendingDeliveries} />
