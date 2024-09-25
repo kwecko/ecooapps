@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { CycleProvider } from "@shared/context";
-import CycloInformaiton from "./home/components/CycloInformation";
+import CycloInformation from "./home/components/CycloInformation";
 import { Header } from "./home/components/Header";
 import { PendingDeliveries } from "./home/components/PendingDeliveries";
 import { ProductMenu } from "./home/components/ProductMenu";
@@ -16,7 +16,7 @@ export default function Home() {
         <div>
           <Header />
           <SelectCycle />
-          <CycloInformaiton />
+          <CycloInformation />
           <ProductMenu />
           <PendingDeliveries />
         </div>

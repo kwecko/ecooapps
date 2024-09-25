@@ -53,19 +53,19 @@ export function ProductMenu() {
   };
 
   return (
-    <Card className="mt-5 gap-4">
-      <div className="flex justify-between items-start mt-[23px]">
-        <span className="text-default text-[16px] mb-[13px]">
+    <Card className="gap-3.5 font-poppins p-5 pt-5 pr-5 pl-5 w-full">
+      <div className="flex justify-between gap-2 items-start pr-0 pl-1">
+        <span className="pt-1 font-normal text-base leading-5.5 tracking-tight">
           Ofereça os seus produtos clicando no botão abaixo
         </span>
         <button>
-          <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
+          <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
         </button>
       </div>
-      <div className="">
+      <div className="w-full flex flex-col gap-3 font-semibold text-base leading-5.5">
         <Button
           onClick={handleClickOfferProductButton}
-          className="w-full bg-theme-default rounded-md h-12 mb-[12px] text-white font-semibold"
+          className="w-full h-12 bg-theme-default rounded-md text-white"
           disabled={!isOfferingDay || isUnderConstruction("/oferta")}
           href="/"
         >
@@ -73,7 +73,7 @@ export function ProductMenu() {
         </Button>
         <Link href={"/"}>
           <Button
-            className="w-full bg-transparent rounded-md h-12 mb-[20px] text-[#3E5155] border-2 border-[#3E5155] font-semibold"
+            className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default"
             disabled={true}
           >
             Gerar relatórios

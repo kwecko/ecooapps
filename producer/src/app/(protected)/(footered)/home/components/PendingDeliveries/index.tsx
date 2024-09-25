@@ -108,6 +108,11 @@ export function PendingDeliveries() {
                 </button>
               </Tooltip>
             </span>
+            <Tooltip title={tooltipContent} trigger="click">
+              <button className="font-semibold bg-battleship-gray text-white text-[12px] rounded-md px-2.5">
+                ver endereço
+              </button>
+            </Tooltip>
           </div>
         </div>
         <button>
