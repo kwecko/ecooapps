@@ -16,7 +16,7 @@ export default function OfferListHeading({
       )}
     >
       <hr className="w-full bg-french-gray h-px" />
-      <small className="px-4 text-[10px] leading-4 text-[#8E8E93] whitespace-nowrap text-center ">
+      <small className="px-4 text-xxs leading-4 text-oslo-gray whitespace-nowrap text-center ">
         {title}
       </small>
       <hr className="w-full bg-french-gray h-px" />

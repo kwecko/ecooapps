@@ -15,7 +15,7 @@ export default function MiniTableCell({
   return (
     <td
       {...rest}
-      className={twMerge("font-normal max-w-max", className)}
+      className={twMerge("font-normal max-w-max break-words overflow-y-auto overflow-x-hidden", className)}
     >
       {children}
     </td>

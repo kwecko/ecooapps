@@ -22,6 +22,7 @@ const config: Config = {
         "slate-blue": "#507080",
         "slate-gray": "#2F4A4D",
         "rain-forest": "#00735E",
+        "oslo-gray": "#8E8E93",
         eucalyptus: "#43DBAB",
         caramel: "#FFDD92",
         "battleship-gray": "#979797",
@@ -48,12 +49,31 @@ const config: Config = {
         inter: ["Inter", "sans"],
       },
       spacing: {
+        inherit: "inherit",
+        3.75: "0.9375rem",
         4.1: "1.0625rem",
         4.5: "1.125rem",
         5.5: "1.375rem",
         7.5: "1.875rem",
         8.5: "2.125rem",
+        15: "3.75rem",
+        22.5: "5.625rem",
         38: "9.5rem",
+      },
+      height: {
+        inherit: "inherit",
+        footer: "var(--footer-height)",
+        "footered-page": "var(--footered-page-height)",
+      },
+      minHeight: {
+        inherit: "inherit",
+        15: "3.75rem",
+        22.5: "5.625rem",
+      },
+      maxWidth: {
+        inherit: "inherit",
+        15: "3.75rem",
+        22.5: "5.625rem",
       },
       lineHeight: {
         4.5: "1.125rem",
@@ -61,7 +81,11 @@ const config: Config = {
         8.5: "2.125rem",
       },
       letterSpacing: {
+        "tight-2": "-0.02em",
         "tight-2-percent": "-2%",
+      },
+      fontSize: {
+        xxs: "0.625rem",
       },
     },
   },

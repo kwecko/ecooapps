@@ -6,20 +6,14 @@ import Input from "@shared/components/Input";
 import { LuChevronLeft } from "react-icons/lu";
 import { toast } from "sonner";
 import { ModelPage } from "@shared/components/ModelPage";
-
+import { formatPrice } from "@shared/utils/format-price";
+import { addTaxToPrice } from "@shared/utils/convert-tax";
 import pageSettings from "./page-settings";
 
 interface InputPriceProps {
   handleNextStep: () => void;
   price: number;
   setPrice: (price: number) => void;
-}
-
-export function formatPrice(price: number) {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(price / 100);
 }
 
 export default function InputPrice({
@@ -77,11 +71,11 @@ export default function InputPrice({
           onChange={handleChange}
           className="text-theme-primary text-sm"
           type="text"
-          value={formatPrice(price * 100)}
+          value={formatPrice(price)}
           label="Preço"
         />
         <span className="text-xs text-gray-500 pt-1 pl-2">
-          Preço + taxa: {formatPrice(price * 100 + price * 100 * 0.2)}
+          Preço + taxa: {formatPrice(addTaxToPrice(price, 0.2))}
         </span>
       </div>
     </ModelPage>

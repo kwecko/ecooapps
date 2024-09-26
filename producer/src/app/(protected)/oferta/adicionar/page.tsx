@@ -100,14 +100,14 @@ export default function Home() {
   };
   return (
     <>
-      <div className="h-[var(--min-page-height)] w-full">
+      <div className="h-footered-page w-full">
         <div className="flex items-center justify-end w-full fixed px-6 pt-5">
           <Button
             title="Cancelar"
-            className="flex items-center gap-2 text-sm font-medium text-[#3E5155] w-auto"
+            className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
             onClick={cancelOffer}
           >
-            <LuX className="w-[30px] h-[30px] text-[#3E5155]" />
+            <LuX className="w-7.5 h-7.5 text-theme-default" />
           </Button>
         </div>
         {currentStep === 1 && (
@@ -153,15 +153,15 @@ export default function Home() {
           />
         )}
       </div>
-      <div className="h-[var(--footer-height)] w-full">
+      <div className="h-footer w-full">
         <div
           className="flex w-full items-center p-5 justify-between
-             static bottom-0 h-[var(--footer-height)] bg-theme-background z-50"
+             static bottom-0 h-footer bg-theme-background z-50"
         >
           <div className="flex items-center">
-            <LuChevronLeft className="w-[30px] h-[30px] text-[#3E5155]" />
+            <LuChevronLeft className="w-7.5 h-7.5 text-theme-default" />
             <Button
-              className="flex items-center gap-2 text-sm font-medium text-[#3E5155] w-auto"
+              className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
               onClick={handlePreviousStep}
             >
               Voltar

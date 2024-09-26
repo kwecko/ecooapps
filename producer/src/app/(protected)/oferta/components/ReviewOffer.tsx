@@ -4,7 +4,9 @@ import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
 import { MiniTable } from "@shared/components/MiniTable";
 import { useRouter } from "next/navigation";
-import { formatPrice } from "./InputPrice";
+import { formatPrice } from "@shared/utils/format-price";
+import { addTaxToPrice } from "@shared/utils/convert-tax";
+import { convertUnitFull } from "@shared/utils/convert-unit";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { ModelPage } from "@shared/components/ModelPage";
 
@@ -28,33 +30,24 @@ export default function ReviewOffer(props: ReviewOfferProps) {
 
   const { handleError } = useHandleError();
 
-  const pricing =
-    props.pricing === "UNIT"
-      ? props.amount === 1
-        ? "unidade"
-        : "unidades"
-      : "kg";
-
   const rows = [
     {
       header: "Produto:",
       content: props.productName,
     },
     {
-      header: props.pricing === "UNIT" ? "Quantidade" : "Peso:",
-      content: `${props.amount} ${pricing}`,
+      header: "Quantidade:",
+      content: `${props.amount} ${convertUnitFull(props.pricing || "", props.amount > 1)}`,
     },
     {
       header: "Preço:",
-      content: `${formatPrice(props.price * 100)} / ${
-        props.pricing === "UNIT" ? "unidade" : "kg"
+      content: `${formatPrice(props.price)} / ${
+        convertUnitFull(props.pricing || "")
       }`,
     },
     {
       header: "Taxa:",
-      content: `+20% = ${formatPrice(
-        props.price * 100 * 0.2 + props.price * 100
-      )}`,
+      content: `+20% = ${formatPrice(addTaxToPrice(props.price, 0.2))}`,
     },
     {
       header: "Descrição:",
@@ -79,7 +72,7 @@ export default function ReviewOffer(props: ReviewOfferProps) {
         </Button>
       }
     >
-      <div className="w-full h-full flex flex-col items-stretch justify-between pt-7">
+      <div className="w-full h-full flex flex-col items-stretch justify-between pt-7 overflow-y-auto">
         <MiniTable.Root>
           <MiniTable.Body>
             {rows.map((row, index) => (
