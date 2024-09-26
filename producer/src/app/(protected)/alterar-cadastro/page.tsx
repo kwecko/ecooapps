@@ -1,229 +1,227 @@
 'use client'
 
+import { useEffect, useState } from "react";
+import { EyeOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { z } from "zod";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { getUser } from "@shared/_actions/account/get-user";
+import { updateUser } from "@shared/_actions/account/update-user";
+import { Tooltip } from "antd";
+import { toast } from "sonner";
+import NewInput from "@shared/components/NewInput";
 import Button from "@shared/components/Button";
 import Link from "next/link";
-import { useState, useEffect, use } from "react";
-import { AiFillEye } from "react-icons/ai";
-import { getUser } from "@producer/app/_actions/get-user/getUser";
-import { updateInfoFieldsSchema } from "./schemas";
-import Input from "./components/Input";
-import ConfirmationModal from "./components/ConfirmationModal";
-import { Tooltip } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { toast } from "sonner";
+import Modal from "@shared/components/Modal";
+import { validateCellphone } from "@shared/utils";
+
+const formSchema = z.object({
+  phone: z.string().min(11, "Formato de telefone inválido.").refine((val) => validateCellphone(val), {
+    message: "Formato de telefone inválido.",
+  }),
+  password: z.string().min(8, "Senha deve ter pelo menos 8 caracteres."),
+  confirmPassword: z.string().min(8, "Confirmar senha deve ter pelo menos 8 caracteres."),
+}).refine(data => data.password === data.confirmPassword, {
+  message: "As senhas não coincidem.",
+});
 
 export default function AlterarCadastro() {
-  const preventDefault = async (e: React.FormEvent) => {
-    e.preventDefault();
-  };
+  const { handleError }  = useHandleError();
+  const { getFromStorage } = useLocalStorage();
+  const passwordRequirements = "Sua senha deve ter pelo menos 8 caracteres."
 
-  const { handleError } = useHandleError()
+  const [formData, setFormData] = useState(getFromStorage("register-form-data"));
 
   const [userInfo, setUserInfo] = useState({
     user: {
-      firstName: "Nome",
-      lastName: "Sobrenome",
+      first_name: "Nome",
+      last_name: "Sobrenome",
       phone: "(XX) XXXXX-XXXX",
       email: "Email",
       cpf: "XXX.XXX.XXX-XX",
     },
-    field: {
-      firstName: "",
-      lastName: "",
-      phone: "",
-      password: "",
-      confirmPassword: "",
-    }
   });
 
-  const passwordRequirements = "Sua senha deve ter pelo menos 8 caracteres.";
+  const preventDefault = async (e: React.FormEvent) => {
+    e.preventDefault();
+  };
 
   useEffect(() => {
     (async () => {
-      await getUser()
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message;
-            handleError(messageError)
-          } else if (response.data) {
-            const { first_name, last_name, phone, email, cpf } = response.data;
-            setUserInfo((prevState) => ({
-              user: {
-              firstName: first_name || prevState.user.firstName,
-              lastName: last_name || prevState.user.lastName,
+      await getUser().then((response) => {
+        if (response.message) {
+          const messageError = response.message;
+          handleError(messageError)
+        } else if (response.data) {
+          const { first_name, last_name, phone, email, cpf } = response.data;
+          setUserInfo((prevState) => ({
+            ...prevState,
+            user: {
+              ...prevState.user,
+              first_name: first_name || prevState.user.first_name,
+              last_name: last_name || prevState.user.last_name,
               phone: phone || prevState.user.phone,
               email: email || prevState.user.email,
               cpf: cpf || prevState.user.cpf,
-              },
-              field: {
-              ...prevState.field
-              }
-            }));
+            }
+          }));
+        }
+      }).catch((error) => {
+        toast.error(error)
+      })
+    })();
+  }, []);
+
+  const getUpdatedData = (newData: any, currentData: any) => {
+    const updatedData = { ...currentData };
+    Object.keys(newData).forEach((key) => {
+      if (newData[key] !== "") {
+        updatedData[key] = newData[key];
+      }
+    });
+    return updatedData;
+  };
+
+  const handleSubmit = async (data: any) => {
+
+    if (!data) {
+      toast.error("Preencha os campos obrigatórios.");
+    } else {
+    data = getUpdatedData(getFromStorage("register-form-data"), userInfo.user);
+    
+    const validation = formSchema.safeParse(data);
+
+    if (!data.password) {
+      toast.error("Senha deve ter pelo menos 8 caracteres.");
+      return;
+    } else if (!validation.success) {
+      toast.error(validation.error.errors[0].message);
+    } else {
+      await updateUser(data)
+        .then((response) => {
+          if (response?.message) {
+            handleError(response.message);
+            return;
+          } else {
+            toast.success("Cadastro atualizado com sucesso!");
+            localStorage.removeItem("register-form-data");
+            window.location.href = "/";
           }
-        })
-        .catch((error) => {
+        }).catch((error) => {
           toast.error(error)
-        })
-    })()
-  }, [])
-  
-  return (
-    <div className="w-full h-screen p-5 flex items-center flex-col bg-theme-background">
-      <div className="flex flex-col h-1/5 w-full items-center justify-end">
-        <h1 className="text-3xl font-medium text-slate-gray">Seu perfil</h1>
-        <span className="text-sm font-medium text-slate-gray text-center mt-2">
-          Após atualizar os seus dados, <br /> clique em salvar.
-        </span>
-      </div>
-      <div className="w-full h-4/5 flex flex-col mt-10">
-        <form className="w-full h-full flex flex-col justify-between" onSubmit={preventDefault}>
-          <div className="w-full flex flex-col gap-1">
-            <Input
-              label="Name"
-              type="text"
-              value={userInfo.field.firstName}
-              placeholder={userInfo.user.firstName}
-              validationSchema={updateInfoFieldsSchema.firstName}
-              onChange={(e) => setUserInfo(prevState => ({
-                ...prevState,
-                field: {
-                  ...prevState.field,
-                  firstName: e.target.value
+        });
+      }  
+    } 
+  }
+
+  return(
+    <>
+      <div className="w-full h-screen p-5 flex items-center flex-col bg-theme-background" onSubmit={preventDefault}>
+        <div className="flex flex-col w-full items-center justify-end">
+          <h1 className="text-3xl font-medium text-slate-gray">Seu perfil</h1>
+          <span className="text-sm font-medium text-slate-gray text-center mt-2">
+            Após atualizar os seus dados, <br /> clique em salvar.
+          </span>
+        </div>
+        <div className="w-full h-[85vh] flex flex-col mt-10">
+          <form onSubmit={preventDefault} className="w-full h-full flex flex-col justify-between">
+            <div className="w-full flex flex-col gap-2">
+              <NewInput
+                name="first_name"
+                placeholder={userInfo.user.first_name}
+                label="Nome"
+                type="text"
+                initialValue={formData?.first_name}
+                localStorageFormKey="register-form-data"
+              />
+              <NewInput
+                name="last_name"
+                placeholder={userInfo.user.last_name}
+                label="Sobrenome"
+                type="text"
+                initialValue={formData?.last_name}
+                localStorageFormKey="register-form-data"
+              />
+              <NewInput
+                name="email"
+                placeholder={userInfo.user.email}
+                label="Email"
+                type="email"
+                initialValue={formData?.email}
+                className="cursor-not-allowed"
+                disabled={true}
+              />
+              <NewInput
+                name="phone"
+                placeholder={userInfo.user.phone}
+                label="Telefone"
+                type="number"
+                initialValue={formData?.phone}
+                localStorageFormKey="register-form-data"
+              />
+              <NewInput
+                name="password"
+                placeholder="********"
+                label={
+                  (
+                    <>
+                      Nova senha *
+                      <Tooltip title={passwordRequirements}>
+                        <InfoCircleOutlined
+                          style={{ color: "rgba(0,0,0,.45)", marginLeft: 10 }}
+                        />
+                      </Tooltip>
+                    </>
+                  ) as unknown as Element
                 }
-              }))}
-            />
-
-            <Input
-              label="Sobrenome"
-              type="text"
-              value={userInfo.field.lastName}
-              placeholder={userInfo.user.lastName}
-              validationSchema={updateInfoFieldsSchema.lastName}
-              onChange={(e) => setUserInfo(prevState => ({
-                ...prevState,
-                field: {
-                  ...prevState.field,
-                  lastName: e.target.value
+                icon={<EyeOutlined />}
+                type="password"
+                initialValue={formData?.password}
+                localStorageFormKey="register-form-data"
+              />
+              <NewInput
+                name="confirmPassword"
+                placeholder="********"
+                label={
+                  (
+                    <>
+                      Confirmar senha *
+                      <Tooltip title={passwordRequirements}>
+                        <InfoCircleOutlined
+                          style={{ color: "rgba(0,0,0,.45)", marginLeft: 10 }}
+                        />
+                      </Tooltip>
+                    </>
+                  ) as unknown as Element
                 }
-              }))}
-            />
+                icon={<EyeOutlined />}
+                type="password"
+                initialValue={formData?.confirmPassword}
+                localStorageFormKey="register-form-data"
+              />
+            </div>
 
-            <Input
-              label="Email"
-              type="email"
-              placeholder={userInfo.user.email}
-              validationSchema={updateInfoFieldsSchema.email}
-              readOnly
-            />
-
-            <Input
-              label="Telefone"
-              type="number"
-              value={userInfo.field.phone}
-              placeholder={userInfo.user.phone}
-              validationSchema={updateInfoFieldsSchema.phone}
-              onChange={(e) => setUserInfo(prevState => ({
-                ...prevState,
-                field: {
-                  ...prevState.field,
-                  phone: e.target.value
-                }
-              }))}
-            />
-
-            <Input
-              label={
-                (
-                  <>
-                    Nova senha
-                    <Tooltip title={passwordRequirements}>
-                      <InfoCircleOutlined
-                        style={{ color: "rgba(0,0,0,.45)", marginLeft: 10 }}
-                      />
-                    </Tooltip>
-                  </>
-                ) as unknown as Element
-              }
-              type="password"
-              value={userInfo.field.password}
-              icon={<AiFillEye />}
-              placeholder="******"
-              validationSchema={updateInfoFieldsSchema.password}
-              onChange={(e) => setUserInfo(prevState => ({
-                ...prevState,
-                field: {
-                  ...prevState.field,
-                  password: e.target.value
-                }
-              }))}
-            />
-
-            <Input
-              label="Confirmar senha"
-              type="password"
-              value={userInfo.field.confirmPassword}
-              icon={<AiFillEye />}
-              placeholder="******"
-              validationSchema={updateInfoFieldsSchema.confirmPassword}
-              onChange={(e) => setUserInfo(prevState => ({
-                ...prevState,
-                field: {
-                  ...prevState.field,
-                  confirmPassword: e.target.value
-                }
-              }))}
-            />
-          </div>
-
-          <div className="w-full flex gap-1 items-end">
-            <Link className="w-full" href={"/"}>
-              <Button className="w-full rounded-lg font-semibold text-slate-gray border-slate-gray border-2 py-[10px]">
-                Voltar
-              </Button>
-            </Link>
-
-            <ConfirmationModal
-              info={{
-                firstName: userInfo.field.firstName,
-                lastName: userInfo.field.lastName,
-                phone: userInfo.field.phone,
-                password: userInfo.field.password,
-                email: userInfo.user.email,
-                cpf: userInfo.user.cpf,
-              }}
-              openButton={
-                <Button
-                  className={`px-2 py-3 w-full rounded-lg font-inter font-semibold text-white ${
-                    !userInfo.field.firstName ||
-                    !userInfo.field.lastName ||
-                    userInfo.field.phone.length < 11 ||
-                    userInfo.field.phone.length < 8 ||
-                    userInfo.field.password.length < 8 ||
-                    userInfo.field.confirmPassword.length < 8 ||
-                    userInfo.field.confirmPassword !== userInfo.field.password
-                      ? "bg-gray-400"
-                      : "bg-[#00735E]"
-                  }`}
-                  style={{ marginBottom: "9px" }}
-                  disabled={
-                    !userInfo.field.firstName ||
-                    !userInfo.field.lastName ||
-                    userInfo.field.phone.length < 11 ||
-                    userInfo.field.phone.length < 8 ||
-                    userInfo.field.password.length < 8 ||
-                    userInfo.field.confirmPassword.length < 8 ||
-                    userInfo.field.confirmPassword !== userInfo.field.password
-                  }
-                >
-                  Salvar
+            <div className="w-full p-5 flex gap-3 z-10 px-2 py-1 bg-transparent">
+              <Link className="w-full" href={"/"}>
+                <Button className="w-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 py-4 hover:bg-gray-100">
+                  Voltar
                 </Button>
-              }
-              link={`/`}
-            />
-          </div>
-        </form>
+              </Link>
+              <Modal
+                titleContentModal="Você tem certeza?"
+                contentModal="Ao clicar em confirmar seus dados de cadastro serão atualizados."
+                titleCloseModal="Cancelar"
+                titleConfirmModal="Confirmar"
+                titleOpenModal="Salvar"
+                bgOpenModal="#2F4A4D"
+                bgConfirmModal="#2F4A4D"
+                bgCloseModal="bg-gray-100"
+                modalAction={() => handleSubmit(getFromStorage("register-form-data"))}
+              />         
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  )
+    </>
+  );
 }
