@@ -43,7 +43,7 @@ export function Header() {
           </>
         ) : (
           <>
-            Olá , <strong className="font-semibold">{name}</strong>
+            Olá, <strong className="font-semibold">{name}</strong>
           </>
         )}
       </span>
