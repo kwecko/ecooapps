@@ -57,7 +57,6 @@ export default function AlterarCadastro() {
   const handleSubmit = async (data: IUser) => {
 
     data = await fetchData(data);
-    console.log(data);
 
     if (!data.password || !data.confirmPassword) {
       toast.error("Preencha os campos * obrigatórios.");
