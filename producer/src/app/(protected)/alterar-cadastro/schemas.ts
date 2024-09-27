@@ -18,11 +18,3 @@ export const schemaChangePassword = z
   .refine((data) => data.password === data.confirmPassword, {
     message: "As senhas não coincidem.",
   });
-
-export const schemaInitialValue = {
-  first_name: "Nome",
-  last_name: "Sobrenome",
-  phone: "(XX) XXXXX-XXXX",
-  email: "Email",
-  cpf: "XXX.XXX.XXX-XX",
-};

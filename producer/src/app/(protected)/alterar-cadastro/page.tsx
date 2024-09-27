@@ -27,10 +27,6 @@ export default function AlterarCadastro() {
 
   const [user, setUser] = useState<IUser>({} as IUser);
 
-  const preventDefault = async (e: React.FormEvent) => {
-    e.preventDefault();
-  };
-
   useEffect(() => {
     (async () => {
       await getUser()
@@ -49,14 +45,22 @@ export default function AlterarCadastro() {
     })();
   }, []);
 
-  const handleSubmit = async (data: IUser) => {
-    if (!data) {
-      toast.error("Preencha os campos obrigatórios.");
-      return;
+  const fetchData = async (data: IUser) => {
+    const storedData = getFromStorage("register-form-data");
+    if (storedData) {
+      const updatedData = { ...data, ...storedData };
+      data = updatedData;
     }
+    return data;
+  };
 
-    if (!data.password) {
-      toast.error("Senha deve ter pelo menos 8 caracteres.");
+  const handleSubmit = async (data: IUser) => {
+
+    data = await fetchData(data);
+    console.log(data);
+
+    if (!data.password || !data.confirmPassword) {
+      toast.error("Preencha os campos obrigatórios.");
       return;
     }
 
@@ -87,7 +91,6 @@ export default function AlterarCadastro() {
     <>
       <div
         className="w-full h-screen p-5 flex items-center flex-col bg-theme-background"
-        onSubmit={preventDefault}
       >
         <div className="flex flex-col w-full items-center justify-end">
           <h1 className="text-3xl font-medium text-slate-gray">Seu perfil</h1>
@@ -97,7 +100,6 @@ export default function AlterarCadastro() {
         </div>
         <div className="w-full h-[85vh] flex flex-col mt-10">
           <form
-            onSubmit={preventDefault}
             className="w-full h-full flex flex-col justify-between"
           >
             <div className="w-full flex flex-col gap-2">
@@ -106,7 +108,7 @@ export default function AlterarCadastro() {
                 placeholder="Primeiro nome"
                 label="Nome"
                 type="text"
-                initialValue={user.first_name}
+                defaultValue={user?.first_name}
                 localStorageFormKey="register-form-data"
               />
               <NewInput
@@ -114,7 +116,7 @@ export default function AlterarCadastro() {
                 placeholder="Sobrenome"
                 label="Sobrenome"
                 type="text"
-                initialValue={user?.last_name}
+                defaultValue={user?.last_name}
                 localStorageFormKey="register-form-data"
               />
               <NewInput
@@ -122,8 +124,8 @@ export default function AlterarCadastro() {
                 placeholder="E-mail"
                 label="Email"
                 type="email"
-                initialValue={user?.email}
-                className="cursor-not-allowed"
+                defaultValue={user?.email}
+                className="cursor-not-allowed text-gray-400"
                 disabled={true}
               />
               <NewInput
@@ -131,7 +133,7 @@ export default function AlterarCadastro() {
                 placeholder="Telefone"
                 label="Telefone"
                 type="number"
-                initialValue={user?.phone}
+                defaultValue={user?.phone}
                 localStorageFormKey="register-form-data"
               />
               <NewInput
@@ -149,7 +151,7 @@ export default function AlterarCadastro() {
                 }
                 icon={<AiOutlineEye />}
                 type="password"
-                initialValue={user?.password}
+                defaultValue={user?.password}
                 localStorageFormKey="register-form-data"
               />
               <NewInput
@@ -167,12 +169,12 @@ export default function AlterarCadastro() {
                 }
                 icon={<AiOutlineEye />}
                 type="password"
-                initialValue={user?.confirmPassword}
+                defaultValue={user?.confirmPassword}
                 localStorageFormKey="register-form-data"
               />
             </div>
 
-            <div className="w-full p-5 flex gap-3 z-10 px-2 py-1 bg-transparent">
+            <div className="w-full p-5 flex gap-4 z-10 px-2 py-1 pb-5 bg-transparent">
               <Link className="w-full" href={"/"}>
                 <Button className="w-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 py-4 hover:bg-gray-100">
                   Voltar
@@ -188,8 +190,8 @@ export default function AlterarCadastro() {
                 bgConfirmModal="#2F4A4D"
                 bgCloseModal="bg-gray-100"
                 modalAction={() =>
-                  handleSubmit(getFromStorage("register-form-data"))
-                }
+                handleSubmit(user)
+              }
               />
             </div>
           </form>
