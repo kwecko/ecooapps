@@ -1,13 +1,14 @@
 "use client";
 
-import { FaCheck, FaBoxOpen } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
-import Table from "./table";
+import { FaCheck, FaBoxOpen } from "react-icons/fa6";
 import StatusFilterButtons from "./StatusFilterButton";
-import { getBoxesWithOrders } from "@shared/_actions/box/get-boxes-with-orders";
+
+import Table from "./table";
 
 import Loader from "@shared/components/Loader";
 import { Boxes } from "@shared/interfaces/farm";
@@ -16,6 +17,7 @@ import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
 interface FarmsProps {
   page: number;
@@ -25,12 +27,6 @@ export interface IStatus {
   name: string;
   key: string;
 }
-
-const classes = {
-  header:
-    "truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center",
-  body: "border-b-[1px] truncate text-[#545F71] px-2 py-3",
-};
 
 export function FarmWithOrdersTable({ page }: FarmsProps) {
   const router = useRouter();
@@ -170,14 +166,14 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         </div>
       )}
 
-      {!isLoading && farmsFiltered.length === 0 && (
+      {farmsFiltered.length === 0 && (
         <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
           <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center">Nenhum pedido < br /> encontrado!</span>
+          <span className="text-center">Nenhum pedido encontrado!</span>
         </div>
       )}
 
-      {!isLoading && farmsFiltered.length > 0 && (
+      {farmsFiltered.length > 0 && (
         <Table headers={headers} info={info} onRowClick={handleClick} />
       )}
     </div>

@@ -94,13 +94,13 @@ export function PendingDeliveries() {
 
   return (
     <div
-      className={`mt-5 w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
+      className={`w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
     >
       <div className="flex justify-between items-start">
         <div className="flex flex-col">
           <span className="text-theme-default">Entregas pendentes</span>
           <div className="flex gap-2">
-            <span className="text-xs text-battleship-gray gap-2 flex gap-2">
+            <span className="text-xs text-battleship-gray gap-2 flex">
               CDD - FURG{"   "}
               <Tooltip title={tooltipContent} trigger="click">
                 <button className="font-semibold bg-battleship-gray text-white text-xs rounded-md h-4.5 w-24">

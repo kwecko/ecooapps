@@ -60,7 +60,7 @@ export default function SelectCycle() {
   }, []);
 
   return (
-    <div className="w-full gap-10">
+    <div className="w-full flex flex-col gap-2">
       <span className="text-sm leading-[19px] text-slate-gray pl-3.5 tracking-tight-2-percent">
         Para começar, selecione o{" "}
         <Button

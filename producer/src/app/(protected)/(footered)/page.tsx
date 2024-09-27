@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)]">
       <CycleProvider>
-        <div>
+        <div className='flex flex-col gap-5'>
           <Header />
           <SelectCycle />
           <CycloInformation />
