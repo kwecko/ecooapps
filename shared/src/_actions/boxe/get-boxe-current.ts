@@ -4,17 +4,13 @@ import ApiService from "@shared/service/index";
 
 interface FetchFarmsWithOrdersRequest {
   cycle_id: string;
-  page: number;
-  name?: string;
 }
 
-export async function getBoxesWithOrders({
+export async function getBoxeCurrent({
   cycle_id,
-  page,
-  name = "",
 }: FetchFarmsWithOrdersRequest) {
   const response = ApiService.GET({
-    url: `/boxes?cycle_id=${cycle_id}&page=${page}&name=${name}`,
+    url: `/boxes/current?cycle_id=${cycle_id}`,
   });
 
   return response;

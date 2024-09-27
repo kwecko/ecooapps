@@ -1,10 +1,10 @@
 import axios, { AxiosInstance } from "axios";
 import { cookies } from "next/headers";
+import { SetTokenCookie } from "../utils/set-token-cookie"
 
 interface RequestProps {
   url: string;
   data?: any;
-  typeReturn?: any 
 }
 
 class ApiService {
@@ -13,9 +13,10 @@ class ApiService {
   constructor(){
     this.axiosInstance = axios.create({
       baseURL: `${process.env.API_URL}`,
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     })
-    this.initializeInterceptor()
+    this.initializeInterceptor();
+    this.initializeResponseInterceptor();
   }
 
   private initializeInterceptor(){
@@ -33,7 +34,30 @@ class ApiService {
     )
   }
 
-  public async POST({ url, data, typeReturn }: RequestProps) {
+  private initializeResponseInterceptor(){
+    this.axiosInstance.interceptors.response.use(
+      response => {
+        const setCookieHeader = response.headers['set-cookie'];
+
+        if(setCookieHeader){
+          const tokenCookie = setCookieHeader.find((cookie: string) =>
+            cookie.startsWith("token=")
+          );
+    
+          if (tokenCookie) {
+            SetTokenCookie(tokenCookie.split("=")[1])
+          }
+        }
+
+        return response;
+      },
+      error => {
+        return Promise.reject(error);
+      }
+    )
+  }
+
+  public async POST({ url, data }: RequestProps) {
     try {
       const response = await this.axiosInstance.post(url, data)
 

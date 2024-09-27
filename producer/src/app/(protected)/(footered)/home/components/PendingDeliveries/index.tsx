@@ -1,18 +1,23 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip, Button, notification } from "antd";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 import { PendingDeliveriesTable } from "./Table";
+import Loader from "@shared/components/Loader";
 
-interface PendingDeliveriesProps {
-  numberOfItems: number;
-}
+import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
+import { IPendingDeliveries } from "@shared/interfaces/offer";
+import { toast } from "sonner";
+import { useCycleProvider } from "@shared/context";
 
-export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
+export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[] | undefined>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { cycle } = useCycleProvider();
 
   const handleCopyAddress = () => {
     const address =
@@ -56,14 +61,52 @@ export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
     </div>
   );
 
+  useEffect(() => {
+    // IIFE
+    (async () => {
+      try {
+        setIsLoading(true);
+
+        if (!cycle) {
+          setPendingDeliveries(undefined);
+          setIsLoading(false);
+          return;
+        }
+        const response = await getBoxeCurrent({ cycle_id: cycle.id });
+        setPendingDeliveries(response.data.orders);
+      } catch {
+        toast.error('Erro desconhecido');
+      } finally {
+        setIsLoading(false);
+      }
+    })()
+  }, [cycle]);
+
+  if (isLoading) {
+    return (
+      <Loader
+        appId="PRODUCER"
+        loaderType="page"
+        className="mt-10"
+      />
+    )
+  }
+
   return (
-    <div className="w-full p-5 pt-5 pr-5 pl-5 rounded-2xl bg-white flex flex-col justify-around gap-8">
-      <div className="flex justify-between items-start pr-0 pl-1">
-        <div className="flex flex-col gap-1.5">
-          <span className="pt-0.5 text-base leading-5.5 tracking-tight">Entregas pendentes</span>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-battleship-gray">
-              CDD - FURG
+    <div
+      className={`w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
+    >
+      <div className="flex justify-between items-start">
+        <div className="flex flex-col">
+          <span className="text-theme-default">Entregas pendentes</span>
+          <div className="flex gap-2">
+            <span className="text-xs text-battleship-gray gap-2 flex">
+              CDD - FURG{"   "}
+              <Tooltip title={tooltipContent} trigger="click">
+                <button className="font-semibold bg-battleship-gray text-white text-xs rounded-md h-4.5 w-24">
+                  ver endereço
+                </button>
+              </Tooltip>
             </span>
             <Tooltip title={tooltipContent} trigger="click">
               <button className="font-semibold bg-battleship-gray text-white text-[12px] rounded-md px-2.5">
@@ -73,10 +116,10 @@ export function PendingDeliveries({ numberOfItems }: PendingDeliveriesProps) {
           </div>
         </div>
         <button>
-          <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
+          <HiOutlineInformationCircle className="text-2xl text-slate-blue" />
         </button>
       </div>
-      <PendingDeliveriesTable numberOfItems={numberOfItems} />
+      <PendingDeliveriesTable pendingDeliveries={pendingDeliveries} />
     </div>
   );
 }

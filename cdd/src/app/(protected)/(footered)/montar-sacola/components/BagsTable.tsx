@@ -53,8 +53,6 @@ export default function BagsTable({ page }: BagsProps) {
 
             handleError(messageError)
           } else if (response.data) {
-            console.log(response.data)
-
             setBags(response.data);
             return;
           }

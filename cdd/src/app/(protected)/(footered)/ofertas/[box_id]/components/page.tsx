@@ -33,7 +33,7 @@ export default function FarmOrdersTable() {
 
   useEffect(() => {
     (async () => {
-      const cycle= getFromStorage("selected-cycle");
+      const cycle = getFromStorage("selected-cycle");
 
       if (!cycle) {
         toast.error("Selecione um ciclo para receber ofertas!");

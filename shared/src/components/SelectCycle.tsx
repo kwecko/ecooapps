@@ -60,8 +60,8 @@ export default function SelectCycle() {
   }, []);
 
   return (
-    <div className="w-full font-inter">
-      <span className="text-sm leading-[19px] text-slate-gray pl-3.5 tracking-tight-2-percent font-inter">
+    <div className="w-full flex flex-col gap-2">
+      <span className="text-sm leading-[19px] text-slate-gray pl-3.5 tracking-tight-2-percent">
         Para começar, selecione o{" "}
         <Button
           className="underline underline-offset-[3px]
@@ -74,7 +74,7 @@ export default function SelectCycle() {
       </span>
       <Listbox value={cycle} onChange={handleCycleChange} by="id">
         {({ open }) => (
-          <div className="w-full relative pt-1">
+          <div className="w-full relative pt-1 mb-2">
             <Listbox.Button
               className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${open ? "flex flex-row justify-between items-center rounded-b-none bg-neutral-50 ring-2 ring-slate-gray ring-opacity-50" : ""
                 }`}
