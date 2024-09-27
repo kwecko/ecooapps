@@ -14,12 +14,13 @@ export interface BagOrder {
     created_at: Date; 
     updated_at: Date | null;
   };
-  created_at: string; 
+  created_at: string;
   updated_at: string | null;
   orders: {
     id: string;
     bag_id: string;
     status: string;
+    amount: number;
     created_at: Date; 
     updated_at: Date | null;
     offer: {
@@ -29,14 +30,14 @@ export interface BagOrder {
       price: number;
       amount: number;
       description: string | null;
-      created_at: Date; 
+      created_at: Date;
       updated_at: Date | null;
       product: {
         id: string;
         name: string;
         pricing: string;
         image: string;
-        created_at: Date; 
+        created_at: Date;
         updated_at: Date | null;
       };
     };

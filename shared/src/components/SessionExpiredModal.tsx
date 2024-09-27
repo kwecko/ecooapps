@@ -21,8 +21,8 @@ export default function SessionExpiredModal({
   const { sessionExpired, setSessionExpired } = useSessionExpiredContext()
 
   const handleClickButton = () => {
-    setSessionExpired(false)
     router.push('/api/auth/logout')
+    setSessionExpired(false)
   }
 
   return (
@@ -68,7 +68,7 @@ export default function SessionExpiredModal({
                   <button
                     style={{ backgroundColor: bgButton }}
                     type="button"
-                    className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium`}
+                    className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium focus:border-slate-gray`}
                     onClick={handleClickButton}
                   >
                     {buttonLabel}
