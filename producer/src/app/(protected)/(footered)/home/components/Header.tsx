@@ -41,7 +41,7 @@ export function Header() {
         {isLoading ? (
           <SkeletonLoader />
         ) : (
-            <span className="flex gap-1 items-center">
+            <span className="flex gap-1 items-center text-slate-gray">
               Olá, <Link href={"/alterar-cadastro"}><strong className="font-semibold hover:underline">{name}</strong></Link>
               <Link href={"/alterar-cadastro"}>
                 <HiOutlinePencilAlt size={16} />
