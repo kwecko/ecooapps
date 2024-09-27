@@ -60,7 +60,7 @@ export default function AlterarCadastro() {
     console.log(data);
 
     if (!data.password || !data.confirmPassword) {
-      toast.error("Preencha os campos obrigatórios.");
+      toast.error("Preencha os campos * obrigatórios.");
       return;
     }
 
