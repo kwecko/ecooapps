@@ -39,8 +39,8 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
     cycle_id,
     describe,
   }: offerProductData = savedOfferProductsDataString
-    ? JSON.parse(savedOfferProductsDataString)
-    : null;
+      ? JSON.parse(savedOfferProductsDataString)
+      : null;
 
   const displayValue = quantity !== "" ? `${quantity} unidades` : `${weigth} g`;
 
@@ -55,16 +55,16 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
     const product_id = id
     const amount = quantity_or_weight
     const price = priceNoFormat
-    const description = describe    
+    const description = describe
 
-    await OfferProducts({ product_id, cycle_id, amount, price, description})
+    await OfferProducts({ product_id, cycle_id, amount, price, description })
       .then((response) => {
-        if(response?.reply.message){
+        if (response?.reply.message) {
           toast.error(response?.reply.message);
           return;
         } else {
-            toast.success("Produto ofertado com sucesso.");
-            goNextClick();
+          toast.success("Produto ofertado com sucesso.");
+          goNextClick();
         }
       })
       .catch((error) => {
@@ -123,7 +123,7 @@ export default function Step4({ goNextClick, goBackClick }: FormProps) {
             onClick={onSubmit}
           >
             {isLoading ? (
-              <Loader className="w-6 h-6 border-white" />
+              <Loader className="w-6 h-6 border-white" appId="PRODUCER" loaderType="component" />
             ) : (
               <>
                 Confirmar e colocar a venda

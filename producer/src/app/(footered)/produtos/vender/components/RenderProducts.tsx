@@ -2,7 +2,6 @@
 
 import {
   GetProducts,
-  Products,
 } from "@producer/app/_actions/products/GetProducts";
 import Image, { ImageLoader } from "next/image";
 import { useRouter } from "next/navigation";
@@ -11,11 +10,12 @@ import { HiOutlineSearch } from "react-icons/hi";
 import { debounce } from "lodash";
 import Loader from "@shared/components/Loader";
 import { toast } from "sonner";
+import { ProductDTO } from "@shared/domain/dtos/product-dto";
 
 export default function RenderProducts() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>("");
-  const [products, setProducts] = useState<Products[]>([] as Products[]);
+  const [products, setProducts] = useState<ProductDTO[]>([] as ProductDTO[]);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function RenderProducts() {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchProducts = async () => {
       setIsLoading(true);
       try {
@@ -59,9 +59,9 @@ export default function RenderProducts() {
         }
       }
     };
-  
+
     fetchProducts();
-  
+
     return () => {
       isMounted = false;
     };
@@ -124,45 +124,45 @@ export default function RenderProducts() {
         <div className="grid grid-cols-2 justify-items-start gap-3 w-full mt-4 p-4">
           {Array.isArray(products) && products.length > 0
             ? products.map((product, index) => (
-                <button
-                  className="flex flex-col items-center rounded-2xl w-full h-[160px] p-2.5 bg-white"
-                  key={product.id}
-                  ref={products.length === index + 1 ? lastProductRef : null}
-                  onClick={() =>
-                    handleSelectProduct(
-                      product.id,
-                      product.name,
-                      product.pricing
-                    )
-                  }
-                >
-                  <div className="relative w-full min-w-[130px] h-[100px] rounded-[10px]">
-                    <Image
-                      className="rounded-[10px]"
-                      loader={imageLoader}
-                      src={product.image}
-                      alt={`${product.name.toLowerCase()}.jpg`}
-                      quality={256}
-                      fill={true}
-                      sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 256px"
-                      style={{ objectFit: "contain" }}
-                    />
-                  </div>
-                  <span className="pt-2.5 text-base leading-[22px] tracking-tight text-slate-gray">
-                    {product.name}
-                  </span>
-                </button>
-              ))
+              <button
+                className="flex flex-col items-center rounded-2xl w-full h-[160px] p-2.5 bg-white"
+                key={product.id}
+                ref={products.length === index + 1 ? lastProductRef : null}
+                onClick={() =>
+                  handleSelectProduct(
+                    product.id,
+                    product.name,
+                    product.pricing
+                  )
+                }
+              >
+                <div className="relative w-full min-w-[130px] h-[100px] rounded-[10px]">
+                  <Image
+                    className="rounded-[10px]"
+                    loader={imageLoader}
+                    src={product.image}
+                    alt={`${product.name.toLowerCase()}.jpg`}
+                    quality={256}
+                    fill={true}
+                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 256px"
+                    style={{ objectFit: "contain" }}
+                  />
+                </div>
+                <span className="pt-2.5 text-base leading-[22px] tracking-tight text-slate-gray">
+                  {product.name}
+                </span>
+              </button>
+            ))
             : !isLoading && (
-                <p
-                  className="text-center text-slate-gray col-span-2 w-full">
-                  Nenhum produto encontrado.
-                </p>
-              )}
+              <p
+                className="text-center text-slate-gray col-span-2 w-full">
+                Nenhum produto encontrado.
+              </p>
+            )}
         </div>
         {isLoading && (
           <div className="mt-2 flex justify-center w-full col-span-2">
-            <Loader className="w-8 h-8 border-slate-gray" />{" "}
+            <Loader className="w-8 h-8 border-slate-gray" appId="PRODUCER" loaderType="component" />{" "}
           </div>
         )}
       </div>
