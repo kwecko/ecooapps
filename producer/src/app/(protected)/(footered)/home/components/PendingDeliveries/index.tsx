@@ -73,7 +73,9 @@ export function PendingDeliveries() {
           return;
         }
         const response = await getBoxeCurrent({ cycle_id: cycle.id });
-        setPendingDeliveries(response.data.orders);
+        if (!response.message) {
+          setPendingDeliveries(response.data.orders);
+        }
       } catch {
         toast.error('Erro desconhecido');
       } finally {
