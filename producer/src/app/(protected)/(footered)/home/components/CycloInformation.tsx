@@ -1,6 +1,6 @@
 "use client";
 
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 import Button from "@shared/components/Button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

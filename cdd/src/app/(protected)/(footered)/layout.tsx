@@ -1,4 +1,7 @@
+"use client"
+
 import Footer from "@shared/components/Footer";
+import { CycleProvider } from "@shared/context/cycle";
 
 const HAS_PREVIOUS_PAGE = {
   "/": false,
@@ -58,18 +61,20 @@ export default function LayoutWithFooter({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col justify-between w-full bg-theme-background h-[100vh]">
-      <div className="h-[var(--min-page-height)] overflow-y-auto">
-        {children}
+    <CycleProvider>
+      <div className="flex flex-col justify-between w-full bg-theme-background h-[100vh]">
+        <div className="h-[var(--min-page-height)] overflow-y-auto">
+          {children}
+        </div>
+        <div className="h-[var(--footer-height)]">
+          <Footer
+            hasPreviousPagePaths={HAS_PREVIOUS_PAGE}
+            hasHelpButtonPaths={HAS_HELP_BUTTON}
+            bgColor={"#4F4743"}
+            returnUrls={RETURN_URLS}
+          />
+        </div>
       </div>
-      <div className="h-[var(--footer-height)]">
-        <Footer
-          hasPreviousPagePaths={HAS_PREVIOUS_PAGE}
-          hasHelpButtonPaths={HAS_HELP_BUTTON}
-          bgColor={"#4F4743"}
-          returnUrls={RETURN_URLS}
-        />
-      </div>
-    </div>
+    </CycleProvider>
   );
 }
