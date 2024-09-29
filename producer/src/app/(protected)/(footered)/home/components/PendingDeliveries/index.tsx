@@ -11,7 +11,7 @@ import Loader from "@shared/components/Loader";
 import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -88,7 +88,7 @@ export function PendingDeliveries() {
     return (
       <Loader
         appId="PRODUCER"
-        loaderType="page"
+        loaderType="component"
         className="mt-10"
       />
     )

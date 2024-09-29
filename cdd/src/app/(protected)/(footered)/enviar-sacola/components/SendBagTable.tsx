@@ -96,15 +96,15 @@ export default function SendBagTable({ page }: BagsProps) {
         </div>
       </div>
       {isLoading ? (
-        <Loader 
-          className="mt-3" 
+        <Loader
+          className="mt-3"
           appId="CDD"
           loaderType="component"
         />
       ) : !isLoading && bags.length === 0 ? (
         <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
           <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center">Nenhuma sacola < br/> encontrada!</span>
+          <span className="text-center w-52">Nenhuma sacola encontrada!</span>
         </div>
       ) : (
         <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
