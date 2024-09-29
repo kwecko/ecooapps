@@ -23,8 +23,8 @@ export function Header() {
 
           handleError(messageError)
         } else if (response.data) {
-          const { first_name, last_name } = response.data;
-          setName(`${first_name} ${last_name}`);
+          const { first_name } = response.data;
+          setName(first_name);
           setIsLoading(false)
         }
       })
@@ -41,7 +41,7 @@ export function Header() {
           <SkeletonLoader />
         ) : (
           <span className="text-slate-gray">
-            Olá, <strong className="font-semibold underline underline-offset-2">{name}!</strong>
+            Olá, <strong className="font-semibold">{name}!</strong>
           </span>
         )}
       </div>
