@@ -1,41 +1,36 @@
 "use client";
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa6";
-import { getCyclesAction } from "../_actions/cycles";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Button from "./Button";
-import { useCycleProvider } from "../context";
-
-export interface CycleData {
-  id: string;
-  alias: string;
-  offer: number[];
-  order: number[];
-  deliver: number[];
-  created_at: Date;
-  updated_at: Date | null
-}
+import { useCycleProvider } from "../context/cycle/index";
+import { getCycles } from "../_actions/cycles/get-cycles"
+import { useHandleError } from "../hooks/useHandleError"
+import { useLocalStorage } from "../hooks/useLocalStorage"
+import { CycleData } from "../interfaces/cycle-data";
 
 export default function SelectCycle() {
   const [cycles, setCycles] = useState<CycleData[] | undefined>();
   const { cycle, setCycle } = useCycleProvider();
 
   const router = useRouter();
+  const { handleError } = useHandleError()
+  const { getFromStorage, setInStorage } = useLocalStorage()
 
   const handleCycleChange = (newCycle: CycleData) => {
     setCycle(newCycle);
 
-    localStorage.setItem("selected-cycle", JSON.stringify(newCycle));
+    setInStorage("selected-cycle", newCycle)
   };
 
   const handleClickButton = () => {
-    const cycleDataString = localStorage.getItem("selected-cycle") as string;
+    const cycle = getFromStorage("selected-cycle")
 
-    if (!cycleDataString) {
+    if (!cycle) {
       toast.warning("Selecione um ciclo para ver mais informações sobre ele!");
       return;
     }
@@ -45,22 +40,30 @@ export default function SelectCycle() {
 
   useEffect(() => {
     (async () => {
-      const getCycles = await getCyclesAction({});
+      
+      getCycles()
+        .then((response) => {
+          if(response.message){
+            const messageError = response.message as string;
+            handleError(messageError);
+          } else {
+            setCycles(response.data)
+          }
+        })
+        .catch(() => {
+          toast.error("Erro ao buscar os ciclos.")
+        })
 
-      if (getCycles) {
-        setCycles(getCycles);
-      }
+      const savedCycle = getFromStorage("selected-cycle")
 
-      const savedCycle = localStorage.getItem("selected-cycle");
       if (savedCycle) {
-        const cycleData: CycleData = JSON.parse(savedCycle);
-        setCycle(cycleData);
+        setCycle(savedCycle);
       }
     })();
   }, []);
 
   return (
-    <div className="w-full gap-10">
+    <div className="w-full flex flex-col gap-2">
       <span className="text-sm leading-[19px] text-slate-gray pl-3.5 tracking-tight-2-percent">
         Para começar, selecione o{" "}
         <Button
@@ -74,7 +77,7 @@ export default function SelectCycle() {
       </span>
       <Listbox value={cycle} onChange={handleCycleChange} by="id">
         {({ open }) => (
-          <div className="w-full relative pt-1 mb-2">
+          <div className="w-full relative pt-1">
             <Listbox.Button
               className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${open ? "flex flex-row justify-between items-center rounded-b-none bg-neutral-50 ring-2 ring-slate-gray ring-opacity-50" : ""
                 }`}

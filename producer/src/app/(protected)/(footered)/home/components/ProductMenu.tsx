@@ -1,15 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { HiOutlineInformationCircle } from "react-icons/hi";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
+import { toast } from "sonner";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 import { isUnderConstruction } from "@shared/next/library/is-under-construction";
 import Button from "@shared/components/Button";
 import Card from "@shared/components/Card";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 
 export function ProductMenu() {
   const router = useRouter();
@@ -33,14 +34,12 @@ export function ProductMenu() {
   }, [cycle]);
 
   const handleClickOfferProductButton = () => {
-    const cycle_idString = localStorage.getItem("selected-cycle") as string;
-
-    if (!cycle_idString) {
+    if(!cycle){
       toast.warning("Selecione um ciclo para começar uma oferta!");
       return;
     }
 
-    const { id } = JSON.parse(cycle_idString);
+    const { id } = cycle
 
     localStorage.setItem(
       "offer-products-data",
@@ -53,9 +52,9 @@ export function ProductMenu() {
   };
 
   return (
-    <Card className="gap-3.5 font-poppins p-5 pt-5 pr-5 pl-5 w-full">
+    <Card className="gap-3.5 p-5 w-full">
       <div className="flex justify-between gap-2 items-start pr-0 pl-1">
-        <span className="pt-1 font-normal text-base leading-5.5 tracking-tight">
+        <span className="font-normal text-base leading-5.5 tracking-tight">
           Ofereça os seus produtos clicando no botão abaixo
         </span>
         <button>

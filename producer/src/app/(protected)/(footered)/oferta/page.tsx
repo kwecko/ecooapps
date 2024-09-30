@@ -1,15 +1,20 @@
 import PageHeader from "./components/PageHeader";
+import AddProductButton from "./components/AddProductButton";
 import OfferListHeading from "./components/OfferListHeading";
 import OffersList from "./components/OffersList";
+import { ModelPage } from "@shared/components/ModelPage";
 
 export default function Home() {
   return (
-    <div className="flex flex-col h-[inherit] bg-theme-background px-5 justify-start w-full overflow-y-hidden">
-      <PageHeader />
-      <div className="max-h-[calc(var(--min-page-height)-13.3rem)] w-full flex flex-col items-center px-.5">
-        <OfferListHeading title="Ofertas Atuais" />
+    <ModelPage
+      title="Sua oferta"
+      titleGap="gap-0.5"
+      subtitle="Adicione produtos à sua oferta"
+    >
+      <div className="w-full overflow-y-auto flex flex-col pt-2">
+        <AddProductButton />
         <OffersList />
       </div>
-    </div>
+    </ModelPage>
   );
 }

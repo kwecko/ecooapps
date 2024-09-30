@@ -1,6 +1,6 @@
 "use client";
 
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 import Button from "@shared/components/Button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -38,7 +38,7 @@ export default function CycloInformation() {
   }, [cycle]);
 
   return (
-    <div className="font-poppins w-full rounded-2xl bg-white text-theme-default py-5 pl-6 pr-5 tracking-tight leading-5.5 text-base flex flex-row justify-between items-start gap-2 mb-2">
+    <div className="w-full rounded-2xl bg-white text-theme-default p-5 tracking-tight leading-5.5 text-base flex flex-row justify-between items-start gap-2">
       {cycle ? (
         <p>
           É hora de:{" "}

@@ -11,7 +11,7 @@ import Loader from "@shared/components/Loader";
 import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -73,7 +73,9 @@ export function PendingDeliveries() {
           return;
         }
         const response = await getBoxeCurrent({ cycle_id: cycle.id });
-        setPendingDeliveries(response.data.orders);
+        if (!response.message) {
+          setPendingDeliveries(response.data.orders);
+        }
       } catch {
         toast.error('Erro desconhecido');
       } finally {
@@ -86,7 +88,7 @@ export function PendingDeliveries() {
     return (
       <Loader
         appId="PRODUCER"
-        loaderType="page"
+        loaderType="component"
         className="mt-10"
       />
     )
@@ -94,13 +96,13 @@ export function PendingDeliveries() {
 
   return (
     <div
-      className={`mt-5 w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
+      className={`w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
     >
       <div className="flex justify-between items-start">
         <div className="flex flex-col">
           <span className="text-theme-default">Entregas pendentes</span>
           <div className="flex gap-2">
-            <span className="text-xs text-battleship-gray gap-2 flex gap-2">
+            <span className="text-xs text-battleship-gray gap-2 flex">
               CDD - FURG{"   "}
               <Tooltip title={tooltipContent} trigger="click">
                 <button className="font-semibold bg-battleship-gray text-white text-xs rounded-md h-4.5 w-24">

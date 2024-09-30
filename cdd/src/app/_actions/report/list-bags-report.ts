@@ -9,8 +9,6 @@ export async function ListBagsReport(cycle_id: string) {
     return "Erro";
   }
 
-  console.log(token);
-
   try {
     const response = await fetch(`${process.env.API_URL}/bags/report/${cycle_id}`, {
       method: 'GET',
@@ -21,18 +19,15 @@ export async function ListBagsReport(cycle_id: string) {
       }
     });
 
+    
     if (!response.ok) {
-      throw new Error("Erro ao gerar o relatório.");
+      return response.json()
     }
 
     const data = await response.arrayBuffer();
 
-    console.log(data);
-
     return data;
   } catch (error) {
-    console.log(error);
-
-    throw new Error("Erro ao gerar o relatório.");
+    console.log(error)
   }
 }

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
 import Table from "../../components/table";
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
-import { getBoxOrders } from "@shared/_actions/box/get-box-orders";
+import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import Modal from "@shared/components/Modal";

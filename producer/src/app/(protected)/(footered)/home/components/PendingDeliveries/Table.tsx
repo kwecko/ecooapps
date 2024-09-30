@@ -18,8 +18,8 @@ export function PendingDeliveriesTable({ pendingDeliveries }: IPendingDeliveries
   if (pendingDeliveries?.length === 0 || !pendingDeliveries) {
     return (
       <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
-        <FaBoxOpen className="text-walnut-brown" size={64} />
-        <span className="text-center">Não há entregas <br /> pendentes!</span>
+        <FaBoxOpen className="text-slate-gray" size={64} />
+        <span className="text-center w-1/2">Não há entregas pendentes!</span>
       </div>
     )
   }

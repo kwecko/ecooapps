@@ -10,6 +10,9 @@ import Loader from "@shared/components/Loader";
 import { toast } from "sonner";
 import { ProductDTO } from "@shared/domain/dtos/product-dto";
 import { useHandleError } from "@shared/hooks/useHandleError";
+import { ModelPage } from "@shared/components/ModelPage";
+
+import pageSettings from "./page-settings";
 
 
 export interface RenderProductsProps {
@@ -25,6 +28,9 @@ export default function RenderProducts({
   setPricing,
   handleNextStep,
 }: RenderProductsProps) {
+
+  const { title, subtitle } = pageSettings.productSelection;
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>("");
   const [products, setProducts] = useState<ProductDTO[]>([]);
@@ -32,7 +38,7 @@ export default function RenderProducts({
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const observer = useRef<IntersectionObserver | null>(null);
-  const { handleError } = useHandleError()
+  const { handleError } = useHandleError();
 
   const debouncedSetQuery = useRef(
     debounce((value: string) => {
@@ -63,19 +69,21 @@ export default function RenderProducts({
       setIsLoading(true);
 
       await listProducts({
-        product:
-          query, page: page
+        product: query,
+        page: page,
       })
         .then((response) => {
           if (response.message) {
-            handleError(response.message as string)
+            handleError(response.message as string);
           } else if (response.data) {
             if (!isCancelled) {
               const fetchedProducts: ProductDTO[] = response.data;
 
               setProducts((prevProducts) => {
                 const allProducts =
-                  page === 1 ? fetchedProducts : [...prevProducts, ...fetchedProducts];
+                  page === 1
+                    ? fetchedProducts
+                    : [...prevProducts, ...fetchedProducts];
                 const uniqueProducts = Array.from(
                   new Map(allProducts.map((item) => [item.id, item])).values()
                 );
@@ -83,16 +91,17 @@ export default function RenderProducts({
               });
             }
           }
-        }).catch(() => {
+        })
+        .catch(() => {
           if (!isCancelled) {
             toast.error("Erro desconhecido.");
           }
-        }).finally(() => {
+        })
+        .finally(() => {
           if (!isCancelled) {
             setIsLoading(false);
           }
-        }
-        );
+        });
     };
     fetchProducts();
 
@@ -126,73 +135,84 @@ export default function RenderProducts({
   );
 
   return (
-    <div className="w-full h-full pt-8">
-      <div className="relative w-full h-12">
-        <form>
-          <input
-            onChange={handleChangeInput}
-            ref={inputRef}
-            className="border border-french-gray rounded-md h-12 p-4 pr-10 text-base inter-font w-full"
-            type="text"
-          />
-          <button type="submit">
-            <HiOutlineSearch
-              className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
-              size={24}
+    <ModelPage
+      title={title}
+      titleGap="gap-2"
+      subtitle={subtitle}
+    >
+      <div className="w-full overflow-y-hidden flex flex-col pt-2">
+        <div className="relative w-full h-12">
+          <form>
+            <input
+              onChange={handleChangeInput}
+              ref={inputRef}
+              className="border border-french-gray rounded-md h-12 p-4 pr-10 text-base inter-font w-full"
+              type="text"
             />
-          </button>
-        </form>
-      </div>
-      <div className="w-full flex flex-col justify-between h-[calc(100%-3rem)]">
-        <div className="grid grid-cols-2 gap-x-0 justify-start items-start gap-y-3 w-full mt-4 snap-y snap-mandatory overflow-y-auto">
-          {Array.isArray(products) && products.length > 0 ? (
-            products.map((product, index) => (
-              <button
-                className="snap-start flex flex-col items-center rounded-2xl h-[160px] w-[150px] bg-white"
-                key={product.id}
-                ref={products.length === index + 1 ? lastProductRef : null}
-                onClick={() => handleSelectProduct(product)}
-              >
-                <div className="relative w-full h-full">
-                  <Image
-                    className="rounded-t-2xl"
-                    loader={imageLoader}
-                    src={product.image}
-                    alt={`${product.name.toLowerCase()}.jpg`}
-                    quality={256}
-                    fill={true}
-                    sizes="(max-width: 640px) 100vw, (max-width: 768px) 100vw, (max-width: 1024px) 100vw, 256px"
-                    style={{ objectFit: "cover" }}
-                  />
-                  <div className="absolute bottom-0 left-0 right-0 m-auto
-                   w-[50px] h-[20px] bg-slate-gray rounded-t-[10px] flex justify-center items-center">
-                    <span className="text-white text-[11px] leading-[14px] tracking-tight h-5 flex items-center">
-                      {product.pricing === "WEIGHT" ? "kg" : "unid."}
-                    </span>
-                  </div>
-                </div>
-                <div className="flex justify-center items-stretch w-full h-[40px] border-t border-[#F6F6F6]">
-                  <span className="flex justify-center items-center w-full
-                  text-[12px] leading-[16px] tracking-tight text-slate-gray h-[inherit]">
-                    {product.name}
-                  </span>
-                </div>
-              </button>
-            ))
-          ) : (
-            !isLoading && (
-              <p className="text-center text-slate-gray col-span-2 w-full">
-                Nenhum produto encontrado.
-              </p>
-            )
+            <button type="submit">
+              <HiOutlineSearch
+                className="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500 cursor-pointer"
+                size={24}
+              />
+            </button>
+          </form>
+        </div>
+        <div className="w-full flex flex-col justify-between h-[calc(100%-3rem)] pt-4">
+          <div className="grid grid-cols-2 gap-3 justify-start items-start w-full snap-y snap-mandatory overflow-y-auto">
+            {Array.isArray(products) && products.length > 0
+              ? products.map((product, index) => (
+                  <button
+                    className="snap-start flex flex-col justify-between items-center rounded-2xl w-full bg-white aspect-square row-span-1 col-span-1"
+                    key={product.id}
+                    ref={products.length === index + 1 ? lastProductRef : null}
+                    onClick={() => handleSelectProduct(product)}
+                  >
+                    <div className="relative aspect-square w-full h-3/4">
+                      <Image
+                        className="rounded-t-2xl aspect-square"
+                        loader={imageLoader}
+                        src={product.image}
+                        alt={`${product.name.toLowerCase()}.jpg`}
+                        quality={256}
+                        fill={true}
+                        style={{ objectFit: "cover" }}
+                      />
+                      <div
+                        className="absolute bottom-0 left-0 right-0 m-auto
+                   w-[50px] h-[20px] bg-slate-gray rounded-t-[10px] flex justify-center items-center"
+                      >
+                        <span className="text-white text-[11px] leading-[14px] tracking-tight h-5 flex items-center">
+                          {product.pricing === "WEIGHT" ? "kg" : "unid."}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex justify-center items-stretch w-full border-t border-[#F6F6F6] h-1/4">
+                      <span
+                        className="flex justify-center items-center w-full
+                  text-[12px] leading-[16px] tracking-tight text-slate-gray"
+                      >
+                        {product.name}
+                      </span>
+                    </div>
+                  </button>
+                ))
+              : !isLoading && (
+                  <p className="text-center text-slate-gray col-span-2 w-full">
+                    Nenhum produto encontrado.
+                  </p>
+                )}
+          </div>
+          {isLoading && (
+            <div className="mt-2 flex justify-center w-full col-span-2">
+              <Loader
+                className="mt-3"
+                appId="PRODUCER"
+                loaderType="component"
+              />
+            </div>
           )}
         </div>
-        {isLoading && (
-          <div className="mt-2 flex justify-center w-full col-span-2">
-            <Loader className="mt-3" appId="PRODUCER" loaderType="component" />
-          </div>
-        )}
       </div>
-    </div>
+    </ModelPage>
   );
 }

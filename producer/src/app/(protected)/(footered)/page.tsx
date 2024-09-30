@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react';
-import { CycleProvider } from "@shared/context";
 import CycloInformation from "./home/components/CycloInformation";
 import { Header } from "./home/components/Header";
 import { PendingDeliveries } from "./home/components/PendingDeliveries";
@@ -12,15 +11,13 @@ export default function Home() {
 
   return (
     <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)]">
-      <CycleProvider>
-        <div>
-          <Header />
-          <SelectCycle />
-          <CycloInformation />
-          <ProductMenu />
-          <PendingDeliveries />
-        </div>
-      </CycleProvider>
+      <div className='flex flex-col gap-5'>
+        <Header />
+        <SelectCycle />
+        <CycloInformation />
+        <ProductMenu />
+        <PendingDeliveries />
+      </div>
     </div>
   );
 }

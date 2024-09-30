@@ -11,9 +11,9 @@ import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto"
 import { CatalogDTO } from "@shared/domain/dtos/catalog-dto";
 import { useRouter } from "next/navigation";
 import { fetchLastCatalog } from "@producer/app/_actions/catalogs/fetch-last-catalog";
+import OfferListHeading from "./OfferListHeading";
 
-interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
-}
+interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function OffersList({ ...rest }: OffersListProps) {
   const [offers, setOffers] = useState<OfferWithProductDTO[] | []>([]);
@@ -23,7 +23,10 @@ export default function OffersList({ ...rest }: OffersListProps) {
 
   const LocalStorage = useLocalStorage();
 
-  const cycle = useMemo(() => LocalStorage.getFromStorage("selected-cycle"), []);
+  const cycle = useMemo(
+    () => LocalStorage.getFromStorage("selected-cycle"),
+    []
+  );
 
   useEffect(() => {
     if (!cycle) {
@@ -64,31 +67,37 @@ export default function OffersList({ ...rest }: OffersListProps) {
   const onDeleteCard = (offerId: string) => {
     const newOffers = offers?.filter((offer) => offer.id !== offerId);
     setOffers(newOffers);
-  }
+  };
 
   return (
-    <div className=
-      {twMerge(`flex flex-col gap-2 w-full m-0 overflow-y-auto`, rest.className)}>
+    <>
       {isLoading ? (
         <div className="w-full h-20 flex items-center justify-center">
-          <Loader
-            appId="PRODUCER"
-            loaderType="component"
-          />
+          <Loader appId="PRODUCER" loaderType="component" />
         </div>
-      ) : (
-        offers.length > 0 ? (
-          <div className="m-0 w-full rounded-2xl p-2.5 overflow-y-scroll snap-y snap-mandatory flex flex-col gap-3.5">
+      ) : offers.length > 0 ? (
+        <div className="shrink-1 h-[inherit] w-full overflow-y-auto flex flex-col items-start gap-3 pt-3">
+          <OfferListHeading title="Ofertas Atuais" />
+          <div className="w-full rounded-2xl p-2.5 overflow-y-scroll snap-y snap-mandatory flex flex-col gap-3.5">
             {offers.map((offer) => (
-              <OfferCard key={offer.id} offer={offer} onDeleteCard={onDeleteCard} />
+              <OfferCard
+                key={offer.id}
+                offer={offer}
+                onDeleteCard={onDeleteCard}
+              />
             ))}
           </div>
-        ) : (
-          <div className="m-0 w-full rounded-2xl p-2.5">
-            <p className="w-full px-10
-            text-center text-sm text-gray-500">Nenhuma oferta encontrada! Faça uma nova oferta.</p>
-          </div>
-        ))}
-    </div>
+        </div>
+      ) : (
+        <div className="m-0 w-full rounded-2xl p-2.5">
+          <p
+            className="w-full px-10
+            text-center text-sm text-gray-500"
+          >
+            Nenhuma oferta encontrada! Faça uma nova oferta.
+          </p>
+        </div>
+      )}
+    </>
   );
 }
