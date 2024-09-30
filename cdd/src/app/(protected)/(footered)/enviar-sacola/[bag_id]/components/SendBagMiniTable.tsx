@@ -110,7 +110,7 @@ export default function SendBagMiniTable() {
                   {bagOrder?.orders.map(order => (
                     <div key={order.id} className="flex flex-col mb-5">
                       {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
-                      <span className="text-sm font-bold text-gray-500">{`(${order.offer.catalog.farm.name})`}</span>
+                      <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
                     </div>
                   ))}
                 </div>
