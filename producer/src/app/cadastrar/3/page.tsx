@@ -8,7 +8,7 @@ export default function RegisterStep3() {
   const handleConfirmation = () => {
     localStorage.setItem("register-form-step", JSON.stringify(4));
 
-    router.push("/cadastrar/4");
+    router.push("/login");
   };
 
   return (

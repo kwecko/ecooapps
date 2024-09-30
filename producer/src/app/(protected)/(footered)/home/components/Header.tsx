@@ -5,7 +5,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { HiOutlineBell } from "react-icons/hi";
+import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
 import { toast } from "sonner";
 
 
@@ -25,7 +25,7 @@ export function Header() {
             handleError(messageError)
           } else if (response.data) {
             const { first_name, last_name } = response.data;
-            setName(first_name);
+            setName(`${first_name} ${last_name}`);
             setIsLoading(false)
           }
         })
@@ -41,8 +41,11 @@ export function Header() {
         {isLoading ? (
           <SkeletonLoader />
         ) : (
-          <span className="text-slate-gray">
-            Olá, <strong className="font-semibold underline underline-offset-2">{name}!</strong>
+          <span className="flex gap-1 items-center text-slate-gray">
+            Olá, <Link href={"/alterar-cadastro"}><strong className="font-semibold underline underline-offset-2">{name}</strong></Link>
+            <Link href={"/alterar-cadastro"}>
+              <HiOutlinePencilAlt size={16} />
+            </Link>
           </span>
         )}
       </div>

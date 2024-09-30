@@ -41,7 +41,7 @@ export function Header() {
           <SkeletonLoader />
         ) : (
           <span className="text-slate-gray">
-            Olá, <strong className="font-semibold">{name}!</strong>
+            Olá, <strong className="font-semibold">{name}</strong>
           </span>
         )}
       </div>
