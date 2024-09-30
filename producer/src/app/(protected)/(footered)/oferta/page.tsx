@@ -9,7 +9,7 @@ export default function Home() {
     <ModelPage
       title="Sua oferta"
       titleGap="gap-0.5"
-      subtitle="Adicione produtos à sua oferta"
+      subtitle="Adicione produtos a sua oferta"
     >
       <div className="w-full overflow-y-auto flex flex-col pt-2">
         <AddProductButton />

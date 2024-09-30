@@ -158,31 +158,35 @@ export default function FarmOrdersTable() {
 
       <Table headers={headers} info={info} />
 
-      <div className="w-full h-[10%] flex gap-2 justify-center items-end mt-4">
-        <Modal
-          titleContentModal="Você tem certeza?"
-          contentModal="Após rejeitar a entrega essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
-          titleCloseModal="Cancelar"
-          titleConfirmModal="Rejeitar"
-          titleOpenModal="Rejeitar"
-          bgOpenModal="#FF7070"
-          bgConfirmModal="#FF7070"
-          bgCloseModal="#EEF1F4"
-          modalAction={cancelBox}
-        />
+      {
+        !!farmOrders.orders.length && (
+          <div className="w-full h-[10%] flex gap-2 justify-center items-end mt-4">
+            <Modal
+              titleContentModal="Você tem certeza?"
+              contentModal="Após rejeitar a entrega essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
+              titleCloseModal="Cancelar"
+              titleConfirmModal="Rejeitar"
+              titleOpenModal="Rejeitar"
+              bgOpenModal="#FF7070"
+              bgConfirmModal="#FF7070"
+              bgCloseModal="#EEF1F4"
+              modalAction={cancelBox}
+            />
 
-        <Modal
-          titleContentModal="Você tem certeza?"
-          contentModal="Após aprovar a oferta essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
-          titleCloseModal="Cancelar"
-          titleConfirmModal="Aprovar"
-          titleOpenModal="Aprovar"
-          bgOpenModal="#00735E"
-          bgConfirmModal="#00735E"
-          bgCloseModal="#EEF1F4"
-          modalAction={approveBox}
-        />
-      </div>
+            <Modal
+              titleContentModal="Você tem certeza?"
+              contentModal="Após aprovar a oferta essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
+              titleCloseModal="Cancelar"
+              titleConfirmModal="Aprovar"
+              titleOpenModal="Aprovar"
+              bgOpenModal="#00735E"
+              bgConfirmModal="#00735E"
+              bgCloseModal="#EEF1F4"
+              modalAction={approveBox}
+            />
+          </div>
+        )
+      }
     </div>
   );
 }

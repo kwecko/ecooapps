@@ -116,7 +116,7 @@ export default function Modal({
                     <button
                       style={{ backgroundColor: bgConfirmModal }}
                       type="button"
-                      className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium`}
+                      className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium focusable-button`}
                       onClick={handleActionModal}
                     >
                       {titleConfirmModal}

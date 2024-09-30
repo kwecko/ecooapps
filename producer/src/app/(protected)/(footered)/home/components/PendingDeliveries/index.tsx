@@ -11,7 +11,7 @@ import Loader from "@shared/components/Loader";
 import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -73,7 +73,17 @@ export function PendingDeliveries() {
           return;
         }
         const response = await getBoxeCurrent({ cycle_id: cycle.id });
-        setPendingDeliveries(response.data.orders);
+
+        if (response.message) {
+          toast.error(response.message);
+          return;
+        }
+
+        const data: IPendingDeliveries[] = response.data.orders
+
+        const ordersFiltered = data.filter(item => item.status === 'PENDING');
+
+        setPendingDeliveries(ordersFiltered);
       } catch {
         toast.error('Erro desconhecido');
       } finally {
@@ -86,7 +96,7 @@ export function PendingDeliveries() {
     return (
       <Loader
         appId="PRODUCER"
-        loaderType="page"
+        loaderType="component"
         className="mt-10"
       />
     )

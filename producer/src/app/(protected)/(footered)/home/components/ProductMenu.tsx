@@ -10,7 +10,7 @@ import { HiOutlineInformationCircle } from "react-icons/hi";
 import { isUnderConstruction } from "@shared/next/library/is-under-construction";
 import Button from "@shared/components/Button";
 import Card from "@shared/components/Card";
-import { useCycleProvider } from "@shared/context";
+import { useCycleProvider } from "@shared/context/cycle";
 
 export function ProductMenu() {
   const router = useRouter();
@@ -34,14 +34,12 @@ export function ProductMenu() {
   }, [cycle]);
 
   const handleClickOfferProductButton = () => {
-    const cycle_idString = localStorage.getItem("selected-cycle") as string;
-
-    if (!cycle_idString) {
+    if(!cycle){
       toast.warning("Selecione um ciclo para começar uma oferta!");
       return;
     }
 
-    const { id } = JSON.parse(cycle_idString);
+    const { id } = cycle
 
     localStorage.setItem(
       "offer-products-data",

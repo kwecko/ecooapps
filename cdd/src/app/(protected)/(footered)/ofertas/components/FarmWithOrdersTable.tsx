@@ -16,7 +16,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
-import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
 interface FarmsProps {
@@ -81,7 +81,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         return;
       }
 
-      const { id } = cycle
+      const { id } = cycle;
 
       getBoxesWithOrders({
         cycle_id: id,
@@ -138,13 +138,13 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
   const info =
     farmsFiltered.length > 0
       ? farmsFiltered.map((farm) => ({
-        id: farm.id,
-        data: [
-          { detail: getNextSaturdayDate() }, // Prazo
-          { detail: farm.catalog.farm.name }, // Produtor
-          { detail: getStatus(farm.status) }, // Status
-        ],
-      }))
+          id: farm.id,
+          data: [
+            { detail: getNextSaturdayDate() }, // Prazo
+            { detail: farm.catalog.farm.name }, // Produtor
+            { detail: getStatus(farm.status) }, // Status
+          ],
+        }))
       : [];
 
   return (
@@ -160,20 +160,16 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         />
       </div>
 
-      {isLoading && (
+      {isLoading ? (
         <div className="flex justify-center mt-3">
           <Loader className="mt-3" appId="CDD" loaderType="component" />
         </div>
-      )}
-
-      {farmsFiltered.length === 0 && (
+      ) : farmsFiltered.length === 0 ? (
         <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
           <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center">Nenhum pedido encontrado!</span>
+          <span className="text-center w-52">Nenhum pedido encontrado!</span>
         </div>
-      )}
-
-      {farmsFiltered.length > 0 && (
+      ) : (
         <Table headers={headers} info={info} onRowClick={handleClick} />
       )}
     </div>

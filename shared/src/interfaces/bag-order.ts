@@ -32,6 +32,31 @@ export interface BagOrder {
       description: string | null;
       created_at: Date;
       updated_at: Date | null;
+      catalog: {
+        id: string;
+        cycle_id: string;
+        farm: {
+          id: string;
+          name: string;
+          caf: string;
+          active: boolean;
+          tax: number;
+          admin: {
+            id: string;
+            first_name: string;
+            last_name: string;
+            cpf: string;
+            email: string;
+            phone: string;
+            created_at: Date;
+            updated_at: Date | null;
+          };
+          created_at: Date;
+          updated_at: Date | null;
+        };
+        created_at: Date;
+        updated_at: Date | null;
+      };
       product: {
         id: string;
         name: string;

@@ -1,16 +1,15 @@
 "use client";
 
-import SelectCycle from "@cdd/components/SelectCycle";
-
 import { Header } from "./home/components/Header";
 import CardComponent from "./home/components/CardComponent";
 import { contentLinksHomePage } from "./home/data";
+import SelectCycle from "@shared/components/SelectCycle"
 
 export default function Cdd() {
   return (
     <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)]">
-      <Header />
-      <div>
+      <div className="flex flex-col gap-5">
+        <Header />
         <SelectCycle />
         {contentLinksHomePage.map((content) => {
           return (
