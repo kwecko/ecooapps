@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import { fetchLastCatalog } from "@producer/app/_actions/catalogs/fetch-last-catalog";
 import OfferListHeading from "./OfferListHeading";
 
-interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export default function OffersList({ ...rest }: OffersListProps) {
   const [offers, setOffers] = useState<OfferWithProductDTO[] | []>([]);
