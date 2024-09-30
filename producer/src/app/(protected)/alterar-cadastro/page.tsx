@@ -113,14 +113,14 @@ export default function AlterarCadastro() {
               <Input
                 register={{...register("password")}}
                 placeholder="Digite sua senha"
-                label="Nova senha *"
+                label="Nova senha"
                 icon={<AiOutlineEye />}
                 type="password"
               />
               <Input
                 register={{...register("confirmPassword")}}
                 placeholder="Confirme sua senha"
-                label="Confirmar senha *"
+                label="Confirmar senha"
                 icon={<AiOutlineEye />}
                 type="password"
               />
