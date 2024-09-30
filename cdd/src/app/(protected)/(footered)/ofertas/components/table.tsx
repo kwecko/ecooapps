@@ -1,6 +1,8 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
+import EmptyBoxInformation from '@shared/components/EmptyBoxInformation'
+
 const styles = {
   itemHeader:
     "truncate text-battleship-gray font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
@@ -17,6 +19,13 @@ interface ITableProps {
 }
 
 const Table = ({ headers, info, onRowClick }: ITableProps) => {
+
+  if (!info.length) {
+    return (
+      <EmptyBoxInformation style="m-auto">Nenhuma Caixa Encontrada!</EmptyBoxInformation>
+    )
+  }
+
   return (
     <table className="bg-white text-theme-primary leading-7 w-full table-fixed rounded-lg mt-3 mb-auto">
       <thead className="w-full">
