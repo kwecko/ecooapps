@@ -6,8 +6,6 @@ import Link from "next/link";
 import { AiOutlineEye } from "react-icons/ai";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { getUser } from "@shared/_actions/account/get-user";
