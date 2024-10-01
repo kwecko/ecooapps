@@ -7,7 +7,6 @@ import {
 
 import { registerAgribusiness } from "./register-agribusiness/handler";
 import { createAccount } from "./account/create-account/handler";
-import { getCycles } from "./cycles/handler";
 import { searchOfferingFarms } from "./offers/search-offering-farms/handler";
 import { listFarmsWithOrders } from "./orders/list-farms-with-orders/handler";
 import { listFarmOrders } from "./orders/list-farm-orders/handler";
@@ -22,7 +21,6 @@ export type ActionHandler<T, U> = ActionHandlerWithoutCases<
 export const ACTIONS = registerActions({
   handlers: {
     "create-account": createAccount,
-    "get-cycles": getCycles,
     "register-agribusiness": registerAgribusiness,
     "search-offering-farms": searchOfferingFarms,
     "list-farms-with-orders": listFarmsWithOrders,

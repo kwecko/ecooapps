@@ -55,12 +55,13 @@ export default function Home() {
           {reportaButtonData.map((data) => {
             return (
               <ButtonV2
-              variant="default"
-              onClick={() => handleClickButtonReport(data.onClick)}
-              disabled={data.disabled}
-            >
-              {data.name}
-            </ButtonV2>
+                key={data.name}
+                variant="default"
+                onClick={() => handleClickButtonReport(data.onClick)}
+                disabled={data.disabled}
+              >
+                {data.name}
+              </ButtonV2>
             )
           })}
         </div>
