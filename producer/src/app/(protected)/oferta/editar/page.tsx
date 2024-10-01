@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@shared/components/Button";
-import { OfferWithProductDTO } from "@shared/interfaces/dtos/offer-with-product-dto";
+import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
