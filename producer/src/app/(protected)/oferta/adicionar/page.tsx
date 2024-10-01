@@ -101,10 +101,10 @@ export default function Home() {
   return (
     <>
       <div className="h-footered-page w-full">
-        <div className="flex items-center justify-end w-full fixed px-6 pt-5">
+        <div className="flex flex-col items-end justify-center absolute px-6 pt-5 w-inherit">
           <Button
             title="Cancelar"
-            className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
+            className="flex items-center gap-2 text-sm font-medium text-theme-default w-7.5 h-7.5"
             onClick={cancelOffer}
           >
             <LuX className="w-7.5 h-7.5 text-theme-default" />

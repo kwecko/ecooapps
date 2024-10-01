@@ -1,12 +1,12 @@
 "use client";
 
 import Button from "@shared/components/Button";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { OfferWithProductDTO } from "@shared/interfaces/dtos/offer-with-product-dto";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { LuChevronLeft, LuX } from "react-icons/lu";
-import { InputAmount, InputPrice, ReviewOffer } from "../components";
+import { InputAmount, InputPrice, InputDescription, ReviewOffer } from "../components";
 import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 
@@ -62,7 +62,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 3;
+  const maxStep = 4;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -94,6 +94,7 @@ export default function Home() {
       offer_id: offerId,
       amount: pricing === "UNIT" ? amount : amount * 1000,
       price: price,
+      description: description,
     }).then(() => {
       toast.success("Oferta atualizada com sucesso!");
       router.push("/oferta");
@@ -103,10 +104,10 @@ export default function Home() {
   return (
     <>
       <div className="h-footered-page w-full">
-        <div className="flex items-center justify-end w-full fixed px-6 pt-5">
+      <div className="flex flex-col items-end justify-center absolute px-6 pt-5 w-inherit">
           <Button
             title="Cancelar"
-            className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
+            className="flex items-center gap-2 text-sm font-medium text-theme-default w-7.5 h-7.5"
             onClick={cancelOffer}
           >
             <LuX className="w-7.5 h-7.5 text-theme-default" />
@@ -128,6 +129,13 @@ export default function Home() {
           />
         )}
         {currentStep === 3 && (
+          <InputDescription
+            handleNextStep={handleNextStep}
+            description={description}
+            setDescription={setDescription}
+          />
+        )}
+        {currentStep === 4 && (
           <ReviewOffer
             cycleId={cycleId}
             productId={productId}
@@ -139,6 +147,7 @@ export default function Home() {
             submitAction={updateOffer}
           />
         )}
+
       </div>
       <div className="h-footer w-full">
         <div
