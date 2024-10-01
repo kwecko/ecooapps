@@ -28,6 +28,7 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   required?: boolean;
   autoComplete?: string;
   labelClassName?: string;
+  disabled?: boolean
 }
 
 export default function Input({
@@ -48,6 +49,7 @@ export default function Input({
   required,
   autoComplete,
   labelClassName,
+  disabled,
   ...rest
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -82,6 +84,7 @@ export default function Input({
           step={step}
           pattern={pattern}
           required={required}
+          disabled={disabled}
         />
         {icon ? (
           <div

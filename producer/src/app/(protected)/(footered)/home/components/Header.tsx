@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
 import { toast } from "sonner";
 
-
 export function Header() {
   const [name, setName] = useState('');
   const [isLoading, setIsLoading] = useState(true)
@@ -24,13 +23,13 @@ export function Header() {
 
             handleError(messageError)
           } else if (response.data) {
-            const { first_name, last_name } = response.data;
-            setName(`${first_name} ${last_name}`);
+            const { first_name } = response.data;
+            setName(first_name);
             setIsLoading(false)
           }
         })
-        .catch((error) => {
-          toast.error(error)
+        .catch(() => {
+          toast.error("Erro desconhecido.")
         })
     })()
   }, [])

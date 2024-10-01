@@ -12,12 +12,15 @@ import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
 import { useCycleProvider } from "@shared/context/cycle";
+import { useHandleError } from "@shared/hooks/useHandleError"
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[] | undefined>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { cycle } = useCycleProvider();
+
+  const { handleError } = useHandleError()
 
   const handleCopyAddress = () => {
     const address =
@@ -64,31 +67,32 @@ export function PendingDeliveries() {
   useEffect(() => {
     // IIFE
     (async () => {
-      try {
-        setIsLoading(true);
+      setIsLoading(true);
 
-        if (!cycle) {
-          setPendingDeliveries(undefined);
-          setIsLoading(false);
-          return;
-        }
-        const response = await getBoxeCurrent({ cycle_id: cycle.id });
-
-        if (response.message) {
-          toast.error(response.message);
-          return;
-        }
-
-        const data: IPendingDeliveries[] = response.data.orders
-
-        const ordersFiltered = data.filter(item => item.status === 'PENDING');
-
-        setPendingDeliveries(ordersFiltered);
-      } catch {
-        toast.error('Erro desconhecido');
-      } finally {
+      if (!cycle) {
+        setPendingDeliveries(undefined);
         setIsLoading(false);
+        return;
       }
+
+      getBoxeCurrent({ cycle_id: cycle.id })
+        .then((response) => {
+          if(response.message){
+            handleError(response.message)
+          } else {
+            const data: IPendingDeliveries[] = response.data.orders
+
+            const ordersFiltered = data.filter(item => item.status === 'PENDING');
+    
+            setPendingDeliveries(ordersFiltered);
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
+        .finally(() => {
+          setIsLoading(false);
+        })
     })()
   }, [cycle]);
 
