@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import RedirectCart from "../../_components/redirectCart";
+import React from "react";
 
 
 export default function Inicio() {
@@ -22,7 +23,7 @@ export default function Inicio() {
             />
           </div>
           <div className="grow flex flex-col items-center justify-center min-h-20 mt-2 mb-2">
-            <span className="w-full text-left font-poppins text-base">
+            <span className="w-full text-left text-base">
               Categorias
             </span>
           </div>
@@ -48,7 +49,7 @@ export default function Inicio() {
             />
           </div>
           <div className="grow flex flex-col items-center justify-center min-h-20 mt-2 mb-2">
-            <span className="w-full text-left font-poppins text-base">
+            <span className="w-full text-left text-base">
               Produtores
             </span>
           </div>
