@@ -3,7 +3,7 @@ import {
   convertPricingToGrams,
   convertPricingToQuantityInGrams,
 } from "@shared/utils/convert-unit";
-import { ProductDTO } from "@shared/interfaces/dtos/product-dto";
+import { ProductDTO } from "@shared/domain/dtos/product-dto";
 
 export const ProductCardImage = ({ product }: { product: ProductDTO }) => {
   const imageLoader: ImageLoader = ({ src }) => {

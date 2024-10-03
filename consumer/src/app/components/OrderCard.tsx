@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useCartProvider } from "@consumer/context/cart";
-import { OfferWithProductDTO } from "@shared/interfaces/dtos/offer-with-product-dto";
+import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
 
 import { ProductCard } from "@consumer/app/components/ProductCard";
 import { FaRegTrashCan } from "react-icons/fa6";

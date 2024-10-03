@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
 import { convertPricingToQuantityInGrams } from "@shared/utils/convert-unit";
-import { OfferWithProductDTO } from "@shared/interfaces/dtos/offer-with-product-dto";
+import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
 
 interface ProductCardControlAmountProps
   extends React.HTMLAttributes<HTMLDivElement> {
