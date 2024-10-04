@@ -5,10 +5,14 @@ import { useEffect, useState } from "react";
 import { useCartProvider } from "../../../context/cart";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { formatPrice } from "@shared/utils/format-price";
+import { useRouter } from "next/navigation";
+import Modal from "@shared/components/Modal";
 
 export default function FinalizarCompras() {
-  const { cart } = useCartProvider();
+  const router = useRouter();
+  const { cart, setCart } = useCartProvider();
   const [totalPurchase, setTotalPurchase] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     let total = 0;
@@ -17,7 +21,8 @@ export default function FinalizarCompras() {
       if (productCart.offer.product.pricing === "UNIT") {
         total = total + productCart.offer.price * productCart.amount;
       } else if (productCart.offer.product.pricing === "WEIGHT") {
-        total = total + (productCart.offer.price * productCart.amount * 500)/1000;
+        total =
+          total + (productCart.offer.price * productCart.amount * 500) / 1000;
       }
     });
 
@@ -26,13 +31,47 @@ export default function FinalizarCompras() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-3 w-full overflow-y-scroll flex flex-col items-center gap-3.5 h-full pt-3.5">
+      <div className="px-3 w-full overflow-y-scroll flex flex-col items-center gap-3.5 h-full pt-3.5 mb-5">
         {cart && cart.length !== 0
           ? cart.map((product, index) => {
-              return <OrderCard key={index} offer={product.offer} exclude={true} />;
+              return (
+                <OrderCard key={index} offer={product.offer} exclude={true} />
+              );
             })
-          : null}
+          : ""}
+        <div>
+          <button
+            className="w-50 h-10 rounded-md text-center bg-theme-primary text-white font-poppins text-xs font-semibold"
+            onClick={() => router.push("/produtores")}
+          >
+            Adicionar Produtos
+          </button>
+        </div>
+        {cart.length != 0 && (
+          <div>
+            <button
+              className="text-theme-primary font-poppins text-xs font-semibold"
+              onClick={() => setIsModalOpen(true)}
+            >
+              Limpar Carrinho
+            </button>
+            {isModalOpen && (
+              <Modal
+                bgCloseModal="white"
+                bgConfirmModal="#FF7070"
+                bgOpenModal="#2F4A4D"
+                modalAction={() => setCart([])}
+                titleCloseModal="Não"
+                titleConfirmModal="Sim"
+                titleContentModal="Deseja limpar todos os itens do carrinho?"
+                isOpen={isModalOpen}
+                setIsOpen={setIsModalOpen}
+              />
+            )}
+          </div>
+        )}
       </div>
+
       <div className="sticky bottom-0 h-12.25 bg-theme-background flex flex-col">
         <div className="bg-french-gray ml-5 mr-5 w-86 border"></div>
         <div className="px-5 w-full font-inter">
