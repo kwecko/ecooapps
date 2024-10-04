@@ -72,7 +72,7 @@ export default function OrderCard({
           <ProductCard.InfoHeader>
             <p
               className="text-left text-base leading-5 font-bold
-            text-[#2F4A4D] truncate"
+            text-theme-home-bg truncate"
             >
               {offer.product.name}
             </p>

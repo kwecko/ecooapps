@@ -11,7 +11,7 @@ export default function ProductCardRoot({
   ...rest
 }: ProductCardRootProps) {
   return (
-    <div className="w-full bg-[rgb(246,246,246)] flex flex-col rounded-2xl justify-start p-2.5 items-start">
+    <div className="w-full bg-theme-background flex flex-col rounded-2xl justify-start p-2.5 items-start">
       {children}
     </div>
   );

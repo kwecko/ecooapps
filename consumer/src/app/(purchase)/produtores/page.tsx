@@ -102,7 +102,7 @@ export default function Produtores() {
           {isLoading && cycles.length > 0 ? <div ref={ref}></div> : null}
         </div>
       </div>
-      <div className="min-h-[70px]">
+      <div className="min-h-17">
         <RedirectCart />
       </div>
     </div>

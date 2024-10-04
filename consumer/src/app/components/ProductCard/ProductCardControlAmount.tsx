@@ -31,8 +31,8 @@ export default function ProductCardControlAmount({
             type="button"
             className={
               amount != 0
-                ? "text-[#00735E] text-2xl p-1.5"
-                : "text-[#00735E] text-2xl p-1.5 opacity-25"
+                ? "text-theme-highlight text-2xl p-1.5"
+                : "text-theme-highlight text-2xl p-1.5 opacity-25"
             }
             onClick={handleRemove}
             disabled={amount == 0}
@@ -41,11 +41,11 @@ export default function ProductCardControlAmount({
           </button>
         </div>
         <div className="w-9 flex items-center justify-center">
-          <p className="font-poppin text-base text-center text-[#2F4A4D] p-1">
+          <p className="font-poppin text-base text-center text-theme-home-bg p-1">
             <input
               type="text"
               value={amount}
-              className="w-9 text-center text-[#2F4A4D] text-base"
+              className="w-9 text-center text-theme-home-bg text-base"
               onChange={(e) => setAmount(Number(e.target.value))}
             />
           </p>
@@ -59,8 +59,8 @@ export default function ProductCardControlAmount({
                 offer.amount /
                   convertPricingToQuantityInGrams(offer.product.pricing)
               )
-                ? "text-[#00735E] text-2xl p-1.5"
-                : "text-[#00735E] text-2xl p-1.5 opacity-25"
+                ? "text-theme-highlight text-2xl p-1.5"
+                : "text-theme-highlight text-2xl p-1.5 opacity-25"
             }
             onClick={handleAdd}
             disabled={

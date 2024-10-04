@@ -20,17 +20,17 @@ export default function ProductCardCostAmount({
         {pricing === "UNIT" && (
           <span>
             {formatPrice(price)}
-            <span className="text-[10px]">/unid.</span>
+            <span className="text-xxs">/unid.</span>
           </span>
         )}
         {pricing === "WEIGHT" && (
           <span>
             {formatPrice(price / 2)}
-            <span className="text-[10px]">/500g</span>
+            <span className="text-xxs">/500g</span>
           </span>
         )}
       </p>
-      <p className="text-lg font-bold text-slate-gray">
+      <p className="text-lg font-bold text-theme-home-bg">
         {amount > 0 &&
           pricing === "UNIT" &&
           formatPrice(price * amount)}

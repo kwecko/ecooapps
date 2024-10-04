@@ -33,18 +33,18 @@ export default function FinalizarCompras() {
             })
           : null}
       </div>
-      <div className="sticky bottom-0 h-[49px] bg-[#F7F7F7] flex flex-col">
-        <div className="bg-[#D1D1D6] ml-5 mr-5 w-[344px] border-[1px]"></div>
+      <div className="sticky bottom-0 h-12.25 bg-theme-background flex flex-col">
+        <div className="bg-french-gray ml-5 mr-5 w-86 border"></div>
         <div className="px-5 w-full font-inter">
-          <span className="w-1/2 text-left text-xs p-2 inline-block text-[#2F4A4D]">
+          <span className="w-1/2 text-left text-xs p-2 inline-block text-theme-home-bg">
             Total:
           </span>
-          <span className="w-1/2 text-right text-xl font-semibold text-[#00735E] font-inter p-2 inline-block">
+          <span className="w-1/2 text-right text-xl font-semibold text-theme-highlight font-inter p-2 inline-block">
             {formatPrice(totalPurchase)}
           </span>
         </div>
       </div>
-      <div className="min-h-[70px]">
+      <div className="min-h-17">
         <SendTelegram />
       </div>
     </div>

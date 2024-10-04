@@ -20,18 +20,18 @@ export default function ProductCardDescription({
   return (
     <div className="w-[calc(100%-2.5rem)] h-full">
       {description && description.length <= 70 && (
-        <p className="w-full text-left text-xs text-[#2F4A4D]">{description}</p>
+        <p className="w-full text-left text-xs text-theme-home-bg">{description}</p>
       )}
       {description && description.length > 70 && (
         <p>
-          <p className="w-full text-left text-xs text-[#2F4A4D]">
+          <p className="w-full text-left text-xs text-theme-home-bg">
             {isExpanded
               ? description
               : `${description?.slice(0, 70).trimEnd()}...`}
           </p>
           <button
             onClick={toggleDescription}
-            className="text-[#2F4A4D] text-xs font-semibold underline"
+            className="text-theme-home-bg text-xs font-semibold underline"
           >
             {isExpanded ? "Fechar" : "Leia mais"}
           </button>

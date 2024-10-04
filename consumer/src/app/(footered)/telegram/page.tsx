@@ -29,14 +29,14 @@ export default async function telegram() {
                 </div>
                 
                 <div className="w-full flex justify-center">
-                    <span className="w-64 text-center place-self-center text-[#2F4A4D]">No momento, os pedidos online podem ser realizados apenas pelo nosso canal do Telegram</span>
+                    <span className="w-64 text-center place-self-center text-theme-home-bg">No momento, os pedidos online podem ser realizados apenas pelo nosso canal do Telegram</span>
                 </div>
                 
                 <div className="w-auto">
                     <Link href={createLinkTelegram()}>
                         <OldButton
                         title="Baixar o Telegram"
-                        className="bg-white rounded-md font-inter font-semibold text-[#545F71] h-auto border-[#545F71] border-2 mb-3 mt-3"
+                        className="bg-white rounded-md font-inter font-semibold text-theme-primary h-auto border-theme-primary border-2 mb-3 mt-3"
                         
                         ></OldButton>
                     </Link>
@@ -46,7 +46,7 @@ export default async function telegram() {
                     <Link href={`${process.env["BOT_URL"]}?start=token`}>
                         <OldButton
                         title="Abrir o Telegram"
-                        className="bg-[#00735E] rounded-md font-inter font-semibold text-white h-auto"
+                        className="bg-theme-highlight rounded-md font-inter font-semibold text-white h-auto"
                         ></OldButton>
                     </Link>
                 </div>

@@ -16,18 +16,18 @@ export default function ProducerCard({
 }: ProducerCardProps) {
   return (
     <Link href={`/ofertas/${id}/${name}/${cycleId}`}>
-      <div className="min-w-[350px] h-[100px] bg-[rgb(246,246,246)] flex rounded-2xl m-[10px]">
-        <div className="flex w-20 h-20 ml-[10px] mt-[10px] mb-[10px] mr-[20px] bg-[#00735E] rounded-[11px]">
+      <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">
+        <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
           <Image
             src={caf != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
-            className="w-full h-full object-cover rounded-[10px]"
+            className="w-full h-full object-cover rounded-2.5"
             width={80}
             height={80}
             alt={`produtor.jpg`}
           />
         </div>
         <div className="grow flex flex-col items-center justify-center min-h-20 mt-2 mb-2">
-          <span className="w-full text-left text-base text-[#2F4A4D]">
+          <span className="w-full text-left text-base text-theme-home-bg">
             {name}
           </span>
         </div>

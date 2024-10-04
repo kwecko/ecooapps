@@ -24,9 +24,9 @@ export default function Header() {
   const { cart } = useCartProvider();
 
   return (
-    <div className="w-full h-18 flex items-center bg-[#F7F7F7]">
+    <div className="w-full h-18 flex items-center bg-theme-background">
       {linkBack ? (
-        <div className="flex items-center justify-center overflow-hidden w-10 h-10 ml-3  bg-[#545F71] rounded-[112px]">
+        <div className="flex items-center justify-center overflow-hidden w-10 h-10 ml-3 bg-theme-primary rounded-full">
           <Link href={linkBack}>
             <Image
               src="/back.png"
@@ -40,11 +40,11 @@ export default function Header() {
       ) : (
         <div className="flex items-center justify-center overflow-hidden w-10 h-10 ml-3"></div>
       )}
-      <div className="grow text-center text-base font-inter font-bold text-[#2F4A4D] m-2">
+      <div className="grow text-center text-base font-inter font-bold text-theme-home-bg m-2">
         {title}
       </div>
 
-      <div className="relative flex items-center justify-center w-10 h-10 mr-3  bg-[#545F71] rounded-[112px]">
+      <div className="relative flex items-center justify-center w-10 h-10 mr-3  bg-theme-primary rounded-full">
         <Link href={"/carrinho"}>
           <Image
             src="/cart.png"
@@ -56,7 +56,7 @@ export default function Header() {
         </Link>
 
         {cart.length > 0 ? (
-          <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 flex items-center justify-center font-bold rounded-ful w-[18px] h-[18px] bg-[#FF7070] font-inter text-[10px] text-white rounded-full text-center">
+          <div className="absolute top-0 right-0 transform translate-x-1/4 -translate-y-1/4 flex items-center justify-center font-bold rounded-ful w-4.5 h-4.5 bg-error font-inter text-xxs text-white rounded-full text-center">
             {cart.length}
           </div>
         ) : null}

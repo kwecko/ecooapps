@@ -19,7 +19,7 @@ export const ProductCardImage = ({ product }: { product: ProductDTO }) => {
         height={100}
         alt={`${product.name.toLowerCase()}.jpg`}
       />
-      <div className="absolute flex justify-center bottom-0 right-0 bg-[#3E5155] text-white items-center w-12 h-5 rounded-tl-xl rounded-br-xl text-xs">
+      <div className="absolute flex justify-center bottom-0 right-0 bg-theme-default text-white items-center w-12 h-5 rounded-tl-xl rounded-br-xl text-xs">
         {`${
           product.pricing === "UNIT" ?
            "" : convertPricingToQuantityInGrams(product.pricing)
