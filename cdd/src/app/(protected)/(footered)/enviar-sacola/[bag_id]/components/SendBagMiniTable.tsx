@@ -15,7 +15,6 @@ import { convertUnit } from "@shared/utils/convert-unit";
 import { Listbox, Transition } from "@headlessui/react";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { FaCheck } from "react-icons/fa6";
-import { set } from "react-hook-form";
 
 export default function SendBagMiniTable() {
   const router = useRouter()
@@ -53,7 +52,7 @@ export default function SendBagMiniTable() {
         })
     })()
   }, [bag_id]);
-  
+
   const handleStatusBag = async (bag_id: string, status: "SEPARATED") => {
     handleBag({
       bag_id,
@@ -71,8 +70,14 @@ export default function SendBagMiniTable() {
               title: "A oferta foi Reprovada!",
               description: "A sacola do cliente foi enviada.",
               button: {
-                secundary: "/",
-                primary: "/enviar-sacola",
+                secundary: {
+                  router: "/",
+                  name: "Voltar para a tela inicial",
+                },
+                primary: {
+                  router: "/enviar-sacola",
+                  name: "Verificar outra oferta"
+                },
               },
             })
           );
@@ -118,9 +123,8 @@ export default function SendBagMiniTable() {
                     <>
                       <div className="relative z-10">
                         <Listbox.Button
-                          className={`ring-1 ring-slate-blue relative w-full py-3 cursor-default outline-none bg-white pl-3 pr-10 text-left rounded-lg ${
-                            open ? 'ring-2 ring-slate-gray bg-theme-background' : ''
-                          }`}
+                          className={`ring-1 ring-slate-blue relative w-full py-3 cursor-default outline-none bg-white pl-3 pr-10 text-left rounded-lg ${open ? 'ring-2 ring-slate-gray bg-theme-background' : ''
+                            }`}
                         >
                           <span className="block truncate text-slate-gray w-full">
                             {bagStatusOptions.find(
@@ -151,10 +155,9 @@ export default function SendBagMiniTable() {
                               <Listbox.Option
                                 key={option.value}
                                 className={({ selected }) =>
-                                  `relative cursor-default select-none py-3 pl-10 pr-4 ${
-                                    selected
-                                      ? 'text-slate-gray bg-theme-background'
-                                      : 'bg-white'
+                                  `relative cursor-default select-none py-3 pl-10 pr-4 ${selected
+                                    ? 'text-slate-gray bg-theme-background'
+                                    : 'bg-white'
                                   }`
                                 }
                                 value={option.value}
@@ -194,14 +197,14 @@ export default function SendBagMiniTable() {
             </div>
             <div className="flex gap-8 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
               <span className="w-1/5">Conteúdo:</span>
-                <div className="w-4/5">
-                  {bagOrder?.orders.map(order => (
-                    <div key={order.id} className="flex flex-col mb-5">
-                      {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
-                      <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
-                    </div>
-                  ))}
-                </div>
+              <div className="w-4/5">
+                {bagOrder?.orders.map(order => (
+                  <div key={order.id} className="flex flex-col mb-5">
+                    {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
+                    <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <div className="w-full h-[10%] flex justify-center items-end">

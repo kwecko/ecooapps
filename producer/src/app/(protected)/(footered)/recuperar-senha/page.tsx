@@ -3,7 +3,7 @@
 import { resetPassword } from '@producer/app/_actions/user/reset-password';
 import Loading from '@producer/app/loading';
 import Input from '@shared/components/Input';
-import Loader from '@shared/components/Loader';
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
@@ -12,16 +12,32 @@ import { toast } from 'sonner';
 function RecuperarSenha() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { register, handleSubmit } = useForm<{ email: string }>();
+  const router = useRouter();
 
   const onSubmit = async (email: { email: string }) => {
     try {
       setIsLoading(true);
       const data = await resetPassword(email);
+
       if (data.message) {
         return toast.error(data.message)
       }
 
-      toast.success('sucesso!')
+      sessionStorage.setItem(
+        "data-sucess",
+        JSON.stringify({
+          title: "Código de verificação enviado",
+          description: "Confira o seu email e a caixa de spam para redefinir a sua senha.",
+          button: {
+            primary: {
+              router: "/login",
+              name: "Voltar para a tela de login"
+            },
+          },
+        })
+      );
+
+      router.push("/success");
     } catch {
       toast.error('Erro desconhecido');
     } finally {
