@@ -31,9 +31,7 @@ export default function AlterarCadastro() {
             handleError(messageError);
             return;
           }
-          const { first_name, last_name, email, phone } = response.data;
-          const data = { first_name, last_name, email, phone };
-          reset(data);
+          reset(response.data);
         })
         .catch((error) => {
           toast.error(error);
