@@ -22,7 +22,7 @@ export default function Home() {
       const offerData: OfferWithProductDTO = JSON.parse(storedOfferData);
 
       setOfferId(offerData.id);
-      setProductId(offerData.product_id);
+      setProductId(offerData.product.id);
       setProductName(offerData.product.name);
       setAmount(
         convertOfferAmount(offerData.amount, offerData.product.pricing)
