@@ -20,13 +20,16 @@ export default function Footer({
   const router = useRouter();
 
   const convertPathname = (path: string) => {
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    
     return path
       .split("/")
-      .map((segment) =>
-        isNaN(Number(segment)) || segment === "" ? segment : "[id]"
+      .map((segment) => 
+        uuidRegex.test(segment) ? "[id]" : segment
       )
       .join("/");
   };
+  
 
   const convertedPathname = convertPathname(pathname);
 
