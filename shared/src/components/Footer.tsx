@@ -13,10 +13,8 @@ import Button from "./Button";
 
 export default function Footer({
   appID,
-  bgColor,
 }: {
   appID: string;
-  bgColor: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -46,15 +44,13 @@ export default function Footer({
   const ReturnButton = () => (
     <Link href={returnPath ? returnPath : "#"} className="flex items-center">
       <LuChevronLeft
-        style={{ color: bgColor }}
-        className={"w-[30px] h-[30px]"}
+        className={"w-[30px] h-[30px] text-theme-default"}
       />
       <Button
         className={
-          "flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto"
+          "flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
         }
         onClick={handleReturn}
-        style={{ color: bgColor }}
       >
         Voltar
       </Button>
@@ -73,12 +69,10 @@ export default function Footer({
       titleContentModal={helpInfo.title}
       contentModal={helpInfo.content}
       titleCloseModal={helpInfo.closeButtonText}
-      bgOpenModal={bgColor}
-      bgCloseModal={bgColor}
       isOpen={isModalOpen}
       setIsOpen={setIsModalOpen}
       buttonOpenModal={
-        <button className="flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full mb-6 justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
+        <button className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full mb-6 justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
           ?
         </button>
       }
