@@ -6,19 +6,17 @@ import React from "react";
 import { IoIosHelp } from "react-icons/io";
 import { LuChevronLeft } from "react-icons/lu";
 import { twMerge } from "tailwind-merge";
+import { getFooteredPageInfo } from "@shared/utils/data/footered-pages-info";
+import InfoModal from "@shared/components/InfoModal";
 
 import Button from "./Button";
 
 export default function Footer({
-  hasPreviousPagePaths,
-  hasHelpButtonPaths,
+  appID,
   bgColor,
-  returnUrls,
 }: {
-  hasPreviousPagePaths: Record<string, boolean>;
-  hasHelpButtonPaths: Record<string, boolean>;
+  appID: string;
   bgColor: string;
-  returnUrls: Record<string, string>;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -34,31 +32,27 @@ export default function Footer({
 
   const convertedPathname = convertPathname(pathname);
 
-  const hasPreviousPage =
-    hasPreviousPagePaths[convertedPathname] !== undefined
-      ? hasPreviousPagePaths[convertedPathname]
-      : true;
-
-  const hasHelpButton =
-    hasHelpButtonPaths[convertedPathname] !== undefined
-      ? hasHelpButtonPaths[convertedPathname]
-      : true;
-
-  const returnUrl = returnUrls[convertedPathname];
+  const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } =
+    getFooteredPageInfo(appID)[convertedPathname];
 
   const handleReturn = () => {
-    if (returnUrl) {
-      router.push(returnUrl);
+    if (returnPath) {
+      router.push(returnPath);
     } else {
       router.back();
     }
   };
 
   const ReturnButton = () => (
-    <Link href={returnUrl ? returnUrl : "#"} className="flex items-center">
-      <LuChevronLeft style={{ color: bgColor }} className={"w-[30px] h-[30px]"} />
+    <Link href={returnPath ? returnPath : "#"} className="flex items-center">
+      <LuChevronLeft
+        style={{ color: bgColor }}
+        className={"w-[30px] h-[30px]"}
+      />
       <Button
-        className={"flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto"}
+        className={
+          "flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto"
+        }
         onClick={handleReturn}
         style={{ color: bgColor }}
       >
@@ -67,10 +61,27 @@ export default function Footer({
     </Link>
   );
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  }
+
   const HelpButton = () => (
-    <IoIosHelp
-      className="w-[50px] h-[50px] rounded-full border-0 text-white mb-6"
-      style={{ backgroundColor: bgColor }}
+    <InfoModal
+      titleOpenModal="Ajuda"
+      titleContentModal={helpInfo.title}
+      contentModal={helpInfo.content}
+      titleCloseModal={helpInfo.closeButtonText}
+      bgOpenModal={bgColor}
+      bgCloseModal={bgColor}
+      isOpen={isModalOpen}
+      setIsOpen={setIsModalOpen}
+      buttonOpenModal={
+        <button className="flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full mb-6 justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
+          ?
+        </button>
+      }
     />
   );
 
