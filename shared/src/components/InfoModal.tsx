@@ -2,15 +2,10 @@ import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useState } from "react";
 
 interface InfoModalProps {
-  titleOpenModal?: string;
-  titleContentModal?: string;
-  contentModal?: string | JSX.Element;
-  titleConfirmModal?: string;
-  titleCloseModal?: string;
-  bgOpenModal?: string;
+  titleContentModal: string;
+  contentModal: string | JSX.Element;
   icon: React.ReactNode | string;
-  bgConfirmModal?: string;
-  bgCloseModal?: string;
+  titleCloseModal: string;
   buttonOpenModal: React.ReactNode;
   isOpen: boolean;
   setIsOpen: (value: boolean) => void;
