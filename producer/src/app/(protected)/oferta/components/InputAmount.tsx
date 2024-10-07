@@ -14,6 +14,21 @@ interface InputAmountProps {
   setAmount: (amount: number) => void;
 }
 
+function validateValue(value: string) {
+  if (!/^\d+$/.test(value)) {
+    toast.error("O valor deve ser um número inteiro.");
+    return false;
+  }
+
+  if (!(value === "" || parseInt(value) >= 1)) {
+    toast.error("A quantidade mínima permitida é 1.");
+    return false;
+  }
+
+  return true;
+}
+
+
 export default function InputAmount({
   handleNextStep,
   amount,
@@ -25,15 +40,20 @@ export default function InputAmount({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === "" || parseInt(value) >= 1) {
-      setAmount(value ? parseInt(value) : 0);
-    } else {
-      toast.error("A quantidade mínima permitida é 1.");
+    
+    if (!validateValue(value)) {
+      return;
     }
+
+    setAmount(parseInt(value));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateValue(amount.toString())) {
+      return;
+    }
 
     if (!amount) {
       toast.error("A quantidade mínima permitida é 1.");
