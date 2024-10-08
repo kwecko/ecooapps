@@ -15,14 +15,6 @@ const poppins = Poppins({
   preload: true,
 });
 
-const inter = Inter({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
-  variable: "--font-inter",
-});
-
 export const metadata: Metadata = {
   title: "Painel e-COO | CDD",
   description: "Administração para cooperados",
@@ -38,8 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${getAppID()} w-screen h-screen 
-        ${styles.fontInter} ${poppins.className}`}
+        className={`${getAppID()} w-screen h-screen ${poppins.className}`}
       >
         <div className="flex flex-row justify-center w-full h-[inherit]">
           <Toaster richColors position="top-right" />
