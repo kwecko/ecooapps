@@ -54,7 +54,7 @@ export default function InfoModal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-md transform rounded-2xl bg-white p-3.75 text-left align-middle shadow-xl transition-all flex flex-col gap-2 items-stretch">
-                  <div className="absolute w-12.5 h-12.5 bg-theme-default rounded-full top-[-25px] z-[99999] overflow-visible flex items-center justify-center text-white text-3xl leading-5.5 font-normal self-center">
+                  <div className="absolute w-12.5 h-12.5 bg-theme-default rounded-full -top-6 z-10 overflow-visible flex items-center justify-center text-white text-3xl leading-5.5 font-normal self-center">
                     {icon}
                   </div>
                   <Dialog.Title
@@ -71,7 +71,7 @@ export default function InfoModal({
                   <div className="flex justify-center gap-3 pt-9">
                     <button
                       type="button"
-                      className={`w-full text-white justify-center rounded-md border border-transparent bg-theme-highlight px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2`}
+                      className={`w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2`}
                       onClick={closeModal}
                     >
                       {titleCloseModal}

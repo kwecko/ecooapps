@@ -47,7 +47,7 @@ export default function Footer({
   const ReturnButton = () => (
     <Link href={returnPath ? returnPath : "#"} className="flex items-center">
       <LuChevronLeft
-        className={"w-[30px] h-[30px] text-theme-default"}
+        className="w-7.5 h-7.5 text-theme-default"
       />
       <Button
         className={
