@@ -9,9 +9,9 @@ interface HelpInfo {
 
 interface FooteredPageInfo {
   hasPreviousPage: boolean;
-  returnPath: string | null;
+  returnPath?: string | null;
   hasHelpButton: boolean;
-  helpInfo: HelpInfo | null;
+  helpInfo?: HelpInfo | null;
 }
 
 const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {

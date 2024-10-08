@@ -17,7 +17,6 @@ export default function LayoutWithFooter({
         <div className="h-[var(--footer-height)]">
           <Footer
             appID={"PRODUCER"}
-            bgColor={"#2F4A4D"}
           />
         </div>
       </div>

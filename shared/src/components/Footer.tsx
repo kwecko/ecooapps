@@ -34,6 +34,18 @@ export default function Footer({
   const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } =
     getFooteredPageInfo(appID)[convertedPathname];
 
+  if (!hasPreviousPage && !hasHelpButton) {
+    throw new Error("Footer component must have at least one button");
+  }
+
+  if (hasPreviousPage && !returnPath) {
+    throw new Error("Footer component must have a return path if hasPreviousPage is true");
+  }
+
+  if (hasHelpButton && !helpInfo) {
+    throw new Error("Footer component must have help info if hasHelpButton is true");
+  }
+
   const handleReturn = () => {
     if (returnPath) {
       router.push(returnPath);
@@ -66,10 +78,10 @@ export default function Footer({
 
   const HelpButton = () => (
     <InfoModal
-      titleContentModal={helpInfo.title || ""}
-      contentModal={helpInfo.content || ""}
+      titleContentModal={helpInfo?.title || ""}
+      contentModal={helpInfo?.content || ""}
       icon="?"
-      titleCloseModal={helpInfo.closeButtonText || ""}
+      titleCloseModal={helpInfo?.closeButtonText || ""}
       buttonOpenModal={
         <button className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full mb-6 justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
           ?
