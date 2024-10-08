@@ -45,7 +45,7 @@ export default function AlterarCadastro() {
         delete data[key as keyof IUserUpdate];
       }
     });
-    
+
     if (data.password && data.password.length < 8) {
       toast.error("Senha deve ter pelo menos 8 caracteres.");
       return;
@@ -62,7 +62,7 @@ export default function AlterarCadastro() {
           handleError(response.message);
           return;
         }
-  
+
         toast.success("Cadastro atualizado com sucesso!");
         window.location.href = "/";
       })
@@ -75,7 +75,7 @@ export default function AlterarCadastro() {
     <ModelPage
       title="Seu perfil"
       titleClassName="gap-5"
-        subtitle={`Após atualizar os seus dados, clique em salvar.`}
+      subtitle={`Após atualizar os seus dados, clique em salvar.`}
       subtitleClassName="px-3"
       buttonArea={
         <div className="w-full p-5 flex gap-4 z-10 px-2 py-1 pb-5 bg-transparent">
@@ -101,21 +101,21 @@ export default function AlterarCadastro() {
       <form
         className="w-full h-full flex flex-col justify-between"
       >
-        <div className="w-full flex flex-col gap-12 mt-4">
+        <div className="w-full flex flex-col gap-4 mt-4">
           <Input
-            register={{...register("first_name")}}
+            register={{ ...register("first_name") }}
             placeholder="Primeiro nome"
             label="Nome"
             type="text"
           />
           <Input
-            register={{...register("last_name")}}
+            register={{ ...register("last_name") }}
             placeholder="Sobrenome"
             label="Sobrenome"
             type="text"
           />
           <Input
-            register={{...register("email")}}
+            register={{ ...register("email") }}
             placeholder="E-mail"
             label="Email"
             type="email"
@@ -123,13 +123,13 @@ export default function AlterarCadastro() {
             disabled={true}
           />
           <Input
-            register={{...register("phone")}}
+            register={{ ...register("phone") }}
             placeholder="Telefone"
             label="Telefone"
             type="text"
           />
           <Input
-            register={{...register("password")}}
+            register={{ ...register("password") }}
             placeholder="Digite sua senha"
             label="Nova senha"
             icon={<AiOutlineEye />}
