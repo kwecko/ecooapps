@@ -25,7 +25,12 @@ interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   notFoundMessage: string;
 }
 
-export default function OffersList({ title, type, notFoundMessage, ...rest }: OffersListProps) {
+export default function OffersList({
+  title,
+  type,
+  notFoundMessage,
+  ...rest
+}: OffersListProps) {
   const [offers, setOffers] = useState<OfferWithProductDTO[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -70,6 +75,7 @@ export default function OffersList({ title, type, notFoundMessage, ...rest }: Of
           } = response.data;
 
           setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
+
           setHasMore(dataOffers.offers.length > 0);
         }
       } catch {
@@ -88,7 +94,7 @@ export default function OffersList({ title, type, notFoundMessage, ...rest }: Of
   }, [isLoading, hasMore]);
 
   const lastProductRef = useCallback(
-    (node: HTMLButtonElement | null) => {
+    (node: HTMLDivElement | null) => {
       if (observer.current) observer.current.disconnect();
       observer.current = new IntersectionObserver((entries) => {
         if (entries[0].isIntersecting) {
@@ -107,9 +113,13 @@ export default function OffersList({ title, type, notFoundMessage, ...rest }: Of
 
   return (
     <>
-      <div 
+      <div
         {...rest}
-      className={twMerge("shrink-1 h-1/2 grow-0 w-full overflow-y-hidden flex flex-col items-start gap-3 pt-3", rest.className)}>
+        className={twMerge(
+          "shrink-1 h-1/2 grow-0 w-full overflow-y-hidden flex flex-col items-start gap-3 pt-3",
+          rest.className
+        )}
+      >
         <OfferListHeading title={title} />
         {isLoading && page === 1 ? (
           <div className="w-full h-20 flex items-center justify-center">

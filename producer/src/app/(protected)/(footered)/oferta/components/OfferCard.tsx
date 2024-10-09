@@ -9,7 +9,7 @@ import {
 } from "@shared/utils/convert-unit";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 
-interface OfferCardProps extends React.HTMLAttributes<HTMLDivElement> {
+interface OfferCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'ref'> {
   offer: OfferWithProductDTO;
   onDeleteCard?: (offerId: string) => void;
   editable?: boolean;
