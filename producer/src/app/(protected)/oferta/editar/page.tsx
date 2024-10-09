@@ -16,6 +16,29 @@ import { toast } from "sonner";
 export default function Home() {
   const router = useRouter();
 
+  const LocalStorage = useLocalStorage();
+
+  const cycle = useMemo(
+    () => LocalStorage.getFromStorage("selected-cycle"),
+    []
+  );
+  const cycleId = cycle?.id ?? "";
+
+  const [offerId, setOfferId] = useState<string>("");
+  const [productId, setProductId] = useState<string>("");
+  const [productName, setProductName] = useState<string>("");
+  const [amount, setAmount] = useState<number>(1);
+  const [price, setPrice] = useState<number>(0);
+  const [description, setDescription] = useState<string>("");
+  const [pricing, setPricing] = useState<"WEIGHT" | "UNIT" | undefined>(
+    undefined
+  );
+
+  const [currentStep, setCurrentStep] = useState<number>(1);
+
+  const minStep = 1;
+  const maxStep = 4;
+
   useEffect(() => {
     const storedOfferData = sessionStorage.getItem("edit-offer-data");
     if (storedOfferData) {
@@ -39,30 +62,6 @@ export default function Home() {
       router.push("/oferta");
     }
   }, []);
-
-  const LocalStorage = useLocalStorage();
-
-  const cycle = useMemo(
-    () => LocalStorage.getFromStorage("selected-cycle"),
-    []
-  );
-  const cycleId = cycle?.id ?? "";
-
-  const [offerId, setOfferId] = useState<string>("");
-  const [productId, setProductId] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [amount, setAmount] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-
-  const [pricing, setPricing] = useState<"WEIGHT" | "UNIT" | undefined>(
-    undefined
-  );
-
-  const [currentStep, setCurrentStep] = useState<number>(1);
-
-  const minStep = 1;
-  const maxStep = 4;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {

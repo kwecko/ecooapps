@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import Button from "@shared/components/Button";
 import { ModelPage } from "@shared/components/ModelPage";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
+import { isInteger } from "@shared/utils/validate-value";
 
 import pageSettings from "./page-settings";
 import { twMerge } from "tailwind-merge";
@@ -15,7 +16,7 @@ interface InputAmountProps {
 }
 
 function validateValue(value: string) {
-  if (!/^\d+$/.test(value)) {
+  if (!isInteger(value)) {
     toast.error("O valor deve ser um número inteiro.");
     return false;
   }
