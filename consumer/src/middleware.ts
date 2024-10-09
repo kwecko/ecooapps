@@ -15,7 +15,7 @@ export function middleware(request: NextRequest) {
       if (pathname.startsWith(item)) return true;
     });
 
-  if (pathnameStartsWith(PROTECTED_PAGES) && !access_token)
+  if (pathname === "/" || pathnameStartsWith(PROTECTED_PAGES) && !access_token)
     return NextResponse.redirect(
       new URL(process.env.UNAUTHENTICATED_REDIRECT_URL as string, request.url)
     );
