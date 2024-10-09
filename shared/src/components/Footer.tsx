@@ -3,74 +3,92 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { IoIosHelp } from "react-icons/io";
 import { LuChevronLeft } from "react-icons/lu";
-import { twMerge } from "tailwind-merge";
+import { getFooteredPageInfo } from "@shared/utils/data/footered-pages-info";
+import InfoModal from "@shared/components/InfoModal";
 
 import Button from "./Button";
 
 export default function Footer({
-  hasPreviousPagePaths,
-  hasHelpButtonPaths,
-  bgColor,
-  returnUrls,
+  appID,
 }: {
-  hasPreviousPagePaths: Record<string, boolean>;
-  hasHelpButtonPaths: Record<string, boolean>;
-  bgColor: string;
-  returnUrls: Record<string, string>;
+  appID: string;
 }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const convertPathname = (path: string) => {
+    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    
     return path
       .split("/")
-      .map((segment) =>
-        isNaN(Number(segment)) || segment === "" ? segment : "[id]"
+      .map((segment) => 
+        uuidRegex.test(segment) ? "[id]" : segment
       )
       .join("/");
   };
+  
 
   const convertedPathname = convertPathname(pathname);
 
-  const hasPreviousPage =
-    hasPreviousPagePaths[convertedPathname] !== undefined
-      ? hasPreviousPagePaths[convertedPathname]
-      : true;
+  const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } =
+    getFooteredPageInfo(appID)[convertedPathname];
 
-  const hasHelpButton =
-    hasHelpButtonPaths[convertedPathname] !== undefined
-      ? hasHelpButtonPaths[convertedPathname]
-      : true;
+  if (!hasPreviousPage && !hasHelpButton) {
+    throw new Error("Footer component must have at least one button");
+  }
 
-  const returnUrl = returnUrls[convertedPathname];
+  if (hasPreviousPage && !returnPath) {
+    throw new Error("Footer component must have a return path if hasPreviousPage is true");
+  }
+
+  if (hasHelpButton && !helpInfo) {
+    throw new Error("Footer component must have help info if hasHelpButton is true");
+  }
 
   const handleReturn = () => {
-    if (returnUrl) {
-      router.push(returnUrl);
+    if (returnPath) {
+      router.push(returnPath);
     } else {
       router.back();
     }
   };
 
   const ReturnButton = () => (
-    <Link href={returnUrl ? returnUrl : "#"} className="flex items-center">
-      <LuChevronLeft style={{ color: bgColor }} className={"w-[30px] h-[30px]"} />
+    <Link href={returnPath ? returnPath : "#"} className="flex items-center">
+      <LuChevronLeft
+        className="w-7.5 h-7.5 text-theme-default"
+      />
       <Button
-        className={"flex items-center gap-2 text-sm font-medium text-[${bgColor}] w-auto"}
+        className={
+          "flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
+        }
         onClick={handleReturn}
-        style={{ color: bgColor }}
       >
         Voltar
       </Button>
     </Link>
   );
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  }
+
   const HelpButton = () => (
-    <IoIosHelp
-      className="w-[50px] h-[50px] rounded-full border-0 text-white mb-6"
-      style={{ backgroundColor: bgColor }}
+    <InfoModal
+      titleContentModal={helpInfo?.title || ""}
+      contentModal={helpInfo?.content || ""}
+      icon="?"
+      titleCloseModal={helpInfo?.closeButtonText || ""}
+      buttonOpenModal={
+        <button className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full mb-6 justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
+          ?
+        </button>
+      }
+      isOpen={isModalOpen}
+      setIsOpen={setIsModalOpen}
     />
   );
 
