@@ -15,7 +15,7 @@ import {
 import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 
-import { UpdateOffer } from "@producer/app/_actions/offers/update-offer";
+import { OfferProducts } from "@producer/app/_actions/offers/offer-products";
 import { toast } from "sonner";
 
 import Loader from "@shared/components/Loader";
@@ -57,7 +57,7 @@ export default function Home() {
       setIsLoading(false);
     } else {
       toast.error(
-        "Nenhuma oferta selecionada para edição. Selecione uma oferta para editar."
+        "Nenhuma oferta selecionada para repetir. Selecione uma oferta para repetir."
       );
       router.push("/oferta");
     }
@@ -83,17 +83,37 @@ export default function Home() {
     router.push("/oferta");
   };
 
-  const updateOffer = async () => {
-    await UpdateOffer({
-      offer_id: offer.id,
+  const submitOffer = async () => {
+    await OfferProducts({
+      cycle_id: cycleId,
+      product_id: offer.product.id,
       amount:
         offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       description: offer.description ?? undefined,
-    }).then(() => {
-      toast.success("Oferta atualizada com sucesso!");
-      router.push("/oferta");
-    });
+    })
+      .then((response) => {
+        if (response.message) {
+          if (
+            response.message.includes("Oferta") &&
+            response.message.includes("já existe")
+          ) {
+            toast.error(
+              `Oferta para o produto ${offer.product.name} já existe. Tente editar a oferta.`
+            );
+            router.push("/oferta");
+            return;
+          }
+          toast.error(response.message as string);
+          return;
+        } else {
+          toast.success("Oferta cadastrada com sucesso");
+          router.push("/oferta");
+        }
+      })
+      .catch((error) => {
+        toast.error("Erro ao cadastrar a oferta");
+      });
   };
 
   return (
@@ -147,7 +167,7 @@ export default function Home() {
                 price={offer.price}
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing}
-                submitAction={updateOffer}
+                submitAction={submitOffer}
               />
             )}
           </div>
