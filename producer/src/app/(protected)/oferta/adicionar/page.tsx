@@ -15,6 +15,8 @@ import {
   RenderProducts,
   ReviewOffer,
 } from "../components";
+import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { ProductDTO } from "@shared/domain/dtos/product-dto";
 
 export default function Home() {
   const router = useRouter();
@@ -28,13 +30,8 @@ export default function Home() {
   );
   const cycleId = cycle?.id ?? "";
 
-  const [productId, setProductId] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [amount, setAmount] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-  const [pricing, setPricing] = useState<"WEIGHT" | "UNIT" | undefined>(
-    undefined
+  const [offer, setOffer] = useState<OfferWithProductDTO>(
+    {} as OfferWithProductDTO
   );
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -57,12 +54,7 @@ export default function Home() {
   };
 
   const cancelOffer = () => {
-    setProductId("");
-    setProductName("");
-    setAmount(0);
-    setPrice(0);
-    setDescription("");
-    setPricing(undefined);
+    setOffer({} as OfferWithProductDTO);
     setCurrentStep(0);
     router.push("/oferta");
   };
@@ -70,10 +62,11 @@ export default function Home() {
   const submitOffer = async () => {
     await OfferProducts({
       cycle_id: cycleId,
-      product_id: productId,
-      amount: pricing === "UNIT" ? amount : amount * 1000,
-      price: price,
-      description: description,
+      product_id: offer.product.id,
+      amount:
+        offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
+      price: offer.price,
+      description: offer.description ?? undefined,
     })
       .then((response) => {
         if (response.message) {
@@ -82,7 +75,7 @@ export default function Home() {
             response.message.includes("já existe")
           ) {
             toast.error(
-              `Oferta para o produto ${productName} já existe. Tente editar a oferta.`
+              `Oferta para o produto ${offer.product.name} já existe. Tente editar a oferta.`
             );
             router.push("/oferta");
             return;
@@ -98,6 +91,7 @@ export default function Home() {
         toast.error("Erro ao cadastrar a oferta");
       });
   };
+
   return (
     <>
       <div className="h-footered-page w-full">
@@ -113,42 +107,44 @@ export default function Home() {
         {currentStep === 1 && (
           <RenderProducts
             handleNextStep={handleNextStep}
-            setProductName={setProductName}
-            setProductId={setProductId}
-            setPricing={setPricing}
+            setProduct={(product: ProductDTO) =>
+              setOffer({ ...offer, product: product })
+            }
           />
         )}
         {currentStep === 2 && (
           <InputAmount
             handleNextStep={handleNextStep}
-            pricing={pricing as "UNIT" | "WEIGHT"}
-            amount={amount}
-            setAmount={setAmount}
+            pricing={offer.product.pricing ?? "UNIT"}
+            amount={offer.amount ?? 0}
+            setAmount={(amount) => setOffer({ ...offer, amount: amount })}
           />
         )}
         {currentStep === 3 && (
           <InputPrice
             handleNextStep={handleNextStep}
-            price={price}
-            setPrice={setPrice}
+            price={offer.price ?? 0}
+            setPrice={(price) => setOffer({ ...offer, price: price })}
           />
         )}
         {currentStep === 4 && (
           <InputDescription
             handleNextStep={handleNextStep}
-            description={description}
-            setDescription={setDescription}
+            description={offer.description ?? ""}
+            setDescription={(description) =>
+              setOffer({ ...offer, description: description })
+            }
           />
         )}
         {currentStep === 5 && (
           <ReviewOffer
-            cycleId={cycleId}
-            productId={productId}
-            productName={productName}
-            amount={amount}
-            price={price}
-            description={description}
-            pricing={pricing}
+            cycleId={cycleId ?? ""}
+            productId={offer.product.id ?? ""}
+            productName={offer.product.name ?? ""}
+            amount={offer.amount ?? 0}
+            price={offer.price ?? 0}
+            description={offer.description ?? ""}
+            pricing={offer.product.pricing ?? "UNIT"}
             submitAction={submitOffer}
           />
         )}
