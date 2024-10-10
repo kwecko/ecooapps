@@ -9,7 +9,7 @@ const PROTECTED_PAGES = [
   "/enviar-sacola",
   "/montar-sacola",
   "/informacoes-ciclo",
-  "/successo",
+  "/sucesso",
 ];
 
 const PAGES_IN_CONSTRUCTION =
@@ -47,6 +47,6 @@ export const config = {
     "/montar-sacola/:path*",
     "/relatorios/:path*",
     "/informacoes-ciclo/:path*",
-    "/successo/:path*",
+    "/sucesso/:path*",
   ],
 };

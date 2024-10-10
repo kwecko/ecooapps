@@ -81,7 +81,7 @@ export default function SendBagMiniTable() {
               },
             })
           );
-          router.push(`/successo`);
+          router.push(`/sucesso`);
           return;
         }
       })

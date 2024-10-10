@@ -91,7 +91,7 @@ export default function FarmOrdersTable() {
               }
             })
           );
-          router.push("/successo");
+          router.push("/sucesso");
         }
       })
       .catch(() => {
@@ -126,7 +126,7 @@ export default function FarmOrdersTable() {
               },
             })
           );
-          router.push("/successo");
+          router.push("/sucesso");
         }
       })
       .catch(() => {

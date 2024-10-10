@@ -79,7 +79,7 @@ export default function BagMiniTable() {
               })
             );
 
-            router.push("/successo");
+            router.push("/sucesso");
             return;
           }
         })
@@ -115,7 +115,7 @@ export default function BagMiniTable() {
               })
             );
 
-            router.push("/successo");
+            router.push("/sucesso");
             return;
           }
         })
