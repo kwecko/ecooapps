@@ -16,16 +16,12 @@ import pageSettings from "./page-settings";
 
 
 export interface RenderProductsProps {
-  setProductId: (id: string) => void;
-  setProductName: (name: string) => void;
-  setPricing: (pricing: "WEIGHT" | "UNIT") => void;
+  setProduct: (product: ProductDTO) => void;
   handleNextStep: () => void;
 }
 
 export default function RenderProducts({
-  setProductId,
-  setProductName,
-  setPricing,
+  setProduct,
   handleNextStep,
 }: RenderProductsProps) {
 
@@ -111,9 +107,7 @@ export default function RenderProducts({
   }, [query, page]);
 
   const handleSelectProduct = (product: ProductDTO) => {
-    setProductId(product.id);
-    setProductName(product.name);
-    setPricing(product.pricing);
+    setProduct(product);
     handleNextStep();
   };
 

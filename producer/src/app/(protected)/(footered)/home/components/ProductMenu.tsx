@@ -52,7 +52,7 @@ export function ProductMenu() {
   };
 
   return (
-    <Card className="gap-3.5 p-5 w-full">
+    <Card className="gap-3.5 p-5 w-full text-theme-default">
       <div className="flex justify-between gap-2 items-start pr-0 pl-1">
         <span className="font-normal text-base leading-5.5 tracking-tight">
           Ofereça os seus produtos clicando no botão abaixo

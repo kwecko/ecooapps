@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import Button from "@shared/components/Button";
 import { ModelPage } from "@shared/components/ModelPage";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
+import { isInteger } from "@shared/utils/validate-value";
 
 import pageSettings from "./page-settings";
 import { twMerge } from "tailwind-merge";
@@ -13,6 +14,21 @@ interface InputAmountProps {
   pricing: "UNIT" | "WEIGHT";
   setAmount: (amount: number) => void;
 }
+
+function validateValue(value: string) {
+  if (!isInteger(value)) {
+    toast.error("O valor deve ser um número inteiro.");
+    return false;
+  }
+
+  if (!(value === "" || parseInt(value) >= 1)) {
+    toast.error("A quantidade mínima permitida é 1.");
+    return false;
+  }
+
+  return true;
+}
+
 
 export default function InputAmount({
   handleNextStep,
@@ -25,15 +41,20 @@ export default function InputAmount({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value === "" || parseInt(value) >= 1) {
-      setAmount(value ? parseInt(value) : 0);
-    } else {
-      toast.error("A quantidade mínima permitida é 1.");
+    
+    if (!validateValue(value)) {
+      return;
     }
+
+    setAmount(parseInt(value));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!validateValue(amount.toString())) {
+      return;
+    }
 
     if (!amount) {
       toast.error("A quantidade mínima permitida é 1.");
