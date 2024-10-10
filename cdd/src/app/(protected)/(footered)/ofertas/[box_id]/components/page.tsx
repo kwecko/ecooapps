@@ -80,7 +80,7 @@ export default function FarmOrdersTable() {
               title: "A oferta foi aprovada!",
               description: "A oferta do produtor foi aprovada.",
               button: {
-                secundary: {
+                secondary: {
                   router: "/",
                   name: "Voltar para a tela inicial",
                 },
@@ -115,7 +115,7 @@ export default function FarmOrdersTable() {
               title: "A oferta foi Reprovada!",
               description: "A oferta do produtor foi REPROVADA.",
               button: {
-                secundary: {
+                secondary: {
                   router: "/",
                   name: "Voltar para a tela inicial",
                 },

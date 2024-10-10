@@ -70,7 +70,7 @@ export default function SendBagMiniTable() {
               title: "A oferta foi Reprovada!",
               description: "A sacola do cliente foi enviada.",
               button: {
-                secundary: {
+                secondary: {
                   router: "/",
                   name: "Voltar para a tela inicial",
                 },

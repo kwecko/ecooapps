@@ -37,7 +37,7 @@ function RecuperarSenha() {
         })
       );
 
-      router.push("/success");
+      router.push("/successo");
     } catch {
       toast.error('Erro desconhecido');
     } finally {

@@ -17,7 +17,7 @@ export interface IDataSessionStorage {
   description: string
   button: {
     primary?: Button
-    secundary?: Button
+    secondary?: Button
   }
 }
 
@@ -41,22 +41,22 @@ export default function Success() {
     <div className="w-full h-full flex flex-col p-5 bg-theme-background">
       <div className="w-full h-screen flex justify-center flex-col">
         <div className="w-full h-4/5 flex items-center flex-col justify-center">
-          <AiFillCheckCircle className="w-[100px] h-[100px] text-rain-forest" />
-          <span className="mt-6 text-center text-3xl text-slate-gray font-medium">
+          <AiFillCheckCircle className="w-25 h-25 text-theme-highlight" />
+          <span className="mt-6 text-center text-3xl text-theme-default font-medium">
             {data.title}
           </span>
-          <span className="mt-4 text-center text-slate-gray font-medium text-sm">
+          <span className="mt-4 text-center text-theme-default font-medium text-sm">
             {data.description}
           </span>
         </div>
         <div className="w-full h-1/5 pb-2 bg-red flex flex-col justify-end gap-4">
           {
-            data.button.secundary && (
-              <Link href={data?.button?.secundary.router}>
+            data.button.secondary && (
+              <Link href={data?.button?.secondary.router}>
                 <Button
                   className="w-full rounded-lg font-semibold text-theme-default border-theme-default border-2 py-3"
                 >
-                  {data.button.secundary.name}
+                  {data.button.secondary.name}
                 </Button>
               </Link>
             )

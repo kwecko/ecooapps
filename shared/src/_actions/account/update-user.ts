@@ -1,6 +1,6 @@
 "use server";
 
-import ApiService from "../../service/index";
+import ApiService from "@shared/shared/src/service";
 import { User as IUser } from "../../interfaces/user";
 
 export async function updateUser(data: IUser) {

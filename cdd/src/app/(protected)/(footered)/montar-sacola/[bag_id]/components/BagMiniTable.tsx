@@ -67,7 +67,7 @@ export default function BagMiniTable() {
                 title: "A sacola está pronta!",
                 description: "A sacola do cliente está pronta.",
                 button: {
-                  secundary: {
+                  secondary: {
                     router: "/",
                     name: "Voltar para a tela inicial",
                   },
@@ -103,7 +103,7 @@ export default function BagMiniTable() {
                 title: "A sacola foi alterada!",
                 description: "A sacola do cliente está pendente para ser montada",
                 button: {
-                  secundary: {
+                  secondary: {
                     router: "/",
                     name: "Voltar para a tela inicial",
                   },
