@@ -25,8 +25,8 @@ export default function SendBagMiniTable() {
   const [bagOrder, setBagOrder] = useState<BagOrder | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const [bagStatus, setBagStatus] = useState<string | undefined>(bagOrder?.status);
-  const [currentStatus, setCurrentStatus] = useState<string | undefined>(bagOrder?.status);
+  const [bagStatus, setBagStatus] = useState<string | undefined>(undefined);
+  const [currentStatus, setCurrentStatus] = useState<string | undefined>(undefined);
   const [isStatusChanged, setIsStatusChanged] = useState(false);
 
   const bagStatusOptions = [
@@ -44,85 +44,69 @@ export default function SendBagMiniTable() {
   }
 
   useEffect(() => {
-    (() => {
+    (async () => {
       setIsLoading(true)
-      fetchBag({
-        bag_id: bag_id as string
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
-
-            handleError(messageError)
-          } else if (response.data) {
-            setBagOrder(response.data)
-            setIsLoading(false)
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })()
+      try {
+        const response = await fetchBag({ bag_id: bag_id as string });
+        if (response.message) {
+          const messageError = response.message as string;
+          handleError(messageError);
+        } else if (response.data) {
+          setBagOrder(response.data);
+          setCurrentStatus(response.data.status);
+          setBagStatus(response.data.status);
+        }
+      } catch (error) {
+        toast.error("Erro desconhecido.");
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [bag_id]);
 
-  useEffect(() => {
-    (async () => {
-      if (bagOrder) {
-        setCurrentStatus(bagOrder.status);
-        setBagStatus(currentStatus);
-        return;
-      }
-    })()
-  }, [bagOrder])
-
   const handleStatusBag = async (bag_id: string, status: "SEPARATED") => {
-    handleBag({
-      bag_id,
-      status: "DISPATCHED"
-    })
-      .then((response) => {
-        if (response.message) {
-          const messageError = response.message as string
-
-          handleError(messageError)
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi enviada!",
-              description: "A sacola está a caminho do cliente.",
-              button: {
-                secundary: "/",
-                primary: "/enviar-sacola",
-              },
-            })
-          );
-          router.push(`/success`);
-          return;
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.")
-      })
-  }
-
-  const handleNewStatus = async (bag_id: string, status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED") => {
-    console.log(`bag_id ${bag_id} status ${status}`)
-    handleBag({
-      bag_id: bag_id,
-      status: status
-    }).then((response) => {
+    try {
+      const response = await handleBag({
+        bag_id,
+        status: "DISPATCHED",
+      });
       if (response.message) {
-        console.log(`response ${response}`)
         const messageError = response.message as string;
         handleError(messageError);
       } else {
-        const statusName = status === "RECEIVED" ? "entregue" : "DEFERRED" ? "retornada" : "enviada";
         sessionStorage.setItem(
           "data-sucess",
           JSON.stringify({
-            title: `A oferta foi ${statusName}!`, 
+            title: "A oferta foi enviada!",
+            description: "A sacola está a caminho do cliente.",
+            button: {
+              secundary: "/",
+              primary: "/enviar-sacola",
+            },
+          })
+        );
+        router.push(`/success`);
+      }
+    } catch (error) {
+      toast.error("Erro desconhecido.");
+    }
+  };
+
+  const handleNewStatus = async (bag_id: string, status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED") => {
+    try {
+      const response = await handleBag({
+        bag_id,
+        status
+      });
+      if (response.message) {
+        const messageError = response.message as string;
+        handleError(messageError);
+      } else {
+        const statusName = status === "RECEIVED" ? "entregue" : status === "DEFERRED" ? "retornada" : "enviada";
+        sessionStorage.setItem(
+          "data-sucess",
+          JSON.stringify({
+            title: `A oferta foi ${statusName}!`,
             description: `A sacola do cliente foi ${statusName}.`,
             button: {
               secundary: "/",
@@ -130,33 +114,30 @@ export default function SendBagMiniTable() {
             },
           })
         );
+        router.push(`/success`);
       }
-      router.push(`/success`);
-      return;
-    }).catch(() => {
-        toast.error("Erro desconhecido.");
-    });
-  }
-
-  console.log(bagStatus)
+    } catch (error) {
+      toast.error("Erro desconhecido.");
+    }
+  };
 
   return (
     <>
       {isLoading ? (
-        <TableSkeleton />
-      ) : (
+        <TableSkeleton /> // Exibe o esqueleto enquanto está carregando
+      ) : bagOrder ? (
         <div className="w-full h-full flex flex-col justify-between">
           <div className="max-w-sm mx-auto bg-white rounded-lg">
             <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
               <span className="w-1/5">Pedido:</span>
-              <span className="w-4/5">{bagOrder?.id}</span>
+              <span className="w-4/5">{bagOrder.id}</span>
             </div>
             <div className="flex gap-10 items-center text-theme-primary border-b-[1px] border-theme-background p-3">
               <span className="w-1/5 flex items-center">Status:</span>
               <div className="w-4/5 relative pr-4">
-                {bagOrder?.status === "SEPARATED" ? (
+                {bagOrder.status === "SEPARATED" ? (
                   <span className="w-4/5 text-theme-primary">
-                    {convertStatus(bagOrder?.status)?.name || "Status desconhecido"}
+                    {convertStatus(bagOrder.status)?.name || "Status desconhecido"}
                   </span>
                 ) : (
                   <Listbox
@@ -221,7 +202,7 @@ export default function SendBagMiniTable() {
             </div>
             <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
               <span className="w-1/5">Cliente:</span>
-              <span className="w-4/5">{`${bagOrder?.user.first_name} ${bagOrder?.user.last_name}`}</span>
+              <span className="w-4/5">{`${bagOrder.user.first_name} ${bagOrder.user.last_name}`}</span>
             </div>
             <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
               <span className="w-1/5">Prazo:</span>
@@ -229,18 +210,18 @@ export default function SendBagMiniTable() {
             </div>
             <div className="flex gap-8 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
               <span className="w-1/5">Conteúdo:</span>
-                <div className="w-4/5">
-                  {bagOrder?.orders.map(order => (
-                    <div key={order.id} className="flex flex-col mb-5">
-                      {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
-                      <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
-                    </div>
-                  ))}
-                </div>
+              <div className="w-4/5">
+                {bagOrder.orders.map(order => (
+                  <div key={order.id} className="flex flex-col mb-5">
+                    {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
+                    <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
           <div className="w-full h-[10%] flex justify-center items-end">
-            {bagOrder?.status === "SEPARATED" ? (
+            {bagOrder.status === "SEPARATED" ? (
               <Modal
                 titleOpenModal="Marcar como enviada"
                 titleContentModal="Você tem certeza?"
@@ -252,9 +233,9 @@ export default function SendBagMiniTable() {
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
                   handleStatusBag(bagOrder.id, "SEPARATED")
-              }}
+                }}
               />
-            ) : bagOrder?.status && isStatusChanged ? (
+            ) : bagOrder.status && isStatusChanged ? (
               <Modal
                 titleOpenModal="Salvar"
                 titleContentModal="Você tem certeza?"
@@ -266,15 +247,17 @@ export default function SendBagMiniTable() {
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
                   handleNewStatus(bagOrder.id, bagStatus as "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED")
-              }}
+                }}
               />
             ) : (
               <>
-              <span className="text-center mt-6 text-slate-gray">Sacola já entregue!</span>
+                <span className="text-center mt-6 text-slate-gray">Sacola já entregue!</span>
               </>
             )}
           </div>
         </div>
+      ) : (
+        <span className="text-center text-red-500">Erro ao carregar os dados da sacola</span>
       )}
     </>
   );
