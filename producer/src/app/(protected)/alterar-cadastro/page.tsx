@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from 'next/navigation';
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 import { AiOutlineEye } from "react-icons/ai";
 import { toast } from "sonner";
@@ -15,15 +17,24 @@ import Modal from "@shared/components/Modal";
 import Input from "@shared/components/Input";
 import Button from "@shared/components/Button";
 
-import { IUserUpdate } from "@shared/interfaces/user-interface";
+import { User as IUser } from "@shared/interfaces/user";
 import { ModelPage } from "@shared/components/ModelPage";
 
 export default function AlterarCadastro() {
   const { handleError } = useHandleError();
-  const { register, handleSubmit, reset } = useForm<IUserUpdate>();
+  const { register, handleSubmit, reset } = useForm<IUser>();
+  const searchParams = useSearchParams();
+  const [_, setCookies, removeCookie] = useCookies();
+
+  const token = searchParams.get('token');
 
   useEffect(() => {
     (async () => {
+      if (token) {
+        setCookies('token-reset-password', token);
+        return;
+      }
+
       await getUser()
         .then((response) => {
           if (response.message) {
@@ -37,15 +48,15 @@ export default function AlterarCadastro() {
           toast.error(error);
         });
     })();
-  }, []);
+  }, [token]);
 
-  const handleSubmitForm = async (data: IUserUpdate) => {
+  const handleSubmitForm = async (data: IUser) => {
     Object.keys(data).forEach((key) => {
-      if (!data[key as keyof IUserUpdate]) {
-        delete data[key as keyof IUserUpdate];
+      if (!data[key as keyof IUser]) {
+        delete data[key as keyof IUser];
       }
     });
-    
+
     if (data.password && data.password.length < 8) {
       toast.error("Senha deve ter pelo menos 8 caracteres.");
       return;
@@ -59,10 +70,17 @@ export default function AlterarCadastro() {
     await updateUser(data)
       .then((response) => {
         if (response?.message) {
-          handleError(response.message);
+          toast.error(response.message);
           return;
         }
-  
+
+        if (token) {
+          removeCookie('token-reset-password')
+          toast.success("Senha atualizada com sucesso!");
+          window.location.href = "/inicio";
+          return;
+        }
+
         toast.success("Cadastro atualizado com sucesso!");
         window.location.href = "/";
       })
@@ -73,17 +91,21 @@ export default function AlterarCadastro() {
 
   return (
     <ModelPage
-      title="Seu perfil"
+      title={token ? "Recuperar senha" : "Seu perfil"}
       titleClassName="gap-5"
-        subtitle={`Após atualizar os seus dados, clique em salvar.`}
+      subtitle={`Após atualizar os seus dados, clique em salvar.`}
       subtitleClassName="px-3"
       buttonArea={
         <div className="w-full p-5 flex gap-4 z-10 px-2 py-1 pb-5 bg-transparent">
-          <Link className="w-full" href={"/"}>
-            <Button className="w-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 py-4 hover:bg-gray-100">
-              Voltar
-            </Button>
-          </Link>
+          {
+            !token && (
+              <Link className="w-full" href={"/"}>
+                <Button className="w-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 py-4 hover:bg-gray-100">
+                  Voltar
+                </Button>
+              </Link>
+            )
+          }
           <Modal
             titleContentModal="Você tem certeza?"
             contentModal="Ao clicar em confirmar seus dados de cadastro serão atualizados."
@@ -101,40 +123,59 @@ export default function AlterarCadastro() {
       <form
         className="w-full h-full flex flex-col justify-between"
       >
-        <div className="w-full flex flex-col gap-12 mt-4">
-          <Input
-            register={{...register("first_name")}}
-            placeholder="Primeiro nome"
-            label="Nome"
-            type="text"
-          />
-          <Input
-            register={{...register("last_name")}}
-            placeholder="Sobrenome"
-            label="Sobrenome"
-            type="text"
-          />
-          <Input
-            register={{...register("email")}}
-            placeholder="E-mail"
-            label="Email"
-            type="email"
-            className="cursor-not-allowed text-gray-400"
-            disabled={true}
-          />
-          <Input
-            register={{...register("phone")}}
-            placeholder="Telefone"
-            label="Telefone"
-            type="text"
-          />
-          <Input
-            register={{...register("password")}}
-            placeholder="Digite sua senha"
-            label="Nova senha"
-            icon={<AiOutlineEye />}
-            type="password"
-          />
+        <div className="w-full flex flex-col gap-4 mt-4">
+          {
+            !token && (
+              <>
+                <Input
+                  register={{ ...register("first_name") }}
+                  placeholder="Primeiro nome"
+                  label="Nome"
+                  type="text"
+                />
+                <Input
+                  register={{ ...register("last_name") }}
+                  placeholder="Sobrenome"
+                  label="Sobrenome"
+                  type="text"
+                />
+                <Input
+                  register={{ ...register("email") }}
+                  placeholder="E-mail"
+                  label="Email"
+                  type="email"
+                  className="cursor-not-allowed text-gray-400"
+                  disabled={true}
+                />
+                <Input
+                  register={{ ...register("phone") }}
+                  placeholder="Telefone"
+                  label="Telefone"
+                  type="text"
+                />
+              </>
+            )
+          }
+          {
+            token && (
+              <>
+                <Input
+                  register={{ ...register("password") }}
+                  placeholder="Digite sua senha"
+                  label="Nova senha"
+                  icon={<AiOutlineEye />}
+                  type="password"
+                />
+                <Input
+                  register={{ ...register("confirmPassword") }}
+                  placeholder="Digite sua senha"
+                  label="Confirmar senha"
+                  icon={<AiOutlineEye />}
+                  type="password"
+                />
+              </>
+            )
+          }
         </div>
       </form>
     </ModelPage>

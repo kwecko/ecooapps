@@ -22,7 +22,9 @@ class ApiService {
   private initializeInterceptor(){
     this.axiosInstance.interceptors.request.use(
       async config => {
-        const token = cookies().get("token")?.value as string;
+        const token =
+          cookies().get("token")?.value ||
+          cookies().get("token-reset-password")?.value;
 
         if(token){
           config.headers["Authorization"] = `Bearer ${token}`
