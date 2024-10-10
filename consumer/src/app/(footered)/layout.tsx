@@ -10,7 +10,6 @@ export default function LayoutWithFooter({
       {children}
       <Footer
         appID={"CONSUMER"}
-        bgColor={"#3E5155"}
       />
     </div>
   );
