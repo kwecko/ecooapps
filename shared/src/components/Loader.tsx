@@ -1,17 +1,9 @@
-import { AppID } from "../library/types/app-id";
-
 interface LoaderProps {
   className?: string;
-  appId: AppID;
   loaderType: "page" | "component" | "login";
 }
 
-export default function Loader({ className, appId, loaderType }: LoaderProps) {
-  const fillColor = appId === "PRODUCER" 
-    ? "fill-slate-gray" 
-    : appId === "CDD" 
-    ? "fill-walnut-brown" 
-    : "fill-slate-gray";
+export default function Loader({ className, loaderType }: LoaderProps) {
 
     const size =
       loaderType === "page"
@@ -20,11 +12,15 @@ export default function Loader({ className, appId, loaderType }: LoaderProps) {
         ? "w-6 h-6"
         : "w-8 h-8";
 
+    const centering = 
+      loaderType === "page" ? "flex items-center justify-center"
+        : "flex items-center justify-center";
+
   return (
-    <div className="flex items-center justify-center space-x-2">
+    <div className={`${centering} space-x-2`}>
       <svg
         aria-hidden="true"
-        className={`animate-spin text-gray-200 ${fillColor} ${size} ${className || ''}`}
+        className={`animate-spin text-gray-200 fill-theme-default ${size} ${className || ''}`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
