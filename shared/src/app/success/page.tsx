@@ -3,13 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { AiFillCheckCircle } from "react-icons/ai";
-
-import { AppID } from "../../library/types/app-id";
-
 import Button from "@shared/components/Button";
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader";
-import Loading from "@cdd/app/loading";
 
 interface Button {
   router: string;
