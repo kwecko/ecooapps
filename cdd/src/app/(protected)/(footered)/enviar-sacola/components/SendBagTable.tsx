@@ -98,7 +98,6 @@ export default function SendBagTable({ page }: BagsProps) {
       {isLoading ? (
         <Loader
           className="mt-3"
-          appId="CDD"
           loaderType="component"
         />
       ) : !isLoading && bags.length === 0 ? (
