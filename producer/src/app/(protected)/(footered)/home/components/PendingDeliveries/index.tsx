@@ -99,7 +99,6 @@ export function PendingDeliveries() {
   if (isLoading) {
     return (
       <Loader
-        appId="PRODUCER"
         loaderType="component"
         className="mt-10"
       />

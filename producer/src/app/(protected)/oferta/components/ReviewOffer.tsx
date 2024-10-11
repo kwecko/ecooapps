@@ -1,7 +1,4 @@
-import { OfferProducts } from "@producer/app/_actions/offers/offer-products";
-import { toast } from "sonner";
 import Button from "@shared/components/Button";
-import Loader from "@shared/components/Loader";
 import { MiniTable } from "@shared/components/MiniTable";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@shared/utils/format-price";

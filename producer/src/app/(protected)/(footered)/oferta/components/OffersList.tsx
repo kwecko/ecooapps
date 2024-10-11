@@ -123,7 +123,7 @@ export default function OffersList({
         <OfferListHeading title={title} />
         {isLoading && page === 1 ? (
           <div className="w-full h-20 flex items-center justify-center">
-            <Loader appId="PRODUCER" loaderType="component" />
+            <Loader loaderType="component" />
           </div>
         ) : offers.length > 0 ? (
           <>
@@ -141,7 +141,7 @@ export default function OffersList({
             </div>
             {isLoading && page > 1 && (
               <div className="w-full flex items-center justify-center">
-                <Loader appId="PRODUCER" loaderType="component" />
+                <Loader loaderType="component" />
               </div>
             )}
           </>

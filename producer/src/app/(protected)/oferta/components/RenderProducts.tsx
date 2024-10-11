@@ -200,7 +200,6 @@ export default function RenderProducts({
             <div className="mt-2 flex justify-center w-full col-span-2">
               <Loader
                 className="mt-3"
-                appId="PRODUCER"
                 loaderType="component"
               />
             </div>

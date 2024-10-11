@@ -1,4 +1,4 @@
-import Success from "@shared/app/success";
+import Success from "@shared/app/success/page";
 
 const SuccessPage = () => <Success />;
 

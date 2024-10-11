@@ -100,7 +100,7 @@ export default function Home() {
     <>
       {isLoading ? (
         <div className="h-full w-full flex justify-center items-center">
-          <Loader className="h-full" appId="PRODUCER" loaderType="page" />
+          <Loader className="h-full" loaderType="page" />
         </div>
       ) : (
         <>

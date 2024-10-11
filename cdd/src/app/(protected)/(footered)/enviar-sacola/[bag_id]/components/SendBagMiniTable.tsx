@@ -80,8 +80,14 @@ export default function SendBagMiniTable() {
             title: "A oferta foi enviada!",
             description: "A sacola está a caminho do cliente.",
             button: {
-              secundary: "/",
-              primary: "/enviar-sacola",
+              secondary: {
+                router: "/",
+                name: "Voltar para a tela inicial",
+              },
+              primary: {
+                router: "/enviar-sacola",
+                name: "Enviar outra sacola",
+              },
             },
           })
         );
@@ -109,8 +115,14 @@ export default function SendBagMiniTable() {
             title: `A oferta foi ${statusName}!`,
             description: `A sacola do cliente foi ${statusName}.`,
             button: {
-              secundary: "/",
-              primary: "/enviar-sacola",
+              secondary: {
+                router: "/",
+                name: "Voltar para a tela inicial",
+              },
+              primary: {
+                router: "/enviar-sacola",
+                name: "Enviar outra sacola",
+              },
             },
           })
         );
