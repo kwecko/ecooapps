@@ -42,8 +42,7 @@ export default function FinalizarCompras() {
         <div>
           <button
             className="w-50 h-10 rounded-md text-center bg-theme-primary text-white font-poppins text-xs font-semibold"
-            onClick={() => router.push("/produtores")}
-          >
+            onClick={() => router.push("/inicio")}>
             Adicionar Produtos
           </button>
         </div>
