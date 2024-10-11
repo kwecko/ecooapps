@@ -96,6 +96,32 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     },
   },
+  "/recuperar-senha": {
+    hasPreviousPage: true,
+    returnPath: "/",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Esqueceu a senha?",
+      content: (
+        <p>
+          A tela de "Esqueceu a senha?" é um recurso essencial para recuperar o acesso à sua conta quando você não lembra sua senha atual. Ao acessar essa tela, você insere o e-mail cadastrado, e um link de recuperação é enviado para ele. Esse link direciona você para uma página onde pode definir uma nova senha. É uma maneira simples e segura de garantir que você recupere o controle da sua conta sem complicações.
+        </p>
+      ),
+      closeButtonText: "Saiba mais",
+      redirectPath: "",
+    },
+  },
+  "/sucesso": {
+    hasPreviousPage: true,
+    returnPath: "/",
+    hasHelpButton: false,
+    helpInfo: {
+      title: "",
+      content: (<></>),
+      closeButtonText: "",
+      redirectPath: "",
+    },
+  },
 };
 
 const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
