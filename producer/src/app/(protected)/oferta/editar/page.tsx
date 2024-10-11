@@ -6,39 +6,24 @@ import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
 import { LuChevronLeft, LuX } from "react-icons/lu";
-import { InputAmount, InputPrice, ReviewOffer } from "../components";
+import {
+  InputAmount,
+  InputPrice,
+  InputDescription,
+  ReviewOffer,
+} from "../components";
 import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 
 import { UpdateOffer } from "@producer/app/_actions/offers/update-offer";
 import { toast } from "sonner";
 
+import Loader from "@shared/components/Loader";
+
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true);
+
   const router = useRouter();
-
-  useEffect(() => {
-    const storedOfferData = sessionStorage.getItem("edit-offer-data");
-    if (storedOfferData) {
-      const offerData: OfferWithProductDTO = JSON.parse(storedOfferData);
-
-      setOfferId(offerData.id);
-      setProductId(offerData.product_id);
-      setProductName(offerData.product.name);
-      setAmount(
-        convertOfferAmount(offerData.amount, offerData.product.pricing)
-      );
-      setPrice(removeTaxFromPrice(offerData.price, 0.2));
-      setDescription(offerData.description ? offerData.description : "");
-      setPricing(offerData.product.pricing);
-      setCurrentStep(1);
-      sessionStorage.removeItem("edit-offer-data");
-    } else {
-      toast.error(
-        "Nenhuma oferta selecionada para edição. Selecione uma oferta para editar."
-      );
-      router.push("/oferta");
-    }
-  }, []);
 
   const LocalStorage = useLocalStorage();
 
@@ -48,21 +33,35 @@ export default function Home() {
   );
   const cycleId = cycle?.id ?? "";
 
-  const [offerId, setOfferId] = useState<string>("");
-  const [productId, setProductId] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [amount, setAmount] = useState<number>(1);
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-
-  const [pricing, setPricing] = useState<"WEIGHT" | "UNIT" | undefined>(
-    undefined
+  const [offer, setOffer] = useState<OfferWithProductDTO>(
+    {} as OfferWithProductDTO
   );
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 3;
+  const maxStep = 4;
+
+  useEffect(() => {
+    setIsLoading(true);
+    const storedOfferData = sessionStorage.getItem("edit-offer-data");
+    if (storedOfferData) {
+      const offerData: OfferWithProductDTO = JSON.parse(storedOfferData);
+      setOffer({
+        ...offerData,
+        amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
+        price: removeTaxFromPrice(offerData.price, 0.2),
+      });
+      setCurrentStep(1);
+      sessionStorage.removeItem("edit-offer-data");
+      setIsLoading(false);
+    } else {
+      toast.error(
+        "Nenhuma oferta selecionada para edição. Selecione uma oferta para editar."
+      );
+      router.push("/oferta");
+    }
+  }, []);
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -79,21 +78,18 @@ export default function Home() {
   };
 
   const cancelOffer = () => {
-    setProductId("");
-    setProductName("");
-    setAmount(0);
-    setPrice(0);
-    setDescription("");
-    setPricing(undefined);
+    setOffer({} as OfferWithProductDTO);
     setCurrentStep(0);
     router.push("/oferta");
   };
 
   const updateOffer = async () => {
     await UpdateOffer({
-      offer_id: offerId,
-      amount: pricing === "UNIT" ? amount : amount * 1000,
-      price: price,
+      offer_id: offer.id,
+      amount:
+        offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
+      price: offer.price,
+      description: offer.description ?? undefined,
     }).then(() => {
       toast.success("Oferta atualizada com sucesso!");
       router.push("/oferta");
@@ -102,60 +98,77 @@ export default function Home() {
 
   return (
     <>
-      <div className="h-footered-page w-full">
-        <div className="flex items-center justify-end w-full fixed px-6 pt-5">
-          <Button
-            title="Cancelar"
-            className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
-            onClick={cancelOffer}
-          >
-            <LuX className="w-7.5 h-7.5 text-theme-default" />
-          </Button>
+      {isLoading ? (
+        <div className="h-full w-full flex justify-center items-center">
+          <Loader className="h-full" appId="PRODUCER" loaderType="page" />
         </div>
-        {currentStep === 1 && (
-          <InputAmount
-            handleNextStep={handleNextStep}
-            pricing={pricing as "UNIT" | "WEIGHT"}
-            amount={amount}
-            setAmount={setAmount}
-          />
-        )}
-        {currentStep === 2 && (
-          <InputPrice
-            handleNextStep={handleNextStep}
-            price={price}
-            setPrice={setPrice}
-          />
-        )}
-        {currentStep === 3 && (
-          <ReviewOffer
-            cycleId={cycleId}
-            productId={productId}
-            productName={productName}
-            amount={amount}
-            price={price}
-            description={description}
-            pricing={pricing}
-            submitAction={updateOffer}
-          />
-        )}
-      </div>
-      <div className="h-footer w-full">
-        <div
-          className="flex w-full items-center p-5 justify-between
-             static bottom-0 h-footer bg-theme-background z-50"
-        >
-          <div className="flex items-center">
-            <LuChevronLeft className="w-7.5 h-7.5 text-theme-default" />
-            <Button
-              className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
-              onClick={handlePreviousStep}
-            >
-              Voltar
-            </Button>
+      ) : (
+        <>
+          <div className="h-footered-page w-full">
+            <div className="flex flex-col items-end justify-center absolute px-6 pt-5 w-inherit">
+              <Button
+                title="Cancelar"
+                className="flex items-center gap-2 text-sm font-medium text-theme-default w-7.5 h-7.5"
+                onClick={cancelOffer}
+              >
+                <LuX className="w-7.5 h-7.5 text-theme-default" />
+              </Button>
+            </div>
+            {currentStep === 1 && (
+              <InputAmount
+                handleNextStep={handleNextStep}
+                pricing={offer.product.pricing}
+                amount={offer.amount}
+                setAmount={(amount) => setOffer({ ...offer, amount: amount })}
+              />
+            )}
+            {currentStep === 2 && (
+              <InputPrice
+                handleNextStep={handleNextStep}
+                price={offer.price}
+                setPrice={(price) => setOffer({ ...offer, price: price })}
+              />
+            )}
+            {currentStep === 3 && (
+              <InputDescription
+                handleNextStep={handleNextStep}
+                description={offer.description ?? ""}
+                setDescription={(description) =>
+                  setOffer({ ...offer, description: description })
+                }
+              />
+            )}
+            {currentStep === 4 && (
+              <ReviewOffer
+                cycleId={cycleId}
+                productId={offer.product.id}
+                productName={offer.product.name}
+                amount={offer.amount}
+                price={offer.price}
+                description={offer.description ?? ""}
+                pricing={offer.product.pricing}
+                submitAction={updateOffer}
+              />
+            )}
           </div>
-        </div>
-      </div>
+          <div className="h-footer w-full">
+            <div
+              className="flex w-full items-center p-5 justify-between
+             static bottom-0 h-footer bg-theme-background z-50"
+            >
+              <div className="flex items-center">
+                <LuChevronLeft className="w-7.5 h-7.5 text-theme-default" />
+                <Button
+                  className="flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
+                  onClick={handlePreviousStep}
+                >
+                  Voltar
+                </Button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
