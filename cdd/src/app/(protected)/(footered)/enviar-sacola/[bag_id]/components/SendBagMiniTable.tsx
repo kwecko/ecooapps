@@ -85,7 +85,7 @@ export default function SendBagMiniTable() {
             },
           })
         );
-        router.push(`/success`);
+        router.push(`/sucesso`);
       }
     } catch (error) {
       toast.error("Erro desconhecido.");
@@ -114,7 +114,7 @@ export default function SendBagMiniTable() {
             },
           })
         );
-        router.push(`/success`);
+        router.push(`/sucesso`);
       }
     } catch (error) {
       toast.error("Erro desconhecido.");
