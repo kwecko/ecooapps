@@ -124,15 +124,15 @@ export default function SendBagMiniTable() {
   return (
     <>
       {isLoading ? (
-        <TableSkeleton /> // Exibe o esqueleto enquanto está carregando
+        <TableSkeleton />
       ) : bagOrder ? (
         <div className="w-full h-full flex flex-col justify-between">
           <div className="max-w-sm mx-auto bg-white rounded-lg">
-            <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
+            <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
               <span className="w-1/5">Pedido:</span>
               <span className="w-4/5">{bagOrder.id}</span>
             </div>
-            <div className="flex gap-10 items-center text-theme-primary border-b-[1px] border-theme-background p-3">
+            <div className="flex gap-10 items-center text-theme-primary border-b border-theme-background p-3">
               <span className="w-1/5 flex items-center">Status:</span>
               <div className="w-4/5 relative pr-4">
                 {bagOrder.status === "SEPARATED" ? (
@@ -200,7 +200,7 @@ export default function SendBagMiniTable() {
                 )}
               </div>
             </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
+            <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
               <span className="w-1/5">Cliente:</span>
               <span className="w-4/5">{`${bagOrder.user.first_name} ${bagOrder.user.last_name}`}</span>
             </div>
