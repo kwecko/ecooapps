@@ -115,7 +115,7 @@ export default function SendBagMiniTable() {
             title: `A oferta foi ${statusName}!`,
             description: `A sacola do cliente foi ${statusName}.`,
             button: {
-              secundary: {
+              secondary: {
                 router: "/",
                 name: "Voltar para a tela inicial",
               },
