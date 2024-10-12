@@ -18,7 +18,8 @@ const HAS_HELP_BUTTON = {
 };
 
 const RETURN_URLS = {
-  "/login": "/",
+  "/telegram": '/login',
+  "/login": "/inicio",
   "/oferta": "/",
   "/em-construcao": "/",
 };

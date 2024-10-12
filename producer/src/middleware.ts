@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { steps } from "./app/cadastrar/data";
 
 const PAGES_IN_CONSTRUCTION =
   process.env.PAGES_IN_CONSTRUCTION?.split(",") || [];
 
-const PROTECTED_PAGES = ["/produtos"];
+const PROTECTED_PAGES = ["/oferta", "/cadastrar/5", "alterar-cadastro", "informacoes-ciclo"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -13,6 +14,15 @@ export function middleware(request: NextRequest) {
 
   const pathnameStartsWith = (startsWith: string[]) =>
     startsWith.some((item) => pathname.startsWith(item));
+
+  if (pathname.startsWith("/cadastrar")) {
+
+    const currentStep = pathname.split("/").pop();
+
+    if (!steps.includes(parseInt(currentStep as string))) {
+      return NextResponse.redirect(new URL("/cadastrar/1", request.url));
+    }
+  }
 
   if (
     (pathname === "/" || pathnameStartsWith(PROTECTED_PAGES)) &&
@@ -29,5 +39,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/produtos/:path*"],
+  matcher: ["/", "/oferta/:path*", "/cadastrar/:path*"],
 };

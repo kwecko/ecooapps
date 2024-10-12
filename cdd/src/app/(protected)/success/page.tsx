@@ -36,7 +36,7 @@ export default function Success() {
     <div className="w-full h-full flex flex-col p-5 bg-theme-background">
       <div className="w-full h-screen flex justify-center flex-col">
         <div className="w-full h-4/5 flex items-center flex-col justify-center">
-          <AiFillCheckCircle className="w-[100px] h-[100px] text-rain-forest" />
+          <AiFillCheckCircle className="w-24 h-24 text-rain-forest" />
           <span className="w-1/2 mt-6 text-center text-3xl text-slate-gray font-medium">
             {data.title}
           </span>

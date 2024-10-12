@@ -1,168 +1,123 @@
-"use client";
-import { LuEye } from "react-icons/lu";
-import { Tooltip } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+'use client'
 
-import React, { Fragment, useState } from "react";
-import { Listbox, Transition } from "@headlessui/react";
-import { LuChevronsUpDown } from "react-icons/lu";
-import { FaCheck } from "react-icons/fa6";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { maskCellphone } from "@shared/utils/index"
+import { options } from "../data";
 
-import Input from "../components/Input";
-import { registerStep1FieldsSchema } from "../schemas";
+import { firstStepRegisterSchema } from "@shared/schemas/register"
+import CustomInput from "@shared/components/CustomInput"
+import SelectInput from "@shared/components/SelectInput"
+import Loader from "@shared/components/Loader";
+import ButtonV2 from "@shared/components/ButtonV2";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { FirstStepRegisterSchema, Roles } from "@shared/types/register";
 
-export default function RegisterStep1() {
-  const unparsedFormData =
-    typeof window !== "undefined"
-      ? localStorage.getItem("register-form-data")
-      : undefined;
-  const formData = unparsedFormData ? JSON.parse(unparsedFormData) : null;
+export default function FirstStep() {
+  const [role, setRole] = useState<Roles>(options[0].value);
+  const [isPending, starTransition] = useTransition()
+  const { getFromStorage, setInStorage, deleteFromStorage } = useLocalStorage();
 
-  const passwordRequirements = "Sua senha deve ter pelo menos 8 caracteres.";
+  const router = useRouter();
 
-  const userTypeOptions = ["Consumidor", "Produtor"];
-  
-  const [userType, setUserType] = useState("Consumidor");
+  const savedData = getFromStorage("register-form-data");
 
-  const handleUserTypeChange = (newUserType: string) => {
-    setUserType(newUserType);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    trigger,
+  } = useForm<FirstStepRegisterSchema>({
+    resolver: zodResolver(firstStepRegisterSchema),
+    mode: "onChange",
+    defaultValues: {
+      firstName: savedData?.firstName,
+      lastName: savedData?.lastName,
+      email: savedData?.email
+    }
+  });
 
-    const formStorageContent = JSON.parse(
-      localStorage.getItem("reg") as string
-    );
+  const submit = async ({ firstName, lastName, email }: FirstStepRegisterSchema) => {
+    starTransition(async () => {
+      const isValid = await trigger();
 
-    if (newUserType === "Consumidor") {
-      localStorage.setItem(
-        "register-form-data",
-        JSON.stringify({
-          ...formStorageContent,
-          roles: ["USER"],
-        })
-      );
-    } else {
-        localStorage.setItem(
-          "register-form-data",
-          JSON.stringify({
-            ...formStorageContent,
-            roles: ["USER", "ADMIN", "PRODUCER"],
-          })
-        );
+      if (!isValid) {
+        return;
       }
-  }
+
+      setInStorage("register-form-data", {
+        ...savedData,
+        firstName,
+        lastName,
+        email,
+        role
+      });
+      setInStorage("register-current-step", 2);
+      router.push("/cadastrar/2");
+    })
+  };
+
+  const handleChange = (value: Roles) => {
+    setRole(value);
+  };
 
   return (
-    <>
-      <div>
-      <span className="text-sm font-inter text-slate-gray">
-        Selecione o tipo de usuário
-      </span>
-      <Listbox value={userType} onChange={handleUserTypeChange}>
-          {({ open }) => (
-            <>
-              <div className="relative mt-1">
-                <Listbox.Button
-                  className={`relative w-full py-3 cursor-default rounded-[6px] bg-white pl-3 pr-10 text-left ring-1 ring-slate-gray ${
-                    open ? "ring-2 ring-slate-gray" : ""
-                  }`}
-                >
-                  <span className="block truncate text-slate-gray">
-                    {userType}
-                  </span>
-                  <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                    <LuChevronsUpDown
-                      className="h-5 w-5 text-slate-gray"
-                      aria-hidden="true"
-                    />
-                  </span>
-                </Listbox.Button>
-                <Transition
-                  as={Fragment}
-                  leave="transition ease-in duration-100"
-                  leaveFrom="opacity-100"
-                  leaveTo="opacity-0"
-                >
-                  <Listbox.Options className="relative mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                    {userTypeOptions?.map((option) => (
-                      <Listbox.Option
-                        key={option}
-                        className={({ selected }) =>
-                          `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                            selected
-                              ? "text-slate-gray bg-theme-background"
-                              : "bg-white"
-                          }`
-                        }
-                        value={option}
-                      >
-                        {({ selected }) => (
-                          <>
-                            <span className={`block truncate text-slate-gray}`}>
-                              {option}
-                            </span>
-                            {selected && (
-                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 bg-theme-background">
-                                <FaCheck
-                                  className="h-4 w-4 text-slate-gray"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            )}
-                          </>
-                        )}
-                      </Listbox.Option>
-                    ))}
-                  </Listbox.Options>
-                </Transition>
-              </div>
-            </>
-          )}
-        </Listbox>
-      </div>
-      <div className="mt-6">
-        <Input
-          name="email"
-          placeholder="suporte@ecoo.org.br"
-          label="Email"
-          type="email"
-          initialValue={formData?.email || null}
-          validationSchema={registerStep1FieldsSchema.email}
-          localStorageFormKey="register-form-data"
+    <form onSubmit={handleSubmit(submit)} className="w-full h-full flex flex-col justify-between mb-2">
+      <div className="w-full flex flex-col gap-6 mb-3">
+        <SelectInput
+          label="Selecione o tipo da conta"
+          options={options}
+          onChange={handleChange}
+          defaultOption={options[0]}
         />
-        <Input
-          name="phone"
-          placeholder="(xx) xxxxx-xxxx"
-          label="Celular"
+        <CustomInput
+          register={register('firstName')}
+          label="Primeiro nome"
+          placeholder="Insira o seu primeiro nome"
           type="text"
-          mask={maskCellphone}
-          initialValue={formData?.phone || null}
-          validationSchema={registerStep1FieldsSchema.phone}
-          localStorageFormKey="register-form-data"
+          errorMessage={errors.firstName?.message}
         />
-        <Input
-          name="password"
-          placeholder="******"
-          label={
-            (
-              <>
-                Senha
-                <Tooltip title={passwordRequirements}>
-                  <InfoCircleOutlined
-                    style={{ color: "rgba(0,0,0,.45)", marginLeft: 10 }}
-                  />
-                </Tooltip>
-              </>
-            ) as unknown as Element
-          }
-          type="password"
-          initialValue={formData?.password || null}
-          validationSchema={registerStep1FieldsSchema.password}
-          icon={<LuEye size={24} />}
-          localStorageFormKey="register-form-data"
+        <CustomInput
+          register={register('lastName')}
+          label="Segundo nome"
+          placeholder="Insira o seu segundo nome"
+          type="text"
+          errorMessage={errors.lastName?.message}
+        />
+        <CustomInput
+          register={register('email')}
+          label="Email"
+          placeholder="Insira o seu email"
+          type="text"
+          errorMessage={errors.email?.message}
         />
       </div>
-      
-    </>
+      <div className="w-full flex gap-3 mb-3">
+        <Link className="w-full" href={'/inicio'}>
+          <ButtonV2
+            type="button"
+            variant="transparent"
+            border={true}
+            className="h-12 flex justify-center items-center"
+            onClick={() => {
+              deleteFromStorage('register-current-step');
+              deleteFromStorage('register-form-data');
+            }}
+          >
+            Voltar
+          </ButtonV2>
+        </Link>
+        <ButtonV2
+          type="submit"
+          variant="default"
+          className="h-12 flex justify-center items-center"
+        >
+          {isPending ? (<Loader appId="PRODUCER" loaderType="login" />) : "Avançar"}
+        </ButtonV2>
+      </div>
+    </form>
   );
 }

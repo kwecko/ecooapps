@@ -3,6 +3,10 @@ export function maskCellphone(value: string) {
 
   const phoneWithoutMask = value.replace(/\D/g, "");
 
+  if (phoneWithoutMask.length <= 2) {
+    return phoneWithoutMask;
+  }
+
   if (phoneWithoutMask.length <= 10) {
     return phoneWithoutMask
       .replace(/(\d{2})(\d)/, "($1) $2")
@@ -16,6 +20,7 @@ export function maskCellphone(value: string) {
       .replace(/(-\d{4})\d+?$/, "$1");
   }
 }
+
 
 export function unmaskCellphone(value: string) {
   if (!value) return "";

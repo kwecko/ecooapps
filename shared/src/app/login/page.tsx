@@ -1,11 +1,28 @@
-import React from "react";
+"use client"
+
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { AppID } from "../../library/types/app-id";
 
 import FormLogin from "./components/form";
 
+import { SetTokenCookie } from "@shared/utils/set-token-cookie"
+
 export default function Login({ appID }: { appID: AppID }) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const token = searchParams.get('token')
+
+  useEffect(() => {
+    if(token) {
+      SetTokenCookie(token)
+      router.push("/cadastrar/5")
+    }
+  }, [searchParams])
+
   return (
     <div className="h-[inherit] w-full flex pl-3 pr-3 pt-3 flex-col justify-start items-center gap-9">
       <div className="w-full flex flex-col items-center justify-end pt-28 gap-2.5">

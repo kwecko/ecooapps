@@ -23,5 +23,8 @@
     "solicitado",
     "ofertar",
     "enviar",
-    "comprar"
+    "comprar",
+    "Email",
+    "Telefone",
+    "CPF"
   ]

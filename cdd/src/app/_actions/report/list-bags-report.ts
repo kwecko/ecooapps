@@ -28,6 +28,6 @@ export async function ListBagsReport(cycle_id: string) {
 
     return data;
   } catch (error) {
-    console.log(error)
+    console.error(error)
   }
 }
