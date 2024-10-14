@@ -12,10 +12,11 @@ import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
 
 import Modal from "@shared/components/Modal";
 import TableSkeleton from "@shared/components/TableSkeleton";
-import convertStatus from "@shared/utils/convert-status";
 
 import { BagOrder } from "@shared/interfaces/bag-order"
 import { useHandleError } from "@shared/hooks/useHandleError";
+
+import convertStatus from "@shared/utils/convert-status";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 import { convertUnit } from "@shared/utils/convert-unit";
 
