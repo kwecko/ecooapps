@@ -5,7 +5,7 @@ import ApiService from "@shared/service/index"
 interface ListBagsRequest {
   page: number;
   cycle_id: string;
-  status: "PENDING" | "SEPARATED" | "DISPATCHED";
+  status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED" | "CANCELLED";
   name?: string;
 }
 
