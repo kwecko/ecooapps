@@ -64,12 +64,11 @@ export default function SendBagMiniTable() {
     })();
   }, [bag_id]);
 
-  const handleStatusBag = async (bag_id: string, status: "SEPARATED") => {
-    try {
-      const response = await handleBag({
-        bag_id,
-        status: "DISPATCHED",
-      });
+  const handleStatusBag = (bag_id: string, status: "SEPARATED") => {
+    handleBag({
+      bag_id,
+      status: "DISPATCHED",
+    }).then(response => {
       if (response.message) {
         const messageError = response.message as string;
         handleError(messageError);
@@ -93,17 +92,16 @@ export default function SendBagMiniTable() {
         );
         router.push(`/sucesso`);
       }
-    } catch (error) {
+    }).catch(() => {
       toast.error("Erro desconhecido.");
-    }
-  };
+    });
+  }
 
-  const handleNewStatus = async (bag_id: string, status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED") => {
-    try {
-      const response = await handleBag({
-        bag_id,
-        status
-      });
+  const handleNewStatus = (bag_id: string, status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED") => {
+    handleBag({
+      bag_id,
+      status
+    }).then(response => {
       if (response.message) {
         const messageError = response.message as string;
         handleError(messageError);
@@ -128,10 +126,10 @@ export default function SendBagMiniTable() {
         );
         router.push(`/sucesso`);
       }
-    } catch (error) {
+    }).catch(() => {
       toast.error("Erro desconhecido.");
-    }
-  };
+    });
+  }
 
   return (
     <>
