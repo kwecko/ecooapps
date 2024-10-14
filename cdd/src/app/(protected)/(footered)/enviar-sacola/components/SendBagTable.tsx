@@ -61,8 +61,6 @@ export default function SendBagTable({ page }: BagsProps) {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log(bags)
-
   const debounceSearch = useDebounce(name)
   const { handleError } = useHandleError()
   const { getFromStorage } = useLocalStorage()
