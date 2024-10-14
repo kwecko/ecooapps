@@ -16,16 +16,12 @@ import pageSettings from "./page-settings";
 
 
 export interface RenderProductsProps {
-  setProductId: (id: string) => void;
-  setProductName: (name: string) => void;
-  setPricing: (pricing: "WEIGHT" | "UNIT") => void;
+  setProduct: (product: ProductDTO) => void;
   handleNextStep: () => void;
 }
 
 export default function RenderProducts({
-  setProductId,
-  setProductName,
-  setPricing,
+  setProduct,
   handleNextStep,
 }: RenderProductsProps) {
 
@@ -111,9 +107,7 @@ export default function RenderProducts({
   }, [query, page]);
 
   const handleSelectProduct = (product: ProductDTO) => {
-    setProductId(product.id);
-    setProductName(product.name);
-    setPricing(product.pricing);
+    setProduct(product);
     handleNextStep();
   };
 
@@ -206,7 +200,6 @@ export default function RenderProducts({
             <div className="mt-2 flex justify-center w-full col-span-2">
               <Loader
                 className="mt-3"
-                appId="PRODUCER"
                 loaderType="component"
               />
             </div>

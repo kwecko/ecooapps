@@ -1,12 +1,13 @@
-"use server"
+"use server";
 
-import ApiService from "../../service/index"
+import ApiService from "../../service/index";
+import { User as IUser } from "../../interfaces/user";
 
-export async function updateUser(data: {first_name: string, last_name: string, phone: string, password: string, email: string, cpf: string}) {
-    const response = ApiService.PATCH({
-    url: '/users',
-    data
-  })
+export async function updateUser(data: IUser) {
+  const response = ApiService.PATCH({
+    url: "/users",
+    data,
+  });
 
   return response;
 }

@@ -162,7 +162,7 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
       {isLoading ? (
         <div className="flex justify-center mt-3">
-          <Loader className="mt-3" appId="CDD" loaderType="component" />
+          <Loader className="mt-3" loaderType="component" />
         </div>
       ) : farmsFiltered.length === 0 ? (
         <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">

@@ -120,7 +120,6 @@ export default function FormLogin({ appID }: { appID: AppID }) {
         className="w-full h-12 flex flex-col items-center justify-center font-semibold rounded-md text-base leading-[22px] bg-theme-default text-white border-0 "
       >
         {isLoading ? <Loader
-          appId="PRODUCER"
           loaderType="login"
         /> : <>Entrar</>}
       </button>

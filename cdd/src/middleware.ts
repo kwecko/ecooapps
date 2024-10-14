@@ -1,14 +1,15 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-const PROTECTED_PAGES = [ "",
+const PROTECTED_PAGES = [
+  "",
   "/ofertas",
   "/relatorios",
   "/entregas",
   "/enviar-sacola",
   "/montar-sacola",
   "/informacoes-ciclo",
-  "/success"
+  "/sucesso",
 ];
 
 const PAGES_IN_CONSTRUCTION =
@@ -23,18 +24,18 @@ export function middleware(request: NextRequest) {
       if (pathname.startsWith(item)) return true;
     });
 
-    if (
-      (pathname === "/" || pathnameStartsWith(PROTECTED_PAGES)) 
-      && !access_token
-    ) {
-      return NextResponse.redirect(new URL("/inicio", request.url));
-    }
-  
-    if (PAGES_IN_CONSTRUCTION.includes(pathname)) {
-      return NextResponse.redirect(new URL("/em-construcao", request.url));
-    }
-  
-    return NextResponse.next();
+  if (
+    (pathname === "/" || pathnameStartsWith(PROTECTED_PAGES)) &&
+    !access_token
+  ) {
+    return NextResponse.redirect(new URL("/inicio", request.url));
+  }
+
+  if (PAGES_IN_CONSTRUCTION.includes(pathname)) {
+    return NextResponse.redirect(new URL("/em-construcao", request.url));
+  }
+
+  return NextResponse.next();
 }
 
 export const config = {
@@ -46,6 +47,6 @@ export const config = {
     "/montar-sacola/:path*",
     "/relatorios/:path*",
     "/informacoes-ciclo/:path*",
-    "/success/:path*"
+    "/sucesso/:path*",
   ],
 };

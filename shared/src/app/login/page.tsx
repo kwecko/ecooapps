@@ -19,7 +19,7 @@ export default function Login({ appID }: { appID: AppID }) {
 
         <div className="flex justify-center">
           <span className="text-sm leading-[22px] font-medium tracking-tight text-theme-default">
-            Esqueceu a senha? <Link href={"/recuperarsenha"} className="underline">Clique aqui</Link>
+            Esqueceu a senha? <Link href={"/recuperar-senha"} className="underline">Clique aqui</Link>
             <span className="inter-font underline"></span>
           </span>
         </div>
