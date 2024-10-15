@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 import { Bag } from "@shared/interfaces/bag"
-import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -17,8 +16,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { twMerge } from "tailwind-merge";
 import StatusFilterButtons from "./StatusFilterButton";
-import Table from "./table";
-
+import Table from "../../ofertas/components/table";
 
 interface BagsProps {
   page: number;
@@ -46,7 +44,7 @@ export default function SendBagTable({ page }: BagsProps) {
       key: "DISPATCHED",
     },
     {
-      name: "Recebidas",
+      name: "Entregues",
       key: "RECEIVED",
     },
     {
@@ -87,6 +85,7 @@ export default function SendBagTable({ page }: BagsProps) {
       }
 
       const { id } = cycle
+
       Promise.all([
         listBags({ cycle_id: id, page, status: "SEPARATED", name: debounceSearch }),
         listBags({ cycle_id: id, page, status: "DISPATCHED", name: debounceSearch }),
@@ -94,24 +93,22 @@ export default function SendBagTable({ page }: BagsProps) {
         listBags({ cycle_id: id, page, status: "DEFERRED", name: debounceSearch }),
       ])
         .then((responses) => {
-          const allBags = responses.flatMap(response => {
-            if (response.message) {
-              const messageError = response.message as string;
-              handleError(messageError);
-              return [];
-            } else if (response.data) {
-              return response.data;
-            }
+          const bag = responses.find(response => response.data && response.data.length > 0);
+      
+          if (!bag) {
+            const messageError = responses.find(response => response.message)?.message as string;
+            handleError(messageError);
             return [];
-          });
-          setBags(allBags);
-          setBagsFiltered(allBags);
+          }
+          setBags(bag.data);
+          setBagsFiltered(bag.data);
           setIsLoading(false);
         })
         .catch(() => {
           toast.error("Erro desconhecido.");
           setIsLoading(false);
         });
+
     })();
   }, [page, debounceSearch]);
 

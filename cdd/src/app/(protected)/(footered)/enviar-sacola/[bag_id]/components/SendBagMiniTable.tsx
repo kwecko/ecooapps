@@ -65,7 +65,7 @@ export default function SendBagMiniTable() {
     })();
   }, [bag_id]);
 
-  const handleStatusBag = (bag_id: string, status: "SEPARATED") => {
+  const handleStatusBag = (bag_id: string) => {
     handleBag({
       bag_id,
       status: "DISPATCHED",
@@ -98,7 +98,9 @@ export default function SendBagMiniTable() {
     });
   }
 
-  const handleNewStatus = (bag_id: string, status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED") => {
+  const handleNewStatus = (bag_id: string, status: "PENDING" | "SEPARATED"
+    | "DISPATCHED" | "RECEIVED" 
+    | "CANCELLED" | "DEFERRED" ) => {
     handleBag({
       bag_id,
       status
@@ -243,7 +245,7 @@ export default function SendBagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bagOrder.id, "SEPARATED")
+                  handleStatusBag(bagOrder.id)
                 }}
               />
             ) : bagOrder.status && isStatusChanged ? (
