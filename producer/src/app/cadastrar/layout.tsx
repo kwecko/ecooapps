@@ -35,7 +35,7 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
   }, [pathname]);
 
   if (!isLoaded) {
-    return <Loader appId="PRODUCER" loaderType="page" />;
+    return <Loader loaderType="page" />;
   }
 
   if(stepFromPath === 5) {

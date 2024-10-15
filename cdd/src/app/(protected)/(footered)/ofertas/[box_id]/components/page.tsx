@@ -80,12 +80,18 @@ export default function FarmOrdersTable() {
               title: "A oferta foi aprovada!",
               description: "A oferta do produtor foi aprovada.",
               button: {
-                secundary: "/",
-                primary: "/ofertas",
-              },
+                secondary: {
+                  router: "/",
+                  name: "Voltar para a tela inicial",
+                },
+                primary: {
+                  router: "/ofertas",
+                  name: "Verificar outra oferta"
+                },
+              }
             })
           );
-          router.push("/success");
+          router.push("/sucesso");
         }
       })
       .catch(() => {
@@ -109,12 +115,18 @@ export default function FarmOrdersTable() {
               title: "A oferta foi Reprovada!",
               description: "A oferta do produtor foi REPROVADA.",
               button: {
-                secundary: "/",
-                primary: "/ofertas",
+                secondary: {
+                  router: "/",
+                  name: "Voltar para a tela inicial",
+                },
+                primary: {
+                  router: "/ofertas",
+                  name: "Verificar outra oferta"
+                },
               },
             })
           );
-          router.push("/success");
+          router.push("/sucesso");
         }
       })
       .catch(() => {

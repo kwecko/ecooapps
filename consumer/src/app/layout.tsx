@@ -1,18 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
 import { Toaster } from "sonner";
 
 import { setAppID } from "@shared/next/library/set-app-id";
 import { getAppID } from "@shared/next/library/get-app-id";
 import { CartProvider } from "@consumer/context/cart";
-
-const poppins = Poppins({
-  weight: ["400", "500", "600", "700"],
-  subsets: ["latin"],
-  display: "swap",
-  preload: false,
-});
 
 export const metadata: Metadata = {
   title: "Painel e-COO",
@@ -27,11 +19,11 @@ export default function RootLayout({
   setAppID("CONSUMER");
 
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
       </head>
-      <body className={`${getAppID()} w-screen h-screen ${poppins.className}`}>
+      <body className={`${getAppID()} w-screen h-screen font-poppins`}>
         <div className="flex flex-row justify-center w-full h-full">
           <Toaster richColors position="top-right" />
           <div className="relative max-w-md w-full h-full">{children}</div>

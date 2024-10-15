@@ -8,7 +8,7 @@ import { HiOutlineSearch } from "react-icons/hi";
 import debounce from "lodash/debounce";
 import Loader from "@shared/components/Loader";
 import { toast } from "sonner";
-import { ProductDTO } from "@shared/domain/dtos/product-dto";
+import { IProduct } from "@shared/interfaces/offer";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { ModelPage } from "@shared/components/ModelPage";
 
@@ -16,16 +16,12 @@ import pageSettings from "./page-settings";
 
 
 export interface RenderProductsProps {
-  setProductId: (id: string) => void;
-  setProductName: (name: string) => void;
-  setPricing: (pricing: "WEIGHT" | "UNIT") => void;
+  setProduct: (product: IProduct) => void;
   handleNextStep: () => void;
 }
 
 export default function RenderProducts({
-  setProductId,
-  setProductName,
-  setPricing,
+  setProduct,
   handleNextStep,
 }: RenderProductsProps) {
 
@@ -33,7 +29,7 @@ export default function RenderProducts({
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string>("");
-  const [products, setProducts] = useState<ProductDTO[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
@@ -77,7 +73,7 @@ export default function RenderProducts({
             handleError(response.message as string);
           } else if (response.data) {
             if (!isCancelled) {
-              const fetchedProducts: ProductDTO[] = response.data;
+              const fetchedProducts: IProduct[] = response.data;
 
               setProducts((prevProducts) => {
                 const allProducts =
@@ -110,10 +106,8 @@ export default function RenderProducts({
     };
   }, [query, page]);
 
-  const handleSelectProduct = (product: ProductDTO) => {
-    setProductId(product.id);
-    setProductName(product.name);
-    setPricing(product.pricing);
+  const handleSelectProduct = (product: IProduct) => {
+    setProduct(product);
     handleNextStep();
   };
 
@@ -206,7 +200,6 @@ export default function RenderProducts({
             <div className="mt-2 flex justify-center w-full col-span-2">
               <Loader
                 className="mt-3"
-                appId="PRODUCER"
                 loaderType="component"
               />
             </div>

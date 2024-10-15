@@ -90,7 +90,7 @@ export default function FifthStep() {
           variant="default"
           className="h-12 flex justify-center items-center"
         >
-          {isPending ? (<Loader appId="PRODUCER" loaderType="login" />) : "Finalizar cadastro"}
+          {isPending ? (<Loader loaderType="login" />) : "Finalizar cadastro"}
         </ButtonV2>
         <Link href={'/inicio'}>
           <ButtonV2

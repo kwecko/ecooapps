@@ -1,7 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from 'next/navigation';
 import Link from "next/link";
+import { useCookies } from "react-cookie";
 
 import { AiOutlineEye } from "react-icons/ai";
 import { toast } from "sonner";
@@ -15,15 +17,24 @@ import Modal from "@shared/components/Modal";
 import Input from "@shared/components/Input";
 import Button from "@shared/components/Button";
 
-import { formSchema } from "./schemas";
-import { IUser } from "./interface";
+import { IUser } from "@shared/interfaces/user";  
+import { ModelPage } from "@shared/components/ModelPage";
 
 export default function AlterarCadastro() {
   const { handleError } = useHandleError();
   const { register, handleSubmit, reset } = useForm<IUser>();
+  const searchParams = useSearchParams();
+  const [_, setCookies, removeCookie] = useCookies();
+
+  const token = searchParams.get('token');
 
   useEffect(() => {
     (async () => {
+      if (token) {
+        setCookies('token-reset-password', token);
+        return;
+      }
+
       await getUser()
         .then((response) => {
           if (response.message) {
@@ -31,33 +42,46 @@ export default function AlterarCadastro() {
             handleError(messageError);
             return;
           }
-
           reset(response.data);
         })
         .catch((error) => {
           toast.error(error);
         });
     })();
-  }, []);
+  }, [token]);
 
   const handleSubmitForm = async (data: IUser) => {
+    Object.keys(data).forEach((key) => {
+      if (!data[key as keyof IUser]) {
+        delete data[key as keyof IUser];
+      }
+    });
 
-    const validation = formSchema.safeParse(data);
+    if (data.password && data.password.length < 8) {
+      toast.error("Senha deve ter pelo menos 8 caracteres.");
+      return;
+    }
 
-    if (!validation.success) {
-      toast.error(validation.error.errors[0].message);
+    if (data.phone && data.phone.length < 11) {
+      toast.error("Formato de telefone inválido.");
       return;
     }
 
     await updateUser(data)
       .then((response) => {
         if (response?.message) {
-          handleError(response.message);
+          toast.error(response.message);
+          return;
+        }
+
+        if (token) {
+          removeCookie('token-reset-password')
+          toast.success("Senha atualizada com sucesso!");
+          window.location.href = "/inicio";
           return;
         }
 
         toast.success("Cadastro atualizado com sucesso!");
-        localStorage.removeItem("register-form-data");
         window.location.href = "/";
       })
       .catch((error) => {
@@ -66,85 +90,94 @@ export default function AlterarCadastro() {
   };
 
   return (
-    <>
-      <div
-        className="w-full h-screen p-5 flex items-center flex-col bg-theme-background"
-      >
-        <div className="flex flex-col w-full items-center justify-end">
-          <h1 className="text-3xl font-medium text-slate-gray">Seu perfil</h1>
-          <span className="text-sm font-medium text-slate-gray text-center mt-2">
-            Após atualizar os seus dados, <br /> clique em salvar.
-          </span>
-        </div>
-        <div className="w-full h-full flex flex-col mt-10">
-          <form
-            id="alterar-cadastro-form"
-            className="w-full h-full flex flex-col justify-between"
-          >
-            <div className="w-full flex flex-col gap-4">
-              <Input
-                register={{...register("first_name")}}
-                placeholder="Primeiro nome"
-                label="Nome"
-                type="text"
-              />
-              <Input
-                register={{...register("last_name")}}
-                placeholder="Sobrenome"
-                label="Sobrenome"
-                type="text"
-              />
-              <Input
-                register={{...register("email")}}
-                placeholder="E-mail"
-                label="Email"
-                type="email"
-                className="cursor-not-allowed text-gray-400"
-                disabled={true}
-              />
-              <Input
-                register={{...register("phone")}}
-                placeholder="Telefone"
-                label="Telefone"
-                type="number"
-              />
-              <Input
-                register={{...register("password")}}
-                placeholder="Digite sua senha"
-                label="Nova senha"
-                icon={<AiOutlineEye />}
-                type="password"
-              />
-              <Input
-                register={{...register("confirmPassword")}}
-                placeholder="Confirme sua senha"
-                label="Confirmar senha"
-                icon={<AiOutlineEye />}
-                type="password"
-              />
-            </div>
-
-            <div className="w-full p-5 flex gap-4 z-10 px-2 py-1 pb-5 bg-transparent">
+    <ModelPage
+      title={token ? "Recuperar senha" : "Seu perfil"}
+      titleClassName="gap-5"
+      subtitle={`Após atualizar os seus dados, clique em salvar.`}
+      subtitleClassName="px-3"
+      buttonArea={
+        <div className="w-full p-5 flex gap-4 z-10 px-2 py-1 pb-5 bg-transparent">
+          {
+            !token && (
               <Link className="w-full" href={"/"}>
                 <Button className="w-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 py-4 hover:bg-gray-100">
                   Voltar
                 </Button>
               </Link>
-              <Modal
-                titleContentModal="Você tem certeza?"
-                contentModal="Ao clicar em confirmar seus dados de cadastro serão atualizados."
-                titleCloseModal="Cancelar"
-                titleConfirmModal="Confirmar"
-                titleOpenModal="Salvar"
-                modalAction={handleSubmit(handleSubmitForm)}
-                bgOpenModal="#2F4A4D"
-                bgConfirmModal="#2F4A4D"
-                bgCloseModal="bg-gray-100"
-              />
-            </div>
-          </form>
+            )
+          }
+          <Modal
+            titleContentModal="Você tem certeza?"
+            contentModal="Ao clicar em confirmar seus dados de cadastro serão atualizados."
+            titleCloseModal="Cancelar"
+            titleConfirmModal="Confirmar"
+            titleOpenModal="Salvar"
+            modalAction={handleSubmit(handleSubmitForm)}
+            bgOpenModal="#2F4A4D"
+            bgConfirmModal="#2F4A4D"
+            bgCloseModal="bg-gray-100"
+          />
         </div>
-      </div>
-    </>
+      }
+    >
+      <form
+        className="w-full h-full flex flex-col justify-between"
+      >
+        <div className="w-full flex flex-col gap-4 mt-4">
+          {
+            !token && (
+              <>
+                <Input
+                  register={{ ...register("first_name") }}
+                  placeholder="Primeiro nome"
+                  label="Nome"
+                  type="text"
+                />
+                <Input
+                  register={{ ...register("last_name") }}
+                  placeholder="Sobrenome"
+                  label="Sobrenome"
+                  type="text"
+                />
+                <Input
+                  register={{ ...register("email") }}
+                  placeholder="E-mail"
+                  label="Email"
+                  type="email"
+                  className="cursor-not-allowed text-gray-400"
+                  disabled={true}
+                />
+                <Input
+                  register={{ ...register("phone") }}
+                  placeholder="Telefone"
+                  label="Telefone"
+                  type="text"
+                />
+              </>
+            )
+          }
+          {
+            token && (
+              <>
+                <Input
+                  register={{ ...register("password") }}
+                  placeholder="Digite sua senha"
+                  label="Nova senha"
+                  icon={<AiOutlineEye />}
+                  type="password"
+                />
+                <Input
+                  register={{ ...register("confirmPassword") }}
+                  placeholder="Digite sua senha"
+                  label="Confirmar senha"
+                  icon={<AiOutlineEye />}
+                  type="password"
+                />
+              </>
+            )
+          }
+        </div>
+      </form>
+    </ModelPage>
   );
 }

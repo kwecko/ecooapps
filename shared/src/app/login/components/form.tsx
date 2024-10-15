@@ -90,7 +90,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
         variant="default"
         className="h-12 flex justify-center items-center mt-0"
       >
-        {isPending ? (<Loader appId="PRODUCER" loaderType="login" />) : "Entrar"}
+        {isPending ? (<Loader loaderType="login" />) : "Entrar"}
       </ButtonV2>
     </form>
   );

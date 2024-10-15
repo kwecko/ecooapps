@@ -136,7 +136,7 @@ export default function SecondStep() {
           variant="default"
           className="h-12 flex justify-center items-center"
         >
-          {isPending ? (<Loader appId="PRODUCER" loaderType="login" />) : "Avançar"}
+          {isPending ? (<Loader loaderType="login" />) : "Avançar"}
         </ButtonV2>
       </div>
     </form>

@@ -35,7 +35,7 @@ export function Header() {
   }, [])
 
   return (
-    <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 sticky pb-2.5 top-0 z-50 bg-theme-background">
+    <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 pb-2.5 top-0 z-10 bg-theme-background">
       <div className="flex-shrink">
         {isLoading ? (
           <SkeletonLoader />

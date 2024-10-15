@@ -8,9 +8,12 @@ import { IoCloseSharp } from "react-icons/io5";
 export const convertStatus = (status: string) => {
   const statuses: Record<string, string> = {
     PENDING: "Pendente",
-    VERIFIED: "Verificado",
-    CANCELLED: "Cancelado",
+    SEPARATED: "Verificado",
+    DISPATCHED: "Enviado",
     RECEIVED: "Recebido",
+    CANCELLED: "Cancelado",
+    DEFERRED: "Retornado",
+    
   };
 
   const colorStatus: Record<string, string> = {

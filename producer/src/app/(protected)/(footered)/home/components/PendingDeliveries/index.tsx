@@ -77,13 +77,13 @@ export function PendingDeliveries() {
 
       getBoxeCurrent({ cycle_id: cycle.id })
         .then((response) => {
-          if(response.message){
+          if (response.message) {
             handleError(response.message)
           } else {
             const data: IPendingDeliveries[] = response.data.orders
 
             const ordersFiltered = data.filter(item => item.status === 'PENDING');
-    
+
             setPendingDeliveries(ordersFiltered);
           }
         })
@@ -99,7 +99,6 @@ export function PendingDeliveries() {
   if (isLoading) {
     return (
       <Loader
-        appId="PRODUCER"
         loaderType="component"
         className="mt-10"
       />
@@ -122,11 +121,6 @@ export function PendingDeliveries() {
                 </button>
               </Tooltip>
             </span>
-            <Tooltip title={tooltipContent} trigger="click">
-              <button className="font-semibold bg-battleship-gray text-white text-[12px] rounded-md px-2.5">
-                ver endereço
-              </button>
-            </Tooltip>
           </div>
         </div>
         <button>

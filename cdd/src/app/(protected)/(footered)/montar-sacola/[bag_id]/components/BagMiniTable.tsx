@@ -67,13 +67,19 @@ export default function BagMiniTable() {
                 title: "A sacola está pronta!",
                 description: "A sacola do cliente está pronta.",
                 button: {
-                  secundary: "/",
-                  primary: "/montar-sacola",
+                  secondary: {
+                    router: "/",
+                    name: "Voltar para a tela inicial",
+                  },
+                  primary: {
+                    router: "/montar-sacola",
+                    name: "Enviar sacola agora"
+                  },
                 },
               })
             );
 
-            router.push("/success");
+            router.push("/sucesso");
             return;
           }
         })
@@ -97,13 +103,19 @@ export default function BagMiniTable() {
                 title: "A sacola foi alterada!",
                 description: "A sacola do cliente está pendente para ser montada",
                 button: {
-                  secundary: "/",
-                  primary: "/montar-sacola",
-                },
+                  secondary: {
+                    router: "/",
+                    name: "Voltar para a tela inicial",
+                  },
+                  primary: {
+                    router: "/montar-sacola",
+                    name: "Enviar sacola agora"
+                  },
+                }
               })
             );
 
-            router.push("/success");
+            router.push("/sucesso");
             return;
           }
         })
