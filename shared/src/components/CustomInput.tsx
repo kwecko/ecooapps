@@ -6,6 +6,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Masks } from "@shared/types/register";
 import { maskCellphone, maskCAF, maskCPF } from "@shared/utils/index";
 import ButtonV2 from "./ButtonV2";
+import InfoModal from "./InfoModal";
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -23,6 +24,7 @@ export default function CustomInput({
   ...inputProps
 }: CustomInputProps) {
   const [showPassword, setShowPassword] = useState(false);
+  const [isOpenInfoModal, setIsOpenInfoModal] = useState(false);
 
   const masksActions: Record<Masks, (value: string) => string> = {
     phone: (value: string) => maskCellphone(value),
@@ -52,6 +54,10 @@ export default function CustomInput({
     setShowPassword(!showPassword);
   };
 
+  const handleIconClick = () => {
+    setIsOpenInfoModal(true)
+  }
+
   return (
     <div className="w-full flex flex-col">
       <label className="text-slate-gray font-inter">
@@ -76,7 +82,7 @@ export default function CustomInput({
           ) || mask === 'caf' && (
             <button
               type="button"
-              onClick={togglePasswordVisibility}
+              onClick={handleIconClick}
               className="absolute right-3 top-3.5 text-theme-primary"
               tabIndex={-1}
             >
@@ -86,6 +92,19 @@ export default function CustomInput({
         </div>
       </label>
       {errorMessage && <span className="text-sm text-red-500 mt-1">{errorMessage}</span>}
+      <InfoModal
+        isOpen={isOpenInfoModal}
+        titleContentModal="Sobre o CAF"
+        contentModal={
+          <p>
+            O CAF (Cadastro Nacional da Agricultura Familiar) é uma identificação das Unidades Familiares de Produção Agrária (UFPA), dos Empreendimentos Familiares Rurais e das formas associativas de organização da agricultura familiar. Para obter a sua inscrição, clique aqui.
+          </p>
+        }
+        buttonOpenModal=""
+        icon="?"
+        titleCloseModal="Ok, entendi"
+        setIsOpen={setIsOpenInfoModal}
+      />
     </div>
   );
 }

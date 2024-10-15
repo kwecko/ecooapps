@@ -1,4 +1,4 @@
-export interface CycleData {
+export interface ICycle {
   id: string;
   alias: string;
   offer: number[];

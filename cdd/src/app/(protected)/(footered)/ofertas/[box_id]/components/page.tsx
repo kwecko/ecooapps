@@ -14,14 +14,14 @@ import { convertUnit } from "@shared/utils/convert-unit";
 import { convertStatus } from "@shared/utils/convert-status";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { FarmOrders } from "@shared/interfaces/farm-orders";
+import { IFarmOrders } from "@shared/interfaces/farm";
 import TableSkeleton from "@shared/components/TableSkeleton";
 
 export default function FarmOrdersTable() {
   const router = useRouter();
   const { box_id } = useParams();
 
-  const [farmOrders, setFarmOrders] = useState<FarmOrders | null>(null);
+  const [farmOrders, setFarmOrders] = useState<IFarmOrders | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const { handleError } = useHandleError();
