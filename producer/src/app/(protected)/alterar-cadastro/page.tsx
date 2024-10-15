@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +9,6 @@ import { useCookies } from "react-cookie";
 import { AiOutlineEye } from "react-icons/ai";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import InputMask from "react-input-mask";
 
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { getUser } from "@shared/_actions/account/get-user";
@@ -167,16 +166,12 @@ export default function AlterarCadastro() {
                 className="cursor-not-allowed text-gray-400"
                 disabled={true}
               />
-              <InputMask mask="(99) 99999-9999">
-                {() => (
-                  <Input
-                    register={{ ...register("phone") }}
-                    placeholder="Celular"
-                    label="Celular"
-                    type="text"
-                  />
-                )}
-              </InputMask>
+              <Input
+                register={{ ...register("phone") }}
+                placeholder="Celular"
+                label="Celular"
+                type="text"
+              />
             </div>
             <hr className="w-37.5 mt-7 mb-2.5 bg-french-gray h-px" />
             <h3 className="text-xl leading-7.5 font-medium text-theme-home-bg">
