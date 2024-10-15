@@ -14,7 +14,7 @@ export default function RegisterStep4() {
         name="agribusiness_name"
         placeholder="Fazenda Teixeira"
         type="text"
-        label="Nome agronegócio"
+        label="Nome Agroprodução Familiar"
         initialValue={formData?.agribusiness_name || null}
         validationSchema={registerStep4FieldsSchema.agribusiness_name}
         localStorageFormKey="register-form-data"
