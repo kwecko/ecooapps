@@ -33,7 +33,6 @@ export default function OrderCard({
       offer.product.pricing === "WEIGHT" &&
       value * 500 > offer.amount
     ) {
-      console.log(Math.floor(offer.amount / 500));
       _setCount(Math.floor(offer.amount / 500));
       return;
     }
@@ -49,7 +48,6 @@ export default function OrderCard({
     }
 
     _setCount(value);
-    console.log(cart);
   };
 
   const { cart, addOrder, removeOrder, updateOrderAmount, findOrderByOfferId } =
