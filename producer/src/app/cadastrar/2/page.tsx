@@ -46,6 +46,8 @@ export default function SecondStep() {
     starTransition(async () => {
       const savedData = getFromStorage("register-form-data");
 
+      console.log(savedData);
+
       if (!savedData) toast.error("Erro ao buscar os dados do localStorage")
 
       setInStorage('register-form-data', {

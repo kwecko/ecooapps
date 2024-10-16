@@ -21,8 +21,8 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
   const savedStep = parseInt(getFromStorage("register-current-step") || "1");
   const stepFromPath = parseInt(pathname.split("/").pop() as string);
 
-  useEffect(() => {
-    if(stepFromPath === 5){
+  useEffect(() => { 
+    if(stepFromPath === 4){
       setIsLoaded(true);
       return;
     }
@@ -38,7 +38,7 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
     return <Loader loaderType="page" />;
   }
 
-  if(stepFromPath === 5) {
+  if(stepFromPath === 4) {
     return (
       <motion.div
         className="w-full h-full"
@@ -57,21 +57,6 @@ export default function RegisterLayout({ children }: { children: React.ReactNode
           }
           overflowAuto={true}
         >
-          {children}
-        </ModelPage>
-      </motion.div>
-    );
-  }
-
-  if (savedStep === 4) {
-    return (
-      <motion.div
-        className="w-full h-full"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <ModelPage>
           {children}
         </ModelPage>
       </motion.div>

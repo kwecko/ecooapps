@@ -5,7 +5,7 @@ import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import Link from "next/link";
 
 export default function ThirdStep() {
-  const { setInStorage } = useLocalStorage()
+  const { deleteFromStorage } = useLocalStorage()
 
   return (
     <div className="w-full h-full flex flex-col justify-between mb-2">
@@ -16,25 +16,14 @@ export default function ThirdStep() {
         <span className="w-64">Caso não localize o email, verifique a sua caixa de spam.</span>
       </div>
       <div className="w-full flex gap-3 mb-3">
-        <Link className="w-full" href={'/cadastrar/2'}>
-          <ButtonV2
-            type="button"
-            variant="transparent"
-            border={true}
-            className="h-12 flex justify-center items-center"
-            onClick={() => setInStorage('register-current-step', 2)}
-          >
-            Voltar
-          </ButtonV2>
-        </Link>
-        <Link className="w-full" href={'/cadastrar/4'}>
+        <Link className="w-full" href={'/login'}>
           <ButtonV2
             type="button"
             variant="default"
             className="h-12 flex justify-center items-center"
-            onClick={() => setInStorage('register-current-step', 4)}
+            onClick={() => deleteFromStorage("register-current-step")}
           >
-            Avançar
+            OK
           </ButtonV2>
         </Link>
       </div>

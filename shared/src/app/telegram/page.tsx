@@ -1,5 +1,7 @@
 "use client"
 
+import { useSearchParams } from "next/navigation";
+
 import { FaTelegram } from "react-icons/fa";
 
 import { osUrls } from "./data";
@@ -9,10 +11,13 @@ import ButtonV2 from "@shared/components/ButtonV2";
 import { ModelPage } from "@shared/components/ModelPage";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
+
 export default function Telegram() {
+  const token = useSearchParams().get('token');
+
   const userOS = detectOs.getOSName();
 
-  const { deleteFromStorage } = useLocalStorage()
+  const { deleteFromStorage } = useLocalStorage();
 
   const handleButtonClick = () => {
     deleteFromStorage('register-form-data')
@@ -20,7 +25,7 @@ export default function Telegram() {
   }
 
   const telegramDownloadUrl = osUrls[userOS] || "https://web.telegram.org/";
-  const telegramOpenUrl = `${process.env.NEXT_PUBLIC_CHAT_URL}`;
+  const telegramOpenUrl = `${process.env.NEXT_PUBLIC_CHAT_URL}?start=${token}`;
 
   return (
     <ModelPage

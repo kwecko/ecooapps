@@ -5,7 +5,7 @@ import { steps } from "./app/cadastrar/data";
 const PAGES_IN_CONSTRUCTION =
   process.env.PAGES_IN_CONSTRUCTION?.split(",") || [];
 
-const PROTECTED_PAGES = ["/oferta", "/cadastrar/5", "alterar-cadastro", "informacoes-ciclo"];
+const PROTECTED_PAGES = ["/oferta", "/cadastrar/4", "alterar-cadastro", "informacoes-ciclo"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;

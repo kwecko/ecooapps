@@ -29,7 +29,8 @@ export function useHandleError() {
         return;
       }
 
-      toast.error(errorCode);
+      toast.error(errorMessage);
+      return;
     } 
 
     const words = errorCode.split(" ");
