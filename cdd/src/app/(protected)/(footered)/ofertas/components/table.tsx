@@ -1,7 +1,7 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-import EmptyBoxInformation from '@shared/components/EmptyBoxInformation'
+import EmptyBoxInformation from '@shared/components/EmptyBoxInformation';
 
 const styles = {
   itemHeader:
@@ -19,46 +19,51 @@ interface ITableProps {
 }
 
 const Table = ({ headers, info, onRowClick }: ITableProps) => {
-
   if (!info.length) {
     return (
-      <EmptyBoxInformation style="m-auto">Nenhuma Caixa Encontrada!</EmptyBoxInformation>
-    )
+      <EmptyBoxInformation style="m-auto">
+        Nenhuma Caixa Encontrada!
+      </EmptyBoxInformation>
+    );
   }
 
   return (
-    <table className="bg-white text-theme-primary leading-7 w-full table-fixed rounded-lg mt-3 mb-auto">
-      <thead className="w-full">
-        <tr>
-          {headers.map((header, index) => (
-            <th
-              key={index}
-              className={twMerge(styles.itemHeader, header.style)}
-            >
-              {header.label}
-            </th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>
-        {info.map((products) => (
-          <tr
-            key={products.id}
-            onClick={() => onRowClick && onRowClick(products.id)}
-            className="text-center cursor-pointer"
-          >
-            {products.data.map((product, cellIndex) => (
-              <td
-                key={cellIndex}
-                className={twMerge(styles.itemBody, product.style)}
+    <div className="w-full">
+      <div className="w-full"> {/* Defina a altura máxima e permita rolagem */}
+        <table className="bg-white text-theme-primary leading-7 w-full table-fixed rounded-lg mb-auto">
+          <thead className="bg-white sticky top-0 z-10"> {/* Cabeçalho fixo no topo e sombra para destaque */}
+            <tr>
+              {headers.map((header, index) => (
+                <th
+                  key={index}
+                  className={twMerge(styles.itemHeader, header.style)}
+                >
+                  {header.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {info.map((products) => (
+              <tr
+                key={products.id}
+                onClick={() => onRowClick && onRowClick(products.id)}
+                className="text-center cursor-pointer"
               >
-                {product.detail}
-              </td>
+                {products.data.map((product, cellIndex) => (
+                  <td
+                    key={cellIndex}
+                    className={twMerge(styles.itemBody, product.style)}
+                  >
+                    {product.detail}
+                  </td>
+                ))}
+              </tr>
             ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 };
 
