@@ -8,18 +8,21 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import { Bag } from "@shared/interfaces/bag"
+import { Bag } from "@shared/interfaces/bag";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { twMerge } from "tailwind-merge";
 import StatusFilterButtons from "./StatusFilterButton";
 import Table from "../../ofertas/components/table";
+import { IBagStatus } from "../page";
 
 interface BagsProps {
   page: number;
+  selectedStatus: IBagStatus;
+  setSelectedStatus: (status: IBagStatus) => void;
 }
 
 export interface IStatus {
@@ -27,96 +30,70 @@ export interface IStatus {
   key: string;
 }
 
-export default function SendBagTable({ page }: BagsProps) {
+export default function SendBagTable({ page, selectedStatus, setSelectedStatus }: BagsProps) {
   const router = useRouter();
 
   const statuses: IStatus[] = [
-    {
-      name: "Todas",
-      key: "ALL",
-    },
-    {
-      name: "Separadas",
-      key: "SEPARATED",
-    },
-    {
-      name: "Enviadas",
-      key: "DISPATCHED",
-    },
-    {
-      name: "Entregues",
-      key: "RECEIVED",
-    },
-    {
-      name: "Retornadas",
-      key: "DEFERRED",
-    },
+    { name: "Separadas", key: "SEPARATED" },
+    { name: "Enviadas", key: "DISPATCHED" },
+    { name: "Entregues", key: "RECEIVED" },
+    { name: "Retornadas", key: "DEFERRED" },
   ];
 
-  const [selectedStatus, setSelectedStatus] = useState("ALL");
   const [bags, setBags] = useState<Bag[]>([]);
   const [bagsFiltered, setBagsFiltered] = useState<Bag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const debounceSearch = useDebounce(name)
-  const { handleError } = useHandleError()
-  const { getFromStorage } = useLocalStorage()
+  const debounceSearch = useDebounce(name);
+  const { handleError } = useHandleError();
+  const { getFromStorage } = useLocalStorage();
 
   const handleStatusFilterClick = (status: IStatus) => {
-    if (selectedStatus === status.key || status.key === "ALL") {
-      setSelectedStatus("ALL");
-      setBagsFiltered(bags);
-      return;
-    }
-
-    setBagsFiltered(() => bags.filter((item) => item.status === status.key));
-    setSelectedStatus(status.key);
+    setSelectedStatus({ status: status.key as IBagStatus["status"] });
   };
 
   useEffect(() => {
-    (() => {
-      setIsLoading(true);
-      const cycle = getFromStorage("selected-cycle");
-      
-      if (!cycle) {
-        toast.error("Selecione um ciclo para ver os pedidos!");
-        return;
-      }
+    setIsLoading(true);
+    const cycle = getFromStorage("selected-cycle");
 
-      const { id } = cycle
+    if (!cycle) {
+      toast.error("Selecione um ciclo para ver os pedidos!");
+      setIsLoading(false);
+      return;
+    }
 
-      Promise.all([
-        listBags({ cycle_id: id, page, status: "SEPARATED", name: debounceSearch }),
-        listBags({ cycle_id: id, page, status: "DISPATCHED", name: debounceSearch }),
-        listBags({ cycle_id: id, page, status: "RECEIVED", name: debounceSearch }),
-        listBags({ cycle_id: id, page, status: "DEFERRED", name: debounceSearch }),
-      ])
-        .then((responses) => {
-          const bag = responses.find(response => response.data && response.data.length > 0);
-      
-          if (!bag) {
-            const messageError = responses.find(response => response.message)?.message as string;
-            handleError(messageError);
-            return [];
-          }
-          setBags(bag.data);
-          setBagsFiltered(bag.data);
-          setIsLoading(false);
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-          setIsLoading(false);
-        });
+    const { id } = cycle;
 
-    })();
-  }, [page, debounceSearch]);
+    listBags({
+      cycle_id: id,
+      page,
+      status: selectedStatus.status,
+      name: debounceSearch,
+    })
+      .then((response) => {
+        console.log(response)
+        if (response.data) {
+          setBags(response.data);
+          setBagsFiltered(response.data);
+        } else {
+          toast.error("Nenhuma sacola encontrada.");
+        }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        handleError(error);
+        setIsLoading(false);
+      });
+  }, [page, debounceSearch, selectedStatus]);
 
   const handleClick = (id: string) => {
     router.push(`/enviar-sacola/${id}`);
   };
 
-  const getStatus = (status: "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED") => {
+  const getStatus = (
+    status: IBagStatus["status"]
+  ) => {
     const colorStatus = {
       SEPARATED: "bg-battleship-gray",
       DISPATCHED: "bg-caramel",
@@ -137,7 +114,7 @@ export default function SendBagTable({ page }: BagsProps) {
         {status === "DEFERRED" && <IoCloseSharp color="white" />}
       </div>
     );
-  }
+  };
 
   const headers = [
     { label: "Código", style: "w-[30%]" },
@@ -145,17 +122,17 @@ export default function SendBagTable({ page }: BagsProps) {
     { label: "Status", style: "w-1/5 text-center" },
   ];
 
-  const info = 
-    bagsFiltered.length > 0 ? 
-      bagsFiltered.map((bag) => ({
-        id: bag.id, //Código
-        data: [
-          { detail: bag.id }, //Código
-          { detail: `${bag.user.first_name} ${bag.user.last_name}` }, //Cliente
-          { detail: getStatus(bag.status as "DISPATCHED" | "RECEIVED" | "DEFERRED") } //Status
-        ],
-      }))
-    : [];
+  const info =
+    bagsFiltered.length > 0
+      ? bagsFiltered.map((bag) => ({
+          id: bag.id,
+          data: [
+            { detail: bag.id },
+            { detail: `${bag.user.first_name} ${bag.user.last_name}` },
+            { detail: getStatus(bag.status as IBagStatus["status"]) },
+          ],
+        }))
+      : [];
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -165,8 +142,8 @@ export default function SendBagTable({ page }: BagsProps) {
         </div>
         <StatusFilterButtons
           statuses={statuses}
-          selectedStatus={selectedStatus}
-          handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+          selectedStatus={selectedStatus.status}
+          handleStatusFilterClick={handleStatusFilterClick}
         />
       </div>
 
@@ -183,7 +160,6 @@ export default function SendBagTable({ page }: BagsProps) {
         <>
           <Table headers={headers} info={info} onRowClick={handleClick} />
         </>
-        
       )}
     </div>
   );
