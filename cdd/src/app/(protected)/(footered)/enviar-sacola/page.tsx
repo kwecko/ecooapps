@@ -6,6 +6,7 @@ import SendBagTable from "./components/SendBagTable";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import PagingButton from "@shared/components/PagingButton";
+import { ModelPage } from "@shared/components/ModelPage";
 
 export interface IBagStatus {
   status: "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
@@ -66,15 +67,12 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full h-full p-5 pb-6 flex items-center flex-col">
-      <div className="flex flex-col h-1/5 w-full items-center justify-end mb-6">
-        <h1 className="text-3xl font-medium text-slate-gray mb-6 text-center">
-          Enviar sacolas
-        </h1>
-        <span className="text-sm font-medium text-slate-gray text-center">
-          Envie as sacolas abaixo
-        </span>
-      </div>
+    <ModelPage
+      title="Enviar sacolas"
+      titleClassName="gap-5"
+      subtitle="Envie as sacolas abaixo"
+      subtitleClassName="px-3"
+    >
       <div className="w-full h-[70%] overflow-y-auto">
         <SendBagTable
           page={page}
@@ -85,6 +83,6 @@ export default function Home() {
       <div className="w-full h-[10%] flex justify-center items-end">
         <PagingButton nextPage={nextPage} backPage={backPage} value={page} />
       </div>
-    </div>
+    </ModelPage>
   );
 }
