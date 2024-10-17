@@ -148,7 +148,6 @@ export default function BagMiniTable() {
               <span className="w-1/5">Prazo:</span>
               <span className="w-4/5">{getNextSaturdayDate()}</span>
             </div>
-            <div className="text-theme-primary p-3">Conteúdo:</div>
             <div className="flex gap-8 items-start text-theme-primary border-b border-theme-background p-3">
               <span className="w-1/5">Conteúdo:</span>
               <div className="w-4/5">
