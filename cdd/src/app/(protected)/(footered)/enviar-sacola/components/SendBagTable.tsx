@@ -41,7 +41,6 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
   ];
 
   const [bags, setBags] = useState<Bag[]>([]);
-  const [bagsFiltered, setBagsFiltered] = useState<Bag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -72,10 +71,8 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
       name: debounceSearch,
     })
       .then((response) => {
-        console.log(response)
         if (response.data) {
           setBags(response.data);
-          setBagsFiltered(response.data);
         } else {
           toast.error("Nenhuma sacola encontrada.");
         }
@@ -123,8 +120,8 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
   ];
 
   const info =
-    bagsFiltered.length > 0
-      ? bagsFiltered.map((bag) => ({
+    bags.length > 0
+      ? bags.map((bag) => ({
           id: bag.id,
           data: [
             { detail: bag.id },
@@ -136,7 +133,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
 
   return (
     <div className="w-full h-full flex flex-col">
-      <div>
+      <div className="sticky top-0 bg-default z-10">
         <div className="w-full flex gap-2 items-center mt-4 mb-4">
           <SearchInput onChange={setName} />
         </div>
@@ -157,9 +154,9 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
           <span className="text-center w-52">Nenhuma sacola encontrada!</span>
         </div>
       ) : (
-        <>
+        <div className="overflow-y-auto h-full">
           <Table headers={headers} info={info} onRowClick={handleClick} />
-        </>
+        </div>
       )}
     </div>
   );
