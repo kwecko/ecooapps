@@ -1,13 +1,12 @@
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
 import { LuPenSquare } from "react-icons/lu";
 import { FaArrowUp } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 interface EditOfferButtonProps {
-    offer: OfferWithProductDTO
-    repeat?: boolean
+    offer: IOfferWithProduct;
+    repeat?: boolean;
 }
-
 
 export default function EditOfferButton({ offer, repeat = false }: EditOfferButtonProps) {
     const router = useRouter();

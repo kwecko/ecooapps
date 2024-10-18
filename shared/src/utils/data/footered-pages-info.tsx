@@ -122,6 +122,22 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     },
   },
+  "/telegram": {
+    hasPreviousPage: true,
+    returnPath: "/login",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Como usar o Telegram?",
+      content: (
+        <p>
+          Para usar o Telegram, você deve baixar o aplicativo em seu celular e
+          clicar no botão para acessar o nosso canal.
+        </p>
+      ),
+      closeButtonText: "Ok, entendi",
+      redirectPath: "",
+    }
+  },
 };
 
 const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
@@ -275,6 +291,22 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       closeButtonText: "Saiba mais",
       redirectPath: "",
     },
+  },
+  "/telegram": {
+    hasPreviousPage: true,
+    returnPath: "/login",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Como usar o Telegram?",
+      content: (
+        <p>
+          Para usar o Telegram, você deve baixar o aplicativo em seu celular e
+          clicar no botão para acessar o nosso canal.
+        </p>
+      ),
+      closeButtonText: "Ok, entendi",
+      redirectPath: "",
+    }
   },
 };
 

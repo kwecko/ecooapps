@@ -1,5 +1,5 @@
 import React from "react";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
 import Image, { ImageLoader } from "next/image";
 import EditOfferButton from "./EditOfferButton";
 import DeleteOfferButton from "./DeleteOfferButton";
@@ -10,7 +10,7 @@ import {
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 
 interface OfferCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'ref'> {
-  offer: OfferWithProductDTO;
+  offer: IOfferWithProduct;
   onDeleteCard?: (offerId: string) => void;
   editable?: boolean;
   repeatable?: boolean;

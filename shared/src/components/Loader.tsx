@@ -7,7 +7,7 @@ export default function Loader({ className, loaderType }: LoaderProps) {
 
     const size =
       loaderType === "page"
-        ? "w-12 h-12"
+        ? "w-12 h-12 h-screen"
         : loaderType === "login"
         ? "w-6 h-6"
         : "w-8 h-8";

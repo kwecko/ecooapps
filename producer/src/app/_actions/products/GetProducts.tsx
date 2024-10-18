@@ -1,7 +1,6 @@
 "use server";
 import { cookies } from "next/headers";
-import { ProductDTO } from "@shared/domain/dtos/product-dto";
-
+import { IProduct } from "@shared/interfaces/offer";
 
 interface GetProductsProps {
   product: string;
@@ -11,7 +10,7 @@ interface GetProductsProps {
 export async function GetProducts({
   product,
   page,
-}: GetProductsProps): Promise<{ data: ProductDTO[] }> {
+}: GetProductsProps): Promise<{ data: IProduct[] }> {
   const token = cookies().get("token")?.value;
 
   if (token) {
@@ -29,7 +28,7 @@ export async function GetProducts({
       const data = await response.json();
 
       return {
-        data: data as ProductDTO[],
+        data: data as IProduct[],
       };
     } catch (error) {
       console.error("Erro ao fazer a chamada à API:", error);
@@ -37,6 +36,6 @@ export async function GetProducts({
   }
 
   return {
-    data: [] as ProductDTO[],
+    data: [] as IProduct[],
   };
 }

@@ -1,9 +1,7 @@
 "use client";
-import { useState } from "react";
 
 import Button from "@shared/components/Button";
 import Input from "@shared/components/Input";
-import { LuChevronLeft } from "react-icons/lu";
 import { toast } from "sonner";
 import { ModelPage } from "@shared/components/ModelPage";
 import { formatPrice } from "@shared/utils/format-price";

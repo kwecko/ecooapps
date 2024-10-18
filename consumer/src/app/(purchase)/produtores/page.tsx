@@ -6,7 +6,7 @@ import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import ProducerCard from "./components/ProducerCard";
 import { searchCatalogs } from "@consumer/app/_actions/search-catalogs";
-import { CatalogDTO } from "@shared/domain/dtos/catalog-dto";
+import { ICatalog } from "@shared/interfaces/catalog";
 import { useHandleError } from "@shared/hooks/useHandleError";
 
 export default function Produtores() {
@@ -52,7 +52,7 @@ export default function Produtores() {
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
-        const catalogs: CatalogDTO[] = response.data;
+        const catalogs: ICatalog[] = response.data;
         let newProducers = catalogs.map((catalog) => {
           return {
             id: catalog.id,

@@ -2,8 +2,6 @@ import { execSync } from "child_process";
 import * as path from "path";
 
 const PACKAGES: [string, string[]][] = [
-  ["./core", ["npm install"]],
-  ["./domain", ["npm install"]],
   ["./shared", ["npm install"]],
 ];
 

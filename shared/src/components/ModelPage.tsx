@@ -4,13 +4,14 @@ import React from "react";
 import { twMerge } from "tailwind-merge";
 
 interface ConfirmationPageProps {
-  title?: string;
+  title?: React.ReactNode;
   titleClassName?: string;
   titleGap?: string;
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   subtitleClassName?: string;
   buttonArea?: React.ReactNode;
   children?: React.ReactNode;
+  overflowAuto?: boolean
 }
 
 export function ModelPage({
@@ -21,9 +22,12 @@ export function ModelPage({
   subtitleClassName,
   buttonArea,
   children,
+  overflowAuto
 }: ConfirmationPageProps): React.JSX.Element {
+  const overflow = overflowAuto ? 'overflow-y-auto' : "overflow-hidden"
+
   return (
-    <div className="w-full h-[inherit] shrink-0 p-4 pt-5 pb-0 flex flex-col justify-stretch items-center gap-4 text-theme-default overflow-hidden bg-theme-background">
+    <div className={twMerge("w-full h-[inherit] shrink-0 p-4 pt-5 pb-0 flex flex-col justify-stretch items-center gap-4 text-theme-default overflow-hidden bg-theme-background ", overflow)}>
       {title && (
         <div
           className={twMerge(
