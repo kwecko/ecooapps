@@ -1,9 +1,14 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
 
 import Button from "@shared/components/Button";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 
 export default function Inicio() {
+  const { setInStorage } = useLocalStorage()
+
   return (
     <div className="h-[inherit] bg-theme-home-bg w-full flex pl-3 pr-3 pt-3 flex-col justify-center items-center gap-12 overflow-hidden">
       <div className="w-full flex flex-col items-center justify-end gap-4 pt-20 pb-1">
@@ -24,8 +29,8 @@ export default function Inicio() {
         <Link href={"/login"}>
           <Button className="w-full h-12 flex flex-col items-center justify-center font-semibold rounded-md text-base leading-[22px] text-slate-gray border-0 bg-white">Entrar</Button>
         </Link>
-        <Link href={"/cadastrar"}>
-          <Button className="w-full h-12 flex flex-col items-center justify-center font-semibold rounded-md text-base leading-[22px] text-white border-white border-2 box-border">Cadastrar</Button>
+        <Link href={"/cadastrar/1"}>
+          <Button onClick={() => setInStorage("register-current-step", 1)} className="w-full h-12 flex flex-col items-center justify-center font-semibold rounded-md text-base leading-[22px] text-white border-white border-2 box-border">Cadastrar</Button>
         </Link>
       </div>
 

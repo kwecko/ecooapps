@@ -8,7 +8,9 @@ import { HiDotsHorizontal } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import { Bag } from "@shared/interfaces/bag";
+
+import { IBag } from "@shared/interfaces/bag"
+import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -41,6 +43,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
   ];
 
   const [bags, setBags] = useState<Bag[]>([]);
+
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

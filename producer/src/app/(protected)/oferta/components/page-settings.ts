@@ -1,6 +1,6 @@
-import { PageSettings } from "@shared/interfaces/page-settings";
+import { IPageSettings } from "@shared/interfaces/page-settings";
 
-const pageSettings: { [key: string]: PageSettings } = {
+const pageSettings: { [key: string]: IPageSettings } = {
     productSelection: {
         title: "Escolha um produto",
         subtitle: "Este produto será disponibilizado para a venda através da plataforma",

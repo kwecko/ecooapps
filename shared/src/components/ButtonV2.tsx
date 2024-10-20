@@ -26,7 +26,7 @@ const styles: IClasses = {
   variant: {
     default: 'text-white bg-theme-default mt-6',
     light: 'text-theme-default bg-white',
-    transparent: 'text-theme-default'
+    transparent: 'text-theme-default mt-6'
   },
   border: 'border-theme-default border-2'
 }

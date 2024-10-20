@@ -1,5 +1,4 @@
 import "./globals.css";
-import { Poppins, Inter } from "next/font/google";
 import { Toaster } from "sonner";
 
 import { setAppID } from "@shared/next/library/set-app-id";

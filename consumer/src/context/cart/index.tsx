@@ -1,9 +1,9 @@
 "use client";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
 import React, { ReactNode, createContext, useContext, useState } from "react";
 
 interface Order {
-  offer: OfferWithProductDTO;
+  offer: IOfferWithProduct;
   amount: number;
 }
 

@@ -38,14 +38,17 @@ export async function login({ email, password, appID }: LoginRequest) {
     "CDD": {
       allowedRoles: ["ADMIN"],
       errorMessage: "Você está tentando acessar um app apenas para administradores!",
+      redirect: "/telegram"
     },
     "PRODUCER": {
       allowedRoles: ["PRODUCER", "ADMIN"],
       errorMessage: "Você está tentando acessar um app apenas para administradores ou produtores!",
+      redirect: "/telegram"
     },
     "CONSUMER": {
       allowedRoles: ["USER", "ADMIN", "PRODUCER"],
       errorMessage: "Você está tentando acessar um app apenas para administradores ou consumidores!",
+      redirect: "#"
     },
   };
 
@@ -54,6 +57,7 @@ export async function login({ email, password, appID }: LoginRequest) {
   if (validation && !roles.some((role: string) => validation.allowedRoles.includes(role))) {
     return {
       message: validation.errorMessage,
+      redirect: validation.redirect
     };
   }
 
