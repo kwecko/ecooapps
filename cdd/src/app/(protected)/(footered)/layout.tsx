@@ -14,7 +14,7 @@ export default function LayoutWithFooter({
         <div className="h-[var(--min-page-height)] overflow-y-auto">
           {children}
         </div>
-        <div className="h-[var(--footer-height)]">
+        <div className="h-[var(--footer-height)] overflow-hidden">
           <Footer
             appID={"CDD"}
           />

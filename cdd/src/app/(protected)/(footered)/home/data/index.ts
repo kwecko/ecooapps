@@ -19,10 +19,10 @@ export const contentLinksHomePage = [
   },
   {
     title: "Aprovar produtores",
-    link: "/",
-    isSelectedCycle: true,
-    hasNotification: false,
-    disabled: true
+    link: "/produtores",
+    isSelectedCycle: false,
+    hasNotification: true,
+    disabled: false
   },
   {
     title: "Gerar relatórios",

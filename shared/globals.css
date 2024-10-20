@@ -6,7 +6,7 @@
 @tailwind utilities;
 
 :root {
-  --footer-height: 7.5vh;
+  --footer-height: 10vh;
   --max-page-height: 100vh;
   --footered-page-height: calc(var(--max-page-height) - var(--footer-height));
   --min-page-height: var(--footered-page-height);
