@@ -1,6 +1,5 @@
 import { twMerge } from "tailwind-merge";
 
-import { IoIosCloseCircle, IoIosCheckmarkCircle } from "react-icons/io";
 import { FaCheck, FaExclamation } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { FaBoxOpen } from "react-icons/fa";
@@ -37,15 +36,15 @@ export function useGetStatus() {
   const getStatusInfo: StatusInfo = {
     oferta: {
       PENDING: {
-        content: <HiDotsHorizontal size={10} color="white" />,
+        content: <HiDotsHorizontal className="p-0.5" color="white" />,
         color: "bg-walnut-brown",
       },
       CANCELLED: {
-        content: <IoIosCloseCircle size={10} color="white" />,
+        content: <IoCloseSharp className="p-0.5" color="white" />,
         color: "bg-error",
       },
       VERIFIED: {
-        content: <IoIosCheckmarkCircle size={10} color="white" />,
+        content: <FaCheck className="p-1" color="white" />,
         color: "bg-rain-forest",
       },
     },
@@ -65,15 +64,15 @@ export function useGetStatus() {
         color: "bg-battleship-gray",
       },
       DISPATCHED: {
-        content: <HiDotsHorizontal color="white" />,
+        content: <HiDotsHorizontal className="p-0.5" color="white" />,
         color: "bg-walnut-brown",
       },
       RECEIVED: {
-        content: <FaCheck color="white" />,
+        content: <FaCheck className="p-1" color="white" />,
         color: "bg-rain-forest",
       },
       DEFERRED: {
-        content: <IoCloseSharp color="white" />,
+        content: <IoCloseSharp className="p-0.5" color="white" />,
         color: "bg-error",
       },
     },
@@ -85,7 +84,7 @@ export function useGetStatus() {
     return (
       <div
         className={twMerge(
-          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full",
+          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 rounded-full",
           statusInfo.color
         )}
       >
