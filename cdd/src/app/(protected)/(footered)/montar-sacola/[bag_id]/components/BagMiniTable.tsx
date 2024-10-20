@@ -151,7 +151,7 @@ export default function BagMiniTable() {
     <>
       {isLoading ? (
         <TableSkeleton />
-      ) : (
+      ) : bagOrder ? (
         <div className="w-full h-full flex flex-col justify-between">
           <div className="max-w-sm mx-auto bg-white rounded-lg">
             <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
@@ -170,7 +170,11 @@ export default function BagMiniTable() {
               <span className="w-1/5">Prazo:</span>
               <span className="w-4/5">{getNextSaturdayDate()}</span>
             </div>
-            <GroupOrder orders={bagOrder?.orders} />
+            {bagOrder && (
+              <GroupOrder 
+                orders={bagOrder.orders} 
+              />
+            )}
           </div>
           <div className="w-full h-[10%] flex justify-center items-end">
             {bagOrder?.status === "PENDING" ? (
@@ -204,6 +208,8 @@ export default function BagMiniTable() {
             )}
           </div>
         </div>
+      ) : (
+        <span className="text-center text-red-500">Erro ao carregar os dados da sacola</span>
       )}
     </>
   );

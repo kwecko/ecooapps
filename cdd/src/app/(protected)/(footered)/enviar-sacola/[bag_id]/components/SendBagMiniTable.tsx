@@ -19,6 +19,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import convertStatus from "@shared/utils/convert-status";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 import { convertUnit } from "@shared/utils/convert-unit";
+import GroupOrder from "@shared/components/GroupOrder";
 
 export default function SendBagMiniTable() {
   const router = useRouter()
@@ -221,17 +222,9 @@ export default function SendBagMiniTable() {
               <span className="w-1/5">Prazo:</span>
               <span className="w-4/5">{getNextSaturdayDate()}</span>
             </div>
-            <div className="flex gap-8 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
-              <span className="w-1/5">Conteúdo:</span>
-              <div className="w-4/5">
-                {bagOrder.orders.map(order => (
-                  <div key={order.id} className="flex flex-col mb-5">
-                    {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
-                    <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <GroupOrder 
+              orders={bagOrder.orders} 
+            />
           </div>
           <div className="w-full h-[10%] flex justify-center items-end">
             {bagOrder.status === "SEPARATED" ? (

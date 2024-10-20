@@ -3,7 +3,13 @@ import React from "react";
 import { BagOrder } from "../interfaces/bag-order";
 import { convertUnit } from "../utils/convert-unit";
 
-export default function GroupOrder(orders: BagOrder["orders"]) {
+interface GroupOrderProps {
+  orders: BagOrder["orders"];
+}
+
+export default function GroupOrder({
+  orders
+}: GroupOrderProps) {
   const description: { [key: string]: { amount: number; unit: string; farmName: string } } = {};
 
   orders.forEach((order) => {
