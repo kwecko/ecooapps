@@ -93,7 +93,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
   ) => {
     const colorStatus = {
       SEPARATED: "bg-battleship-gray",
-      DISPATCHED: "bg-caramel",
+      DISPATCHED: "bg-walnut-brown",
       RECEIVED: "bg-rain-forest",
       DEFERRED: "bg-error",
     };
@@ -101,14 +101,14 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
     return (
       <div
         className={twMerge(
-          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full",
+          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 rounded-full",
           `${colorStatus[status]}`
         )}
       >
         {status === "SEPARATED" && <FaExclamation size={10} color="white" />}
-        {status === "DISPATCHED" && <HiDotsHorizontal color="white" />}
-        {status === "RECEIVED" && <FaCheck color="white" />}
-        {status === "DEFERRED" && <IoCloseSharp color="white" />}
+        {status === "DISPATCHED" && <HiDotsHorizontal className="p-0.5" color="white" />}
+        {status === "RECEIVED" && <FaCheck className="p-1" color="white" />}
+        {status === "DEFERRED" && <IoCloseSharp className="p-0.5" color="white" />}
       </div>
     );
   };
