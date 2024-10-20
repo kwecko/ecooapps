@@ -24,6 +24,8 @@ import GroupOrder from "@shared/components/GroupOrder";
 export default function SendBagMiniTable() {
   const router = useRouter()
 
+  type IStatus = "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED" | "PENDING";
+
   const [bagOrder, setBagOrder] = useState<BagOrder | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -99,9 +101,7 @@ export default function SendBagMiniTable() {
     });
   }
 
-  const handleNewStatus = (bag_id: string, status: "PENDING" | "SEPARATED"
-    | "DISPATCHED" | "RECEIVED" 
-    | "CANCELLED" | "DEFERRED" ) => {
+  const handleNewStatus = (bag_id: string, status: IStatus) => {
     handleBag({
       bag_id,
       status
@@ -252,7 +252,7 @@ export default function SendBagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleNewStatus(bagOrder.id, bagStatus as "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "CANCELLED" | "DEFERRED")
+                  handleNewStatus(bagOrder.id, bagStatus as IStatus)
                 }}
               />
             ) : (

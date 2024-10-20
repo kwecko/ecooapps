@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
 import { FaCheck, FaBoxOpen } from "react-icons/fa6";
-import StatusFilterButtons from "./StatusFilterButton";
+import StatusFilterButtons from "@shared/components/StatusFilterButton";
 
 import Table from "./table";
 

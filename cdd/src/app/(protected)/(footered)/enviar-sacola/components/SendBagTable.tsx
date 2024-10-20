@@ -15,7 +15,7 @@ import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { twMerge } from "tailwind-merge";
-import StatusFilterButtons from "./StatusFilterButton";
+import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import Table from "../../ofertas/components/table";
 import { IBagStatus } from "../page";
 

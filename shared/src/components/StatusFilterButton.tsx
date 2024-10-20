@@ -1,7 +1,11 @@
 import { HiX } from "react-icons/hi";
 
 import { twMerge } from "tailwind-merge";
-import { IStatus } from "./SendBagTable";
+
+interface IStatus {
+  name: string;
+  key: string;
+}
 
 interface StatusFilterButtonsProps {
   selectedStatus: string;
