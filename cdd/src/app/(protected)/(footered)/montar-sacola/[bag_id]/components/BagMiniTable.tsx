@@ -6,6 +6,7 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { fetchBag } from "@cdd/app/_actions/bag/fetch-bag";
 import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
 
+import GroupOrder from "@shared/components/GroupOrder";
 import Modal from "@shared/components/Modal";
 import { BagOrder } from "@shared/interfaces/bag-order";
 import TableSkeleton from "@shared/components/TableSkeleton";
@@ -125,6 +126,27 @@ export default function BagMiniTable() {
     }
   }
 
+  const groupProducts = (orders: any[]) => {
+    const grouped: { [key: string]: { amount: number; unit: string; farmName: string } } = {};
+
+    orders.forEach((order) => {
+      const productName = order.offer.product.name;
+      const productKey = `${productName}-${order.offer.catalog.farm.name}`; // Unique key per product and farm
+
+      if (grouped[productKey]) {
+        grouped[productKey].amount += order.amount;
+      } else {
+        grouped[productKey] = {
+          amount: order.amount,
+          unit: convertUnit(order.offer.product.pricing),
+          farmName: order.offer.catalog.farm.name,
+        };
+      }
+    });
+
+    return grouped;
+  };
+
   return (
     <>
       {isLoading ? (
@@ -148,17 +170,7 @@ export default function BagMiniTable() {
               <span className="w-1/5">Prazo:</span>
               <span className="w-4/5">{getNextSaturdayDate()}</span>
             </div>
-            <div className="flex gap-8 items-start text-theme-primary border-b border-theme-background p-3">
-              <span className="w-1/5">Conteúdo:</span>
-              <div className="w-4/5">
-                {bagOrder?.orders.map(order => (
-                  <div key={order.id} className="flex flex-col mb-5">
-                    {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name} `}
-                    <span className="text-sm font-semibold text-theme-primary">{`(${order.offer.catalog.farm.name})`}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <GroupOrder orders={bagOrder?.orders} />
           </div>
           <div className="w-full h-[10%] flex justify-center items-end">
             {bagOrder?.status === "PENDING" ? (
@@ -196,3 +208,4 @@ export default function BagMiniTable() {
     </>
   );
 }
+
