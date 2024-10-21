@@ -68,6 +68,7 @@ const config: Config = {
         50: "12.5rem",
         86: "21.5rem",
         87.5: "21.875rem",
+        fullScreen: "100dvh",
       },
       height: {
         inherit: "inherit",
