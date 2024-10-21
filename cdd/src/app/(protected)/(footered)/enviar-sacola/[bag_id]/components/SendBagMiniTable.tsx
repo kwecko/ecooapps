@@ -18,7 +18,6 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 
 import convertStatus from "@shared/utils/convert-status";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
-import { convertUnit } from "@shared/utils/convert-unit";
 import GroupOrder from "@shared/components/GroupOrder";
 
 export default function SendBagMiniTable() {
@@ -26,7 +25,7 @@ export default function SendBagMiniTable() {
 
   type IStatus = "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED" | "PENDING";
 
-  const [bagOrder, setBagOrder] = useState<BagOrder | null>(null);
+  const [bagOrder, setBagOrder] = useState<IBagOrder | null>(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
