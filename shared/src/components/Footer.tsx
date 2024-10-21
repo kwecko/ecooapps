@@ -31,8 +31,13 @@ export default function Footer({
 
   const convertedPathname = convertPathname(pathname);
 
-  const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } =
-    getFooteredPageInfo(appID)[convertedPathname];
+  const footerPageInfo = getFooteredPageInfo(appID)[convertedPathname];
+
+  if(!footerPageInfo) {
+    throw new Error("Error when fetching footer information");
+  }
+
+  const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } = footerPageInfo;
 
   if (!hasPreviousPage && !hasHelpButton) {
     throw new Error("Footer component must have at least one button");

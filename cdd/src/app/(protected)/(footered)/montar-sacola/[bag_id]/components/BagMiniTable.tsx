@@ -8,7 +8,7 @@ import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
 
 import GroupOrder from "@shared/components/GroupOrder";
 import Modal from "@shared/components/Modal";
-import { BagOrder } from "@shared/interfaces/bag-order";
+import { IBagOrder } from "@shared/interfaces/bag";
 import TableSkeleton from "@shared/components/TableSkeleton";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
@@ -18,7 +18,7 @@ export default function BagMiniTable() {
   const router = useRouter()
   const { bag_id } = useParams();
 
-  const [bagOrder, setBagOrder] = useState<BagOrder>();
+  const [bagOrder, setBagOrder] = useState<IBagOrder>();
   const [isLoading, setIsLoading] = useState(true);
 
   const { handleError } = useHandleError()

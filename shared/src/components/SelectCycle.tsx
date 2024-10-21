@@ -11,17 +11,17 @@ import { useCycleProvider } from "../context/cycle/index";
 import { getCycles } from "../_actions/cycles/get-cycles"
 import { useHandleError } from "../hooks/useHandleError"
 import { useLocalStorage } from "../hooks/useLocalStorage"
-import { CycleData } from "../interfaces/cycle-data";
+import { ICycle } from "../interfaces/cycle";
 
 export default function SelectCycle() {
-  const [cycles, setCycles] = useState<CycleData[] | undefined>();
+  const [cycles, setCycles] = useState<ICycle[] | undefined>();
   const { cycle, setCycle } = useCycleProvider();
 
   const router = useRouter();
   const { handleError } = useHandleError()
   const { getFromStorage, setInStorage } = useLocalStorage()
 
-  const handleCycleChange = (newCycle: CycleData) => {
+  const handleCycleChange = (newCycle: ICycle) => {
     setCycle(newCycle);
 
     setInStorage("selected-cycle", newCycle)

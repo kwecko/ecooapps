@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useCartProvider } from "@consumer/context/cart";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
 
 import { ProductCard } from "@consumer/app/components/ProductCard";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 interface OrderCardProps {
-  offer: OfferWithProductDTO;
+  offer: IOfferWithProduct;
   exclude: boolean;
 }
 
@@ -33,7 +33,6 @@ export default function OrderCard({
       offer.product.pricing === "WEIGHT" &&
       value * 500 > offer.amount
     ) {
-      console.log(Math.floor(offer.amount / 500));
       _setCount(Math.floor(offer.amount / 500));
       return;
     }
@@ -49,7 +48,6 @@ export default function OrderCard({
     }
 
     _setCount(value);
-    console.log(cart);
   };
 
   const { cart, addOrder, removeOrder, updateOrderAmount, findOrderByOfferId } =

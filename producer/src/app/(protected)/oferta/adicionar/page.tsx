@@ -15,8 +15,8 @@ import {
   RenderProducts,
   ReviewOffer,
 } from "../components";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
-import { ProductDTO } from "@shared/domain/dtos/product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
+import { IProduct } from "@shared/interfaces/offer";
 
 export default function Home() {
   const router = useRouter();
@@ -30,8 +30,8 @@ export default function Home() {
   );
   const cycleId = cycle?.id ?? "";
 
-  const [offer, setOffer] = useState<OfferWithProductDTO>(
-    {} as OfferWithProductDTO
+  const [offer, setOffer] = useState<IOfferWithProduct>(
+    {} as IOfferWithProduct
   );
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -54,7 +54,7 @@ export default function Home() {
   };
 
   const cancelOffer = () => {
-    setOffer({} as OfferWithProductDTO);
+    setOffer({} as IOfferWithProduct);
     setCurrentStep(0);
     router.push("/oferta");
   };
@@ -107,7 +107,7 @@ export default function Home() {
         {currentStep === 1 && (
           <RenderProducts
             handleNextStep={handleNextStep}
-            setProduct={(product: ProductDTO) =>
+            setProduct={(product: IProduct) =>
               setOffer({ ...offer, product: product })
             }
           />

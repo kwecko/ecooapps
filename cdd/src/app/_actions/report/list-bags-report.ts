@@ -28,6 +28,8 @@ export async function ListBagsReport(cycle_id: string) {
 
     return data;
   } catch (error) {
-    console.log(error)
+    return {
+      message: "Erro desconhecido."
+    }
   }
 }

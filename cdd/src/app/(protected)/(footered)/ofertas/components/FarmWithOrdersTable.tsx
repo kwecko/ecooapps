@@ -11,7 +11,7 @@ import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import Table from "./table";
 
 import Loader from "@shared/components/Loader";
-import { Boxes } from "@shared/interfaces/farm";
+import { IBoxes } from "@shared/interfaces/farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import SearchInput from "@shared/components/SearchInput";
@@ -52,8 +52,8 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
 
   const [selectedStatus, setSelectedStatus] = useState("ALL");
   const [isLoading, setIsLoading] = useState(false);
-  const [farms, setFarms] = useState<Boxes[]>([]);
-  const [farmsFiltered, setFarmFiltered] = useState<Boxes[]>([]);
+  const [farms, setFarms] = useState<IBoxes[]>([]);
+  const [farmsFiltered, setFarmFiltered] = useState<IBoxes[]>([]);
   const [name, setName] = useState("");
 
   const { handleError } = useHandleError();

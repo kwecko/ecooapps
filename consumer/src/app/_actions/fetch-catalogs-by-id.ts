@@ -1,7 +1,7 @@
 "use server";
 
 import axios from "axios";
-import { CatalogMergeDTO } from "@shared/domain/dtos/catalog-dto";
+import { ICatalogMerge } from "@shared/interfaces/catalog";
 
 export async function fetchCatologsById(
   catalog_id: string | undefined,
@@ -24,5 +24,5 @@ export async function fetchCatologsById(
     return null;
   }
 
-  return response.data as CatalogMergeDTO | null;
+  return response.data as ICatalogMerge | null;
 }
