@@ -18,7 +18,7 @@ export default function Home() {
   const [selectedStatus, setSelectedStatus] = useState<IBagStatus>({
     status: "SEPARATED",
   });
-  // Removed prevStatus state
+
   const { getFromStorage } = useLocalStorage();
 
   useEffect(() => {
@@ -56,8 +56,6 @@ export default function Home() {
       cycle_id: id,
       status: selectedStatus.status,
     });
-
-    console.log("Fez a requisição")
 
     if (nextPageData.data && nextPageData.data.length > 0) {
       setPage((prev) => prev + 1);
