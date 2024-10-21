@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Inicio() {
   return (
-    <div className="h-[inherit] bg-theme-home-bg w-full flex pl-3 pr-3 pt-3 flex-col justify-center items-center gap-12 overflow-hidden">
+    <div className="h-fullScreen bg-theme-home-bg w-full flex pl-3 pr-3 pt-3 flex-col justify-center items-center gap-12 overflow-hidden">
       <div className="w-full flex flex-col items-center justify-end gap-4 pt-20 pb-1">
         <Image
           src="/logo/light.svg"
