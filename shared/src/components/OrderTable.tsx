@@ -18,7 +18,7 @@ interface ITableProps {
   onRowClick?: (id: string) => void;
 }
 
-const Table = ({ headers, info, onRowClick }: ITableProps) => {
+const OrderTable = ({ headers, info, onRowClick }: ITableProps) => {
   if (!info.length) {
     return (
       <EmptyBoxInformation style="m-auto">
@@ -67,4 +67,4 @@ const Table = ({ headers, info, onRowClick }: ITableProps) => {
   );
 };
 
-export default Table;
+export default OrderTable;

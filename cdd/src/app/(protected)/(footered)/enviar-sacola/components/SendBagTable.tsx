@@ -17,7 +17,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { twMerge } from "tailwind-merge";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
-import Table from "../../ofertas/components/table";
+import OrderTable from "@shared/components/OrderTable";
 import { IBagStatus } from "../page";
 
 interface BagsProps {
@@ -130,7 +130,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
             { detail: getStatus(bag.status as IBagStatus["status"]) },
           ],
         }))
-      : [];
+    : [];
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -156,7 +156,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
         </div>
       ) : (
         <div className="overflow-y-auto h-full">
-          <Table headers={headers} info={info} onRowClick={handleClick} />
+          <OrderTable headers={headers} info={info} onRowClick={handleClick} />
         </div>
       )}
     </div>
