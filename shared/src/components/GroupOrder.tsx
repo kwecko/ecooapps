@@ -1,10 +1,10 @@
 import React from "react";
 
-import { BagOrder } from "../interfaces/bag-order";
+import { IBagOrder } from "../interfaces/bag";
 import { convertOfferAmount, convertUnit } from "../utils/convert-unit";
 
 interface GroupOrderProps {
-  orders: BagOrder["orders"];
+  orders: IBagOrder["orders"];
 }
 
 export default function GroupOrder({
@@ -13,9 +13,8 @@ export default function GroupOrder({
   const description: { [key: string]: { amount: number; unit: string; farmName: string } } = {};
 
   orders.forEach((order) => {
-    console.log(order);
     const productName = order.offer.product.name;
-    const productKey = `${productName}-${order.offer.catalog.farm.name}`; // Unique key per product and farm
+    const productKey = `${productName}-${order.offer.catalog.farm.name}`;
 
     if (description[productKey]) {
       description[productKey].amount += convertOfferAmount(order.amount, order.offer.product.pricing);

@@ -1,27 +1,47 @@
 'use client'
 
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BagsTable from "./components/BagsTable";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 import PagingButton from "@shared/components/PagingButton";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { ModelPage } from "@shared/components/ModelPage";
+
+export interface IBagStatus {
+  status: "PENDING" | "SEPARATED";
+}
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
-  const [hasNextPage, setHasNextPage] = useState<boolean>(true);
+  const [prevState, setPrevState] = useState<{ page: number; status: IBagStatus }>({ page: 1, status: { status: "" as IBagStatus["status"] } });
+  const [selectedStatus, setSelectedStatus] = useState<IBagStatus>({
+    status: "PENDING",
+  });
 
   const { getFromStorage } = useLocalStorage()
+
+  useEffect(() => {
+    if (selectedStatus !== prevState.status) {
+      setPage(1);
+    }
+  }, [selectedStatus]);
 
   const backPage = () => {
     if (page > 1) {
       setPage((prev) => prev - 1);
+      setPrevState({ page, status: selectedStatus });
     }
   };
 
   const nextPage = async () => {
-    if (!hasNextPage) return;
+
+    if (prevState.status.status === selectedStatus.status && prevState.page === page) {
+      return;
+    }
+
+    setPrevState({ page, status: selectedStatus });
 
     const cycle = getFromStorage('selected-cycle')
 
@@ -35,30 +55,32 @@ export default function Home() {
     const nextPageData = await listBags({
       page: page + 1,
       cycle_id: id,
-      status: "PENDING",
+      status: selectedStatus.status,
     });
 
     if (nextPageData.data && nextPageData.data.length > 0) {
       setPage((prev) => prev + 1);
     } else {
-      setHasNextPage(false);
+      return;
     }
   };
 
   return (
-    <div className="w-full h-full p-5 pb-6 flex items-center flex-col">
-      <div className="flex flex-col h-1/5 w-full items-center justify-end mb-6">
-        <h1 className="text-3xl font-medium text-slate-gray mb-6 text-center">Montar sacolas</h1>
-        <span className="w-64 text-sm font-medium text-slate-gray text-center">
-          Monte as sacolas abaixo
-        </span>
-      </div>
+    <ModelPage
+      title="Montar sacola"
+      titleClassName="gap-5"
+      subtitle="Monte as sacolas abaixo"
+      subtitleClassName="px-3"
+    >
       <div className="w-full h-[70%] overflow-y-auto">
-        <BagsTable page={page} />
+        <BagsTable 
+          page={page} 
+          selectedStatus={selectedStatus} 
+          setSelectedStatus={setSelectedStatus} />
       </div>
       <div className="w-full h-[10%] flex justify-center items-end">
         <PagingButton nextPage={nextPage} backPage={backPage} value={page} />
       </div>
-    </div>
+    </ModelPage>
   );
 }
