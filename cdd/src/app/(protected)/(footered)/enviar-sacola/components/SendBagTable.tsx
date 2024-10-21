@@ -10,7 +10,6 @@ import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 
 import { IBag } from "@shared/interfaces/bag"
-import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -42,8 +41,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
     { name: "Retornadas", key: "DEFERRED" },
   ];
 
-  const [bags, setBags] = useState<Bag[]>([]);
-
+  const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
