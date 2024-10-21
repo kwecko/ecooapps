@@ -14,7 +14,7 @@ export interface IBagStatus {
 
 export default function Home() {
   const [page, setPage] = useState<number>(1);
-  const [prevState, setPrevState] = useState<{ page: number; status: IBagStatus }>({ page: 1, status: { status: "SEPARATED" } });
+  const [prevState, setPrevState] = useState<{ page: number; status: IBagStatus }>({ page: 1, status: { status: "" as IBagStatus["status"] } });
   const [selectedStatus, setSelectedStatus] = useState<IBagStatus>({
     status: "SEPARATED",
   });
