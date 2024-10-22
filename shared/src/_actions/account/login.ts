@@ -61,6 +61,9 @@ export async function login({ email, password, appID }: LoginRequest) {
     };
   }
 
-  SetTokenCookie(token);
+  SetTokenCookie({
+    token,
+    appID
+  });
   return reply;
 }
