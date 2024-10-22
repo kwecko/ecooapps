@@ -3,7 +3,8 @@ import React from "react";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { FaBoxOpen } from "react-icons/fa6";
 
-import { convertUnit } from "@shared/utils/convert-unit";
+import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
+import { formatComma } from "@shared/utils/format-comma";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 import { ProductDTO } from "@shared/domain/dtos/product-dto";
 
@@ -53,23 +54,26 @@ export function PendingDeliveriesTable({
       return acc;
     },
     {} as IGroupedPendingDeliveriesData
-  ); 
+  );
 
   return (
     <table className="text-theme-primary">
       <tbody className="text-center">
-        {Object.values(groupedData).map((item: IGroupedPendingDeliveriesDataItem) => {
-          return (
-            <tr key={item.product.id} className="text-left">
-              <td className={style.row}>
-                {item.amount}
-                {convertUnit(item.product.pricing)}
-              </td>
-              <td className={style.row}>{item.product.name}</td>
-              <td className={style.row}>{item.date}</td>
-            </tr>
-          );
-        })}
+        {Object.values(groupedData).map(
+          (item: IGroupedPendingDeliveriesDataItem) => {
+            return (
+              <tr key={item.product.id} className="text-left">
+                <td className={style.row}>
+                  {formatComma(convertOfferAmount(item.amount, item.product.pricing))}
+                  {" "}
+                  {convertUnit(item.product.pricing)}
+                </td>
+                <td className={style.row}>{item.product.name}</td>
+                <td className={style.row}>{item.date}</td>
+              </tr>
+            );
+          }
+        )}
       </tbody>
     </table>
   );
