@@ -308,22 +308,6 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     }
   },
-  "/produtores": {
-    hasPreviousPage: true,
-    returnPath: "/",
-    hasHelpButton: true,
-    helpInfo: {
-      title: "Como usar o Telegram?",
-      content: (
-        <p>
-          Para usar o Telegram, você deve baixar o aplicativo em seu celular e
-          clicar no botão para acessar o nosso canal.
-        </p>
-      ),
-      closeButtonText: "Ok, entendi",
-      redirectPath: "",
-    }
-  },
 };
 
 const consumerFooteredPagesInfo: Record<string, FooteredPageInfo> = {

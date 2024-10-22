@@ -7,15 +7,14 @@ import { useRouter } from "next/navigation";
 
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import { IBag } from "@shared/interfaces/bag"
+import Table from "@shared/components/Table";
+import { IBag } from "@shared/interfaces/bag";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
-
-import { EnviarStatus, useGetStatus } from "../../useGetStatus";
-import Table from "../../ofertas/components/table";
+import { useGetStatus, EnviarStatus } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
@@ -27,8 +26,8 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
 
   const { getStatus } = useGetStatus();
 
-  const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
+  const [bags, setBags] = useState<IBag[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const debounceSearch = useDebounce(name)

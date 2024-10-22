@@ -1,26 +1,23 @@
   "use client";
 
   import { toast } from "sonner";
-  import { twMerge } from "tailwind-merge";
   import { useEffect, useState } from "react";
   import { useRouter } from "next/navigation";
 
-  import { FaCheck, FaBoxOpen } from "react-icons/fa6";
+  import { FaBoxOpen } from "react-icons/fa6";
   import StatusFilterButtons from "./StatusFilterButton";
 
-  import Table from "./table";
-
+  import Table from "@shared/components/Table"
   import Loader from "@shared/components/Loader";
   import { IBoxes } from "@shared/interfaces/farm";
+  import { useDebounce } from "@shared/hooks/useDebounce";
+  import SearchInput from "@shared/components/SearchInput";
+  import { useGetStatus } from "@shared/hooks/useGetStatus";
   import { useHandleError } from "@shared/hooks/useHandleError";
   import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-  import SearchInput from "@shared/components/SearchInput";
-  import { useDebounce } from "@shared/hooks/useDebounce";
   import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
   import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
-
-import { useGetStatus } from "../../useGetStatus";
 
   interface FarmsProps {
     page: number;

@@ -29,6 +29,7 @@ export default function Home() {
       title="Enviar sacolas"
       titleGap="gap-2"
       subtitle="Envie as sacolas abaixo"
+      overflowAuto={true}
     >
       <div className="w-full h-full flex flex-col justify-between items-center">
         <SendBagTable page={page} setTotalItems={setTotalItems} />

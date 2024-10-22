@@ -7,15 +7,14 @@ import { useRouter } from "next/navigation";
 
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
+import Table from "@shared/components/Table"
 import { IBag } from "@shared/interfaces/bag"
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import Loader from "@shared/components/Loader";
-import { useHandleError } from "@shared/hooks/useHandleError";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import SearchInput from "@shared/components/SearchInput";
-
-import { MontarStatus, useGetStatus } from "../../useGetStatus";
-import Table from "../../ofertas/components/table";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { useGetStatus, MontarStatus } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;

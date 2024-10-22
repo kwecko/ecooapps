@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
 
-import PagingButton from "@shared/components/PagingButton";
 import { ModelPage } from "@shared/components/ModelPage";
+import PagingButton from "@shared/components/PagingButton";
 
 export default function Home() {
   const [page, setPage] = useState(1);

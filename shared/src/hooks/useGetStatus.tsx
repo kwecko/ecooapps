@@ -1,13 +1,13 @@
 import { twMerge } from "tailwind-merge";
 
-import { FaCheck, FaExclamation } from "react-icons/fa6";
-import { HiDotsHorizontal } from "react-icons/hi";
-import { FaBoxOpen } from "react-icons/fa";
 import { IoCloseSharp } from "react-icons/io5";
+import { HiDotsHorizontal } from "react-icons/hi";
+import { FaCheck, FaExclamation } from "react-icons/fa6";
 
-type GetStatusType = "oferta" | "montar" | "enviar";
+type GetStatusType = "oferta" | "montar" | "enviar" | "farm";
 
 type OfertaStatus = "PENDING" | "CANCELLED" | "VERIFIED";
+type FarmStatus = "ACTIVE" | "INACTIVE" | "PENDING";
 export type MontarStatus = "PENDING" | "SEPARATED";
 export type EnviarStatus = "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
 
@@ -15,12 +15,14 @@ type StatusMap = {
   oferta: OfertaStatus;
   montar: MontarStatus;
   enviar: EnviarStatus;
+  farm: FarmStatus;
 };
 
 type StatusContent = {
   oferta: { content: JSX.Element; color: string };
   montar: { content: JSX.Element; color: string };
   enviar: { content: JSX.Element; color: string };
+  farm: { content: JSX.Element; color: string };
 };
 
 type StatusInfo = {
@@ -50,12 +52,12 @@ export function useGetStatus() {
     },
     montar: {
       PENDING: {
-        content: <FaBoxOpen size={10} color="white" />,
+        content: <HiDotsHorizontal size={10} color="white" />,
         color: "bg-walnut-brown",
       },
       SEPARATED: {
-        content: <FaExclamation size={10} color="white" />,
-        color: "bg-battleship-gray",
+        content: <FaCheck className="p-1" color="white" />,
+        color: "bg-rain-forest",
       },
     },
     enviar: {
@@ -64,7 +66,7 @@ export function useGetStatus() {
         color: "bg-battleship-gray",
       },
       DISPATCHED: {
-        content: <HiDotsHorizontal className="p-0.5" color="white" />,
+        content: <HiDotsHorizontal color="white" />,
         color: "bg-walnut-brown",
       },
       RECEIVED: {
@@ -76,6 +78,20 @@ export function useGetStatus() {
         color: "bg-error",
       },
     },
+    farm: {
+      ACTIVE: {
+        content: <FaCheck className="p-1" color="white" />,
+        color: "bg-rain-forest",
+      },
+      INACTIVE: {
+        content: <IoCloseSharp className="p-0.5" color="white" />,
+        color: "bg-error",
+      },
+      PENDING: {
+        content: <HiDotsHorizontal className="p-0.5" color="white" />,
+        color: "bg-walnut-brown",
+      },
+    }
   };
 
   const getStatus = <T extends GetStatusType>({ type, status }: UseGetStatusProps<T>) => {

@@ -18,13 +18,6 @@ export const contentLinksHomePage = [
     hasNotification: false
   },
   {
-    title: "Aprovar produtores",
-    link: "/produtores",
-    isSelectedCycle: false,
-    hasNotification: true,
-    disabled: false
-  },
-  {
     title: "Gerar relatórios",
     link: "/relatorios",
     isSelectedCycle: true,
