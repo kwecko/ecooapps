@@ -1,13 +1,13 @@
 import React, { ReactNode } from "react";
 
 import { convertPricingToQuantityInGrams } from "@shared/utils/convert-unit";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
 
 interface ProductCardControlAmountProps
   extends React.HTMLAttributes<HTMLDivElement> {
   amount: number;
   setAmount: (amount: number) => void;
-  offer: OfferWithProductDTO;
+  offer: IOfferWithProduct;
 }
 
 export default function ProductCardControlAmount({

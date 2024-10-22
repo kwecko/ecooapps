@@ -10,11 +10,11 @@ export default function LayoutWithFooter({
 }) {
   return (
     <CycleProvider>
-      <div className="flex flex-col justify-between w-full bg-theme-background h-[100vh]">
+      <div className="flex flex-col justify-between w-full bg-theme-background h-fullScreen">
         <div className="h-[var(--min-page-height)] overflow-y-auto">
           {children}
         </div>
-        <div className="h-[var(--footer-height)]">
+        <div className="mt-auto">
           <Footer
             appID={"CDD"}
           />

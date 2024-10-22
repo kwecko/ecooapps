@@ -5,14 +5,14 @@ import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import OrderCard from "@consumer/app/components/OrderCard";
 import RedirectCart from "@consumer/app/_components/redirectCart";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
-import { CatalogMergeDTO } from "@shared/domain/dtos/catalog-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
+import { ICatalogMerge } from "@shared/interfaces/catalog";
 import React from "react";
 
 export default function Ofertas() {
   const params = useParams();
 
-  const [offers, setOffers] = useState([] as OfferWithProductDTO[]);
+  const [offers, setOffers] = useState([] as IOfferWithProduct[]);
   const [page, setPage] = useState(1 as number);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -26,7 +26,7 @@ export default function Ofertas() {
   const searchOffers = async () => {
     setIsLoading(true);
 
-    const responseFarmCatalogs: CatalogMergeDTO | null =
+    const responseFarmCatalogs: ICatalogMerge | null =
       await fetchCatologsById(
       params.id as string,
       params.cycle_id as string,
@@ -44,7 +44,7 @@ export default function Ofertas() {
     }
 
     const newOffers = [...offers, ...offersFarm];
-    setOffers(newOffers as OfferWithProductDTO[]);
+    setOffers(newOffers as IOfferWithProduct[]);
     const nextPage = page + 1;
     setPage(nextPage);
 

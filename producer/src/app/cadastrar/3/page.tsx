@@ -1,41 +1,32 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { AiOutlineMail } from "react-icons/ai";
+"use client"
 
-export default function RegisterStep3() {
-  const router = useRouter();
+import ButtonV2 from "@shared/components/ButtonV2";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import Link from "next/link";
 
-  const handleConfirmation = () => {
-    localStorage.setItem("register-form-step", JSON.stringify(4));
-
-    router.push("/login");
-  };
+export default function ThirdStep() {
+  const { deleteFromStorage } = useLocalStorage()
 
   return (
-    <>
-      <div className="flex flex-col justify-center items-center w-full h-full">
-        <div className="flex justify-center items-center w-[100px] h-[100px] rounded-full bg-rain-forest text-white">
-          <AiOutlineMail size={64} />
-        </div>
-        <span className="mt-6 text-center text-3xl leading-[34px] font-medium text-slate-gray">
-          Verifique o <br /> seu e-mail!
-        </span>
-        <span className="mt-4 text-center font-medium text-sm text-slate-gray">
-          O seu cadastro como produtor <br /> está quase concluído.
-        </span>
-        <span className="mt-4 text-center font-medium text-sm text-slate-gray">
-          Abra o seu e-mail em <br /> uma nova guia para confirmar <br /> seu
-          cadastro.
-        </span>
+    <div className="w-full h-full flex flex-col justify-between mb-2">
+      <div className="w-full flex flex-col items-center gap-6 mb-3 mt-12 text-slate-gray text-center">
+        <h1 className="text-2xl font-semibold">Verifique o seu email</h1>
+        <span className="w-64">Enviamos uma confirmação para o seu email de cadastro.</span>
+        <span className="w-64">A confirmação é obrigatória para utilizar a sua conta e-COO.</span>
+        <span className="w-64">Caso não localize o email, verifique a sua caixa de spam.</span>
       </div>
-      <div className="flex flex-col w-full">
-        <button
-          className="flex justify-center w-full py-[10px] border-2 rounded-[6px] text-base leading-[22px] tracking-tight font-semibold bg-slate-gray text-white border-slate-gray"
-          onClick={handleConfirmation}
-        >
-          OK
-        </button>
+      <div className="w-full flex gap-3 mb-3">
+        <Link className="w-full" href={'/login'}>
+          <ButtonV2
+            type="button"
+            variant="default"
+            className="h-12 flex justify-center items-center"
+            onClick={() => deleteFromStorage("register-current-step")}
+          >
+            OK
+          </ButtonV2>
+        </Link>
       </div>
-    </>
-  );
+    </div>
+  )
 }

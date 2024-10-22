@@ -5,13 +5,8 @@ const EXCLUDED_FOLDERS: string[] = ["node_modules"]; // Add folder names to excl
 
 const PATHS: [string, string][] = [
   ["../shared/src", "./.shared/src/"],
-  ["../utils", "./.shared/src/utils/"],
-  ["../core", "./.shared/src/core/"],
-  ["../domain", "./.shared/src/domain/"],
-  ["../interfaces", "./.shared/src/interfaces/"],
   ["../shared/tailwind.config.ts", "./tailwind.config.ts"],
   ["../shared/globals.css", "./src/app/globals.css"],
-  ["../warnings.ts", "./.shared/warnings.ts"],
 ];
 
 function copyFilesOrDirectories(sourceDestDirs: [string, string][]): void {
