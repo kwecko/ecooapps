@@ -29,12 +29,28 @@ export function useHandleError() {
         return;
       }
 
-      toast.error(errorCode);
+      toast.error(errorMessage);
+      return;
     } 
 
     const words = errorCode.split(" ");
 
     if(genericErrorsMapper.includes(words[0])) {
+      if(words[0] === 'Email'){
+        toast.error(`Email ${words[1]} já cadastrado`);
+        return;
+      }
+
+      if(words[0] === 'Telefone'){
+        toast.error(`Telefone ${words[1]} ${words[2]} já cadastrado`);
+        return;
+      }
+
+      if(words[0] === 'CPF'){
+        toast.error(`CPF ${words[1]} já cadastrado`);
+        return;
+      }
+
       toast.error(`${words[0]} não encontrado.`);
       return;
     }

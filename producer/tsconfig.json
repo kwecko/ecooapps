@@ -30,9 +30,6 @@
       "@shared/*": [
         "./.shared/src/*"
       ],
-      "@shared/warnings": [
-        "./.shared/warnings.ts"
-      ],
       "@shared/next/*": [
         "./.shared/src/*"
       ]
@@ -43,11 +40,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "../interfaces/inMemoryStubStore.ts",
-    "../interfaces/nextCookiesStubStore.ts",
-    "../shared/Action.ts",
-    "../shared/src/_actions/account/get-account/handler.ts",
-    "../shared/src/_actions/account/log-into-account.ts"
   ],
   "exclude": [
     "node_modules"

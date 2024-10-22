@@ -6,7 +6,7 @@ import { FaBoxOpen } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import { Bag } from "@shared/interfaces/bag"
+import { IBag } from "@shared/interfaces/bag"
 import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
@@ -21,7 +21,7 @@ interface BagsProps {
 export default function SendBagTable({ page }: BagsProps) {
   const router = useRouter();
 
-  const [bags, setBags] = useState<Bag[]>([]);
+  const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

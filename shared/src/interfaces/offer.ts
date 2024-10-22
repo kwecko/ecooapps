@@ -1,29 +1,44 @@
+import { OfferWithProductDTO } from '@shared/domain/dtos/offer-with-product-dto';
+
+
 export interface IPendingDeliveries {
   id: string;
   bag_id: string;
-  offer: Offer;
+  offer: OfferWithProductDTO;
   status: string;
   amount: number;
   created_at: string;
   updated_at: any;
 }
 
-export interface Offer {
+export interface IOffer {
   id: string;
   amount: number;
   price: number;
   description: any;
   catalog_id: string;
-  product: Product;
-  created_at: string;
-  updated_at: any;
+  product: IProduct;
+  created_at: Date;
+  updated_at: Date | null;
 }
 
-export interface Product {
+export interface IProduct {
   id: string;
   name: string;
+  pricing: "UNIT" | "WEIGHT";
   image: string;
-  pricing: string;
-  created_at: string;
-  updated_at: any;
+  created_at: Date;
+  updated_at: Date | null;
+}
+
+export interface IOfferWithProduct {
+  id: string;
+  price: number;
+  amount: number;
+  description: string | null;
+  catalog_id: string;
+  product_id: string;
+  created_at: Date;
+  updated_at: Date | null;
+  product: IProduct;
 }

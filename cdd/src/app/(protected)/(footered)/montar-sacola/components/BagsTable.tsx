@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 import Button from "@shared/components/Button";
-import { Bag } from "@shared/interfaces/bag"
+import { IBag } from "@shared/interfaces/bag"
 import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import Loader from "@shared/components/Loader";
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -21,7 +21,7 @@ interface BagsProps {
 export default function BagsTable({ page }: BagsProps) {
   const router = useRouter();
 
-  const [bags, setBags] = useState<Bag[]>([]);
+  const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 

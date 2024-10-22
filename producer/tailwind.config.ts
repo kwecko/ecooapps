@@ -22,6 +22,7 @@ const config: Config = {
         "slate-blue": "#507080",
         "slate-gray": "#2F4A4D",
         "rain-forest": "#00735E",
+        "ocean-blue": "#229ED9",
         "oslo-gray": "#8E8E93",
         eucalyptus: "#43DBAB",
         caramel: "#FFDD92",
@@ -56,9 +57,16 @@ const config: Config = {
         5.5: "1.375rem",
         7.5: "1.875rem",
         8.5: "2.125rem",
+        12.25: "3.0625rem",
+        12.5: "3.125rem",
         15: "3.75rem",
+        17: "4.375rem",
+        18: "4.5rem",
         22.5: "5.625rem",
+        25: "6.25rem",
         38: "9.5rem",
+        86: "21.5rem",
+        87.5: "21.875rem",
       },
       height: {
         inherit: "inherit",
@@ -68,12 +76,17 @@ const config: Config = {
       minHeight: {
         inherit: "inherit",
         15: "3.75rem",
+        17: "4.375rem",
         22.5: "5.625rem",
       },
       maxWidth: {
         inherit: "inherit",
         15: "3.75rem",
         22.5: "5.625rem",
+      },
+      minWidth: {
+        inherit: "inherit",
+        87.5: "21.875rem",
       },
       lineHeight: {
         4.5: "1.125rem",

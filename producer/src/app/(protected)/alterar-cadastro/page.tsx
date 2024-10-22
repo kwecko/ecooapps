@@ -18,7 +18,7 @@ import Modal from "@shared/components/Modal";
 import Input from "@shared/components/Input";
 import Button from "@shared/components/Button";
 
-import { User as IUser } from "@shared/interfaces/user";
+import { IUser } from "@shared/interfaces/user";  
 import { ModelPage } from "@shared/components/ModelPage";
 
 export default function AlterarCadastro() {

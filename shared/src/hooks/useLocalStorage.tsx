@@ -18,8 +18,13 @@ export function useLocalStorage() {
     return null;
   }
 
+  const deleteFromStorage = (key: string) => {
+    localStorage.removeItem(key)
+  }
+
   return {
     setInStorage,
-    getFromStorage
+    getFromStorage,
+    deleteFromStorage
   }
 }

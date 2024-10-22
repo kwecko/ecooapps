@@ -1,7 +1,7 @@
 "use client";
 
 import Button from "@shared/components/Button";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useMemo, useState } from "react";
@@ -33,8 +33,8 @@ export default function Home() {
   );
   const cycleId = cycle?.id ?? "";
 
-  const [offer, setOffer] = useState<OfferWithProductDTO>(
-    {} as OfferWithProductDTO
+  const [offer, setOffer] = useState<IOfferWithProduct>(
+    {} as IOfferWithProduct
   );
 
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -46,7 +46,7 @@ export default function Home() {
     setIsLoading(true);
     const storedOfferData = sessionStorage.getItem("edit-offer-data");
     if (storedOfferData) {
-      const offerData: OfferWithProductDTO = JSON.parse(storedOfferData);
+      const offerData: IOfferWithProduct = JSON.parse(storedOfferData);
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
@@ -78,7 +78,7 @@ export default function Home() {
   };
 
   const cancelOffer = () => {
-    setOffer({} as OfferWithProductDTO);
+    setOffer({} as IOfferWithProduct);
     setCurrentStep(0);
     router.push("/oferta");
   };

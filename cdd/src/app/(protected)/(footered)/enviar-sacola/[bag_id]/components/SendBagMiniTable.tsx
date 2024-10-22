@@ -14,7 +14,7 @@ import Modal from "@shared/components/Modal";
 import TableSkeleton from "@shared/components/TableSkeleton";
 import convertStatus from "@shared/utils/convert-status";
 
-import { BagOrder } from "@shared/interfaces/bag-order"
+import { IBagOrder } from "@shared/interfaces/bag"
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 import { convertUnit } from "@shared/utils/convert-unit";
@@ -22,7 +22,7 @@ import { convertUnit } from "@shared/utils/convert-unit";
 export default function SendBagMiniTable() {
   const router = useRouter()
 
-  const [bagOrder, setBagOrder] = useState<BagOrder | null>(null);
+  const [bagOrder, setBagOrder] = useState<IBagOrder | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const [bagStatus, setBagStatus] = useState<string | undefined>(undefined);

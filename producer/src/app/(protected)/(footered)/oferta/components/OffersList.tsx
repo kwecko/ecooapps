@@ -13,8 +13,8 @@ import { twMerge } from "tailwind-merge";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { toast } from "sonner";
-import { OfferWithProductDTO } from "@shared/domain/dtos/offer-with-product-dto";
-import { CatalogDTO } from "@shared/domain/dtos/catalog-dto";
+import { IOfferWithProduct } from "@shared/interfaces/offer";
+import { ICatalog } from "@shared/interfaces/catalog";
 import { useRouter } from "next/navigation";
 import { fetchCatalog } from "@producer/app/_actions/catalogs/fetch-catalog";
 import OfferListHeading from "./OfferListHeading";
@@ -31,7 +31,7 @@ export default function OffersList({
   notFoundMessage,
   ...rest
 }: OffersListProps) {
-  const [offers, setOffers] = useState<OfferWithProductDTO[] | []>([]);
+  const [offers, setOffers] = useState<IOfferWithProduct[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -70,8 +70,8 @@ export default function OffersList({
           handleError(response.message as string);
         } else if (response.data) {
           const dataOffers: {
-            catalog: CatalogDTO;
-            offers: OfferWithProductDTO[];
+            catalog: ICatalog;
+            offers: IOfferWithProduct[];
           } = response.data;
 
           setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
