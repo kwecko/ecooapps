@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
-import Table from "../../components/table";
+import OrderTable from "@shared/components/OrderTable";
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 
@@ -168,7 +168,7 @@ export default function FarmOrdersTable() {
         time={getNextSaturdayDate()}
       />
 
-      <Table headers={headers} info={info} />
+      <OrderTable headers={headers} info={info} />
 
       {
         !!farmOrders.orders.length && (
