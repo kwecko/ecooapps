@@ -54,8 +54,6 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
       })
         .then((response) => {
           if (response.message) {
-            console.log(response.message)
-
             handleError(response.message)
           } else if (response.data) {
             setBags(response.data);
