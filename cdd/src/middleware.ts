@@ -17,7 +17,7 @@ const PAGES_IN_CONSTRUCTION =
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const access_token = request.cookies.get("token")?.value;
+  const access_token = request.cookies.get("cdd_token")?.value;
 
   const pathnameStartsWith = (startsWith: string[]) =>
     startsWith.some((item) => {

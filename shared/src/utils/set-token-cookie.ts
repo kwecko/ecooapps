@@ -1,10 +1,19 @@
 "use server"
 
 import { cookies } from "next/headers"
+import { AppID } from "../library/types/app-id"
+import { tokenKeys } from "../data/token-keys";
 
-export const SetTokenCookie = (token: string) => {
-  cookies().delete("token")
-  cookies().set("token", token, {
+interface SetTokenCookieProps {
+  token: string;
+  appID: AppID
+}
+
+export const SetTokenCookie = ({ token, appID }: SetTokenCookieProps) => {
+  const tokenKey = tokenKeys[appID];
+
+  cookies().delete(tokenKey)
+  cookies().set(tokenKey, token, {
     httpOnly: process.env.NODE_ENV !== 'development',
     secure: process.env.NODE_ENV !== 'development',
     sameSite: "lax",

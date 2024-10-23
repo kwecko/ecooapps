@@ -18,8 +18,11 @@ export default function Login({ appID }: { appID: AppID }) {
 
   useEffect(() => {
     if(token) {
-      SetTokenCookie(token)
-      router.push("/cadastrar/5")
+      SetTokenCookie({
+        token,
+        appID
+      })
+      router.push("/cadastrar/4")
     }
   }, [searchParams])
 
