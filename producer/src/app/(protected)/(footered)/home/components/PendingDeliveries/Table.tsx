@@ -6,7 +6,7 @@ import { FaBoxOpen } from "react-icons/fa6";
 import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
 import { formatComma } from "@shared/utils/format-comma";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
-import { ProductDTO } from "@shared/domain/dtos/product-dto";
+import { IProduct } from "@shared/interfaces/offer";
 
 const style = {
   row: "py-2.5 border-b-2 border-custom-gray",
@@ -18,7 +18,7 @@ interface IPendingDeliveriesTableProps {
 
 interface IGroupedPendingDeliveriesDataItem {
   amount: number;
-  product: ProductDTO;
+  product: IProduct;
   date: string;
 }
 

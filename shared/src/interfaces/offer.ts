@@ -1,10 +1,7 @@
-import { OfferWithProductDTO } from '@shared/domain/dtos/offer-with-product-dto';
-
-
 export interface IPendingDeliveries {
   id: string;
   bag_id: string;
-  offer: OfferWithProductDTO;
+  offer: IOfferWithProduct;
   status: string;
   amount: number;
   created_at: string;
