@@ -7,7 +7,7 @@ import SelectCycle from "@shared/components/SelectCycle"
 
 export default function Cdd() {
   return (
-    <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)]">
+    <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)] overflow-y-auto mb-4">
       <div className="flex flex-col gap-5">
         <Header />
         <SelectCycle />

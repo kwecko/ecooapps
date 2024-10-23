@@ -1,43 +1,49 @@
 "use client";
 
 import { toast } from "sonner";
-import { useState } from "react";
-import DateInput from '@shared/components/DateInput';
-import ButtonV2 from "@shared/components/ButtonV2";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { useReportGenerator } from "./hooks/useReportGenerator"; 
+import { useState, useTransition } from "react";
+
 import { reportaButtonData } from "./data";
+import { useReportGenerator } from "./hooks/useReportGenerator"; 
+
+import Loader from "@shared/components/Loader";
+import ButtonV2 from "@shared/components/ButtonV2";
+import DateInput from '@shared/components/DateInput';
+import { ModelPage } from "@shared/components/ModelPage";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 
 export default function Home() {
   const [initialDate, setInitialDate] = useState('');
   const [finalDate, setFinalDate] = useState('');
+  const [isPending, startTransition] = useTransition();
 
   const { getFromStorage } = useLocalStorage();
-  const { generateReport } = useReportGenerator()
+  const { generateReport } = useReportGenerator();
 
   const handleClickButtonReport = async (name: string) => {
-    const cycle = getFromStorage('selected-cycle');
-
-    if (!cycle) {
-      toast.error("Selecione um ciclo para ver os pedidos!");
-      return;
-    }
-
-    const { id } = cycle;
-
-    generateReport(name, id)
+    startTransition(async () => {
+      const cycle = getFromStorage('selected-cycle');
+  
+      if (!cycle) {
+        toast.error("Selecione um ciclo para ver os pedidos!");
+        return;
+      }
+  
+      const { id } = cycle;
+  
+      generateReport(name, id)
+    });
   };
 
   return (
-    <div className="w-full h-full p-5 pb-6 flex items-center flex-col overflow-y-auto">
-      <div className="flex flex-col h-1/5 w-full items-center justify-end mb-10">
-        <h1 className="text-3xl font-medium text-slate-gray mb-6 text-center">Relatórios</h1>
-        <span className="w-64 text-sm font-medium text-slate-gray text-center">
-          Informe o período e o tipo de relatório que deseja gerar
-        </span>
-      </div>
-      <div className="w-full h-4/5 overflow-y-auto">
-        <div className='flex space-x-3 mb-3'>
+    <ModelPage
+      title="Relatórios"
+      titleGap="gap-2"
+      subtitle="Informe o período e o tipo de relatório que deseja gerar"
+      subtitleClassName="w-80"
+    >
+      <div className="w-full h-full flex flex-col">
+        <div className='flex space-x-3 mb-3 mt-8'>
           <DateInput
             label="Data inicial"
             value={initialDate}
@@ -51,21 +57,26 @@ export default function Home() {
             disabled={true}
           />
         </div>
-        <div>
-          {reportaButtonData.map((data) => {
-            return (
-              <ButtonV2
-                key={data.name}
-                variant="default"
-                onClick={() => handleClickButtonReport(data.onClick)}
-                disabled={data.disabled}
-              >
-                {data.name}
-              </ButtonV2>
-            )
-          })}
+        <div className="w-full h-full flex flex-col justify-between mb-2">
+          <div className="w-full flex flex-col">
+            {reportaButtonData.map((data) => {
+              return (
+                <ButtonV2
+                  key={data.name}
+                  variant="default"
+                  onClick={() => handleClickButtonReport(data.onClick)}
+                  disabled={data.disabled}
+                >
+                  {data.name}
+                </ButtonV2>
+              )
+            })}
+          </div>
+
+          {isPending && <Loader loaderType="component" />}
+
         </div>
       </div>
-    </div>
+    </ModelPage>
   );
 }

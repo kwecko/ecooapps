@@ -4,20 +4,20 @@ interface LoaderProps {
 }
 
 export default function Loader({ className, loaderType }: LoaderProps) {
+  const size =
+    loaderType === "page"
+      ? "w-12 h-12"
+      : loaderType === "login"
+      ? "w-6 h-6"
+      : "w-8 h-8";
 
-    const size =
-      loaderType === "page"
-        ? "w-12 h-12 h-screen"
-        : loaderType === "login"
-        ? "w-6 h-6"
-        : "w-8 h-8";
-
-    const centering = 
-      loaderType === "page" ? "flex items-center justify-center"
-        : "flex items-center justify-center";
+  const centering = 
+    loaderType === "page" 
+      ? "flex items-center justify-center min-h-screen"
+      : "w-full flex items-center justify-center";
 
   return (
-    <div className={`${centering} space-x-2`}>
+    <div className={`${centering} space-x-2 overflow-hidden`}>
       <svg
         aria-hidden="true"
         className={`animate-spin text-gray-200 fill-theme-default ${size} ${className || ''}`}
