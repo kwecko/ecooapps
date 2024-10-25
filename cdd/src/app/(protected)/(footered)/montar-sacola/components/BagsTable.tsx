@@ -4,25 +4,26 @@ import { useEffect, useState } from "react";
 import { FaBoxOpen, FaCheck } from "react-icons/fa6";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import Button from "@shared/components/Button";
+import Table from "@shared/components/Table"
 import { IBag } from "@shared/interfaces/bag"
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import Loader from "@shared/components/Loader";
-import { useHandleError } from "@shared/hooks/useHandleError";
 import { useDebounce } from "@shared/hooks/useDebounce";
-import SearchInput from "@shared/components/SearchInput";
+import SearchInput from "@shared/components/SearchInput";c
 import { IBagStatus } from "../page";
 import { twMerge } from "tailwind-merge";
 import { HiDotsHorizontal } from "react-icons/hi";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { useGetStatus, MontarStatus } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
-  selectedStatus: IBagStatus;
-  setSelectedStatus: (status: IBagStatus) => void;
+  setTotalItems: (total: number) => void;
 }
 
 export interface IStatus {
@@ -35,8 +36,10 @@ const statuses: IStatus[] = [
   { name: "Separadas", key: "SEPARATED" }
 ];
 
-export default function BagsTable({ page, selectedStatus, setSelectedStatus }: BagsProps) {
+export default function BagsTable({ page, setTotalItems }: BagsProps) {
   const router = useRouter();
+
+  const { getStatus } = useGetStatus();
 
   const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
@@ -51,36 +54,58 @@ export default function BagsTable({ page, selectedStatus, setSelectedStatus }: B
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    const cycle = getFromStorage("selected-cycle");
+    (() => {
+      setIsLoading(true)
+      const cycle= getFromStorage("selected-cycle");
 
-    if (!cycle) {
-      toast.error("Selecione um ciclo para ver os pedidos!");
-      setIsLoading(false);
-      return;
-    }
+      if (!cycle) {
+        toast.error("Selecione um ciclo para montar uma sacola!");
+        return;
+      }
 
-    const { id } = cycle;
+      const { id } = cycle
 
-    listBags({
-      cycle_id: id,
-      page,
-      status: selectedStatus.status,
-      name: debounceSearch,
-    })
-      .then((response) => {
-        if (response.data) {
-          setBags(response.data);
-        } else {
-          toast.error("Nenhuma sacola encontrada.");
-        }
-        setIsLoading(false);
+      listBags({
+        cycle_id: id,
+        page,
+        status: "PENDING",
+        name: debounceSearch
       })
-      .catch((error) => {
-        handleError(error);
-        setIsLoading(false);
-      });
-  }, [page, debounceSearch, selectedStatus]);
+        .then((response) => {
+          if (response.message) {
+            handleError(response.message)
+          } else if (response.data) {
+            setBags(response.data);
+            return;
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
+
+      listBags({
+        cycle_id: id,
+        page,
+        status: "SEPARATED",
+        name: debounceSearch
+      })
+        .then((response) => {
+          if (response.message) {
+            const messageError = response.message as string
+
+            handleError(messageError)
+          } else if (response.data) {
+            setBags(prevBags => [...prevBags, ...response.data]);
+            setIsLoading(false);
+            setTotalItems(bags.length)
+            return;
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
+    })();
+  }, [page, debounceSearch]);
 
   const handleClick = (id: string) => {
     router.push(`/montar-sacola/${id}`);
@@ -118,12 +143,12 @@ export default function BagsTable({ page, selectedStatus, setSelectedStatus }: B
       ? bags.map((bag) => ({
           id: bag.id,
           data: [
-            { detail: bag.id },
-            { detail: `${bag.user.first_name} ${bag.user.last_name}` },
-            { detail: getStatus(bag.status as IBagStatus["status"]) },
+            { detail: bag.id }, // Código
+            { detail: bag.user.first_name }, // Cliente
+            { detail: getStatus({ type: 'montar', status: bag.status as MontarStatus }) }, // Status
           ],
         }))
-    : [];
+      : [];
 
     return (
       <div className="w-full h-full flex flex-col">

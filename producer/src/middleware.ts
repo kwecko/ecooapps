@@ -10,7 +10,7 @@ const PROTECTED_PAGES = ["/oferta", "/cadastrar/4", "alterar-cadastro", "informa
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const access_token = request.cookies.get("token")?.value;
+  const access_token = request.cookies.get("producer_token")?.value;
 
   const pathnameStartsWith = (startsWith: string[]) =>
     startsWith.some((item) => pathname.startsWith(item));

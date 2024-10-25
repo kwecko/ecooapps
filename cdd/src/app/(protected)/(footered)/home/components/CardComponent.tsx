@@ -17,10 +17,10 @@ interface CardComponentProps {
 export default function CardComponent({ title, link, linkIcon, isSelectedCycle, hasNotification , disabled = false }: CardComponentProps) {
   const router = useRouter();
 
-  const { cycle } = useCycleProvider()
+  const { cycle } = useCycleProvider();
 
   const handleClickSelectedCycle = () => {
-    if (!cycle) {
+    if(isSelectedCycle && !cycle) {
       toast.warning("Selecione um ciclo para continuar!");
       return;
     }

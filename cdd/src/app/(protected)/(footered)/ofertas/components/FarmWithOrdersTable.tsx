@@ -81,50 +81,93 @@ export function FarmWithOrdersTable({ page }: FarmsProps) {
         return;
       }
 
-      const { id } = cycle;
-
-      getBoxesWithOrders({
-        cycle_id: id,
-        page,
-        name: debounceSearch,
-      })
-        .then((response: any) => {
-          if (response.message) {
-            const messageError = response.message as string;
-            handleError(messageError);
-          } else if (response.data) {
-            setFarms(response.data);
-            setFarmFiltered(response.data);
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    })();
-  }, [page, debounceSearch]);
-
-  const handleClick = (id: string) => {
-    router.push(`/ofertas/${id}`);
-  };
-
-  const getStatus = (status: "PENDING" | "CANCELLED" | "VERIFIED") => {
-    const colorStatus = {
-      PENDING: "bg-battleship-gray",
-      CANCELLED: "bg-error",
-      VERIFIED: "bg-rain-forest",
+      setFarmFiltered(() => farms.filter((item) => item.status === status.key));
+      setSelectedStatus(status.key);
     };
 
+    useEffect(() => {
+      (() => {
+        setIsLoading(true);
+        const cycle = getFromStorage("selected-cycle");
+
+        if (!cycle) {
+          toast.error("Selecione um ciclo para ver os pedidos!");
+          return;
+        }
+
+        const { id } = cycle;
+
+        getBoxesWithOrders({
+          cycle_id: id,
+          page,
+          name: debounceSearch,
+        })
+          .then((response: any) => {
+            if (response.message) {
+              const messageError = response.message as string;
+              handleError(messageError);
+            } else if (response.data) {
+              setFarms(response.data);
+              setFarmFiltered(response.data);
+              setTotalItems(response.data.length);
+            }
+          })
+          .catch(() => {
+            toast.error("Erro desconhecido.");
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      })();
+    }, [page, debounceSearch]);
+
+    const handleClick = (id: string) => {
+      router.push(`/ofertas/${id}`);
+    };
+
+    const headers = [
+      { label: "Prazo", style: "w-[30%]" },
+      { label: "Produtor", style: "w-1/2" },
+      { label: "Status", style: "w-1/5 text-center" },
+    ];
+
+    const info =
+      farmsFiltered.length > 0
+        ? farmsFiltered.map((farm) => ({
+            id: farm.id,
+            data: [
+              { detail: getNextSaturdayDate() }, // Prazo
+              { detail: farm.catalog.farm.name }, // Produtor
+              { detail: getStatus({ type: 'oferta', status: farm.status }) }, // Status
+            ],
+          }))
+        : [];
+
     return (
-      <div
-        className={twMerge(
-          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full",
-          `${colorStatus[status]}`
+      <div className="w-full h-full flex flex-col">
+        <div>
+          <div className="w-full flex gap-2 items-center mt-4 mb-4">
+            <SearchInput onChange={setName} />
+          </div>
+          <StatusFilterButtons
+            statuses={statuses}
+            selectedStatus={selectedStatus}
+            handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+          />
+        </div>
+
+        {isLoading ? (
+          <div className="flex justify-center mt-3">
+            <Loader className="mt-3" loaderType="component" />
+          </div>
+        ) : farmsFiltered.length === 0 ? (
+          <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
+            <FaBoxOpen className="text-walnut-brown" size={64} />
+            <span className="text-center w-52">Nenhum pedido encontrado!</span>
+          </div>
+        ) : (
+          <Table headers={headers} info={info} onRowClick={handleClick} />
         )}
-      >
-        {status === "VERIFIED" && <FaCheck color="white" />}
       </div>
     );
   };

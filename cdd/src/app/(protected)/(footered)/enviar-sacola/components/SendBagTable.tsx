@@ -6,10 +6,11 @@ import { FaBoxOpen, FaCheck, FaExclamation } from "react-icons/fa6";
 import { IoCloseSharp } from "react-icons/io5";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { useRouter } from "next/navigation";
+
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-
-import { IBag } from "@shared/interfaces/bag"
+import Table from "@shared/components/Table";
+import { IBag } from "@shared/interfaces/bag";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -19,11 +20,13 @@ import { twMerge } from "tailwind-merge";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
 import { IBagStatus } from "../page";
+import { useGetStatus, EnviarStatus } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
   selectedStatus: IBagStatus;
   setSelectedStatus: (status: IBagStatus) => void;
+  setTotalItems: (total: number) => void;
 }
 
 export interface IStatus {
@@ -34,6 +37,8 @@ export interface IStatus {
 export default function SendBagTable({ page, selectedStatus, setSelectedStatus }: BagsProps) {
   const router = useRouter();
 
+  const { getStatus } = useGetStatus();
+  
   const statuses: IStatus[] = [
     { name: "Separadas", key: "SEPARATED" },
     { name: "Enviadas", key: "DISPATCHED" },
@@ -43,6 +48,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
 
   const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
+  const [bags, setBags] = useState<IBag[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const debounceSearch = useDebounce(name);
@@ -121,15 +127,16 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
   ];
 
   const info =
-    bags.length > 0
-      ? bags.map((bag) => ({
-          id: bag.id,
-          data: [
-            { detail: bag.id },
-            { detail: `${bag.user.first_name} ${bag.user.last_name}` },
-            { detail: getStatus(bag.status as IBagStatus["status"]) },
-          ],
-        }))
+
+  bags.length > 0
+    ? bags.map((bag) => ({
+        id: bag.id,
+        data: [
+          { detail: bag.id }, // Código
+          { detail: bag.user.first_name }, // Cliente
+          { detail: getStatus({ type: 'enviar', status: bag.status as IBagStatus["status"] }) }, // Status
+        ],
+      }))
     : [];
 
   return (
@@ -158,6 +165,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
         <div className="overflow-y-auto h-full">
           <OrderTable headers={headers} info={info} onRowClick={handleClick} />
         </div>
+<!--         <Table headers={headers} info={info} onRowClick={handleClick}  -->
       )}
     </div>
   );

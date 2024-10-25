@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useSearchParams } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Image from "next/image";
 import Link from "next/link";
 import { useCookies } from "react-cookie";
 
@@ -25,13 +26,14 @@ export default function AlterarCadastro() {
   const { register, handleSubmit, reset } = useForm<IUser>();
   const searchParams = useSearchParams();
   const [_, setCookies, removeCookie] = useCookies();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const token = searchParams.get('token');
+  const token = searchParams.get("token");
 
   useEffect(() => {
     (async () => {
       if (token) {
-        setCookies('token-reset-password', token);
+        setCookies("token-reset-password", token);
         return;
       }
 
@@ -62,7 +64,7 @@ export default function AlterarCadastro() {
       return;
     }
 
-    if (data.phone && data.phone.length < 11) {
+    if (data.phone && data.phone.replace(/\D/g, "").length < 11) {
       toast.error("Formato de telefone inválido.");
       return;
     }
@@ -75,7 +77,7 @@ export default function AlterarCadastro() {
         }
 
         if (token) {
-          removeCookie('token-reset-password')
+          removeCookie("token-reset-password");
           toast.success("Senha atualizada com sucesso!");
           window.location.href = "/inicio";
           return;
@@ -92,20 +94,19 @@ export default function AlterarCadastro() {
   return (
     <ModelPage
       title={token ? "Recuperar senha" : "Seu perfil"}
-      titleClassName="gap-5"
+      titleClassName="pt-17"
+      titleGap="gap-2.5"
       subtitle={`Após atualizar os seus dados, clique em salvar.`}
-      subtitleClassName="px-3"
+      subtitleClassName="px-9 leading-5.5"
       buttonArea={
-        <div className="w-full p-5 flex gap-4 z-10 px-2 py-1 pb-5 bg-transparent">
-          {
-            !token && (
-              <Link className="w-full" href={"/"}>
-                <Button className="w-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 py-4 hover:bg-gray-100">
-                  Voltar
-                </Button>
-              </Link>
-            )
-          }
+        <div className="w-full flex gap-2 bg-transparent h-11">
+          {!token && (
+            <Link className="w-full h-full" href={"/"}>
+              <Button className="w-full h-full rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 hover:bg-gray-100">
+                Voltar
+              </Button>
+            </Link>
+          )}
           <Modal
             titleContentModal="Você tem certeza?"
             contentModal="Ao clicar em confirmar seus dados de cadastro serão atualizados."
@@ -116,67 +117,152 @@ export default function AlterarCadastro() {
             bgOpenModal="#2F4A4D"
             bgConfirmModal="#2F4A4D"
             bgCloseModal="bg-gray-100"
+            isOpen={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            buttonOpenModal={
+              <Button
+                className="w-full h-full rounded-lg bg-theme-default font-semibold text-white"
+                title="Salvar"
+                onClick={() => setIsModalOpen(true)}
+              >
+                Salvar
+              </Button>
+            }
           />
         </div>
       }
     >
-      <form
-        className="w-full h-full flex flex-col justify-between"
-      >
-        <div className="w-full flex flex-col gap-4 mt-4">
-          {
-            !token && (
-              <>
-                <Input
-                  register={{ ...register("first_name") }}
-                  placeholder="Primeiro nome"
-                  label="Nome"
-                  type="text"
+      <form className="mt-7.5 pb-14 gap-3.5 w-full h-full overflow-y-auto flex flex-col items-center justify-between">
+        {!token && (
+          <>
+            <div className="w-32.5 h-32.5">
+              <Image
+                priority
+                src="/producer.jpeg"
+                alt="User"
+                width={130}
+                height={130}
+                className="rounded-full border border-theme-default object-none object-top aspect-square grayscale cursor-not-allowed"
+              />
+            </div>
+            <div className="w-full flex flex-col items-center justify-center gap-5">
+              <Input
+                register={{ ...register("first_name") }}
+                placeholder="Primeiro nome"
+                label="Nome"
+                type="text"
+              />
+              <Input
+                register={{ ...register("last_name") }}
+                placeholder="Sobrenome"
+                label="Sobrenome"
+                type="text"
+              />
+              <Input
+                register={{ ...register("email") }}
+                placeholder="E-mail"
+                label="E-mail"
+                type="email"
+                className="cursor-not-allowed text-gray-400"
+                disabled={true}
+              />
+              <Input
+                register={{ ...register("phone") }}
+                placeholder="Celular"
+                label="Celular"
+                type="text"
+              />
+            </div>
+            <hr className="w-37.5 mt-7 mb-2.5 bg-french-gray h-px" />
+            <h3 className="text-xl leading-7.5 font-medium text-theme-home-bg">
+              Informações comerciais
+            </h3>
+            <div className="w-full flex flex-col items-center justify-center gap-5">
+              <Input
+                placeholder="Nome comercial"
+                label="Nome comercial"
+                type="text"
+                disabled
+                className="cursor-not-allowed text-gray-400"
+              />
+              <Input
+                placeholder="Número do Talão"
+                label="Número do Talão"
+                type="text"
+                disabled
+                className="cursor-not-allowed text-gray-400"
+              />
+              <div className="w-full h-full relative flex flex-col text-slate-gray">
+                <label className="text-sm leading-4.75 font-inter font-normal text-theme-primary pb-1.75 flex flex-row items-center justify-start gap-2 tracking-tight-2">
+                  Descrição
+                </label>
+                <textarea
+                  maxLength={200}
+                  value="Elit ipsum deserunt elit exercitation voluptate deserunt quis sunt proident. Est adipisicing proident cillum ad. Ad in sint elit consectetur duis voluptate fugiat. In ex cillum et ipsum magna sint cillum eiusmod non occaecat minim veniam adipisicing. Aliqua ullamco magna labore ex quis voluptate ea occaecat."
+                  className="w-full p-3 border border-theme-primary rounded-lg font-inter font-normal box-border h-56 cursor-not-allowed text-gray-400 resize-none"
+                  disabled
                 />
-                <Input
-                  register={{ ...register("last_name") }}
-                  placeholder="Sobrenome"
-                  label="Sobrenome"
-                  type="text"
-                />
-                <Input
-                  register={{ ...register("email") }}
-                  placeholder="E-mail"
-                  label="Email"
-                  type="email"
-                  className="cursor-not-allowed text-gray-400"
-                  disabled={true}
-                />
-                <Input
-                  register={{ ...register("phone") }}
-                  placeholder="Telefone"
-                  label="Telefone"
-                  type="text"
-                />
-              </>
-            )
-          }
-          {
-            token && (
-              <>
-                <Input
-                  register={{ ...register("password") }}
-                  placeholder="Digite sua senha"
-                  label="Nova senha"
-                  icon={<AiOutlineEye />}
-                  type="password"
-                />
-                <Input
-                  register={{ ...register("confirmPassword") }}
-                  placeholder="Digite sua senha"
-                  label="Confirmar senha"
-                  icon={<AiOutlineEye />}
-                  type="password"
-                />
-              </>
-            )
-          }
-        </div>
+              </div>
+              <div className="relative flex flex-col text-slate-gray w-full">
+                <label className="text-sm leading-4.75 font-inter font-normal text-theme-primary pb-1.75 flex flex-row items-center justify-start gap-2 tracking-tight-2">
+                  Selecione até 4 fotos
+                </label>
+                <div className="w-full flex flex-row justify-start items-center flex-wrap gap-3.25">
+                  <Image
+                    priority
+                    src="/producer.jpeg"
+                    alt="User"
+                    width={130}
+                    height={130}
+                    className="rounded-lg w-18 border border-theme-default object-contain object-top aspect-square grayscale cursor-not-allowed"
+                  />
+                  <Image
+                    priority
+                    src="/producer.jpeg"
+                    alt="User"
+                    width={130}
+                    height={130}
+                    className="rounded-lg w-18 border border-theme-default object-contain object-top aspect-square grayscale cursor-not-allowed"
+                  />
+                  <Image
+                    priority
+                    src="/producer.jpeg"
+                    alt="User"
+                    width={130}
+                    height={130}
+                    className="rounded-lg w-18 border border-theme-default object-contain object-top aspect-square grayscale cursor-not-allowed"
+                  />
+                  <Image
+                    priority
+                    src="/producer.jpeg"
+                    alt="User"
+                    width={130}
+                    height={130}
+                    className="rounded-lg w-18 border border-theme-default object-contain object-top aspect-square grayscale cursor-not-allowed"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+        {token && (
+          <>
+            <Input
+              register={{ ...register("password") }}
+              placeholder="Digite sua senha"
+              label="Nova senha"
+              icon={<AiOutlineEye />}
+              type="password"
+            />
+            <Input
+              register={{ ...register("confirmPassword") }}
+              placeholder="Digite sua senha"
+              label="Confirmar senha"
+              icon={<AiOutlineEye />}
+              type="password"
+            />
+          </>
+        )}
       </form>
     </ModelPage>
   );
