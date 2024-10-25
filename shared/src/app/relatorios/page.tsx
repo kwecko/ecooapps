@@ -56,9 +56,8 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
           <div className="w-full flex flex-col gap-2.5">
             {reportData.map((data) => {
               return (
-                <div className="w-full h-full items-center p-4 pr-6 rounded-2xl bg-white flex gap-7">
+                <div key={data.name} className="w-full h-full items-center p-4 pr-6 rounded-2xl bg-white flex gap-7">
                   <ButtonV2
-                    key={data.name}
                     variant="default"
                     onClick={() => handleClickButtonReport(data.onClick)}
                     disabled={data.disabled}
@@ -70,7 +69,7 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
                     <HiOutlineInformationCircle size={24} className="text-theme-primary" />
                   </div>
                 </div>
-                )
+              );
             })}
           </div>
 
