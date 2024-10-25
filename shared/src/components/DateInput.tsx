@@ -29,7 +29,7 @@ export default function DateInput({ label, value, disabled = false }: DateInputP
           maxLength={10}
           placeholder="DD/MM/YYYY"
           disabled={disabled}
-          className={`w-full py-3 pl-4 pr-10 border border-gray-300 rounded-md placeholder-[#9BA5B7] text-theme-primary focus:outline-none focus:ring-0 focus:border-slate-gray ${disabled && 'opacity-50 cursor-not-allowed'}`}
+          className={`w-full h-12 pl-3 pr-4 border border-gray-300 rounded-md placeholder-[#9BA5B7] text-theme-primary focus:outline-none focus:ring-0 focus:border-slate-gray ${disabled && 'opacity-50 cursor-not-allowed'}`}
         />
         <FiCalendar className="absolute right-3 top-3.5 text-[#9BA5B7]" />
       </div>
