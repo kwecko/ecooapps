@@ -1,19 +1,17 @@
 "use client";
 
-import { maskDate } from '@shared/utils/mask-date';
 import { FiCalendar } from 'react-icons/fi';
 
 interface DateInputProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
   disabled?: boolean
+  label?: string;
+  value?: string;
 }
 
-export default function DateInput({ label, value, onChange, disabled = false }: DateInputProps) {
+export default function DateInput({ label, value, disabled = false }: DateInputProps) {
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(maskDate(e.target.value));
+    // onChange(maskDate(e.target.value));
   };
 
   return (
