@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { toast } from "sonner";
 import { useTransition } from "react";
@@ -10,6 +10,7 @@ import { ModelPage } from "@shared/components/ModelPage";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useReportGenerator } from "@shared/hooks/useReportGenerator"; 
 import { ReportActions, ReportButtonData } from "@shared/types/report";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 export default function Home({ reportData }: { reportData: ReportButtonData }) {
   const [isPending, startTransition] = useTransition();
@@ -35,7 +36,7 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
   return (
     <ModelPage
       title="Relatórios"
-      titleGap="gap-2"
+      titleGap="gap-4"
       subtitle="Informe o período e o tipo de relatório que deseja gerar"
       subtitleClassName="w-80"
       overflowAuto={true}
@@ -51,19 +52,25 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
             disabled={true}
           />
         </div>
-        <div className="w-full h-full flex flex-col justify-between mb-2">
-          <div className="w-full flex flex-col">
+        <div className="w-full h-full flex flex-col justify-between mb-2 mt-8">
+          <div className="w-full flex flex-col gap-2.5">
             {reportData.map((data) => {
               return (
-                <ButtonV2
-                  key={data.name}
-                  variant="default"
-                  onClick={() => handleClickButtonReport(data.onClick)}
-                  disabled={data.disabled}
-                >
-                  {data.name}
-                </ButtonV2>
-              )
+                <div className="w-full h-full items-center p-4 pr-6 rounded-2xl bg-white flex gap-7">
+                  <ButtonV2
+                    key={data.name}
+                    variant="default"
+                    onClick={() => handleClickButtonReport(data.onClick)}
+                    disabled={data.disabled}
+                    className="mt-0"
+                  >
+                    {data.name}
+                  </ButtonV2>
+                  <div className="w-[10%] h-full flex justify-center items-center">
+                    <HiOutlineInformationCircle size={24} className="text-theme-primary" />
+                  </div>
+                </div>
+                )
             })}
           </div>
 
