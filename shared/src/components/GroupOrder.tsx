@@ -17,10 +17,10 @@ export default function GroupOrder({
     const productKey = `${productName}-${order.offer.catalog.farm.name}`;
 
     if (description[productKey]) {
-      description[productKey].amount += convertOfferAmount(order.amount, order.offer.product.pricing);
-    } else {
+      description[productKey].amount = parseFloat((description[productKey].amount + convertOfferAmount(order.amount, order.offer.product.pricing)).toFixed(1));
+        } else {
       description[productKey] = {
-        amount: convertOfferAmount(order.amount, order.offer.product.pricing),
+        amount: parseFloat(convertOfferAmount(order.amount, order.offer.product.pricing).toFixed(1)),
         unit: convertUnit(order.offer.product.pricing),
         farmName: order.offer.catalog.farm.name,
       };

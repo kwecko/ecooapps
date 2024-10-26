@@ -2,122 +2,95 @@
 
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { FaBoxOpen, FaCheck, FaExclamation } from "react-icons/fa6";
-import { IoCloseSharp } from "react-icons/io5";
-import { HiDotsHorizontal } from "react-icons/hi";
+import { FaBoxOpen } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import Table from "@shared/components/Table";
 import { IBag } from "@shared/interfaces/bag";
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { twMerge } from "tailwind-merge";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
-import { IBagStatus } from "../page";
-import { useGetStatus, EnviarStatus } from "@shared/hooks/useGetStatus"
+import { useGetStatus, EnviarStatus, StatusMap } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
-  selectedStatus: IBagStatus;
-  setSelectedStatus: (status: IBagStatus) => void;
   setTotalItems: (total: number) => void;
 }
 
 export interface IStatus {
   name: string;
-  key: string;
+  key: string[];
 }
 
-export default function SendBagTable({ page, selectedStatus, setSelectedStatus }: BagsProps) {
+const statuses: IStatus[] = [
+  { name: "Todas", key: ["PENDING", "SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
+  { name: "Separadas", key: ["SEPARATED"] },
+  { name: "Enviadas", key: ["DISPATCHED"] },
+  { name: "Entregues", key: ["RECEIVED"] },
+  { name: "Retornadas", key: ["DEFERRED"] },
+];
+
+export default function SendBagTable({ page, setTotalItems }: BagsProps) {
   const router = useRouter();
 
   const { getStatus } = useGetStatus();
-  
-  const statuses: IStatus[] = [
-    { name: "Separadas", key: "SEPARATED" },
-    { name: "Enviadas", key: "DISPATCHED" },
-    { name: "Entregues", key: "RECEIVED" },
-    { name: "Retornadas", key: "DEFERRED" },
-  ];
 
   const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
-  const [bags, setBags] = useState<IBag[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<EnviarStatus>(
+    statuses[0].key as EnviarStatus
+  );
 
   const debounceSearch = useDebounce(name);
   const { handleError } = useHandleError();
   const { getFromStorage } = useLocalStorage();
 
   const handleStatusFilterClick = (status: IStatus) => {
-    setSelectedStatus({ status: status.key as IBagStatus["status"] });
+    setSelectedStatus(status.key as EnviarStatus);
   };
 
   useEffect(() => {
-    setIsLoading(true);
-    const cycle = getFromStorage("selected-cycle");
+    (() => {
+      setIsLoading(true)
+      const cycle= getFromStorage("selected-cycle");
 
-    if (!cycle) {
-      toast.error("Selecione um ciclo para ver os pedidos!");
-      setIsLoading(false);
-      return;
-    }
+      if (!cycle) {
+        toast.error("Selecione um ciclo para montar uma sacola!");
+        return;
+      }
 
-    const { id } = cycle;
+      const { id } = cycle
 
-    listBags({
-      cycle_id: id,
-      page,
-      status: selectedStatus.status,
-      name: debounceSearch,
-    })
-      .then((response) => {
-        if (response.data) {
-          setBags(response.data);
-        } else {
-          toast.error("Nenhuma sacola encontrada.");
-        }
-        setIsLoading(false);
+      listBags({
+        cycle_id: id,
+        page,
+        status: selectedStatus,
+        name: debounceSearch
       })
-      .catch((error) => {
-        handleError(error);
-        setIsLoading(false);
-      });
+        .then((response) => {
+          if (response.message) {
+            handleError(response.message)
+          } else if (response.data) {
+            setBags(response.data);
+            setTotalItems(response.data.length)
+            setIsLoading(false);
+            return;
+          }
+        })
+        .catch(() => {
+          toast.error("Erro desconhecido.")
+        })
+    })();
   }, [page, debounceSearch, selectedStatus]);
 
   const handleClick = (id: string) => {
     router.push(`/enviar-sacola/${id}`);
-  };
-
-  const getStatus = (
-    status: IBagStatus["status"]
-  ) => {
-    const colorStatus = {
-      SEPARATED: "bg-battleship-gray",
-      DISPATCHED: "bg-walnut-brown",
-      RECEIVED: "bg-rain-forest",
-      DEFERRED: "bg-error",
-    };
-
-    return (
-      <div
-        className={twMerge(
-          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 rounded-full",
-          `${colorStatus[status]}`
-        )}
-      >
-        {status === "SEPARATED" && <FaExclamation size={10} color="white" />}
-        {status === "DISPATCHED" && <HiDotsHorizontal className="p-0.5" color="white" />}
-        {status === "RECEIVED" && <FaCheck className="p-1" color="white" />}
-        {status === "DEFERRED" && <IoCloseSharp className="p-0.5" color="white" />}
-      </div>
-    );
   };
 
   const headers = [
@@ -130,14 +103,14 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
 
   bags.length > 0
     ? bags.map((bag) => ({
-        id: bag.id,
-        data: [
-          { detail: bag.id }, // Código
-          { detail: bag.user.first_name }, // Cliente
-          { detail: getStatus({ type: 'enviar', status: bag.status as IBagStatus["status"] }) }, // Status
-        ],
-      }))
-    : [];
+      id: bag.id,
+      data: [
+        { detail: bag.id },
+        { detail: `${bag.user.first_name} ${bag.user.last_name}` },
+        { detail: getStatus({ type: 'enviar', status: bag.status as StatusMap["enviar"]}) },
+      ],
+    }))
+  : [];
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -147,7 +120,7 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
         </div>
         <StatusFilterButtons
           statuses={statuses}
-          selectedStatus={selectedStatus.status}
+          selectedStatus={selectedStatus}
           handleStatusFilterClick={handleStatusFilterClick}
         />
       </div>
@@ -165,7 +138,6 @@ export default function SendBagTable({ page, selectedStatus, setSelectedStatus }
         <div className="overflow-y-auto h-full">
           <OrderTable headers={headers} info={info} onRowClick={handleClick} />
         </div>
-<!--         <Table headers={headers} info={info} onRowClick={handleClick}  -->
       )}
     </div>
   );

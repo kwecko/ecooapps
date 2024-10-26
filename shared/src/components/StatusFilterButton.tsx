@@ -4,11 +4,11 @@ import { twMerge } from "tailwind-merge";
 
 interface IStatus {
   name: string;
-  key: string;
+  key: string[];
 }
 
 interface StatusFilterButtonsProps {
-  selectedStatus: string;
+  selectedStatus: string[];
   handleStatusFilterClick: (status: IStatus) => void;
   statuses: IStatus[];
   disabled?: boolean;

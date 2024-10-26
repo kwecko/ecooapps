@@ -1,25 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaBoxOpen, FaCheck } from "react-icons/fa6";
+import { FaBoxOpen } from "react-icons/fa6";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
-import Table from "@shared/components/Table"
 import { IBag } from "@shared/interfaces/bag"
 import Loader from "@shared/components/Loader";
 import { useDebounce } from "@shared/hooks/useDebounce";
-import SearchInput from "@shared/components/SearchInput";c
-import { IBagStatus } from "../page";
-import { twMerge } from "tailwind-merge";
-import { HiDotsHorizontal } from "react-icons/hi";
+import SearchInput from "@shared/components/SearchInput";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { useGetStatus, MontarStatus } from "@shared/hooks/useGetStatus"
+import { useGetStatus, MontarStatus, StatusMap } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
@@ -28,12 +24,13 @@ interface BagsProps {
 
 export interface IStatus {
   name: string;
-  key: string;
+  key: string[];
 }
 
 const statuses: IStatus[] = [
-  { name: "Pendentes", key: "PENDING" },
-  { name: "Separadas", key: "SEPARATED" }
+  { name: "Todas", key: ["PENDING", "SEPARATED"] },
+  { name: "Pendentes", key: ["PENDING"] },
+  { name: "Separadas", key: ["SEPARATED"] }
 ];
 
 export default function BagsTable({ page, setTotalItems }: BagsProps) {
@@ -44,13 +41,16 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
   const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<MontarStatus>(
+    statuses[0].key as MontarStatus
+  );
 
   const debounceSearch = useDebounce(name)
   const { handleError } = useHandleError()
   const { getFromStorage } = useLocalStorage()
 
   const handleStatusFilterClick = (status: IStatus) => {
-    setSelectedStatus({ status: status.key as IBagStatus["status"] });
+    setSelectedStatus(status.key as MontarStatus);
   };
 
   useEffect(() => {
@@ -68,7 +68,7 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
       listBags({
         cycle_id: id,
         page,
-        status: "PENDING",
+        status: selectedStatus,
         name: debounceSearch
       })
         .then((response) => {
@@ -76,28 +76,8 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
             handleError(response.message)
           } else if (response.data) {
             setBags(response.data);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-
-      listBags({
-        cycle_id: id,
-        page,
-        status: "SEPARATED",
-        name: debounceSearch
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
-
-            handleError(messageError)
-          } else if (response.data) {
-            setBags(prevBags => [...prevBags, ...response.data]);
+            setTotalItems(response.data.length)
             setIsLoading(false);
-            setTotalItems(bags.length)
             return;
           }
         })
@@ -105,31 +85,10 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           toast.error("Erro desconhecido.")
         })
     })();
-  }, [page, debounceSearch]);
+  }, [page, debounceSearch, selectedStatus]);
 
   const handleClick = (id: string) => {
     router.push(`/montar-sacola/${id}`);
-  };
-
-  const getStatus = (
-    status: IBagStatus["status"]
-  ) => {
-    const colorStatus = {
-      PENDING: "bg-walnut-brown",
-      SEPARATED: "bg-rain-forest",
-    };
-
-    return (
-      <div
-        className={twMerge(
-          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 rounded-full",
-          `${colorStatus[status]}`
-        )}
-      >
-        {status === "PENDING" && <HiDotsHorizontal className="p-0.5" color="white" />}
-        {status === "SEPARATED" && <FaCheck size={10} color="white" />}
-      </div>
-    );
   };
 
   const headers = [
@@ -143,9 +102,9 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
       ? bags.map((bag) => ({
           id: bag.id,
           data: [
-            { detail: bag.id }, // Código
-            { detail: bag.user.first_name }, // Cliente
-            { detail: getStatus({ type: 'montar', status: bag.status as MontarStatus }) }, // Status
+            { detail: bag.id },
+            { detail: `${bag.user.first_name} ${bag.user.last_name}` },
+            { detail: getStatus({ type: 'montar', status: bag.status as StatusMap["montar"]}) },
           ],
         }))
       : [];
@@ -158,7 +117,7 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           </div>
           <StatusFilterButtons
             statuses={statuses}
-            selectedStatus={selectedStatus.status}
+            selectedStatus={selectedStatus}
             handleStatusFilterClick={handleStatusFilterClick}
           />
         </div>
