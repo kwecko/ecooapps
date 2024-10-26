@@ -126,27 +126,6 @@ export default function BagMiniTable() {
     }
   }
 
-  const groupProducts = (orders: any[]) => {
-    const grouped: { [key: string]: { amount: number; unit: string; farmName: string } } = {};
-
-    orders.forEach((order) => {
-      const productName = order.offer.product.name;
-      const productKey = `${productName}-${order.offer.catalog.farm.name}`; // Unique key per product and farm
-
-      if (grouped[productKey]) {
-        grouped[productKey].amount += order.amount;
-      } else {
-        grouped[productKey] = {
-          amount: order.amount,
-          unit: convertUnit(order.offer.product.pricing),
-          farmName: order.offer.catalog.farm.name,
-        };
-      }
-    });
-
-    return grouped;
-  };
-
   return (
     <>
       {isLoading ? (

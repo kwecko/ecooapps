@@ -5,7 +5,6 @@ import { FarmWithOrdersTable } from "./components/FarmWithOrdersTable";
 
 import { ModelPage } from "@shared/components/ModelPage";
 import PagingButton from "@shared/components/PagingButton";
-import { ModelPage } from "@shared/components/ModelPage";
 
 export default function Home() {
   const [page, setPage] = useState(1);
@@ -18,7 +17,7 @@ export default function Home() {
   };
 
   const nextPage = () => {
-    if(totalItems <= 20){
+    if(totalItems < 20){
       return;
     }
 
