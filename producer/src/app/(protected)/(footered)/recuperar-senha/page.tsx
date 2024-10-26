@@ -2,9 +2,11 @@
 
 import { resetPassword } from '@producer/app/_actions/user/reset-password';
 import Loading from '@producer/app/loading';
+import ButtonV2 from '@shared/components/ButtonV2';
 import Input from '@shared/components/Input';
+import { ModelPage } from '@shared/components/ModelPage';
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -50,28 +52,27 @@ function RecuperarSenha() {
   }
 
   return (
-    <div className='h-[inherit] w-full flex pl-3 pr-3 pt-3 flex-col justify-start items-center gap-9'>
-      <div className="w-full flex flex-col items-center justify-end pt-28 mb-4 gap-2.5">
-        <h1 className="text-3xl font-medium text-slate-gray pt-3">Esqueci a senha</h1>
-        <span className="text-sm font-medium text-slate-gray w-2/3 text-center">
-          Enviaremos um código de verificação para o email abaixo
-        </span>
+    <ModelPage
+      title="Esqueci a senha"
+      subtitle="Enviaremos um código de verificação para o email abaixo"
+      overflowAuto={true}
+    >
+      <div className='w-full flex p-3 flex-col justify-start items-center gap-9 mt-3'>
+        <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            label="E-mail"
+            labelClassName="pb-1.5 text-sm font-inter font-normal leading-5 tracking-tight"
+            register={{ ...register("email") }}
+            autoComplete="email"
+            className="text-slate-gray w-full"
+            placeholder='Digite seu e-mail'
+          />
+          <ButtonV2 variant='default'>
+            Avançar
+          </ButtonV2>
+        </form>
       </div>
-
-      <form className='w-full' onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          label="E-mail"
-          labelClassName="pb-1.5 text-sm font-inter font-normal leading-5 tracking-tight"
-          register={{ ...register("email") }}
-          autoComplete="email"
-          className="text-slate-gray w-full"
-          placeholder='Digite seu e-mail'
-        />
-        <button className="w-full bg-theme-default rounded-md h-12 mt-6 text-white font-semibold">
-          Avançar
-        </button>
-      </form>
-    </div>
+    </ModelPage>
   );
 }
 
