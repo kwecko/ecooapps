@@ -48,7 +48,7 @@ export function PendingDeliveries() {
       </p>
       <Button
         type="link"
-        href="https://maps.app.goo.gl/5ZrUfgwhA7evFBXi9"
+        href="https://maps.app.goo.gl/SGVoUf6Vs4LC3UZQ9"
         target="_blank"
         style={{ width: "100%" }}
       >
