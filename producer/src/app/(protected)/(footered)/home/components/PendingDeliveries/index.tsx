@@ -12,26 +12,34 @@ import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
 import { useCycleProvider } from "@shared/context/cycle";
-import { useHandleError } from "@shared/hooks/useHandleError"
+import { useHandleError } from "@shared/hooks/useHandleError";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [pendingDeliveries, setPendingDeliveries] = useState<IPendingDeliveries[] | undefined>([]);
+  const [pendingDeliveries, setPendingDeliveries] = useState<
+    IPendingDeliveries[] | undefined
+  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { cycle } = useCycleProvider();
 
-  const { handleError } = useHandleError()
+  const { handleError } = useHandleError();
+
+  const address = [
+    "UNIVERSIDADE FEDERAL DO RIO GRANDE - FURG CAMPUS CARREIROS",
+    "Av. Itália, km 8, s/n - Bairro Carreiros CEP: 96203-900 - Rio Grande/RS",
+    "Referência: Antigo prédio do NUDESE, próximo ao prédio do CIDEC e ao lado do prédio da INOVATIO.",
+  ];
 
   const handleCopyAddress = () => {
-    const address =
-      "UNIVERSIDADE FEDERAL DO RIO GRANDE - FURG CAMPUS CARREIROS Av. Itália, km 8, s/n - Bairro Carreiros CEP: 96203-900 - Rio Grande/RS Referência: Antigo prédio do NUDESE, próximo ao prédio do CIDEC e ao lado do prédio da INOVATIO.";
-    navigator.clipboard.writeText(address).then(() => {
-      notification.open({
-        message: "Endereço Copiado",
-        description: "Endereço copiado para a área de transferência.",
+    navigator.clipboard
+      .writeText(address.reduce((acc, curr) => `${acc}\n${curr}`))
+      .then(() => {
+        notification.open({
+          message: "Endereço Copiado",
+          description: "Endereço copiado para a área de transferência.",
+        });
+        setIsTooltipVisible(false);
       });
-      setIsTooltipVisible(false);
-    });
   };
 
   const tooltipContent = (
@@ -39,12 +47,12 @@ export function PendingDeliveries() {
       <p>
         <strong>Endereço do CDD:</strong>
         <br />
-        UNIVERSIDADE FEDERAL DO RIO GRANDE - FURG CAMPUS CARREIROS
-        <br />
-        Av. Itália, km 8, s/n - Bairro Carreiros CEP: 96203-900 - Rio Grande/RS
-        <br />
-        Referência: Antigo prédio do NUDESE, próximo ao prédio do CIDEC e ao
-        lado do prédio da INOVATIO.
+        {address.map((line, index) => (
+          <>
+            <span key={index}>{line}</span>
+            <br />
+          </>
+        ))}
       </p>
       <Button
         type="link"
@@ -78,31 +86,28 @@ export function PendingDeliveries() {
       getBoxeCurrent({ cycle_id: cycle.id })
         .then((response) => {
           if (response.message) {
-            handleError(response.message)
+            handleError(response.message);
           } else {
-            const data: IPendingDeliveries[] = response.data.orders
+            const data: IPendingDeliveries[] = response.data.orders;
 
-            const ordersFiltered = data.filter(item => item.status === 'PENDING');
+            const ordersFiltered = data.filter(
+              (item) => item.status === "PENDING"
+            );
 
             setPendingDeliveries(ordersFiltered);
           }
         })
         .catch(() => {
-          toast.error("Erro desconhecido.")
+          toast.error("Erro desconhecido.");
         })
         .finally(() => {
           setIsLoading(false);
-        })
-    })()
+        });
+    })();
   }, [cycle]);
 
   if (isLoading) {
-    return (
-      <Loader
-        loaderType="component"
-        className="mt-10"
-      />
-    )
+    return <Loader loaderType="component" className="mt-10" />;
   }
 
   return (
