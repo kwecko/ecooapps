@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Tooltip, Button, notification } from "antd";
+import { Tooltip, Button } from "antd";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
@@ -34,10 +34,7 @@ export function PendingDeliveries() {
     navigator.clipboard
       .writeText(address.reduce((acc, curr) => `${acc}\n${curr}`))
       .then(() => {
-        notification.open({
-          message: "Endereço Copiado",
-          description: "Endereço copiado para a área de transferência.",
-        });
+        toast.success("Endereço copiado para a área de transferência.");
         setIsTooltipVisible(false);
       });
   };
