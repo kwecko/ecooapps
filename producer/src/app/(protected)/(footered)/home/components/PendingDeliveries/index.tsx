@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Tooltip, Button } from "antd";
+import Link from "next/link";
+import { Tooltip } from "antd";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 import { PendingDeliveriesTable } from "./Table";
 import Loader from "@shared/components/Loader";
+import Button from "@shared/components/ButtonV2";
 
 import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
 import { IPendingDeliveries } from "@shared/interfaces/offer";
@@ -40,32 +42,30 @@ export function PendingDeliveries() {
   };
 
   const tooltipContent = (
-    <div>
-      <p>
-        <strong>Endereço do CDD:</strong>
-        <br />
+    <div className="flex flex-col p-2 text-theme-default gap-4">
+      <div className="flex flex-col gap-2 text-xs">
+        <h3 className="text-base font-semibold w-full text-center">
+          Endereço do CDD
+        </h3>
         {address.map((line, index) => (
-          <>
-            <span key={index}>{line}</span>
-            <br />
-          </>
+          <span key={index}>{line}</span>
         ))}
-      </p>
-      <Button
-        type="link"
-        href="https://maps.app.goo.gl/SGVoUf6Vs4LC3UZQ9"
-        target="_blank"
-        style={{ width: "100%" }}
-      >
-        Abrir no Maps
-      </Button>
-      <Button
-        type="primary"
-        style={{ width: "100%" }}
-        onClick={handleCopyAddress}
-      >
-        Copiar endereço
-      </Button>
+      </div>
+      <div className="flex flex-col justify-between items-stretch gap-2 ">
+        <Link href="https://maps.app.goo.gl/SGVoUf6Vs4LC3UZQ9" target="_blank">
+          <Button variant="default" className="w-full h-9 py-0 text-sm mt-0">
+            Abrir no Maps
+          </Button>
+        </Link>
+        <Button
+          variant="light"
+          onClick={handleCopyAddress}
+          className="w-full h-9 py-0 text-sm"
+          border
+        >
+          Copiar endereço
+        </Button>
+      </div>
     </div>
   );
 
@@ -117,7 +117,7 @@ export function PendingDeliveries() {
           <div className="flex gap-2">
             <span className="text-xs text-battleship-gray gap-2 flex">
               CDD - FURG{"   "}
-              <Tooltip title={tooltipContent} trigger="click">
+              <Tooltip title={tooltipContent} trigger="click" color="white">
                 <button className="font-semibold bg-battleship-gray text-white text-xs rounded-md h-4.5 w-24">
                   ver endereço
                 </button>
