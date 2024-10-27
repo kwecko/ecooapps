@@ -41,7 +41,7 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
       subtitleClassName="w-80"
       overflowAuto={true}
     >
-      <div className="w-full h-full flex flex-col mb-4">
+      <div className="w-full h-full flex flex-col">
         <div className='flex space-x-3 mb-3 mt-8'>
           <DateInput
             label="Data inicial"
@@ -53,7 +53,7 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
           />
         </div>
         <div className="w-full h-full flex flex-col justify-between mb-2 mt-8">
-          <div className="w-full flex flex-col gap-2.5">
+          <div className="w-full flex flex-col gap-2.5 pb-4">
             {reportData.map((data) => {
               return (
                 <div key={data.name} className="w-full h-full items-center p-4 pr-6 rounded-2xl bg-white flex gap-7">
