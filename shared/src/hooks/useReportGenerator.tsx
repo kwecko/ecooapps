@@ -1,21 +1,29 @@
 import { toast } from "sonner";
-import { ListBagsReport } from "@cdd/app/_actions/report/list-bags-report";
+
+import { ReportActions } from "@shared/types/report";
 import { useHandleError } from "@shared/hooks/useHandleError";
+import { ListBagsReport } from "@shared/_actions/report/list-bags-report";
 
 export function useReportGenerator() {
   const { handleError } = useHandleError();
 
-  const reportActions: Record<string, (id: string) => Promise<any>> = {
-    "listar-sacolas": (id: string) => ListBagsReport(id),
-    "listar-ofertas": () => {
+  const reportActions: Record<ReportActions, (id: string) => Promise<any>> = {
+    "list-bags": (id: string) => ListBagsReport(id),
+    "list-offers": () => {
       return Promise.resolve();
     },
-    "cash-flow": () => {
+    "cash-flow-cdd": () => {
       return Promise.resolve();
     },
+    "cash-flow-producer": () => {
+      return Promise.resolve();
+    },
+    "offer-history": () => {
+      return Promise.resolve();
+    }
   };
 
-  const generateReport = async (type: string, id: string) => {
+  const generateReport = async (type: ReportActions, id: string) => {
     try {
       const action = reportActions[type];
       
