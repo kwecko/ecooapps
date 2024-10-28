@@ -50,7 +50,6 @@ const config: Config = {
         inter: ["Inter", "sans"],
       },
       spacing: {
-        "10-negative": "-0.625rem",
         inherit: "inherit",
         1.25: ".3125rem",
         1.75: "0.4375rem",
@@ -68,7 +67,6 @@ const config: Config = {
         18: "4.5rem",
         22.5: "5.625rem",
         25: "6.25rem",
-        37.5: "9.375rem",
         38: "9.5rem",
         50: "12.5rem",
         86: "21.5rem",
