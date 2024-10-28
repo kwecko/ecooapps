@@ -1,11 +1,10 @@
-import { useState, InputHTMLAttributes } from "react";
-import { FaRegCircleQuestion } from "react-icons/fa6";
+import { InputHTMLAttributes, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { FaRegCircleQuestion } from "react-icons/fa6";
 
 import { Masks } from "@shared/types/register";
-import { maskCellphone, maskCAF, maskCPF } from "@shared/utils/index";
-import ButtonV2 from "./ButtonV2";
+import { maskCAF, maskCellphone, maskCPF } from "@shared/utils/index";
 import InfoModal from "./InfoModal";
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -66,7 +65,7 @@ export default function CustomInput({
           <input
             {...register}
             onChange={handleInputChange}
-            className="w-full rounded-lg border border-slate-gray px-4 h-12 text-slate-gray focus:outline-none"
+            className="w-full rounded-lg border border-slate-gray px-3 h-12 text-slate-gray focus:outline-none"
             type={type === "password" && showPassword ? "text" : type}
             {...inputProps}
           />
