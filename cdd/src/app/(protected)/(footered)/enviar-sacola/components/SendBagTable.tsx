@@ -28,7 +28,7 @@ export interface IStatus {
 }
 
 const statuses: IStatus[] = [
-  { name: "Todas", key: ["PENDING", "SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
+  { name: "Todas", key: ["SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
   { name: "Separadas", key: ["SEPARATED"] },
   { name: "Enviadas", key: ["DISPATCHED"] },
   { name: "Entregues", key: ["RECEIVED"] },
@@ -67,10 +67,12 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
 
       const { id } = cycle
 
+      console.log(selectedStatus)
+
       listBags({
         cycle_id: id,
         page,
-        status: selectedStatus,
+        statuses: selectedStatus,
         name: debounceSearch
       })
         .then((response) => {

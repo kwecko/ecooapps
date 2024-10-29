@@ -6,7 +6,7 @@ import EmptyBoxInformation from '@shared/components/EmptyBoxInformation';
 const styles = {
   itemHeader:
     "truncate text-battleship-gray font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
-  itemBody: "border-b-[1px] truncate text-grayish-blue p-3 text-left",
+  itemBody: "border-b truncate text-grayish-blue p-3 text-left",
 };
 
 interface ITableProps {
@@ -29,9 +29,9 @@ const OrderTable = ({ headers, info, onRowClick }: ITableProps) => {
 
   return (
     <div className="w-full">
-      <div className="w-full"> {/* Defina a altura máxima e permita rolagem */}
+      <div className="w-full">
         <table className="bg-white text-theme-primary leading-7 w-full table-fixed rounded-lg mb-auto">
-          <thead className="bg-white sticky top-0 z-10"> {/* Cabeçalho fixo no topo e sombra para destaque */}
+          <thead className="bg-white sticky top-0 z-10">
             <tr>
               {headers.map((header, index) => (
                 <th

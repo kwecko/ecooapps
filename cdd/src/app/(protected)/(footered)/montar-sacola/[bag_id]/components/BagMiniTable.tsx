@@ -12,7 +12,8 @@ import { IBagOrder } from "@shared/interfaces/bag";
 import TableSkeleton from "@shared/components/TableSkeleton";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
-import { convertUnit } from "@shared/utils/convert-unit";
+import convertStatus from "@shared/utils/convert-status";
+import HeaderDetail from "@shared/components/HeaderDetail";
 
 export default function BagMiniTable() {
   const router = useRouter()
@@ -127,34 +128,22 @@ export default function BagMiniTable() {
   }
 
   return (
-    <>
+    <div className="w-full h-full flex flex-col justify-between">
       {isLoading ? (
         <TableSkeleton />
       ) : bagOrder ? (
-        <div className="w-full h-full flex flex-col justify-between">
-          <div className="max-w-sm mx-auto bg-white rounded-lg">
-            <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
-              <span className="w-1/5">Pedido:</span>
-              <span className="w-4/5">{bagOrder?.id}</span>
-            </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
-              <span className="w-1/5">Status:</span>
-              <span className="w-4/5">{bagOrder?.status === "PENDING" ? "Pendente" : "Pronta"}</span>
-            </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
-              <span className="w-1/5">Cliente:</span>
-              <span className="w-4/5">{`${bagOrder?.user.first_name} ${bagOrder?.user.last_name}`}</span>
-            </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b border-theme-background p-3">
-              <span className="w-1/5">Prazo:</span>
-              <span className="w-4/5">{getNextSaturdayDate()}</span>
-            </div>
-            {bagOrder && (
+        <>
+          <HeaderDetail
+            id={bagOrder.id}
+            status={convertStatus(bagOrder.status)?.name}
+            name={`${bagOrder.user.first_name} ${bagOrder.user.last_name}`}
+            time={getNextSaturdayDate()}
+            content={
               <GroupOrder 
                 orders={bagOrder.orders} 
               />
-            )}
-          </div>
+            }
+          />
           <div className="w-full h-[10%] flex justify-center items-end">
             {bagOrder?.status === "PENDING" ? (
               <Modal
@@ -170,7 +159,7 @@ export default function BagMiniTable() {
                   handleStatusBag(bag_id as string, "PENDING")
                 }}
               />
-            ) : (
+              ) : (
               <Modal
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao alterar o status para pendente, a sacola deverá ser montada novamente."
@@ -186,11 +175,11 @@ export default function BagMiniTable() {
               />
             )}
           </div>
-        </div>
+        </>
       ) : (
         <span className="text-center text-red-500">Erro ao carregar os dados da sacola</span>
       )}
-    </>
+    </div>
   );
 }
 

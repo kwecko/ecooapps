@@ -15,7 +15,7 @@ interface StatusFilterButtonsProps {
 }
 
 const style = {
-  button: 'text-sm text-white font-semibold px-2 rounded-[0.25rem] flex items-center h-[22px]'
+  button: 'text-sm text-white font-semibold px-2 rounded-2xl flex items-center h-6'
 }
 
 export default function StatusFilterButtons({

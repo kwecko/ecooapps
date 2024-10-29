@@ -68,13 +68,14 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
       listBags({
         cycle_id: id,
         page,
-        status: selectedStatus,
+        statuses: selectedStatus,
         name: debounceSearch
       })
         .then((response) => {
           if (response.message) {
             handleError(response.message)
           } else if (response.data) {
+            console.log(response.data)
             setBags(response.data);
             setTotalItems(response.data.length)
             setIsLoading(false);
