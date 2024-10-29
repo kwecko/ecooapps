@@ -75,7 +75,6 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           if (response.message) {
             handleError(response.message)
           } else if (response.data) {
-            console.log(response.data)
             setBags(response.data);
             setTotalItems(response.data.length)
             setIsLoading(false);

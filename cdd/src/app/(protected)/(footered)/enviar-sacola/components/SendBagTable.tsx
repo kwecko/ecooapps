@@ -67,8 +67,6 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
 
       const { id } = cycle
 
-      console.log(selectedStatus)
-
       listBags({
         cycle_id: id,
         page,
