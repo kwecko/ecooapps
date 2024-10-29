@@ -11,6 +11,7 @@ import Modal from "@shared/components/Modal";
 import TableSkeleton from "@shared/components/TableSkeleton";
 
 import { IBagOrder } from "@shared/interfaces/bag"
+import { IBagStatus } from "@shared/interfaces/bag-status";
 import { useHandleError } from "@shared/hooks/useHandleError";
 
 import convertStatus from "@shared/utils/convert-status";
@@ -21,8 +22,6 @@ import GroupOrder from "@shared/components/GroupOrder";
 
 export default function SendBagMiniTable() {
   const router = useRouter()
-
-  type IStatus = "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
 
   const [bagOrder, setBagOrder] = useState<IBagOrder | null>(null);
 
@@ -68,7 +67,7 @@ export default function SendBagMiniTable() {
       });
   }, [bag_id]);
 
-  const handleStatusBag = (bag_id: string, status: IStatus) => {
+  const handleStatusBag = (bag_id: string, status: IBagStatus["send"]) => {
     handleBag({
       bag_id,
       status
@@ -156,7 +155,7 @@ export default function SendBagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bagOrder.id, bagStatus as IStatus)
+                  handleStatusBag(bagOrder.id, bagStatus as IBagStatus["send"])
                 }}
               />
             ) : (
