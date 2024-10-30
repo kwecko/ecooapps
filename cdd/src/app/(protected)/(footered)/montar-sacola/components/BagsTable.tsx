@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 import { IBag } from "@shared/interfaces/bag"
+import { BuildStatus } from "@shared/interfaces/bag-status"
+
 import Loader from "@shared/components/Loader";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import SearchInput from "@shared/components/SearchInput";
@@ -15,7 +17,7 @@ import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { useGetStatus, MontarStatus, StatusMap } from "@shared/hooks/useGetStatus"
+import { useGetStatus, StatusMap } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
@@ -41,8 +43,8 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
   const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<MontarStatus>(
-    statuses[0].key as MontarStatus
+  const [selectedStatus, setSelectedStatus] = useState<BuildStatus>(
+    statuses[0].key as BuildStatus
   );
 
   const debounceSearch = useDebounce(name)
@@ -50,7 +52,12 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
   const { getFromStorage } = useLocalStorage()
 
   const handleStatusFilterClick = (status: IStatus) => {
-    setSelectedStatus(status.key as MontarStatus);
+    if (selectedStatus === status.key) {
+      setSelectedStatus(statuses[0].key as BuildStatus);
+      return;
+    }
+
+    setSelectedStatus(status.key as BuildStatus);
   };
 
   useEffect(() => {

@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 import { IBag } from "@shared/interfaces/bag";
+import { SendStatus } from "@shared/interfaces/bag-status";
+
 import Loader from "@shared/components/Loader";
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -15,7 +17,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
-import { useGetStatus, EnviarStatus, StatusMap } from "@shared/hooks/useGetStatus"
+import { useGetStatus, StatusMap } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
@@ -43,8 +45,8 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
   const [bags, setBags] = useState<IBag[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<EnviarStatus>(
-    statuses[0].key as EnviarStatus
+  const [selectedStatus, setSelectedStatus] = useState<SendStatus>(
+    statuses[0].key as SendStatus
   );
 
   const debounceSearch = useDebounce(name);
@@ -52,7 +54,11 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
   const { getFromStorage } = useLocalStorage();
 
   const handleStatusFilterClick = (status: IStatus) => {
-    setSelectedStatus(status.key as EnviarStatus);
+    if (selectedStatus === status.key) {
+      setSelectedStatus(statuses[0].key as SendStatus);
+      return;
+    }
+    setSelectedStatus(status.key as SendStatus);
   };
 
   useEffect(() => {
