@@ -53,16 +53,6 @@ export default function Modal({
     setIsOpen(true)
   }
 
-  // const handleRejectActionModal = () => {
-  //   closeModal();
-  //   if (approveAction) approveAction();
-  // };
-
-  // const handleApproveActionModal = () => {
-  //   closeModal();
-  //   if (approveAction) approveAction();
-  // };
-
   return (
     <>
       {buttonOpenModal ? (
