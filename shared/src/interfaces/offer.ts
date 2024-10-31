@@ -1,11 +1,11 @@
 export interface IPendingDeliveries {
   id: string;
   bag_id: string;
-  offer: IOffer;
+  offer: IOfferWithProduct;
   status: string;
   amount: number;
-  created_at: Date;
-  updated_at: Date | null;
+  created_at: string;
+  updated_at: any;
 }
 
 export interface IOffer {

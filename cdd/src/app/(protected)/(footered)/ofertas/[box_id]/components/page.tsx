@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
-import Table from "../../components/table";
+import Table from "@shared/components/Table";
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 

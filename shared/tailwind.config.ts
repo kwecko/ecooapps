@@ -50,7 +50,11 @@ const config: Config = {
         inter: ["Inter", "sans"],
       },
       spacing: {
+        "10-negative": "-0.625rem",
         inherit: "inherit",
+        1.25: ".3125rem",
+        1.75: "0.4375rem",
+        3.25: "0.8125rem",
         3.75: "0.9375rem",
         4.1: "1.0625rem",
         4.5: "1.125rem",
@@ -64,10 +68,12 @@ const config: Config = {
         18: "4.5rem",
         22.5: "5.625rem",
         25: "6.25rem",
+        37.5: "9.375rem",
         38: "9.5rem",
         50: "12.5rem",
         86: "21.5rem",
         87.5: "21.875rem",
+        fullScreen: "100dvh",
       },
       height: {
         inherit: "inherit",
@@ -91,7 +97,9 @@ const config: Config = {
       },
       lineHeight: {
         4.5: "1.125rem",
+        4.75: "1.1875rem",
         5.5: "1.375rem",
+        7.5: "1.875rem",
         8.5: "2.125rem",
       },
       letterSpacing: {

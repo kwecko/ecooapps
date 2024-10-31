@@ -62,17 +62,17 @@ export default function Input({
   };
 
   return (
-    <div className="relative flex flex-col text-slate-gray">
-      <label className={twMerge("text-sm inter-font font-normal text-theme-primary pb-2 flex flex-row items-center justify-start gap-2", labelClassName)} htmlFor={label}>
+    <div className="relative w-full flex flex-col text-theme-home-bg">
+      <label className={twMerge("text-sm leading-4.75 font-inter font-normal pb-1.75 flex flex-row items-center justify-start gap-2 tracking-tight-2", labelClassName)} htmlFor={label}>
         {label} {typeof error === "string" && (
-          <div className="text-red-500 text-[12px] tracking-tighter">{error}</div>
+          <div className="text-red-500 text-xs leading-3 tracking-tight-2">{error}</div>
         )}
       </label>
-      <div className="relative">
+      <div className="relative w-full">
         <input
           {...rest}
           {...register}
-          className={`z-0 w-full p-3 border border-theme-primary rounded-lg inter-font font-normal ${className}`}
+          className={`z-0 w-full h-12 px-3 border border-theme-primary rounded-lg font-inter font-normal box-border ${className}`}
           type={inputType}
           onChange={onChange}
           onFocus={onFocus}

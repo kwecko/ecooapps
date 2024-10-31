@@ -88,7 +88,7 @@ export default function Footer({
       icon="?"
       titleCloseModal={helpInfo?.closeButtonText || ""}
       buttonOpenModal={
-        <button className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full mb-6 justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
+        <button className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
           ?
         </button>
       }
