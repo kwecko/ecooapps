@@ -15,6 +15,7 @@ import SearchInput from "@shared/components/SearchInput";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useGetStatus, MontarStatus } from "@shared/hooks/useGetStatus"
+import EmptyBoxSearch from "@shared/components/EmptyBoxSearch";
 
 interface BagsProps {
   page: number;
@@ -122,7 +123,9 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           className="mt-3"
           loaderType="component"
         />
-      ) : !isLoading && bags.length === 0 ? (
+      ) : debounceSearch && bags.length === 0 ? (
+        <EmptyBoxSearch />
+      ) : bags.length === 0 ? (
         <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
           <FaBoxOpen className="text-walnut-brown" size={64} />
           <span className="text-center w-52">Nenhuma sacola encontrada!</span>
