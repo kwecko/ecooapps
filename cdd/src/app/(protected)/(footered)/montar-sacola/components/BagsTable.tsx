@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
 
 import { IBag } from "@shared/interfaces/bag"
-import { BuildStatus } from "@shared/interfaces/bag-status"
+import { BuildStatus, IBagStatus } from "@shared/interfaces/bag-status"
 
 import Loader from "@shared/components/Loader";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -17,7 +17,7 @@ import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { useGetStatus, StatusMap } from "@shared/hooks/useGetStatus"
+import { useGetStatus } from "@shared/hooks/useGetStatus"
 
 interface BagsProps {
   page: number;
@@ -111,7 +111,7 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           data: [
             { detail: bag.id },
             { detail: `${bag.user.first_name} ${bag.user.last_name}` },
-            { detail: getStatus({ type: 'montar', status: bag.status as StatusMap["montar"]}) },
+            { detail: getStatus({ type: 'montar', status: bag.status as IBagStatus["build"]}) },
           ],
         }))
       : [];

@@ -16,7 +16,7 @@ import { useGetStatus } from "@shared/hooks/useGetStatus";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
-import { OfertaStatus, StatusMap } from "@shared/hooks/useGetStatus";
+import { OfferStatus, IBagStatus } from "@shared/interfaces/bag-status";
 
 import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
@@ -46,8 +46,8 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
   const [farmsFiltered, setFarmFiltered] = useState<IBoxes[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<OfertaStatus>(
-    statuses[0].key as OfertaStatus
+  const [selectedStatus, setSelectedStatus] = useState<OfferStatus>(
+    statuses[0].key as OfferStatus
   );
 
   const debounceSearch = useDebounce(name, 1000);
@@ -56,13 +56,13 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
 
   const handleStatusFilterClick = (status: IStatus) => {
     if (selectedStatus === status.key) {
-      setSelectedStatus(statuses[0].key as OfertaStatus);
+      setSelectedStatus(statuses[0].key as OfferStatus);
       setFarmFiltered(farms);
       return;
     }
 
     setFarmFiltered(() => farms.filter((item) => status.key.includes(item.status)));
-    setSelectedStatus(status.key as OfertaStatus);
+    setSelectedStatus(status.key as OfferStatus);
   };
 
     useEffect(() => {
@@ -118,7 +118,7 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
             data: [
               { detail: getNextSaturdayDate() },
               { detail: farm.catalog.farm.name },
-              { detail: getStatus({ type: 'oferta', status: farm.status as StatusMap["oferta"] }) },
+              { detail: getStatus({ type: 'oferta', status: farm.status as IBagStatus["offer"] }) },
             ],
           }))
         : [];
