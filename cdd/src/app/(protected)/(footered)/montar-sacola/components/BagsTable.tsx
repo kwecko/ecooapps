@@ -15,7 +15,7 @@ import SearchInput from "@shared/components/SearchInput";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useGetStatus, MontarStatus } from "@shared/hooks/useGetStatus"
-import EmptyBoxSearch from "@shared/components/EmptyBoxSearch";
+import EmptyBox from "@shared/components/EmptyBox";
 
 interface BagsProps {
   page: number;
@@ -124,12 +124,13 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           loaderType="component"
         />
       ) : debounceSearch && bags.length === 0 ? (
-        <EmptyBoxSearch />
+        <EmptyBox
+          type="search"
+        />
       ) : bags.length === 0 ? (
-        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
-          <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center w-52">Nenhuma sacola encontrada!</span>
-        </div>
+        <EmptyBox
+          type="box"
+        />
       ) : (
         <Table headers={headers} info={info} onRowClick={handleClick} />
       )}

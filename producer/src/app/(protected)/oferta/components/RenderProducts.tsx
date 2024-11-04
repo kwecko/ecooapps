@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { IProduct } from "@shared/interfaces/offer";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { ModelPage } from "@shared/components/ModelPage";
-import EmptyBoxSearch from "@shared/components/EmptyBoxSearch";
+import EmptyBox from "@shared/components/EmptyBox";
 
 import pageSettings from "./page-settings";
 
@@ -204,7 +204,9 @@ export default function RenderProducts({
       </div>
       {!isLoading && products.length === 0 ? (
         <div className="w-full h-full">
-          <EmptyBoxSearch />
+          <EmptyBox
+            type="search"
+          />
         </div>
       ) : null}
     </ModelPage>

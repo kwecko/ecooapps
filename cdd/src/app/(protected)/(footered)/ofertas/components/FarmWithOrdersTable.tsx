@@ -16,7 +16,7 @@
   import { useHandleError } from "@shared/hooks/useHandleError";
   import { useLocalStorage } from "@shared/hooks/useLocalStorage";
   import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
-  import EmptyBoxSearch from "@shared/components/EmptyBoxSearch";
+  import EmptyBox from "@shared/components/EmptyBox";
 
   import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
@@ -151,12 +151,13 @@
             <Loader className="mt-3" loaderType="component" />
           </div>
         ) : debounceSearch && farmsFiltered.length === 0 ? (
-          <EmptyBoxSearch />
+          <EmptyBox
+            type="search"
+          />
         ) : farmsFiltered.length === 0 ? (
-          <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
-            <FaBoxOpen className="text-walnut-brown" size={64} />
-            <span className="text-center w-52">Nenhum pedido encontrado!</span>
-          </div>
+          <EmptyBox
+            type="box"
+          />
         ) : (
           <Table headers={headers} info={info} onRowClick={handleClick} />
         )}
