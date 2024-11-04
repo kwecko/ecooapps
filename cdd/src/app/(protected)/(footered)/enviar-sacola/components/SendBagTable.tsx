@@ -2,7 +2,6 @@
 
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { FaBoxOpen } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 import { listBags } from "@cdd/app/_actions/bag/list-bags";

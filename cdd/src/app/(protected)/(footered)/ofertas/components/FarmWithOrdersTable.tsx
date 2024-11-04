@@ -4,7 +4,6 @@
   import { useEffect, useState } from "react";
   import { useRouter } from "next/navigation";
 
-  import { FaBoxOpen } from "react-icons/fa6";
   import StatusFilterButtons from "./StatusFilterButton";
 
   import Table from "@shared/components/Table"

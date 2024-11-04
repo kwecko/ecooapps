@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaBoxOpen } from "react-icons/fa6";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
