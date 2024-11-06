@@ -57,7 +57,7 @@ export default function Produtores() {
           return {
             id: catalog.id,
             name: catalog.farm.name,
-            caf: catalog.farm.caf,
+            tally: catalog.farm.tally,
           };
         });
 
@@ -92,7 +92,7 @@ export default function Produtores() {
                   key={producer.id}
                   id={producer.id}
                   name={producer.name}
-                  caf={producer.caf}
+                  tally={producer.tally}
                   cycleId={cycleId}
                 />
               );
