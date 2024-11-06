@@ -4,14 +4,14 @@ import Link from "next/link";
 interface ProducerCardProps {
   id: string;
   name: string;
-  caf: string;
+  tally: string;
   cycleId: string;
 }
 
 export default function ProducerCard({
   id,
   name,
-  caf,
+  tally,
   cycleId,
 }: ProducerCardProps) {
   return (
@@ -19,7 +19,7 @@ export default function ProducerCard({
       <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">
         <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
           <Image
-            src={caf != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
+            src={tally != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
             className="w-full h-full object-cover rounded-2.5"
             width={80}
             height={80}

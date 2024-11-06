@@ -16,7 +16,7 @@ export interface Admin {
 export interface Farm {
   id: string
   name: string
-  caf: string
+  tally: string;
   active: boolean
   admin: Admin
   tax: number
