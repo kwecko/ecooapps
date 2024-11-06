@@ -1,4 +1,3 @@
-import { maskCAF } from "./mask-caf";
 import { maskCPF } from "./mask-cpf";
 import { maskCellphone } from "./mask-phone";
 import { parseCookies } from "./parse-cookies";
@@ -9,7 +8,6 @@ import { maskDate } from "./mask-date";
 import { getNextSaturdayDate } from "./get-next-saturday-date";
 
 export {
-  maskCAF,
   maskCPF,
   maskCellphone,
   validateCPF,
