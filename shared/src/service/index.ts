@@ -1,6 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import { cookies } from "next/headers";
 import { SetTokenCookie } from "../utils/set-token-cookie";
+import { tokenKeys } from "../data/token-keys";
+import { AppID } from "../library/types/app-id";
 
 interface RequestProps {
   url: string;
@@ -9,8 +11,11 @@ interface RequestProps {
 
 class ApiService {
   private axiosInstance: AxiosInstance;
+  private tokenKey: string;
 
   constructor() {
+    this.tokenKey = process.env.APP_ID as AppID;
+
     this.axiosInstance = axios.create({
       baseURL: `${process.env.API_URL}`,
       headers: { "Content-Type": "application/json" },
@@ -23,8 +28,8 @@ class ApiService {
     this.axiosInstance.interceptors.request.use(
       async (config) => {
         const token =
-          cookies().get("token")?.value ||
-          cookies().get("token-reset-password")?.value;
+        cookies().get(tokenKeys[this.tokenKey as AppID])?.value ||
+        cookies().get("token-reset-password")?.value;
 
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
@@ -47,7 +52,10 @@ class ApiService {
           );
 
           if (tokenCookie) {
-            SetTokenCookie(tokenCookie.split("=")[1]);
+            SetTokenCookie({
+              token: tokenCookie.split("=")[1],
+              appID: this.tokenKey as AppID
+            })
           }
         }
 
