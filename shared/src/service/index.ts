@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { cookies } from "next/headers";
 import { SetTokenCookie } from "../utils/set-token-cookie";
 import { tokenKeys } from "../data/token-keys";
@@ -7,8 +7,6 @@ import { AppID } from "../library/types/app-id";
 interface RequestProps {
   url: string;
   data?: any;
-  responseType?: AxiosRequestConfig['responseType'];
-  headers?: Record<string, string>;
 }
 
 class ApiService {
@@ -30,8 +28,8 @@ class ApiService {
     this.axiosInstance.interceptors.request.use(
       async (config) => {
         const token =
-          cookies().get(tokenKeys[this.tokenKey as AppID])?.value ||
-          cookies().get("token-reset-password")?.value;
+        cookies().get(tokenKeys[this.tokenKey as AppID])?.value ||
+        cookies().get("token-reset-password")?.value;
 
         if (token) {
           config.headers["Authorization"] = `Bearer ${token}`;
@@ -69,24 +67,17 @@ class ApiService {
     );
   }
 
-  private async request({ url, data, responseType, headers, method }: RequestProps & { method: string }) {
+  public async POST({ url, data }: RequestProps) {
     try {
-      const config: AxiosRequestConfig = {
-        url,
-        method,
-        data,
-        headers,
-        responseType,
-      };
-
-      const response = await this.axiosInstance.request(config);
+      const response = await this.axiosInstance.post(url, data);
 
       return {
         data: response.data,
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const apiErrorMessage = error.response?.data?.message || "Erro desconhecido";
+        const apiErrorMessage =
+          error.response?.data?.message || "Erro desconhecido";
 
         return {
           message: apiErrorMessage,
@@ -99,24 +90,96 @@ class ApiService {
     }
   }
 
-  public async POST({ url, data, headers }: RequestProps) {
-    return this.request({ url, data, headers, method: "post" });
+  public async GET({ url }: RequestProps) {
+    try {
+      const response = await this.axiosInstance.get(url);
+
+      return {
+        data: response.data,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiErrorMessage =
+          error.response?.data?.message || "Erro desconhecido";
+
+        return {
+          message: apiErrorMessage,
+        };
+      } else {
+        return {
+          message: `Erro desconhecido ${error}`,
+        };
+      }
+    }
   }
 
-  public async GET({ url, responseType, headers }: RequestProps) {
-    return this.request({ url, responseType, headers, method: "get" });
+  public async PATCH({ url, data }: RequestProps) {
+    try {
+      const response = await this.axiosInstance.patch(url, data);
+
+      return {
+        data: response.data,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiErrorMessage =
+          error.response?.data?.message || "Erro desconhecido";
+
+        return {
+          message: apiErrorMessage,
+        };
+      } else {
+        return {
+          message: `Erro desconhecido ${error}`,
+        };
+      }
+    }
   }
 
-  public async PATCH({ url, data, headers }: RequestProps) {
-    return this.request({ url, data, headers, method: "patch" });
+  public async DELETE({ url }: RequestProps) {
+    try {
+      const response = await this.axiosInstance.delete(url);
+
+      return {
+        data: response.data,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiErrorMessage =
+          error.response?.data?.message || "Erro desconhecido";
+
+        return {
+          message: apiErrorMessage,
+        };
+      } else {
+        return {
+          message: `Erro desconhecido ${error}`,
+        };
+      }
+    }
   }
 
-  public async DELETE({ url, headers }: RequestProps) {
-    return this.request({ url, headers, method: "delete" });
-  }
+  public async PUT({ url, data }: RequestProps) {
+    try {
+      const response = await this.axiosInstance.put(url, data);
 
-  public async PUT({ url, data, headers }: RequestProps) {
-    return this.request({ url, data, headers, method: "put" });
+      return {
+        data: response.data,
+      };
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const apiErrorMessage =
+          error.response?.data?.message || "Erro desconhecido";
+
+        return {
+          message: apiErrorMessage,
+        };
+      } else {
+        return {
+          message: `Erro desconhecido ${error}`,
+        };
+      }
+    }
   }
 }
 
