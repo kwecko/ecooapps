@@ -19,15 +19,15 @@ export default function Footer({
 
   const convertPathname = (path: string) => {
     const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    
-    return path
-      .split("/")
-      .map((segment) => 
-        uuidRegex.test(segment) ? "[id]" : segment
-      )
-      .join("/");
+
+    const params = path.split("/");
+
+    if(params[2] && uuidRegex.test(params[2])) return `/${params[1]}/[id]`;
+
+    if(params[2]) return `/${params[1]}/[generic]`;
+
+    return `/${params[1]}`;
   };
-  
 
   const convertedPathname = convertPathname(pathname);
 

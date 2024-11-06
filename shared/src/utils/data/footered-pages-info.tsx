@@ -39,7 +39,7 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
   },
   "/login": {
     hasPreviousPage: true,
-    returnPath: "/",
+    returnPath: "/inicio",
     hasHelpButton: false,
     helpInfo: null,
   },
@@ -154,6 +154,28 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     },
   },
+  "/negocio/[generic]": {
+    hasPreviousPage: false,
+    returnPath: null,
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Precisa de Suporte?",
+      content: (
+        <p>
+          Se você está com dificuldades ao utilizar o nosso sistema, você pode
+          obter ajuda via Telegram clicando no botão abaixo ou através de um dos
+          nossos canais oficiais:
+          <br />
+          <br />
+          telefone: (53) XXXX-XXXX
+          <br />
+          email: suporte@ecoo.org.br
+        </p>
+      ),
+      closeButtonText: "Entrar em contato",
+      redirectPath: "",
+    },
+  },
 };
 
 const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
@@ -213,7 +235,7 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
   },
   "/login": {
     hasPreviousPage: true,
-    returnPath: "/",
+    returnPath: "/inicio",
     hasHelpButton: false,
     helpInfo: null,
   },

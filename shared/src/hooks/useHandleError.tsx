@@ -1,15 +1,16 @@
 'use client'
 
 import { toast } from "sonner";
-import { errorsMapper, genericErrorsMapper } from "../errors";
-import { useSessionExpiredContext } from "../context/session/index";
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
+
+import { errorsMapper, genericErrorsMapper } from "../errors";
+import { useSessionExpiredContext } from "../context/session/index";
 
 export function useHandleError() {
   const { setSessionExpired } = useSessionExpiredContext();
 
-  const router = useRouter()
+  const router = useRouter();
 
   const handleError = useCallback((errorCode: string) => {
     if (errorCode in errorsMapper) {
@@ -20,11 +21,26 @@ export function useHandleError() {
         return;
       }
 
-      if(errorCode === "💥 Ocorreu um erro interno." || errorCode === "Erro desconhecido"){
+      if(errorCode === "💥 Ocorreu um erro interno." || errorCode === "Erro desconhecido") {
         toast.error(errorMessage)
         setTimeout(() => {  
           router.push("/")
         }, 2000)
+
+        return;
+      }
+
+      if(errorCode === "Você não é administrador de um agronegócio.") {
+        toast.warning(errorMessage);
+        router.push("/cadastrar/4");
+        return;
+      }
+
+      if(errorCode === "Você está tentando acessar um app apenas para administradores!" || errorCode === "Você está tentando acessar um app apenas para administradores ou produtores!") {
+        toast.error(errorMessage);
+        setTimeout(() => {
+          router.push("/telegram");
+        }, 1000);
 
         return;
       }
@@ -48,6 +64,11 @@ export function useHandleError() {
 
       if(words[0] === 'CPF'){
         toast.error(`CPF ${words[1]} já cadastrado`);
+        return;
+      }
+
+      if(words[0] === 'CAF'){
+        toast.error(`CAF ${words[1]} já cadastrado`);
         return;
       }
 

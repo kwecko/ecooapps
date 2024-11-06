@@ -57,7 +57,8 @@ export default function FifthStep() {
 
           deleteFromStorage('register-form-data')
           deleteFromStorage('register-current-step')
-          router.push('/')
+          toast.success("Produtor cadastrado com sucesso!");
+          router.push('/login')
         })
         .catch(() => {
           toast.error("Erro desconhecido.")

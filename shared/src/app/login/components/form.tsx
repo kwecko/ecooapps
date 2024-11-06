@@ -51,15 +51,11 @@ export default function FormLogin({ appID }: { appID: AppID }) {
         .then((response) => {
           if (response.message) {
             handleError(response.message);  
-            if (response?.redirect && typeof response.redirect === 'string') {
-              setTimeout(() => {
-                router.push(response.redirect);
-              }, 800);
-            }
-          } else {
-            toast.success("Login efetuado com sucesso!");
-            router.push("/");
-          }
+            return;
+          } 
+
+          toast.success("Login efetuado com sucesso!");
+          router.push("/");
         })
         .catch(() => {
           toast.error("Erro ao efetuar login");
