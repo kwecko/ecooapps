@@ -1,10 +1,9 @@
 import { InputHTMLAttributes, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { FaRegCircleQuestion } from "react-icons/fa6";
 
 import { Masks } from "@shared/types/register";
-import { maskCAF, maskCellphone, maskCPF } from "@shared/utils/index";
+import { maskCellphone, maskCPF } from "@shared/utils/index";
 import InfoModal from "./InfoModal";
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -53,8 +52,8 @@ export default function CustomInput({
   };
 
   const handleIconClick = () => {
-    setIsOpenInfoModal(true)
-  }
+    setIsOpenInfoModal(true);
+  };
 
   return (
     <div className="w-full flex flex-col">
