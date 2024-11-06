@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { cookies } from "next/headers";
-import { SetTokenCookie } from "../utils/set-token-cookie";
 import { tokenKeys } from "../data/token-keys";
 import { AppID } from "../library/types/app-id";
+import { SetTokenCookie } from "../utils/set-token-cookie";
 
 interface RequestProps {
   url: string;
@@ -56,8 +56,8 @@ class ApiService {
           if (tokenCookie) {
             SetTokenCookie({
               token: tokenCookie.split("=")[1],
-              appID: this.tokenKey as AppID
-            })
+              appID: this.tokenKey as AppID,
+            });
           }
         }
 
@@ -84,9 +84,6 @@ class ApiService {
         headers,
         responseType,
       };
-
-      console.log("config", config);
-      console.log("baseURL", this.axiosInstance.defaults.baseURL);
 
       const response = await this.axiosInstance.request(config);
 
