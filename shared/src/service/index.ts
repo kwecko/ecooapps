@@ -7,7 +7,7 @@ import { AppID } from "../library/types/app-id";
 interface RequestProps {
   url: string;
   data?: any;
-  responseType?: AxiosRequestConfig['responseType'];
+  responseType?: AxiosRequestConfig["responseType"];
   headers?: Record<string, string>;
 }
 
@@ -69,7 +69,13 @@ class ApiService {
     );
   }
 
-  private async request({ url, data, responseType, headers, method }: RequestProps & { method: string }) {
+  private async request({
+    url,
+    data,
+    responseType,
+    headers,
+    method,
+  }: RequestProps & { method: string }) {
     try {
       const config: AxiosRequestConfig = {
         url,
@@ -79,6 +85,9 @@ class ApiService {
         responseType,
       };
 
+      console.log("config", config);
+      console.log("baseURL", this.axiosInstance.defaults.baseURL);
+
       const response = await this.axiosInstance.request(config);
 
       return {
@@ -86,7 +95,8 @@ class ApiService {
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const apiErrorMessage = error.response?.data?.message || "Erro desconhecido";
+        const apiErrorMessage =
+          error.response?.data?.message || "Erro desconhecido";
 
         return {
           message: apiErrorMessage,
