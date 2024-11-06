@@ -116,6 +116,8 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
         }))
       : [];
 
+    // console.log(bags)
+
     return (
       <div className="w-full h-full flex flex-col">
         <div className="sticky top-0 bg-default z-10">

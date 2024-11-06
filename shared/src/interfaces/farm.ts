@@ -4,10 +4,11 @@ import { IAdmin } from "./user";
 
 export interface IBoxes {
   id: string;
-  status: "PENDING" | "CANCELLED" | "VERIFIED";
+  status: "PENDING" | "VERIFIED";
   catalog: ICatalog;
   created_at: Date;
   updated_at: Date | null;
+  verified: number;
 }
 
 export interface IFarm {
@@ -23,7 +24,7 @@ export interface IFarm {
 
 export interface IFarmOrders {
   id: string;
-  status: "PENDING" | "CANCELLED" | "VERIFIED";
+  verified: number;
   catalog: ICatalog;
   created_at: Date;
   updated_at: Date | null;

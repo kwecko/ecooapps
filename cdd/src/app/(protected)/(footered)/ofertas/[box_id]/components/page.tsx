@@ -4,13 +4,11 @@ import { useEffect, useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
-import OrderTable from "@shared/components/OrderTable";
+import IndividualProductTable from "@shared/components/IndividualProductTable";
 
-import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import Modal from "@shared/components/Modal";
 import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
 import { convertStatus } from "@shared/utils/convert-status";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
@@ -41,8 +39,6 @@ export default function FarmOrdersTable() {
         return;
       }
 
-      const { id } = cycle
-
       await getBoxOrders({
         box_id: box_id as string,
       })
@@ -64,76 +60,6 @@ export default function FarmOrdersTable() {
         });
     })();
   }, [box_id]);
-
-  const approveBox = () => {
-    handleOrderDelivery({
-      box_id: box_id as string,
-      status: "RECEIVED",
-    })
-      .then((response) => {
-        if (response.message) {
-          const messageError = response.message as string;
-          handleError(messageError);
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi aprovada!",
-              description: "A oferta do produtor foi aprovada.",
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: "/ofertas",
-                  name: "Verificar outra oferta"
-                },
-              }
-            })
-          );
-          router.push("/sucesso");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
-  };
-
-  const cancelBox = () => {
-    handleOrderDelivery({
-      box_id: box_id as string,
-      status: "CANCELLED",
-    })
-      .then((response) => {
-        if (response.message) {
-          const messageError = response.message as string;
-          handleError(messageError);
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi Reprovada!",
-              description: "A oferta do produtor foi REPROVADA.",
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: "/ofertas",
-                  name: "Verificar outra oferta"
-                },
-              },
-            })
-          );
-          router.push("/sucesso");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
-  };
 
   if (isLoading) {
     return <TableSkeleton />;
@@ -160,46 +86,18 @@ export default function FarmOrdersTable() {
     ],
   }));
 
+  const status = farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
+
   return (
     <div className="w-full h-full flex flex-col justify-between">
       <HeaderDetail
         id={farmOrders?.id.split("-", 1).toString().toUpperCase()}
-        status={convertStatus(farmOrders.status).name}
+        status={convertStatus(status).name}
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
       />
 
-      <OrderTable headers={headers} info={info} />
-
-      {
-        !!farmOrders.orders.length && (
-          <div className="w-full h-[10%] flex gap-2 justify-center items-end mt-4">
-            <Modal
-              titleContentModal="Você tem certeza?"
-              contentModal="Após rejeitar a entrega essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
-              titleCloseModal="Cancelar"
-              titleConfirmModal="Rejeitar"
-              titleOpenModal="Rejeitar"
-              bgOpenModal="#FF7070"
-              bgConfirmModal="#FF7070"
-              bgCloseModal="#EEF1F4"
-              modalAction={cancelBox}
-            />
-
-            <Modal
-              titleContentModal="Você tem certeza?"
-              contentModal="Após aprovar a oferta essa operação não poderá ser desfeita. Em caso de erro, entre em contato com o suporte."
-              titleCloseModal="Cancelar"
-              titleConfirmModal="Aprovar"
-              titleOpenModal="Aprovar"
-              bgOpenModal="#00735E"
-              bgConfirmModal="#00735E"
-              bgCloseModal="#EEF1F4"
-              modalAction={approveBox}
-            />
-          </div>
-        )
-      }
+      <IndividualProductTable headers={headers} info={info} farmOrders={farmOrders}/>
     </div>
   );
 }

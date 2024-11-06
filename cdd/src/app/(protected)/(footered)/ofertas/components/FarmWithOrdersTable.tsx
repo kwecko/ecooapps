@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { FaBoxOpen } from "react-icons/fa6";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 
+import IndividualProductTable from "@shared/components/IndividualProductTable";
 import OrderTable from "@shared/components/OrderTable";
 import Loader from "@shared/components/Loader";
 import { IBoxes } from "@shared/interfaces/farm";
@@ -17,6 +18,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 import { OfferStatus, IBagStatus } from "@shared/interfaces/bag-status";
+import { getBoxStatus } from "@shared/hooks/useGetBoxStatus";
 
 import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
@@ -118,7 +120,7 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
             data: [
               { detail: getNextSaturdayDate() },
               { detail: farm.catalog.farm.name },
-              { detail: getStatus({ type: 'oferta', status: farm.status as IBagStatus["offer"] }) },
+              { detail: getStatus({ type: 'oferta', status: farm.status as IBagStatus["offer"]}) },
             ],
           }))
         : [];
@@ -132,7 +134,7 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
           <StatusFilterButtons
             statuses={statuses}
             selectedStatus={selectedStatus}
-            handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+            handleStatusFilterClick={(status: IStatus) => handleStatusFilterClick(status)}
           />
         </div>
 
