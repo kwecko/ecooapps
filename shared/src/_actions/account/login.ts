@@ -1,7 +1,7 @@
 "use server";
 
-import ApiService from "../../service/index";
 import { AppID } from "../../library/types/app-id";
+import ApiService from "../../service/index";
 import { SetTokenCookie } from "../../utils/set-token-cookie";
 
 interface LoginRequest {
@@ -18,7 +18,7 @@ export async function login({ email, password, appID }: LoginRequest) {
   };
 
   const response = await ApiService.POST({
-    url: '/auth',
+    url: "/auth",
     data,
   });
 
@@ -35,35 +35,41 @@ export async function login({ email, password, appID }: LoginRequest) {
   const { token } = reply;
 
   const appValidation = {
-    "CDD": {
+    CDD: {
       allowedRoles: ["ADMIN"],
-      errorMessage: "Você está tentando acessar um app apenas para administradores!",
-      redirect: "/telegram"
+      errorMessage:
+        "Você está tentando acessar um app apenas para administradores!",
+      redirect: "/telegram",
     },
-    "PRODUCER": {
+    PRODUCER: {
       allowedRoles: ["PRODUCER", "ADMIN"],
-      errorMessage: "Você está tentando acessar um app apenas para administradores ou produtores!",
-      redirect: "/telegram"
+      errorMessage:
+        "Você está tentando acessar um app apenas para administradores ou produtores!",
+      redirect: "/telegram",
     },
-    "CONSUMER": {
+    CONSUMER: {
       allowedRoles: ["USER", "ADMIN", "PRODUCER"],
-      errorMessage: "Você está tentando acessar um app apenas para administradores ou consumidores!",
-      redirect: "#"
+      errorMessage:
+        "Você está tentando acessar um app apenas para administradores ou consumidores!",
+      redirect: "#",
     },
   };
 
   const validation = appValidation[appID];
 
-  if (validation && !roles.some((role: string) => validation.allowedRoles.includes(role))) {
+  if (
+    validation &&
+    !roles.some((role: string) => validation.allowedRoles.includes(role))
+  ) {
     return {
       message: validation.errorMessage,
-      redirect: validation.redirect
+      redirect: validation.redirect,
     };
   }
 
   SetTokenCookie({
     token,
-    appID
+    appID,
   });
   return reply;
 }

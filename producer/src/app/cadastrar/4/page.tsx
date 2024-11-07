@@ -36,12 +36,12 @@ export default function FifthStep() {
     resolver: zodResolver(fifthStepRegisterSchema),
     mode: "onChange",
     defaultValues: {
-      name: '',
-      caf: ''
-    }
+      name: "",
+      tally: "",
+    },
   });
 
-  const submit = async ({ name, caf }: FifthStepRegisterSchema) => {
+  const submit = async ({ name, tally }: FifthStepRegisterSchema) => {
     starTransition(async () => {
       const isValid = await trigger();
 
@@ -49,7 +49,7 @@ export default function FifthStep() {
         return;
       }
 
-      registerFarm({ name, caf })
+      registerFarm({ name, tally })
         .then((response) => {
           if (response.message) {
             handleError(response.message);
@@ -76,12 +76,11 @@ export default function FifthStep() {
           errorMessage={errors.name?.message}
         />
         <CustomInput
-          register={register('caf')}
-          label="CAF"
-          placeholder="Insira o CAF"
+          register={register("tally")}
+          label="Nº do talão"
+          placeholder="Insira o nº do talão"
           type="text"
-          errorMessage={errors.caf?.message}
-          mask="caf"
+          errorMessage={errors.tally?.message}
         />
       </div>
       <div className="w-full flex flex-col gap-3 mb-3">

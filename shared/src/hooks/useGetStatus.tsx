@@ -6,15 +6,15 @@ import { FaCheck, FaExclamation } from "react-icons/fa6";
 
 type GetStatusType = "oferta" | "montar" | "enviar" | "farm";
 
-type OfertaStatus = "PENDING" | "CANCELLED" | "VERIFIED";
+export type OfertaStatus = Array<"PENDING" | "CANCELLED" | "VERIFIED">;
 type FarmStatus = "ACTIVE" | "INACTIVE" | "PENDING";
-export type MontarStatus = "PENDING" | "SEPARATED";
-export type EnviarStatus = "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
+export type MontarStatus = Array<"PENDING" | "SEPARATED">;
+export type EnviarStatus = Array<"SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED">;
 
-type StatusMap = {
-  oferta: OfertaStatus;
-  montar: MontarStatus;
-  enviar: EnviarStatus;
+export type StatusMap = {
+  oferta: "PENDING" | "CANCELLED" | "VERIFIED";
+  montar: "PENDING" | "SEPARATED";
+  enviar: "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
   farm: FarmStatus;
 };
 

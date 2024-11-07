@@ -1,78 +1,70 @@
-  "use client";
+"use client";
 
-  import { toast } from "sonner";
-  import { useEffect, useState } from "react";
-  import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
-  import StatusFilterButtons from "./StatusFilterButton";
+import { toast } from "sonner";
+import { FaBoxOpen } from "react-icons/fa6";
+import StatusFilterButtons from "@shared/components/StatusFilterButton";
 
-  import Table from "@shared/components/Table"
-  import Loader from "@shared/components/Loader";
-  import { IBoxes } from "@shared/interfaces/farm";
-  import { useDebounce } from "@shared/hooks/useDebounce";
-  import SearchInput from "@shared/components/SearchInput";
-  import { useGetStatus } from "@shared/hooks/useGetStatus";
-  import { useHandleError } from "@shared/hooks/useHandleError";
-  import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-  import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
-  import EmptyBox from "@shared/components/EmptyBox";
+import OrderTable from "@shared/components/OrderTable";
+import Loader from "@shared/components/Loader";
+import { IBoxes } from "@shared/interfaces/farm";
+import { useDebounce } from "@shared/hooks/useDebounce";
+import SearchInput from "@shared/components/SearchInput";
+import { useGetStatus } from "@shared/hooks/useGetStatus";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
+import { OfferStatus, IBagStatus } from "@shared/interfaces/bag-status";
+import EmptyBox from "@shared/components/EmptyBox";
 
-  import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
+import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
-  interface FarmsProps {
-    page: number;
-    setTotalItems: (total: number) => void;
-  }
+interface FarmsProps {
+  page: number;
+  setTotalItems: (total: number) => void;
+}
 
-  export interface IStatus {
-    name: string;
-    key: string;
-  }
+export interface IStatus {
+  name: string;
+  key: string[];
+}
 
-  export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
-    const router = useRouter();
+const statuses: IStatus[] = [
+  { name: "Todas", key: ["PENDING", "VERIFIED", "CANCELLED"] },
+  { name: "Pendentes", key: ["PENDING"] },
+  { name: "Verificados", key: ["VERIFIED"] },
+  { name: "Cancelados", key: ["CANCELLED"] },
+];
 
-    const { getStatus } = useGetStatus();
+export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
+  const router = useRouter();
 
-    const statuses: IStatus[] = [
-      {
-        name: "Todas",
-        key: "ALL",
-      },
-      {
-        name: "Pendentes",
-        key: "PENDING",
-      },
-      {
-        name: "Verificados",
-        key: "VERIFIED",
-      },
-      {
-        name: "Cancelados",
-        key: "CANCELLED",
-      },
-    ];
+  const { getStatus } = useGetStatus();
 
-    const [selectedStatus, setSelectedStatus] = useState("ALL");
-    const [isLoading, setIsLoading] = useState(false);
-    const [farms, setFarms] = useState<IBoxes[]>([]);
-    const [farmsFiltered, setFarmFiltered] = useState<IBoxes[]>([]);
-    const [name, setName] = useState("");
+  const [farms, setFarms] = useState<IBoxes[]>([]);
+  const [farmsFiltered, setFarmFiltered] = useState<IBoxes[]>([]);
+  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedStatus, setSelectedStatus] = useState<OfferStatus>(
+    statuses[0].key as OfferStatus
+  );
 
-    const { handleError } = useHandleError();
-    const { getFromStorage } = useLocalStorage();
-    const debounceSearch = useDebounce(name, 1000);
+  const debounceSearch = useDebounce(name, 1000);
+  const { handleError } = useHandleError();
+  const { getFromStorage } = useLocalStorage();
 
-    const handleStatusFilterClick = (status: IStatus) => {
-      if (selectedStatus === status.key || status.key === "ALL") {
-        setSelectedStatus("ALL");
-        setFarmFiltered(farms);
-        return;
-      }
+  const handleStatusFilterClick = (status: IStatus) => {
+    if (selectedStatus === status.key) {
+      setSelectedStatus(statuses[0].key as OfferStatus);
+      setFarmFiltered(farms);
+      return;
+    }
 
-      setFarmFiltered(() => farms.filter((item) => item.status === status.key));
-      setSelectedStatus(status.key);
-    };
+    setFarmFiltered(() => farms.filter((item) => status.key.includes(item.status)));
+    setSelectedStatus(status.key as OfferStatus);
+  };
 
     useEffect(() => {
       (() => {
@@ -125,9 +117,9 @@
         ? farmsFiltered.map((farm) => ({
             id: farm.id,
             data: [
-              { detail: getNextSaturdayDate() }, // Prazo
-              { detail: farm.catalog.farm.name }, // Produtor
-              { detail: getStatus({ type: 'oferta', status: farm.status }) }, // Status
+              { detail: getNextSaturdayDate() },
+              { detail: farm.catalog.farm.name },
+              { detail: getStatus({ type: 'oferta', status: farm.status as IBagStatus["offer"] }) },
             ],
           }))
         : [];
@@ -158,8 +150,8 @@
             type="box"
           />
         ) : (
-          <Table headers={headers} info={info} onRowClick={handleClick} />
+          <OrderTable headers={headers} info={info} onRowClick={handleClick} />
         )}
       </div>
     );
-  }
+  };
