@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 import { notFound, useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
-import Table from "@shared/components/Table";
+import OrderTable from "@shared/components/OrderTable";
+
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
 
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import Modal from "@shared/components/Modal";
-import { convertUnit } from "@shared/utils/convert-unit";
+import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
 import { convertStatus } from "@shared/utils/convert-status";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -152,10 +153,10 @@ export default function FarmOrdersTable() {
     id: detail.id,
     data: [
       {
-        detail: detail.amount + convertUnit(detail.offer.product.pricing), // quant.
+        detail: convertOfferAmount(detail.amount, detail.offer.product.pricing) + " " + convertUnit(detail.offer.product.pricing),
       },
-      { detail: detail.offer.product.name }, // produto
-      { detail: convertStatus(detail.status).icon, style: "text-center" }, // status
+      { detail: detail.offer.product.name },
+      { detail: convertStatus(detail.status).icon, style: "text-center" },
     ],
   }));
 
@@ -168,7 +169,7 @@ export default function FarmOrdersTable() {
         time={getNextSaturdayDate()}
       />
 
-      <Table headers={headers} info={info} />
+      <OrderTable headers={headers} info={info} />
 
       {
         !!farmOrders.orders.length && (

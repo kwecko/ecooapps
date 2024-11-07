@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { useState } from "react";
 import SendBagTable from "./components/SendBagTable";
@@ -17,7 +17,7 @@ export default function Home() {
   };
 
   const nextPage = async () => {
-    if(totalItems <= 20){
+    if(totalItems < 20){
       return;
     }
 
