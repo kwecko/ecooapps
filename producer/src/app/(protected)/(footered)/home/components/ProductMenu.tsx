@@ -77,10 +77,9 @@ export function ProductMenu() {
         >
           Fazer uma oferta
         </Button>
-        <Link href={"/"}>
+        <Link href={"/relatorios"}>
           <Button
             className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default"
-            disabled={true}
           >
             Gerar relatórios
           </Button>

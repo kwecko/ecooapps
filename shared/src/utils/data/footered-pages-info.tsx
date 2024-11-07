@@ -138,6 +138,22 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     }
   },
+  "/relatorios": {
+    hasPreviousPage: true,
+    returnPath: "/",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Como visualizar um relatório?",
+      content: (
+        <p>
+          Para visualizar um relatório, você deve clicar no botão "visualizar" e
+          seguir os passos indicados.
+        </p>
+      ),
+      closeButtonText: "Ok, entendi",
+      redirectPath: "",
+    },
+  },
 };
 
 const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {

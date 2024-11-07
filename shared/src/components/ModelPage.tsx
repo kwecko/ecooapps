@@ -27,7 +27,7 @@ export function ModelPage({
   const overflow = overflowAuto ? 'overflow-y-auto' : "overflow-hidden"
 
   return (
-    <div className={twMerge("w-full h-[inherit] shrink-0 p-4 pt-5 pb-0 flex flex-col justify-stretch items-center gap-4 text-theme-default overflow-hidden bg-theme-background ", overflow)}>
+    <div className={twMerge("w-full h-[inherit] shrink-0 p-4 pt-5 pb-4 flex flex-col justify-stretch items-center gap-4 text-theme-default overflow-hidden bg-theme-background ", overflow)}>
       {title && (
         <div
           className={twMerge(

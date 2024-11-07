@@ -11,7 +11,7 @@ interface ListBagsRequest {
 
 export async function listBags({ page, cycle_id, statuses, name }: ListBagsRequest) {
   const statusParams = statuses.map((singleStatus) => `${singleStatus}`).join(',');
-  const url = `/bags?page=${page}&cycle_id=${cycle_id}&statuses=${statusParams}${name ? `&name=${name}` : ''}`;
+  const url = `/bags/current?page=${page}&cycle_id=${cycle_id}&statuses=${statusParams}${name ? `&name=${name}` : ''}`;
 
   const response = ApiService.GET({
     url

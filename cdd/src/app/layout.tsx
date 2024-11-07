@@ -1,13 +1,12 @@
 import "./globals.css";
 import { Toaster } from "sonner";
 
-import { setAppID } from "@shared/next/library/set-app-id";
-import { getAppID } from "@shared/next/library/get-app-id";
+import { addOrganizationNameToTitle } from "@shared/library/get-metadata";
 
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Painel e-COO | CDD",
+  title: addOrganizationNameToTitle("Painel CDD"),
   description: "Administração para cooperados",
 };
 
@@ -16,12 +15,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  setAppID("CDD");
-
   return (
     <html lang="en">
       <body
-        className={`${getAppID()} w-screen font-poppins`}
+        className={`${process.env.APP_ID} w-screen font-poppins`}
       >
         <div className="flex flex-row justify-center w-full">
           <Toaster richColors position="top-right" />

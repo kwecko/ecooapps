@@ -14,6 +14,7 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
 import convertStatus from "@shared/utils/convert-status";
 import HeaderDetail from "@shared/components/HeaderDetail";
+import { IBagStatus } from "@shared/interfaces/bag-status";
 
 export default function BagMiniTable() {
   const router = useRouter()
@@ -51,7 +52,7 @@ export default function BagMiniTable() {
     })()
   }, [bag_id]);
 
-  const handleStatusBag = (bag_id: string, status: "PENDING" | "SEPARATED") => {
+  const handleStatusBag = (bag_id: string, status: IBagStatus["build"]) => {
     if (status === 'PENDING') {
       handleBag({
         bag_id,

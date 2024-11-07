@@ -22,7 +22,7 @@ interface IClasses {
 }
 
 const styles: IClasses = {
-  default: 'w-full px-3 py-4 font-semibold rounded-lg text-base relative',
+  default: 'w-full p-3 font-semibold rounded-lg text-base relative',
   variant: {
     default: 'text-white bg-theme-default mt-6',
     light: 'text-theme-default bg-white',
@@ -60,8 +60,8 @@ export default function ButtonV2({
       {children}
       {
         notification && (
-          <span className="absolute top-0 right-0 mt-[-10px] mr-[-10px] flex h-5 w-5">
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-[#FF7070] text-white text-xs font-bold items-center justify-center">{notification}</span>
+          <span className="absolute top-0 right-0 mt-10-negative mr-10-negative flex h-5 w-5">
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-error text-white text-xs font-bold items-center justify-center">{notification}</span>
           </span>
         )
       }
