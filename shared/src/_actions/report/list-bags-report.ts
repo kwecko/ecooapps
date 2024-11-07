@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 export async function ListBagsReport(cycle_id: string) {
-  const token = cookies().get("token");
+  const token = cookies().get("cdd_token");
 
   if (!token) {
     return "Erro";
@@ -21,7 +21,7 @@ export async function ListBagsReport(cycle_id: string) {
 
     
     if (!response.ok) {
-      return response.json()
+      return response.json();
     }
 
     const data = await response.arrayBuffer();

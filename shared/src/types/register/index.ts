@@ -9,4 +9,4 @@ export type FifthStepRegisterSchema = z.infer<typeof fifthStepRegisterSchema>
 
 export type Roles = "USER" | "PRODUCER"
 
-export type Masks = 'phone' | 'cpf' | 'caf'
+export type Masks = 'phone' | 'cpf'
