@@ -40,9 +40,9 @@ export default function Success() {
   }
 
   return (
-    <div className="w-full h-full flex flex-col p-5 bg-theme-background">
-      <div className="w-full h-screen flex justify-center flex-col">
-        <div className="w-full h-4/5 flex items-center flex-col justify-center">
+    <div className="w-full min-h-screen overflow-hidden flex flex-col p-5 bg-theme-background">
+      <div className="w-full flex-grow flex justify-center flex-col">
+        <div className="flex-grow flex items-center flex-col justify-center">
           <AiFillCheckCircle className="w-25 h-25 text-theme-highlight" />
           <span className="mt-6 text-center text-3xl text-theme-default font-medium">
             {data.title}
@@ -51,7 +51,7 @@ export default function Success() {
             {data.description}
           </span>
         </div>
-        <div className="w-full h-1/5 pb-2 bg-red flex flex-col justify-end gap-4">
+        <div className="w-full pb-2 bg-red flex flex-col justify-end gap-4">
           {
             data.button.secondary && (
               <Link href={data?.button?.secondary.router}>
