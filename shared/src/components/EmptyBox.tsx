@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import Image from 'next/legacy/image';
+import emptyBox from '@shared/assets/public/empty-box.png';
 
 type EmptyBoxType = "search" | "bag";
 
@@ -24,7 +25,7 @@ export default function EmptyBox ({
     <div className="flex-grow flex h-full">
       <div className="flex flex-col w-full pb-20 justify-center gap-4 items-center">
         <Image
-          src="/empty-box.png"
+          src={emptyBox}
           alt="bag"
           width={180}
           height={100}
