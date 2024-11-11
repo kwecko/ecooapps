@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import Image from 'next/legacy/image';
 
+type EmptyBoxType = "search" | "bag";
+
 interface EmptyBoxProps {
-  type: string;
+  type: EmptyBoxType;
 }
 
 const EmptyBox = ({
@@ -13,9 +15,9 @@ const EmptyBox = ({
   useEffect(() => {
     if (type == "search") {
       setBoxText("Não encontramos resultados para a sua pesquisa.");
-    } else {
-      setBoxText("Nenhuma sacola encontrada!");
+      return;
     }
+    setBoxText("Nenhuma sacola encontrada!");
   }, [type]);
 
   return (
