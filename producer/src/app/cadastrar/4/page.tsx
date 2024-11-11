@@ -37,11 +37,11 @@ export default function FifthStep() {
     mode: "onChange",
     defaultValues: {
       name: '',
-      caf: ''
+      tally: ''
     }
   });
 
-  const submit = async ({ name, caf }: FifthStepRegisterSchema) => {
+  const submit = async ({ name, tally }: FifthStepRegisterSchema) => {
     starTransition(async () => {
       const isValid = await trigger();
 
@@ -49,9 +49,11 @@ export default function FifthStep() {
         return;
       }
 
-      registerFarm({ name, caf })
+      registerFarm({ name, tally })
         .then((response) => {
           if (response.message) {
+            console.log(response.message);
+
             handleError(response.message);
           }
 
@@ -77,12 +79,12 @@ export default function FifthStep() {
           errorMessage={errors.name?.message}
         />
         <CustomInput
-          register={register('caf')}
-          label="CAF"
-          placeholder="Insira o CAF"
-          type="text"
-          errorMessage={errors.caf?.message}
-          mask="caf"
+          register={register('tally')}
+          label="Número do Talão"
+          placeholder="Insira o número do Talão"
+          type="number"
+          errorMessage={errors.tally?.message}
+          maxLength={12}
         />
       </div>
       <div className="w-full flex flex-col gap-3 mb-3">
@@ -102,7 +104,7 @@ export default function FifthStep() {
             onClick={() => {
               deleteFromStorage('register-form-data')
               deleteFromStorage('register-current-step')
-            }}  
+            }}
           >
             Tela inicial
           </ButtonV2>

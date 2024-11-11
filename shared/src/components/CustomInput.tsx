@@ -20,6 +20,7 @@ export default function CustomInput({
   register,
   type,
   mask,
+  maxLength,
   ...inputProps
 }: CustomInputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -37,6 +38,10 @@ export default function CustomInput({
 
     if (mask && masksActions[mask]) {
       maskedValue = masksActions[mask](value);
+    }
+
+    if (maxLength && maskedValue.length > maxLength) {
+      maskedValue = maskedValue.slice(0, maxLength);
     }
 
     event.target.value = maskedValue;

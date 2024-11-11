@@ -4,15 +4,15 @@ import ApiService from "@shared/service"
 
 interface RegisterFarmRequest {
   name: string;
-  caf: string;
+  tally: string;
 }
 
-export async function registerFarm({ name, caf }: RegisterFarmRequest){
+export async function registerFarm({ name, tally }: RegisterFarmRequest){
   const response = ApiService.POST({
     url: '/farms',
     data: {
       name,
-      caf
+      tally
     }
   })
 
