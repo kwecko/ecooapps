@@ -14,7 +14,6 @@ import { useDebounce } from "@shared/hooks/useDebounce";
 import SearchInput from "@shared/components/SearchInput";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
-import Table from "@shared/components/Table";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import EmptyBox from "@shared/components/EmptyBox";
