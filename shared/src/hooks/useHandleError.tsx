@@ -67,8 +67,8 @@ export function useHandleError() {
         return;
       }
 
-      if(words[0] === 'CAF'){
-        toast.error(`CAF ${words[1]} já cadastrado`);
+      if(words[0] === 'Número'){
+        toast.error(`Número de Talão ${words[1]} já cadastrado`);
         return;
       }
 

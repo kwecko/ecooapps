@@ -28,5 +28,5 @@
     "Email",
     "Telefone",
     "CPF",
-    "CAF"
+    "Número"
   ]
