@@ -14,6 +14,7 @@ import { useDebounce } from "@shared/hooks/useDebounce";
 import SearchInput from "@shared/components/SearchInput";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
+import Table from "@shared/components/Table";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import EmptyBox from "@shared/components/EmptyBox";
@@ -144,7 +145,7 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
             type="box"
           />
         ) : (
-          <Table headers={headers} info={info} onRowClick={handleClick} />
+          <OrderTable headers={headers} info={info} onRowClick={handleClick} />
         )}
       </div>
     );
