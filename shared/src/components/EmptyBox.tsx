@@ -7,9 +7,9 @@ interface EmptyBoxProps {
   type: EmptyBoxType;
 }
 
-const EmptyBox = ({
+export default function EmptyBox ({
   type
-}: EmptyBoxProps) => {
+}: EmptyBoxProps) {
   const [boxText, setBoxText] = React.useState("");
 
   useEffect(() => {
@@ -38,5 +38,3 @@ const EmptyBox = ({
     </div>
   );
 }
-
-export default EmptyBox;
