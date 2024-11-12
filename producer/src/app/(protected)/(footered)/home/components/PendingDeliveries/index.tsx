@@ -15,7 +15,7 @@ import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
 import { useCycleProvider } from "@shared/context/cycle";
 import { useHandleError } from "@shared/hooks/useHandleError"
-import CustomInfoModal from "@shared/components/CustomModal";
+import CustomInfoModal from "@shared/components/CustomInfoModal";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);

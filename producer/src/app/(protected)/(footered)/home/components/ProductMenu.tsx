@@ -10,7 +10,7 @@ import { isUnderConstruction } from "@shared/next/library/is-under-construction"
 import Button from "@shared/components/Button";
 import Card from "@shared/components/Card";
 import { useCycleProvider } from "@shared/context/cycle";
-import CustomInfoModal from "@shared/components/CustomModal";
+import CustomInfoModal from "@shared/components/CustomInfoModal";
 
 export function ProductMenu() {
   const router = useRouter();

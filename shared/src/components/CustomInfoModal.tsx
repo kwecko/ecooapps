@@ -1,10 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react'
-import Image from 'next/image'
 import { Fragment, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai'  // Importando o ícone X da biblioteca react-icons
+import { AiOutlineClose } from 'react-icons/ai'
 import { HiOutlineInformationCircle } from 'react-icons/hi'
 
-interface ModalProps {
+interface CustomInfoModalProps {
   titleOpenModal?: string
   titleContentModal?: string
   subtitleContentModal?: string
@@ -22,7 +21,7 @@ interface ModalProps {
   approveAction?: () => void
 }
 
-export default function Modal({
+export default function CustomInfoModal({
   titleOpenModal,
   titleContentModal,
   subtitleContentModal,
@@ -38,7 +37,7 @@ export default function Modal({
   setIsOpen: externalSetIsOpen,
   rejectAction,
   approveAction,
-}: ModalProps) {
+}: CustomInfoModalProps) {
 
   const [internalIsOpen, setInternalIsOpen] = useState(false);
 
@@ -62,7 +61,7 @@ export default function Modal({
           type="button"
           onClick={openModal}
         >
-          <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
+          <HiOutlineInformationCircle className="text-2xl text-theme-primary" />
         </button>
       )
       }
