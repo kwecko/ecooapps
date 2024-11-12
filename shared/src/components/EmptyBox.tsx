@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/legacy/image';
 import emptyBox from '@shared/assets/public/empty-box.png';
 
@@ -11,7 +11,7 @@ interface EmptyBoxProps {
 export default function EmptyBox ({
   type
 }: EmptyBoxProps) {
-  const [boxText, setBoxText] = React.useState("");
+  const [boxText, setBoxText] = useState("");
 
   useEffect(() => {
     if (type == "search") {
