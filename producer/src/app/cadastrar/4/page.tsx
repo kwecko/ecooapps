@@ -36,9 +36,9 @@ export default function FifthStep() {
     resolver: zodResolver(fifthStepRegisterSchema),
     mode: "onChange",
     defaultValues: {
-      name: '',
-      tally: ''
-    }
+      name: "",
+      tally: "",
+    },
   });
 
   const submit = async ({ name, tally }: FifthStepRegisterSchema) => {

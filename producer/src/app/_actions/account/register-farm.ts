@@ -7,14 +7,14 @@ interface RegisterFarmRequest {
   tally: string;
 }
 
-export async function registerFarm({ name, tally }: RegisterFarmRequest){
+export async function registerFarm({ name, tally }: RegisterFarmRequest) {
   const response = ApiService.POST({
     url: '/farms',
     data: {
       name,
-      tally
-    }
-  })
+      tally,
+    },
+  });
 
   return response;
 }
