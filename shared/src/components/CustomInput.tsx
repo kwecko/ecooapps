@@ -1,10 +1,9 @@
 import { InputHTMLAttributes, useState } from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { FaRegCircleQuestion } from "react-icons/fa6";
 
 import { Masks } from "@shared/types/register";
-import { maskCAF, maskCellphone, maskCPF } from "@shared/utils/index";
+import { maskCellphone, maskCPF } from "@shared/utils/index";
 import InfoModal from "./InfoModal";
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -29,7 +28,6 @@ export default function CustomInput({
   const masksActions: Record<Masks, (value: string) => string> = {
     phone: (value: string) => maskCellphone(value),
     cpf: (value: string) => maskCPF(value),
-    caf: (value: string) => maskCAF(value),
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,8 +57,8 @@ export default function CustomInput({
   };
 
   const handleIconClick = () => {
-    setIsOpenInfoModal(true)
-  }
+    setIsOpenInfoModal(true);
+  };
 
   return (
     <div className="w-full flex flex-col">
@@ -81,28 +79,23 @@ export default function CustomInput({
               className="absolute right-3 top-3.5 text-theme-primary"
               tabIndex={-1}
             >
-              {showPassword ? <AiFillEyeInvisible size={20} /> : <AiFillEye size={20} />}
-            </button>
-          ) || mask === 'caf' && (
-            <button
-              type="button"
-              onClick={handleIconClick}
-              className="absolute right-3 top-3.5 text-theme-primary"
-              tabIndex={-1}
-            >
-              <FaRegCircleQuestion size={20} />
+              {showPassword ? (
+                <AiFillEyeInvisible size={20} />
+              ) : (
+                <AiFillEye size={20} />
+              )}
             </button>
           )}
         </div>
       </label>
-      {errorMessage && <span className="text-sm text-red-500 mt-1">{errorMessage}</span>}
+      {errorMessage && (
+        <span className="text-sm text-red-500 mt-1">{errorMessage}</span>
+      )}
       <InfoModal
         isOpen={isOpenInfoModal}
-        titleContentModal="Sobre o CAF"
+        titleContentModal="Sobre o Nº do talão"
         contentModal={
-          <p>
-            O CAF (Cadastro Nacional da Agricultura Familiar) é uma identificação das Unidades Familiares de Produção Agrária (UFPA), dos Empreendimentos Familiares Rurais e das formas associativas de organização da agricultura familiar. Para obter a sua inscrição, clique aqui.
-          </p>
+          <p>O Nº do talão é um número de identificação do talão de pedidos.</p>
         }
         buttonOpenModal=""
         icon="?"

@@ -1,9 +1,9 @@
 "use server";
 
-import ApiService from "../../service/index";
-import { AppID } from "../../library/types/app-id";
-import { SetOnCookie } from "../../utils/set-on-cookie";
-import { SetTokenCookie } from "../../utils/set-token-cookie";
+import ApiService from "@shared/service/index";
+import { AppID } from "@shared/library/types/app-id";
+import { SetOnCookie } from "@shared/utils/set-on-cookie";
+import { SetTokenCookie } from "@shared/utils/set-token-cookie";
 
 interface LoginRequest {
   email: string;
@@ -11,7 +11,12 @@ interface LoginRequest {
   appID: AppID;
 }
 
-const appValidationConfig = {
+interface AppValidationConfigProps {
+  allowedRoles: string[];
+  errorMessage: string;
+}
+
+const appValidationConfig: Record<AppID, AppValidationConfigProps> = {
   "CDD": {
     allowedRoles: ["ADMIN"],
     errorMessage: "Você está tentando acessar um app apenas para administradores!",

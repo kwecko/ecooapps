@@ -1,5 +1,7 @@
 "use client"
 
+import Link from "next/link";
+import { toast } from "sonner";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
@@ -16,8 +18,6 @@ import { useLocalStorage } from "@shared/hooks/useLocalStorage"
 import { FifthStepRegisterSchema } from "@shared/types/register";
 import { fifthStepRegisterSchema } from "@shared/schemas/register";
 
-import { toast } from "sonner";
-import Link from "next/link";
 
 export default function FifthStep() {
   const [isPending, starTransition] = useTransition();
@@ -52,21 +52,23 @@ export default function FifthStep() {
       registerFarm({ name, tally })
         .then((response) => {
           if (response.message) {
-            console.log(response.message);
-
             handleError(response.message);
           }
 
-          deleteFromStorage('register-form-data')
-          deleteFromStorage('register-current-step')
+          handleDeleteFromStorage();
           toast.success("Produtor cadastrado com sucesso!");
-          router.push('/login')
+          router.push('/negocio/aguardando-aprovacao')
         })
         .catch(() => {
           toast.error("Erro desconhecido.")
         })
     })
   };
+
+  const handleDeleteFromStorage = () => {
+    deleteFromStorage('register-form-data')
+    deleteFromStorage('register-current-step')
+  }
 
   return (
     <form onSubmit={handleSubmit(submit)} className="w-full h-full flex flex-col justify-between mb-2 mt-6">
