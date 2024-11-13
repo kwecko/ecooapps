@@ -1,7 +1,6 @@
 import React from "react";
 import { ReactNode } from "react";
-import GroupOrderProps from "@shared/components/GroupOrder";
-import { IBagOrder } from "../interfaces/bag";
+import { GroupOrderProps } from "./GroupOrder";
 
 interface IHeaderDetailProps {
   id: string | undefined;

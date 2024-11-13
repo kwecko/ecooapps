@@ -2,7 +2,6 @@
 
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
-import { FaBoxOpen } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 import { listBags } from "@cdd/app/_actions/bag/list-bags";
@@ -18,6 +17,7 @@ import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import OrderTable from "@shared/components/OrderTable";
 import { useGetStatus } from "@shared/hooks/useGetStatus"
+import EmptyBox from "@shared/components/EmptyBox";
 
 interface BagsProps {
   page: number;
@@ -132,14 +132,18 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
       </div>
 
       {isLoading ? (
-        <div className="flex justify-center mt-3">
-          <Loader className="mt-3" loaderType="component" />
-        </div>
-      ) : !isLoading && bags.length === 0 ? (
-        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
-          <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center w-52">Nenhuma sacola encontrada!</span>
-        </div>
+        <Loader
+          className="mt-3"
+          loaderType="component"
+        />
+      ) : debounceSearch && bags.length === 0 ? (
+        <EmptyBox
+          type="search"
+        />
+      ) : bags.length === 0 ? (
+        <EmptyBox 
+          type="box"
+        />
       ) : (
         <div className="overflow-y-auto h-full">
           <OrderTable headers={headers} info={info} onRowClick={handleClick} />

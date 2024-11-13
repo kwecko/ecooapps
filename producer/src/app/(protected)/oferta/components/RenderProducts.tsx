@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { IProduct } from "@shared/interfaces/offer";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { ModelPage } from "@shared/components/ModelPage";
+import EmptyBox from "@shared/components/EmptyBox";
 
 import pageSettings from "./page-settings";
 
@@ -154,7 +155,7 @@ export default function RenderProducts({
         <div className="w-full flex flex-col justify-between h-[calc(100%-3rem)] pt-4">
           <div className="grid grid-cols-2 gap-3 justify-start items-start w-full snap-y snap-mandatory overflow-y-auto">
             {Array.isArray(products) && products.length > 0
-              ? products.map((product, index) => (
+              && products.map((product, index) => (
                   <button
                     className="snap-start flex flex-col justify-between items-center rounded-2xl w-full bg-white aspect-square row-span-1 col-span-1"
                     key={product.id}
@@ -189,12 +190,7 @@ export default function RenderProducts({
                       </span>
                     </div>
                   </button>
-                ))
-              : !isLoading && (
-                  <p className="text-center text-slate-gray col-span-2 w-full">
-                    Nenhum produto encontrado.
-                  </p>
-                )}
+                ))}
           </div>
           {isLoading && (
             <div className="mt-2 flex justify-center w-full col-span-2">
@@ -206,6 +202,13 @@ export default function RenderProducts({
           )}
         </div>
       </div>
+      {!isLoading && products.length === 0 ? (
+        <div className="w-full flex-grow flex items-center justify-center">
+          <EmptyBox
+            type="search"
+          />
+        </div>
+      ) : null}
     </ModelPage>
   );
 }
