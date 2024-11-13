@@ -137,7 +137,7 @@ export default function CustomModal({
                     </p>
                   </div>
 
-                  <div className="flex justify-center gap-3 mt-4">
+                  <div className="flex justify-center gap-3 mt-8">
                     {rejectAction ? (
                       <button
                         style={{ backgroundColor: bgCloseModal, color: textCloseModal }}
