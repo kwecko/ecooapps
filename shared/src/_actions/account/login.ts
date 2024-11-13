@@ -29,6 +29,10 @@ const appValidationConfig: Record<AppID, AppValidationConfigProps> = {
     allowedRoles: ["USER", "ADMIN", "PRODUCER"],
     errorMessage: "Você está tentando acessar um app apenas para administradores ou consumidores!",
   },
+  "ADMIN": {
+    allowedRoles: ["ADMIN"],
+    errorMessage: "Você está tentando acessar um app apenas para administradores!",
+  },
 };
 
 async function validateAccess(appID: AppID, roles: string[]) {
