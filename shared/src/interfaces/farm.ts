@@ -16,6 +16,7 @@ export interface IFarm {
   tally: string;
   active: boolean;
   tax: number;
+  description?: string;
   admin: IAdmin;
   created_at: Date;
   updated_at: Date | null;
@@ -28,4 +29,10 @@ export interface IFarmOrders {
   created_at: Date;
   updated_at: Date | null;
   orders: IOrder[];
+}
+
+export interface IUpdateFarm {
+  name: string;
+  tally: string;
+  description?: string;
 }
