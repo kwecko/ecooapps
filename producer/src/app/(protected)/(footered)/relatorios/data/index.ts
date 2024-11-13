@@ -2,18 +2,13 @@ import { ReportButtonData } from "@shared/types/report/index";
 
 export const reportButtonData: ReportButtonData = [
   {
-    name: "Lista de ofertas",
-    onClick: 'list-offers',
+    name: "Histórico de ofertas",
+    onClick: 'offer-history',
     disabled: true
   },
   {
-    name: "Lista de sacolas",
-    onClick: "list-bags",
-    disabled: false
-  },
-  {
     name: "Fluxo de caixa",
-    onClick: "cash-flow-cdd",
+    onClick: "cash-flow-producer",
     disabled: true
   },
 ];

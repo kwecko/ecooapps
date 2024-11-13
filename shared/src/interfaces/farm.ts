@@ -14,7 +14,7 @@ export interface IBoxes {
 export interface IFarm {
   id: string;
   name: string;
-  caf: string;
+  tally: string;
   active: boolean;
   tax: number;
   admin: IAdmin;
