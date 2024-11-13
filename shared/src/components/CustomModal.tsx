@@ -70,18 +70,7 @@ export default function CustomModal({
         >
           {buttonOpenModal}
         </button>
-      ) : (
-        <div className="w-full flex">
-          <button
-            style={{ backgroundColor: bgOpenModal }}
-            type="button"
-            onClick={openModal}
-            className={`rounded-md px-3 py-4 font-medium text-white w-full`}
-          >
-            {titleOpenModal}
-          </button>
-        </div>
-      )
+      ) : undefined
       }
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
