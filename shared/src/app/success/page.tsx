@@ -40,7 +40,7 @@ export default function Success() {
   }
 
   return (
-    <div className="w-full min-h-screen overflow-hidden flex flex-col p-5 bg-theme-background">
+    <div className="w-full min-h-screen flex flex-col p-5 bg-theme-background">
       <div className="w-full flex-grow flex justify-center flex-col">
         <div className="flex-grow flex items-center flex-col justify-center">
           <AiFillCheckCircle className="w-25 h-25 text-theme-highlight" />
