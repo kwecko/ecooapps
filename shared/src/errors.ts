@@ -11,6 +11,7 @@
     "Não autorizado": "Acesso não autorizado.",
     "O agronegócio não está ativo.": "O seu agronegócio não está ativo! Por favor entre em contato com o CDD.",
     "Essa conta não tem uma senha definida.": "Sua conta não possui uma senha definida.",
+    "Você não é administrador de um agronegócio.": "Identificamos que você não possui um agronegócio. Por favor, finalize seu cadastro.",
   };
 
   export const genericErrorsMapper = [
@@ -26,5 +27,6 @@
     "comprar",
     "Email",
     "Telefone",
-    "CPF"
+    "CPF",
+    "Número"
   ]

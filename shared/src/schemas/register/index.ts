@@ -24,5 +24,5 @@ export const secondStepRegisterSchema = z.object({
 
 export const fifthStepRegisterSchema = z.object({
   name: z.string().min(1, { message: "Nome do agronegócio obrigatório" }),
-  tally: z.string().min(1, { message: "Número do talão é obrigatório" }),
+  tally: z.string().min(1, { message: "Número do Talão obrigatório" }),
 })

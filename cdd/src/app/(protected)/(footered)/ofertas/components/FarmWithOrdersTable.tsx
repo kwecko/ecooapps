@@ -118,7 +118,7 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
             data: [
               { detail: getNextSaturdayDate() },
               { detail: farm.catalog.farm.name },
-              { detail: getStatus({ type: 'oferta', status: farm.status as IBagStatus["offer"] }) },
+              { detail: getStatus({ type: 'oferta', status: farm.status as IBagStatus["offer"]}) },
             ],
           }))
         : [];
@@ -132,7 +132,7 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
           <StatusFilterButtons
             statuses={statuses}
             selectedStatus={selectedStatus}
-            handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+            handleStatusFilterClick={(status: IStatus) => handleStatusFilterClick(status)}
           />
         </div>
 

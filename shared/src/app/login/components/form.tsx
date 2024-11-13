@@ -7,14 +7,14 @@ import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { login } from "@shared/_actions/account/login";
-import ButtonV2 from "@shared/components/ButtonV2";
-import CustomInput from "@shared/components/CustomInput";
 import Loader from "@shared/components/Loader";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { AppID } from "@shared/library/types/app-id";
-import { loginSchema } from "@shared/schemas/login";
 import { LoginSchema } from "@shared/types/login";
+import ButtonV2 from "@shared/components/ButtonV2";
+import { loginSchema } from "@shared/schemas/login";
+import { AppID } from "@shared/library/types/app-id";
+import { login } from "@shared/_actions/account/login";
+import CustomInput from "@shared/components/CustomInput";
+import { useHandleError } from "@shared/hooks/useHandleError";
 
 export default function FormLogin({ appID }: { appID: AppID }) {
   const [isPending, starTransition] = useTransition();
@@ -50,16 +50,12 @@ export default function FormLogin({ appID }: { appID: AppID }) {
       })
         .then((response) => {
           if (response.message) {
-            handleError(response.message);
-            if (response?.redirect && typeof response.redirect === "string") {
-              setTimeout(() => {
-                router.push(response.redirect);
-              }, 800);
-            }
-          } else {
-            toast.success("Login efetuado com sucesso!");
-            router.push("/");
-          }
+            handleError(response.message);  
+            return;
+          } 
+
+          toast.success("Login efetuado com sucesso!");
+          router.push("/");
         })
         .catch(() => {
           toast.error("Erro ao efetuar login");
