@@ -203,7 +203,7 @@ export default function RenderProducts({
         </div>
       </div>
       {!isLoading && products.length === 0 ? (
-        <div className="w-full h-full">
+        <div className="w-full flex-grow flex items-center justify-center">
           <EmptyBox
             type="search"
           />
