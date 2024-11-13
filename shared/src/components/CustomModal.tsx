@@ -1,6 +1,6 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai'  // Importando o ícone X da biblioteca react-icons
+import { AiOutlineClose } from 'react-icons/ai'
 
 interface ModalProps {
   titleOpenModal?: string
@@ -20,7 +20,7 @@ interface ModalProps {
   approveAction?: () => void
 }
 
-export default function Modal({
+export default function CustomModal({
   titleOpenModal,
   titleContentModal,
   subtitleContentModal,
@@ -52,21 +52,24 @@ export default function Modal({
   }
 
   const handleRejectActionModal = () => {
-    closeModal();
     if (rejectAction) rejectAction();
-    else closeModal();
+    closeModal();
   };
 
   const handleApproveActionModal = () => {
-    closeModal();
     if (approveAction) approveAction();
-    else closeModal();
+    closeModal();
   };
 
   return (
     <>
       {buttonOpenModal ? (
-        buttonOpenModal
+        <button
+          type="button"
+          onClick={openModal}
+        >
+          {buttonOpenModal}
+        </button>
       ) : (
         <div className="w-full flex">
           <button
@@ -107,12 +110,14 @@ export default function Modal({
               >
                 <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all relative">
                   
-                  <button
-                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-                    onClick={closeModal}
-                  >
-                    <AiOutlineClose className="w-6 h-6" />
-                  </button>
+                <div className="h-7">
+                    <button
+                      className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                      onClick={closeModal}
+                    >
+                      <AiOutlineClose className="w-7 h-7"/>
+                    </button>
+                  </div>
 
                   <Dialog.Title
                     as="h3"
@@ -126,12 +131,11 @@ export default function Modal({
                   >
                     {subtitleContentModal}
                   </Dialog.Title>
-                  <div className="mt-6 mb-8">
+                  <div className="mt-6 mb-6">
                     <p className="text-center text-theme-primary">
                       {contentModal}
                     </p>
                   </div>
-
 
                   <div className="flex justify-center gap-3 mt-4">
                     {rejectAction ? (
