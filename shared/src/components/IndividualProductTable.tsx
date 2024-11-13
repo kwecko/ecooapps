@@ -162,7 +162,7 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
         </tbody>
       </table>
 
-      {selectedOrder && selectedOrder.status === "PENDING" ? (
+      {selectedOrder && selectedOrder.status === "PENDING" && (
         <CustomModal
           titleContentModal={selectedOrder?.offer.product.name}
           subtitleContentModal={`Quantidade: ${convertOfferAmount(selectedOrder?.amount, selectedOrder.offer.product.pricing)} ${convertUnit(selectedOrder.offer.product.pricing)}`}
@@ -177,7 +177,8 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
           approveAction={handleApprove}
           rejectAction={handleReject}
         />
-      ) : selectedOrder && (selectedOrder.status === "CANCELLED" || selectedOrder.status === "RECEIVED") ? (
+      )}
+      {selectedOrder && (selectedOrder.status !== "PENDING") && (
         <CustomModal
           titleContentModal={selectedOrder?.offer.product.name}
           subtitleContentModal={`Quantidade: ${convertOfferAmount(selectedOrder?.amount, selectedOrder.offer.product.pricing)} ${convertUnit(selectedOrder.offer.product.pricing)}`}
@@ -185,8 +186,6 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
           isOpen={isModalOpen}
           setIsOpen={setModalOpen}
         />
-      ) : (
-        null
       )}
     </>
   );
