@@ -3,22 +3,20 @@ import { useParams, useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
 import EmptyBoxInformation from '@shared/components/EmptyBoxInformation';
-import OrderModal from "@shared/components/OrderModal";
+import CustomModal from "./CustomModal";
 import { IFarmOrders } from "@shared/interfaces/farm";
 import { IOrder } from "@shared/interfaces/order";
 import { convertUnit } from "@shared/utils/convert-unit";
 import { useHandleError } from "@shared/hooks/useHandleError";
 
-// import { getOrder } from "@cdd/app/_actions/order/get-order";
 import { toast } from "sonner";
 import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
 import { convertOfferAmount } from "../utils/convert-unit";
-import convertStatus from "../utils/convert-status";
 
 const styles = {
   itemHeader:
     "truncate text-battleship-gray font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
-  itemBody: "border-b-[1px] truncate text-grayish-blue p-3 text-left",
+  itemBody: "border-b truncate text-grayish-blue p-3 text-left",
 };
 
 interface ITableProps {
@@ -165,7 +163,7 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
       </table>
 
       {selectedOrder && selectedOrder.status === "PENDING" ? (
-        <OrderModal
+        <CustomModal
           titleContentModal={selectedOrder?.offer.product.name}
           subtitleContentModal={`Quantidade: ${convertOfferAmount(selectedOrder?.amount, selectedOrder.offer.product.pricing)} ${convertUnit(selectedOrder.offer.product.pricing)}`}
           contentModal="Confira a quantidade e a qualidade do produto. Se estiver tudo certo, clique em aprovar."
@@ -180,7 +178,7 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
           rejectAction={handleReject}
         />
       ) : selectedOrder && (selectedOrder.status === "CANCELLED" || selectedOrder.status === "RECEIVED") ? (
-        <OrderModal
+        <CustomModal
           titleContentModal={selectedOrder?.offer.product.name}
           subtitleContentModal={`Quantidade: ${convertOfferAmount(selectedOrder?.amount, selectedOrder.offer.product.pricing)} ${convertUnit(selectedOrder.offer.product.pricing)}`}
           contentModal={`O produto foi marcado como ${statusText}. Após terminar de conferir a sacola, siga para a montagem.`}
