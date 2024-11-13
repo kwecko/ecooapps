@@ -86,6 +86,8 @@ export default function FarmOrdersTable() {
     ],
   }));
 
+  console.log(farmOrders);
+
   const status = farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
 
   return (
