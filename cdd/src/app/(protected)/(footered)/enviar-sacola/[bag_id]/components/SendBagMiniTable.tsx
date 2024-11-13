@@ -148,7 +148,7 @@ export default function SendBagMiniTable() {
               <Modal
                 titleOpenModal="Salvar"
                 titleContentModal="Você tem certeza?"
-                contentModal="Ao alterar o status para entregue, o cliente será notificado que ela foi entregue."
+                contentModal={`Ao alterar o status para ${bagStatusOptions.find(option => option.value === bagStatus)?.label.toLowerCase()}, o cliente será notificado que ela foi ${bagStatusOptions.find(option => option.value === bagStatus)?.label.toLowerCase()}.`}
                 bgOpenModal="#00735E"
                 titleCloseModal="Cancelar"
                 titleConfirmModal="Confirmar"
