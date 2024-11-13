@@ -10,7 +10,8 @@ import { isUnderConstruction } from "@shared/next/library/is-under-construction"
 import Button from "@shared/components/Button";
 import Card from "@shared/components/Card";
 import { useCycleProvider } from "@shared/context/cycle";
-import CustomInfoModal from "@shared/components/CustomInfoModal";
+import CustomModal from "@shared/components/CustomModal";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 export function ProductMenu() {
   const router = useRouter();
@@ -61,11 +62,14 @@ export function ProductMenu() {
         <span className="font-normal text-base leading-5.5 tracking-tight">
           Ofereça os seus produtos clicando no botão abaixo
         </span>
-        <CustomInfoModal
+        <CustomModal
           titleContentModal="Oferta de Produtos"
           contentModal="Gerencie aqui os produtos que deseja disponibilizar para venda no ciclo de comercialização."
           bgConfirmModal="#2F4A4D"
           titleConfirmModal="Ok"
+          buttonOpenModal={
+            <HiOutlineInformationCircle className="text-2xl text-theme-primary" />
+          }
         />
       </div>
       <div className="w-full flex flex-col gap-3 font-semibold text-base leading-5.5">

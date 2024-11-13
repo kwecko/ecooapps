@@ -1,9 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
-import { HiOutlineInformationCircle } from 'react-icons/hi'
 
-interface CustomInfoModalProps {
+interface ModalProps {
   titleOpenModal?: string
   titleContentModal?: string
   subtitleContentModal?: string
@@ -21,7 +20,7 @@ interface CustomInfoModalProps {
   approveAction?: () => void
 }
 
-export default function CustomInfoModal({
+export default function CustomModal({
   titleOpenModal,
   titleContentModal,
   subtitleContentModal,
@@ -37,7 +36,7 @@ export default function CustomInfoModal({
   setIsOpen: externalSetIsOpen,
   rejectAction,
   approveAction,
-}: CustomInfoModalProps) {
+}: ModalProps) {
 
   const [internalIsOpen, setInternalIsOpen] = useState(false);
 
@@ -52,18 +51,26 @@ export default function CustomInfoModal({
     setIsOpen(true)
   }
 
+  const handleRejectActionModal = () => {
+    if (rejectAction) rejectAction();
+    closeModal();
+  };
+
+  const handleApproveActionModal = () => {
+    if (approveAction) approveAction();
+    closeModal();
+  };
+
   return (
     <>
       {buttonOpenModal ? (
-        buttonOpenModal
-      ) : (
         <button
           type="button"
           onClick={openModal}
         >
-          <HiOutlineInformationCircle className="text-2xl text-theme-primary" />
+          {buttonOpenModal}
         </button>
-      )
+      ) : undefined
       }
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -92,12 +99,14 @@ export default function CustomInfoModal({
               >
                 <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all relative">
                   
-                  <button
-                    className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
-                    onClick={closeModal}
-                  >
-                    <AiOutlineClose className="w-6 h-6" />
-                  </button>
+                <div className="h-7">
+                    <button
+                      className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+                      onClick={closeModal}
+                    >
+                      <AiOutlineClose className="w-7 h-7"/>
+                    </button>
+                  </div>
 
                   <Dialog.Title
                     as="h3"
@@ -117,15 +126,36 @@ export default function CustomInfoModal({
                     </p>
                   </div>
 
-                  <div className="flex justify-center gap-3 mt-4">
-                    <button
+                  <div className="flex justify-center gap-3 mt-8">
+                    {rejectAction ? (
+                      <button
+                        style={{ backgroundColor: bgCloseModal, color: textCloseModal }}
+                        type="button"
+                        className={`w-full inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-3 font-medium`}
+                        onClick={handleRejectActionModal}
+                      >
+                        {titleCloseModal}
+                      </button>
+                    ) : null}
+                    {approveAction ? (
+                      <button
                       style={{ backgroundColor: bgConfirmModal }}
                       type="button"
                       className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
-                      onClick={closeModal}
+                      onClick={handleApproveActionModal}
                     >
                       {titleConfirmModal}
                     </button>
+                    ) : null}
+                    {!rejectAction && !approveAction && (
+                      <button
+                        type="button"
+                        className={`w-full bg-[#EAE7E3] text-theme-primary inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
+                        onClick={closeModal}
+                      >
+                        Ok
+                      </button>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

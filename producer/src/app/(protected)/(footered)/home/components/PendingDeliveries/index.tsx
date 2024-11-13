@@ -15,7 +15,7 @@ import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { toast } from "sonner";
 import { useCycleProvider } from "@shared/context/cycle";
 import { useHandleError } from "@shared/hooks/useHandleError"
-import CustomInfoModal from "@shared/components/CustomInfoModal";
+import CustomModal from "@shared/components/CustomModal";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
@@ -126,11 +126,14 @@ export function PendingDeliveries() {
             </span>
           </div>
         </div>
-        <CustomInfoModal
+        <CustomModal
           titleContentModal="Entregas Pendentes"
           contentModal="Aqui estão os pedidos que já foram feitos e estão esperando que você envie para o Centro de Distribuição (CDD)."
           bgConfirmModal="#2F4A4D"
           titleConfirmModal="Ok"
+          buttonOpenModal={
+            <HiOutlineInformationCircle className="text-2xl text-theme-primary" />
+          }
         />
       </div>
       <PendingDeliveriesTable pendingDeliveries={pendingDeliveries} />
