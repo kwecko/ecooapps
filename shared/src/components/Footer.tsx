@@ -9,6 +9,8 @@ import InfoModal from "@shared/components/InfoModal";
 
 import Button from "./Button";
 
+const PagesWithGenericParams = ['aguardando-aprovacao', 'perfil-rejeitado'];
+
 export default function Footer({
   appID,
 }: {
@@ -19,15 +21,17 @@ export default function Footer({
 
   const convertPathname = (path: string) => {
     const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    
-    return path
-      .split("/")
-      .map((segment) => 
-        uuidRegex.test(segment) ? "[id]" : segment
-      )
-      .join("/");
-  };
+
+    const params = path.split("/");
+
+    const convertedParams = params.map((param) => {
+      if (uuidRegex.test(param)) return "[id]";
+      if (PagesWithGenericParams.includes(param)) return "[generic]";
+      return param;
+    });
   
+    return convertedParams.join("/");
+  };
 
   const convertedPathname = convertPathname(pathname);
 

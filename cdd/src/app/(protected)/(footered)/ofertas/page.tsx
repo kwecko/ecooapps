@@ -17,7 +17,7 @@ export default function Home() {
   };
 
   const nextPage = () => {
-    if(totalItems <= 20){
+    if(totalItems < 20){
       return;
     }
 

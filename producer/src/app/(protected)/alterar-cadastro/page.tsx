@@ -18,7 +18,7 @@ import Modal from "@shared/components/Modal";
 import Input from "@shared/components/Input";
 import Button from "@shared/components/Button";
 
-import { IUser } from "@shared/interfaces/user";  
+import { IUser } from "@shared/interfaces/user";
 import { ModelPage } from "@shared/components/ModelPage";
 
 export default function AlterarCadastro() {
@@ -246,7 +246,7 @@ export default function AlterarCadastro() {
           </>
         )}
         {token && (
-          <>
+          <div className="w-full flex flex-col gap-3.5">
             <Input
               register={{ ...register("password") }}
               placeholder="Digite sua senha"
@@ -261,7 +261,7 @@ export default function AlterarCadastro() {
               icon={<AiOutlineEye />}
               type="password"
             />
-          </>
+          </div>
         )}
       </form>
     </ModelPage>
