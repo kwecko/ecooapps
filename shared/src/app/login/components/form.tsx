@@ -43,7 +43,7 @@ export default function FormLogin({ appID }: { appID: AppID }) {
 
       if (!isValid) return;
 
-      await login({
+      login({
         email,
         password,
         appID,

@@ -30,7 +30,7 @@ a {
   text-decoration: none;
 }
 
-.PRODUCER, .CONSUMER {
+.PRODUCER, .CONSUMER, .ADMIN {
   --color-default: #3E5155;
   --color-home-background: #2F4A4D;
   --color-highlight: #00735E;
