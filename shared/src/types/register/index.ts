@@ -1,12 +1,17 @@
 import { z } from "zod";
-import { firstStepRegisterSchema, secondStepRegisterSchema, fifthStepRegisterSchema } from "@shared/schemas/register";
 
-export type FirstStepRegisterSchema = z.infer<typeof firstStepRegisterSchema>
+import {
+  fifthStepRegisterSchema,
+  firstStepRegisterSchema,
+  secondStepRegisterSchema,
+} from "@shared/schemas/register";
 
-export type SecondStepRegisterSchema = z.infer<typeof secondStepRegisterSchema>
+export type FirstStepRegisterSchema = z.infer<typeof firstStepRegisterSchema>;
 
-export type FifthStepRegisterSchema = z.infer<typeof fifthStepRegisterSchema>
+export type SecondStepRegisterSchema = z.infer<typeof secondStepRegisterSchema>;
 
-export type Roles = "USER" | "PRODUCER"
+export type FifthStepRegisterSchema = z.infer<typeof fifthStepRegisterSchema>;
 
-export type Masks = 'phone' | 'cpf'
+export type Roles = "USER" | "PRODUCER";
+
+export type Masks = "phone" | "cpf" | "tally";

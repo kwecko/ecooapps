@@ -3,13 +3,15 @@ import { UseFormRegisterReturn } from "react-hook-form";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 import { Masks } from "@shared/types/register";
-import { maskCellphone, maskCPF } from "@shared/utils/index";
+import { maskCellphone, maskCPF, maskTally } from "@shared/utils/index";
+
 import InfoModal from "./InfoModal";
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
   errorMessage?: string;
   register: UseFormRegisterReturn;
+  type?: string;
   mask?: Masks;
 }
 
@@ -28,6 +30,7 @@ export default function CustomInput({
   const masksActions: Record<Masks, (value: string) => string> = {
     phone: (value: string) => maskCellphone(value),
     cpf: (value: string) => maskCPF(value),
+    tally: (value: string) => maskTally(value),
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {

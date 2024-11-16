@@ -1,11 +1,11 @@
 "use server";
 
-import { IUserUpdate } from "@shared/interfaces/user";
+import { IUpdateFarm } from "@shared/interfaces/farm";
 import ApiService from "@shared/service/index";
 
-export async function updateUser(data: IUserUpdate) {
+export async function updateFarm(data: IUpdateFarm) {
   const response = ApiService.PATCH({
-    url: "/users",
+    url: "/farms",
     data,
   });
 
