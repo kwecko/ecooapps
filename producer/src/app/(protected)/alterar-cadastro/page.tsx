@@ -21,7 +21,6 @@ export default function AlterarCadastro() {
   const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
-    console.log(isFormValid);
     if (formRef.current) {
       setIsFormValid(formRef.current.checkValidity());
     }

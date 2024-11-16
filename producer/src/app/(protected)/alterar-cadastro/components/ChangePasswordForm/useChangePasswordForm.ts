@@ -17,7 +17,6 @@ export const useChangePasswordForm = (token: string) => {
   }, [token]);
 
   const handleSubmitForm = async (data: IUser) => {
-    console.log(data);
     Object.keys(data).forEach((key) => {
       if (!data[key as keyof IUser]) {
         delete data[key as keyof IUser];

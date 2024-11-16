@@ -53,7 +53,6 @@ export const useChangeRegistrationForm = () => {
   }, []);
 
   const handleSubmitForm = async (data: ChangeRegistrationSchema) => {
-    console.log(data);
     starTransition(async () => {
       const isValid = await trigger();
 
@@ -66,7 +65,6 @@ export const useChangeRegistrationForm = () => {
         delete data[key as keyof ChangeRegistrationSchema];
       }
     });
-    console.log(data);
 
     const farmData: IUpdateFarm = {
       name: data.name,
