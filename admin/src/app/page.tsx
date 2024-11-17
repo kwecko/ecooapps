@@ -1,7 +1,5 @@
-"use client"
+import Title from "./components/Title";
 
 export default function Home() {
-  return (
-    <h1>Ola mundo</h1>
-  )
+  return <Title>Painel de controle do produtor familiar</Title>;
 }
