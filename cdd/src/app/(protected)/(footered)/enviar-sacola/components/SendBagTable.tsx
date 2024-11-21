@@ -142,7 +142,7 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
         />
       ) : bags.length === 0 ? (
         <EmptyBox 
-          type="box"
+          type="bag"
         />
       ) : (
         <div className="overflow-y-auto h-full">
