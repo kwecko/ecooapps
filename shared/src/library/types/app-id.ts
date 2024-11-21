@@ -1,1 +1,1 @@
-export type AppID = "PRODUCER" | "CDD" | "CONSUMER";
+export type AppID = "PRODUCER" | "CDD" | "CONSUMER" | "ADMIN";
