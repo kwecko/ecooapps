@@ -101,6 +101,7 @@ const config: Config = {
         5.5: "1.375rem",
         7.5: "1.875rem",
         8.5: "2.125rem",
+        12.5: "3.125rem",
       },
       letterSpacing: {
         "tight-2": "-0.02em",
@@ -108,6 +109,7 @@ const config: Config = {
       },
       fontSize: {
         xxs: "0.625rem",
+        2.5: "2.5rem"
       },
     },
   },

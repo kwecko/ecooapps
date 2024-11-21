@@ -17,10 +17,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={`${process.env.APP_ID} w-screen h-screen font-poppins`}>
-        <div className="flex flex-row justify-center w-full h-[inherit]">
+      <body
+        className={`${process.env.APP_ID} w-screen h-screen font-poppins bg-theme-background`}
+      >
+        <div className="flex flex-row justify-center w-full h-inherit">
           <Toaster richColors position="top-right" />
-          <div className="relative max-w-md w-full h-[inherit]">
+          <div className="relative w-full h-inherit flex flex-row">
             <ClientValidation>{children}</ClientValidation>
           </div>
         </div>
