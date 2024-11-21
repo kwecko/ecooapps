@@ -1,11 +1,10 @@
+import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers"; 
 
-export async function GET(request: NextRequest){
-  const logoutRedirectUrl = new URL('/inicio', request.url);
+export async function GET(request: NextRequest) {
+  const logoutRedirectUrl = new URL("/login", request.url);
 
-  cookies().delete('producer_token');
-  cookies().delete('farm_status');
+  cookies().delete("admin_token");
 
   return NextResponse.redirect(logoutRedirectUrl);
-} 
+}

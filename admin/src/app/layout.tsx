@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Toaster } from "sonner";
 import "./globals.css";
 
-import ClientValidation from "@shared/components/ClientValidation";
 import { addOrganizationNameToTitle } from "@shared/library/get-metadata";
 import Sidebar from "./components/Sidebar";
 
@@ -25,9 +24,7 @@ export default function RootLayout({
           <Toaster richColors position="top-right" />
           <div className="relative w-full h-inherit flex flex-row">
             <Sidebar />
-            <ClientValidation>
-              <div className="w-full h-full p-15 pt-24">{children}</div>
-            </ClientValidation>
+            <main className="w-full h-full p-15 pt-24">{children}</main>
           </div>
         </div>
       </body>
