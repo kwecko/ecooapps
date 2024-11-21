@@ -14,6 +14,7 @@ export const SetTokenCookie = ({ token, appID }: SetTokenCookieProps) => {
 
   cookies().delete(tokenKey)
   cookies().set(tokenKey, token, {
+    domain: process.env.APP_DOMAIN,
     httpOnly: process.env.NODE_ENV !== 'development',
     secure: process.env.NODE_ENV !== 'development',
     sameSite: "none",
