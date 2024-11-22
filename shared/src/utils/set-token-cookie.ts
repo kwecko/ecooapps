@@ -16,7 +16,7 @@ export const SetTokenCookie = ({ token, appID }: SetTokenCookieProps) => {
   cookies().set(tokenKey, token, {
     httpOnly: process.env.NODE_ENV !== 'development',
     secure: process.env.NODE_ENV !== 'development',
-    sameSite: "none",
+    sameSite: "lax",
     path: "/",
   })
 }
