@@ -54,6 +54,7 @@ const config: Config = {
         inherit: "inherit",
         1.25: ".3125rem",
         1.75: "0.4375rem",
+        2.75: "0.6875rem",
         3.25: "0.8125rem",
         3.75: "0.9375rem",
         4.1: "1.0625rem",
@@ -71,8 +72,13 @@ const config: Config = {
         37.5: "9.375rem",
         38: "9.5rem",
         50: "12.5rem",
+        75: "18.75rem",
         86: "21.5rem",
         87.5: "21.875rem",
+        100: "25rem",
+        110: "27.5rem",
+        112: "28rem",
+        sidebar: "var(--sidebar-width)",
         fullScreen: "100dvh",
       },
       height: {
@@ -109,7 +115,7 @@ const config: Config = {
       },
       fontSize: {
         xxs: "0.625rem",
-        2.5: "2.5rem"
+        "4.25xl": "2.5rem",
       },
     },
   },
