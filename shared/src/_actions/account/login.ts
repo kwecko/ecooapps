@@ -85,11 +85,11 @@ export async function login({ email, password, appID }: LoginRequest) {
 
   SetTokenCookie({ token, appID });
 
-  // if (roles.includes("PRODUCER") && appID === "PRODUCER") {
-  //   const farmError = await fetchUserFarm();
+  if (roles.includes("PRODUCER") && appID === "PRODUCER") {
+    const farmError = await fetchUserFarm();
 
-  //   if (farmError) return { message: farmError.error };
-  // }
+    if (farmError) return { message: farmError.error };
+  }
 
   return response;
 }
