@@ -1,6 +1,4 @@
-import React from "react";
-
-interface IHeaderDetailProps {
+interface HeaderDetailProps {
   id: string | undefined;
   name: string | undefined;
   status: string;
@@ -12,7 +10,7 @@ const styles = {
     "flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3",
 };
 
-function HeaderDetail({ id, name, time, status }: IHeaderDetailProps) {
+function HeaderDetail({ id, name, time, status }: HeaderDetailProps) {
   return (
     <div className="w-full mx-auto bg-white rounded-lg">
       <div className={styles.containerDetail}>

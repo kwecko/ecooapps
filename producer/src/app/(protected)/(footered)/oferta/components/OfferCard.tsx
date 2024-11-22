@@ -1,16 +1,17 @@
-import React from "react";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
-import Image, { ImageLoader } from "next/image";
-import EditOfferButton from "./EditOfferButton";
-import DeleteOfferButton from "./DeleteOfferButton";
-import {
-  convertUnitFull,
-  convertOfferAmount,
-} from "@shared/utils/convert-unit";
+import { OfferDTO } from "@shared/interfaces/dtos";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
+import {
+  convertOfferAmount,
+  convertUnitFull,
+} from "@shared/utils/convert-unit";
+import Image, { ImageLoader } from "next/image";
+import React from "react";
+import DeleteOfferButton from "./DeleteOfferButton";
+import EditOfferButton from "./EditOfferButton";
 
-interface OfferCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'ref'> {
-  offer: IOfferWithProduct;
+interface OfferCardProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "ref"> {
+  offer: OfferDTO;
   onDeleteCard?: (offerId: string) => void;
   editable?: boolean;
   repeatable?: boolean;

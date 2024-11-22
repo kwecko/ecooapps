@@ -1,22 +1,30 @@
 "use client";
-import { fetchCatologsById } from "@consumer/app/_actions/fetch-catalogs-by-id";
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import OrderCard from "@consumer/app/components/OrderCard";
+import { fetchCatalog } from "@consumer/_actions/catalogs/GET/fetch-catalog";
 import RedirectCart from "@consumer/app/_components/redirectCart";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
-import { ICatalogMerge } from "@shared/interfaces/catalog";
-import React from "react";
+import OrderCard from "@consumer/app/components/OrderCard";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { CatalogMergeDTO, OfferDTO } from "@shared/interfaces/dtos";
+import { useParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function Ofertas() {
   const params = useParams();
 
-  const [offers, setOffers] = useState([] as IOfferWithProduct[]);
+  const [offers, setOffers] = useState([] as OfferDTO[]);
   const [page, setPage] = useState(1 as number);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
   const { ref, inView } = useInView();
+  const { handleError } = useHandleError();
+
+  const LocalStorage = useLocalStorage();
+
+  const cycle = useMemo(
+    () => LocalStorage.getFromStorage("selected-cycle"),
+    []
+  );
 
   const mapQuantity = {
     UNIT: 1,
@@ -26,29 +34,37 @@ export default function Ofertas() {
   const searchOffers = async () => {
     setIsLoading(true);
 
-    const responseFarmCatalogs: ICatalogMerge | null =
-      await fetchCatologsById(
-      params.id as string,
-      params.cycle_id as string,
-      page
-    );
+    try {
+      const response = await fetchCatalog({
+        catalog_id: params.id as string,
+        cycle_id: cycle.id as string,
+        page: page,
+      });
+      if (response.message) {
+        handleError(response.message as string);
+      } else if (response.data) {
+        const responseFarmCatalogs: CatalogMergeDTO = response.data;
+        let offersFarm = responseFarmCatalogs?.offers ?? [];
+        offersFarm = offersFarm.filter(
+          (offer: OfferDTO) =>
+            offer.amount >= mapQuantity[offer.product.pricing]
+        );
 
-    let offersFarm = responseFarmCatalogs?.offers ?? [];
-    offersFarm = offersFarm.filter(
-      (offer) => offer.amount >= mapQuantity[offer.product.pricing]
-    );
+        if (offersFarm.length == 0) {
+          setHasMore(false);
+          return;
+        }
 
-    if (offersFarm.length == 0) {
-      setHasMore(false);
-      return;
+        const newOffers = [...offers, ...offersFarm];
+        setOffers(newOffers as OfferDTO[]);
+        const nextPage = page + 1;
+        setPage(nextPage);
+      }
+    } catch (error) {
+      handleError((error as string) ?? "Erro desconhecido.");
+    } finally {
+      setIsLoading(false);
     }
-
-    const newOffers = [...offers, ...offersFarm];
-    setOffers(newOffers as IOfferWithProduct[]);
-    const nextPage = page + 1;
-    setPage(nextPage);
-
-    setIsLoading(false);
   };
 
   useEffect(() => {

@@ -1,34 +1,31 @@
-import React from "react";
-
-import { IPendingDeliveries } from "@shared/interfaces/offer";
 import { FaBoxOpen } from "react-icons/fa6";
 
+import { OrderMergeDTO, ProductDTO } from "@shared/interfaces/dtos";
 import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
 import { formatComma } from "@shared/utils/format-comma";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
-import { IProduct } from "@shared/interfaces/offer";
 
 const style = {
   row: "py-2.5 border-b-2 border-custom-gray",
 };
 
-interface IPendingDeliveriesTableProps {
-  pendingDeliveries: IPendingDeliveries[] | undefined;
+interface PendingDeliveriesTableProps {
+  pendingDeliveries: OrderMergeDTO[] | undefined;
 }
 
-interface IGroupedPendingDeliveriesDataItem {
+interface GroupedPendingDeliveriesDataItem {
   amount: number;
-  product: IProduct;
+  product: ProductDTO;
   date: string;
 }
 
-interface IGroupedPendingDeliveriesData {
-  [productId: string]: IGroupedPendingDeliveriesDataItem;
+interface GroupedPendingDeliveriesData {
+  [productId: string]: GroupedPendingDeliveriesDataItem;
 }
 
 export function PendingDeliveriesTable({
   pendingDeliveries,
-}: IPendingDeliveriesTableProps) {
+}: PendingDeliveriesTableProps) {
   if (!pendingDeliveries || pendingDeliveries.length === 0) {
     return (
       <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
@@ -41,7 +38,7 @@ export function PendingDeliveriesTable({
   const generalDate = getNextSaturdayDate().split("/").slice(0, 2).join("/");
 
   const groupedData = pendingDeliveries.reduce(
-    (acc: IGroupedPendingDeliveriesData, curr: IPendingDeliveries) => {
+    (acc: GroupedPendingDeliveriesData, curr: OrderMergeDTO) => {
       const productId = curr.offer.product.id;
       if (!acc[productId]) {
         acc[productId] = {
@@ -53,19 +50,20 @@ export function PendingDeliveriesTable({
       acc[productId].amount += curr.amount;
       return acc;
     },
-    {} as IGroupedPendingDeliveriesData
+    {} as GroupedPendingDeliveriesData
   );
 
   return (
     <table className="text-theme-primary">
       <tbody className="text-center">
         {Object.values(groupedData).map(
-          (item: IGroupedPendingDeliveriesDataItem) => {
+          (item: GroupedPendingDeliveriesDataItem) => {
             return (
               <tr key={item.product.id} className="text-left">
                 <td className={style.row}>
-                  {formatComma(convertOfferAmount(item.amount, item.product.pricing))}
-                  {" "}
+                  {formatComma(
+                    convertOfferAmount(item.amount, item.product.pricing)
+                  )}{" "}
                   {convertUnit(item.product.pricing)}
                 </td>
                 <td className={style.row}>{item.product.name}</td>

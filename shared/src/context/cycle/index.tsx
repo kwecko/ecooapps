@@ -1,9 +1,9 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
-import { ICycle } from '@shared/interfaces/cycle';
+import { CycleDTO } from "@shared/interfaces/dtos";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 
 interface CycleContextProps {
-  cycle: ICycle | undefined;
-  setCycle: (cycle: ICycle | undefined) => void;
+  cycle: CycleDTO | undefined;
+  setCycle: (cycle: CycleDTO | undefined) => void;
 }
 
 const CycleContext = createContext<CycleContextProps>({
@@ -11,9 +11,8 @@ const CycleContext = createContext<CycleContextProps>({
   setCycle: () => {},
 });
 
-
 export function CycleProvider({ children }: { children: ReactNode }) {
-  const [cycle, setCycle] = useState<ICycle | undefined>();
+  const [cycle, setCycle] = useState<CycleDTO | undefined>();
 
   return (
     <CycleContext.Provider value={{ cycle, setCycle }}>

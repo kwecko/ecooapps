@@ -1,7 +1,7 @@
 import React from "react";
 import { twMerge } from "tailwind-merge";
 
-import EmptyBoxInformation from '@shared/components/EmptyBoxInformation'
+import EmptyBoxInformation from "@shared/components/EmptyBoxInformation";
 
 const styles = {
   itemHeader:
@@ -9,7 +9,7 @@ const styles = {
   itemBody: "border-b-[1px] truncate text-grayish-blue p-3 text-left",
 };
 
-interface ITableProps {
+interface TableProps {
   headers: Array<{ label: string; style?: string }>;
   info: {
     id: string;
@@ -18,12 +18,13 @@ interface ITableProps {
   onRowClick?: (id: string) => void;
 }
 
-const Table = ({ headers, info, onRowClick }: ITableProps) => {
-
+const Table = ({ headers, info, onRowClick }: TableProps) => {
   if (!info.length) {
     return (
-      <EmptyBoxInformation style="m-auto">Nenhuma Caixa Encontrada!</EmptyBoxInformation>
-    )
+      <EmptyBoxInformation style="m-auto">
+        Nenhuma Caixa Encontrada!
+      </EmptyBoxInformation>
+    );
   }
 
   return (

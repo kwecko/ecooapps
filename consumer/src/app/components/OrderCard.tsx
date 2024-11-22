@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
 import { useCartProvider } from "@consumer/context/cart";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
+import { useEffect, useState } from "react";
 
 import { ProductCard } from "@consumer/app/components/ProductCard";
+import { OfferDTO } from "@shared/interfaces/dtos";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 interface OrderCardProps {
-  offer: IOfferWithProduct;
+  offer: OfferDTO;
   exclude: boolean;
 }
 
-export default function OrderCard({
-  offer,
-  exclude = false,
-}: OrderCardProps) {
+export default function OrderCard({ offer, exclude = false }: OrderCardProps) {
   const [count, _setCount] = useState(0);
 
   const setCount = (value: number) => {
@@ -78,7 +75,7 @@ export default function OrderCard({
               <button onClick={() => removeOrder(offer.id)}>
                 <span className="text-battleship-gray">
                   {" "}
-                  <FaRegTrashCan className="h-inherit text-xl"/>{" "}
+                  <FaRegTrashCan className="h-inherit text-xl" />{" "}
                 </span>
               </button>
             )}
@@ -93,7 +90,11 @@ export default function OrderCard({
           pricing={offer.product.pricing}
           amount={count}
         />
-        <ProductCard.ControlAmount amount={count} setAmount={setCount} offer={offer} />
+        <ProductCard.ControlAmount
+          amount={count}
+          setAmount={setCount}
+          offer={offer}
+        />
       </ProductCard.Footer>
     </ProductCard.Root>
   );

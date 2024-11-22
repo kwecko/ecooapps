@@ -1,19 +1,19 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { useForm } from "react-hook-form";
 
-import { resetPassword } from '@producer/app/_actions/user/reset-password';
-import Loading from '@producer/app/loading';
+import { requestPasswordUpdate } from "@producer/_actions/users/POST/request-password-update";
+import Loading from "@producer/app/loading";
 import { schemaForgotPassword } from "@shared/schemas/forgot-password";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import ButtonV2 from '@shared/components/ButtonV2';
-import CustomInput from '@shared/components/CustomInput';
-import { ModelPage } from '@shared/components/ModelPage';
+import { zodResolver } from "@hookform/resolvers/zod";
+import ButtonV2 from "@shared/components/ButtonV2";
+import CustomInput from "@shared/components/CustomInput";
+import { ModelPage } from "@shared/components/ModelPage";
 
 function RecuperarSenha() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -30,7 +30,7 @@ function RecuperarSenha() {
   const onSubmit = async (email: { email: string }) => {
     try {
       setIsLoading(true);
-      const data = await resetPassword(email);
+      const data = await requestPasswordUpdate(email);
 
       if (data.message) {
         return toast.error(data.message);

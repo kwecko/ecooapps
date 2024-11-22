@@ -1,11 +1,12 @@
 "use client";
 
-import { OfferProducts } from "@producer/app/_actions/offers/offer-products";
+import { OfferProducts } from "@producer/_actions/offers/POST/offer-products";
 import Button from "@shared/components/Button";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { OfferDTO, ProductDTO } from "@shared/interfaces/dtos";
 import { useRouter } from "next/navigation";
-import React, { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { LuChevronLeft, LuX } from "react-icons/lu";
 import { toast } from "sonner";
 import {
@@ -15,8 +16,6 @@ import {
   RenderProducts,
   ReviewOffer,
 } from "../components";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
-import { IProduct } from "@shared/interfaces/offer";
 
 export default function Home() {
   const router = useRouter();
@@ -30,9 +29,7 @@ export default function Home() {
   );
   const cycleId = cycle?.id ?? "";
 
-  const [offer, setOffer] = useState<IOfferWithProduct>(
-    {} as IOfferWithProduct
-  );
+  const [offer, setOffer] = useState<OfferDTO>({} as OfferDTO);
 
   const [currentStep, setCurrentStep] = useState<number>(1);
 
@@ -54,7 +51,7 @@ export default function Home() {
   };
 
   const cancelOffer = () => {
-    setOffer({} as IOfferWithProduct);
+    setOffer({} as OfferDTO);
     setCurrentStep(0);
     router.push("/oferta");
   };
@@ -107,7 +104,7 @@ export default function Home() {
         {currentStep === 1 && (
           <RenderProducts
             handleNextStep={handleNextStep}
-            setProduct={(product: IProduct) =>
+            setProduct={(product: ProductDTO) =>
               setOffer({ ...offer, product: product })
             }
           />
