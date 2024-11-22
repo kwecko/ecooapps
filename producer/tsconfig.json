@@ -27,6 +27,9 @@
       "@producer/*": [
         "./src/*"
       ],
+      "@producer/_actions/*": [
+        "./src/app/_actions/*"
+      ],
       "@shared/*": [
         "./.shared/src/*"
       ],
