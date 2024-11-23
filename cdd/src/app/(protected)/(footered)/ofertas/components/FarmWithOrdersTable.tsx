@@ -147,7 +147,7 @@ export function FarmWithOrdersTable({ page, setTotalItems }: FarmsProps) {
           />
         ) : farmsFiltered.length === 0 ? (
           <EmptyBox
-            type="box"
+            type="bag"
           />
         ) : (
           <OrderTable headers={headers} info={info} onRowClick={handleClick} />

@@ -10,7 +10,7 @@ export async function ListBagsReport(cycle_id: string) {
   }
 
   try {
-    const response = await fetch(`${process.env.API_URL}/bags/report/${cycle_id}`, {
+    const response = await fetch(`${process.env.API_URL}/bags/report?cycle_id=${cycle_id}`, {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${token.value}`, 

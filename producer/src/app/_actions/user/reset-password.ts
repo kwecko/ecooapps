@@ -8,7 +8,7 @@ interface IResetPasswordProps {
 
 export async function resetPassword({ email }: IResetPasswordProps) {
   const response = ApiService.POST({
-    url: `/users/password`,
+    url: `/me/password`,
     data: {
       email: email,
     },

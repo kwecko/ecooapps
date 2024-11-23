@@ -86,7 +86,11 @@ class ApiService {
       };
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        const apiErrorMessage = error.response?.data?.message || "Erro desconhecido";
+        const apiErrorMessage =
+          error.response?.data?.message ||
+          error.response?.data?.error ||
+          JSON.stringify(error.response?.data) ||
+          "Erro desconhecido";
 
         return {
           message: apiErrorMessage,
