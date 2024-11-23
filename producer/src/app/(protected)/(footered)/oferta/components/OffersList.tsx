@@ -67,8 +67,6 @@ export default function OffersList({
         });
 
         if (response.message) {
-          console.log(response.message)
-
           handleError(response.message as string);
         } else if (response.data) {
           const dataOffers: {
