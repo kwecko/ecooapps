@@ -83,8 +83,10 @@ export default function LoginForm() {
         <Button
           type="submit"
           variant="default"
+          className="bg-theme-home-bg"
         >
-          {isPending ? <Loader loaderType="login" /> : "Entrar"}
+          {isPending && <Loader loaderType="login" />}
+          {!isPending && "Entrar"}
         </Button>
         <span className="leading-[22px] font-medium tracking-tight text-center text-theme-default">
           Esqueceu a senha? <Link href={"/recuperar-senha"} className="underline">Clique aqui</Link>
