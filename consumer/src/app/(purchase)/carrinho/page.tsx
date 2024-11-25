@@ -16,7 +16,6 @@ export default function FinalizarCompras() {
   );
   const [totalPurchase, setTotalPurchase] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [openFarmId, setOpenFarmId] = useState<string | null>(null);
   const [openFarmIds, setOpenFarmIds] = useState<string[]>([]);
 
   const toggleAccordion = (farmId: string) => {
@@ -44,9 +43,9 @@ export default function FinalizarCompras() {
     const groupedByFarm = cart.reduce((acc, item) => {
       const farmId = item.offer.farm.id;
       if (!acc[farmId]) {
-        acc[farmId] = []; // Inicializa o array se não existir
+        acc[farmId] = [];
       }
-      acc[farmId].push(item); // Adiciona o item ao array correspondente
+      acc[farmId].push(item);
       return acc;
     }, {} as Record<string, typeof cart>); //
 
