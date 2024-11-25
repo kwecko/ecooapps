@@ -1,3 +1,5 @@
+import { IFarm } from "./farm";
+
 export interface IPendingDeliveries {
   id: string;
   bag_id: string;
@@ -34,6 +36,7 @@ export interface IOfferWithProduct {
   amount: number;
   description: string | null;
   catalog_id: string;
+  farm: IFarm;
   product_id: string;
   created_at: Date;
   updated_at: Date | null;

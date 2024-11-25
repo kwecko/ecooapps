@@ -8,6 +8,7 @@ import RedirectCart from "@consumer/app/_components/redirectCart";
 import { IOfferWithProduct } from "@shared/interfaces/offer";
 import { ICatalogMerge } from "@shared/interfaces/catalog";
 import React from "react";
+import { IFarm } from "@shared/interfaces/farm";
 
 export default function Ofertas() {
   const params = useParams();
@@ -37,6 +38,7 @@ export default function Ofertas() {
     offersFarm = offersFarm.filter(
       (offer) => offer.amount >= mapQuantity[offer.product.pricing]
     );
+    offersFarm = offersFarm.map((offer) => { return { ...offer, farm: responseFarmCatalogs?.farm as IFarm} });
 
     if (offersFarm.length == 0) {
       setHasMore(false);
