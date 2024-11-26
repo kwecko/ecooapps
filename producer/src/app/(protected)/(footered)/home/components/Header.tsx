@@ -21,7 +21,7 @@ export function Header() {
           if (response.message) {
             const messageError = response.message;
 
-            handleError(messageError)
+            console.log(messageError)
           } else if (response.data) {
             const { first_name } = response.data;
             setName(first_name);
