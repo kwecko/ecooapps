@@ -18,6 +18,7 @@ export default function Home() {
         <ProductMenu />
         <PendingDeliveries />
       </div> */}
+      <h1>Bem vindo</h1>
     </div>
   );
 }
