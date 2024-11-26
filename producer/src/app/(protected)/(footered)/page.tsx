@@ -1,10 +1,10 @@
 'use client'
 
 import React from 'react';
-// import CycloInformation from "./home/components/CycloInformation";
+import CycloInformation from "./home/components/CycloInformation";
 import { Header } from "./home/components/Header";
 import { PendingDeliveries } from "./home/components/PendingDeliveries";
-// import { ProductMenu } from "./home/components/ProductMenu";
+import { ProductMenu } from "./home/components/ProductMenu";
 import SelectCycle from "@shared/components/SelectCycle";
 
 export default function Home() {
@@ -14,8 +14,8 @@ export default function Home() {
       <div className='flex flex-col gap-5'>
         <Header />
         <SelectCycle />
-        {/* <CycloInformation /> */}
-        {/* <ProductMenu /> */}
+        <CycloInformation />
+        <ProductMenu />
         <PendingDeliveries />
       </div>
     </div>
