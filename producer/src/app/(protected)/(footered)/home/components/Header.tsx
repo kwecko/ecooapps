@@ -21,7 +21,7 @@ export function Header() {
           if (response.message) {
             const messageError = response.message;
 
-            console.log(messageError)
+            handleError(messageError)
           } else if (response.data) {
             const { first_name } = response.data;
             setName(first_name);
@@ -52,9 +52,9 @@ export function Header() {
         <button disabled className="text-theme-primary">
           <HiOutlineBell size={24} />
         </button>
-        <Link href="/api/auth/logout" title="Sair" type="button" aria-label="Sair" className="pt-0.5 text-slate-gray">
+        {/* <Link href="/api/auth/logout" title="Sair" type="button" aria-label="Sair" className="pt-0.5 text-slate-gray">
           Sair
-        </Link>
+        </Link> */}
       </div>
     </header>
   );
