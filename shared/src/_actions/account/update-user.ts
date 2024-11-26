@@ -5,7 +5,7 @@ import ApiService from "@shared/service/index";
 
 export async function updateUser(data: IUserUpdate) {
   const response = ApiService.PATCH({
-    url: "/users",
+    url: "/me",
     data,
   });
 

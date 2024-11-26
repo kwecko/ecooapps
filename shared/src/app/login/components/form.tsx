@@ -54,7 +54,6 @@ export default function FormLogin({ appID }: { appID: AppID }) {
             return;
           } 
 
-          toast.success("Login efetuado com sucesso!");
           router.push("/");
         })
         .catch(() => {

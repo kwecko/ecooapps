@@ -7,9 +7,11 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function Header() {
   const [name, setName] = useState('');
+  const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
 
   const { handleError } = useHandleError()
@@ -34,6 +36,10 @@ export function Header() {
     })()
   }, [])
 
+  const logout = () => {
+    router.push("/api/auth/logout")
+  }
+
   return (
     <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 pb-2.5 top-0 z-10 bg-theme-background">
       <div className="flex-shrink">
@@ -52,9 +58,15 @@ export function Header() {
         <button disabled className="text-theme-primary">
           <HiOutlineBell size={24} />
         </button>
-        <Link href="/api/auth/logout" title="Sair" type="button" aria-label="Sair" className="pt-0.5 text-slate-gray">
+        <button
+          onClick={logout}
+          title="Sair" 
+          type="button" 
+          aria-label="Sair" 
+          className="pt-0.5 text-slate-gray"
+        >
           Sair
-        </Link>
+        </button>
       </div>
     </header>
   );
