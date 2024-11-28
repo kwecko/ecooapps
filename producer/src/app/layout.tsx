@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body
-        className={`${process.env.APP_ID} w-screen h-fullScreen font-poppins`}
+        className={`${process.env.APP_ID} w-screen h-full-dvh font-poppins`}
       >
         <div className="flex flex-row justify-center h-full w-full">
           <Toaster richColors position="top-right" />
