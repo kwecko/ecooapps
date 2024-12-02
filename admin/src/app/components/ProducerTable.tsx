@@ -11,7 +11,7 @@ import convertStatus from "@shared/utils/convert-status";
 import Button from "@shared/components/Button";
 import ModalV2 from "@shared/components/ModalV2";
 import OrderTable from "@shared/components/OrderTable";
-import producer from '@shared/assets/public/producer.png';
+import producer from '@shared/assets/images/producer.png';
 
 interface ProducerTableProps {
   farms?: FarmDTO[];
