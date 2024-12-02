@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service/index";
 
-interface ListFarmRequest {
+interface ListFarmsRequest {
   page: number;
   farm?: string;
 }
@@ -10,7 +10,7 @@ interface ListFarmRequest {
 export async function listFarms({ 
   page,
   farm = "",
-}: ListFarmRequest) {
+}: ListFarmsRequest) {
   const response = ApiService.GET({
     url: `/farms?page=${page}&farm=${farm}`,
   });

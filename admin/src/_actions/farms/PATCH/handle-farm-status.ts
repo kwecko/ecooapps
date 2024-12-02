@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service/index";
 
-interface HandleFarmStatusRequest {
+interface HandleFarmsStatusRequest {
   farm_id: string;
   status: "ACTIVE" | "PENDING" | "INACTIVE";
 }
@@ -10,7 +10,7 @@ interface HandleFarmStatusRequest {
 export async function handleFarmStatus({ 
   farm_id,
   status
-}: HandleFarmStatusRequest) {
+}: HandleFarmsStatusRequest) {
   const response = ApiService.PATCH({
     url: `/farms/${farm_id}`,
     data: { status: status },
