@@ -1,4 +1,4 @@
-import notFound from "../assets/not-found.png"
+import notFound from "../assets/images/not-found.webp"
 import Button from "../components/Button"
 import Image from 'next/image'
 import Link from "next/link"
