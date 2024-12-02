@@ -7,6 +7,8 @@ import { formatPrice } from "@shared/utils/format-price";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useCartProvider } from "../../../context/cart";
+import { RiArrowDownSLine } from "react-icons/ri";
+import { RiArrowUpSLine } from "react-icons/ri";
 
 export default function FinalizarCompras() {
   const router = useRouter();
@@ -67,13 +69,9 @@ export default function FinalizarCompras() {
                       <span>{cartByFarm[farmId][0].offer.farm.name}</span>
                       <span>
                         {openFarmIds.includes(farmId) ? (
-                          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 1L5 5L9 1" stroke="#2F4A4D" />
-                          </svg>
+                          <RiArrowDownSLine />
                         ) : (
-                          <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M1 5L5 1L9 5" stroke="#2F4A4D" />
-                          </svg>
+                          <RiArrowUpSLine />
                         )}
                       </span>
                     </button>
