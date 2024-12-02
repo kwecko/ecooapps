@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 
-import { handleFarmStatus } from "../../_actions/farms/PATCH/handle-farm-status";
+import { handleFarmStatus } from "@admin/_actions/farms/PATCH/handle-farm-status";
 
 import { FarmDTO } from "@shared/interfaces/dtos/farm-dto";
 import convertStatus from "@shared/utils/convert-status";

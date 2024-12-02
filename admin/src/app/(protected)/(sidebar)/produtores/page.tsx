@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import ProducerTable from "@admin/app/components/ProducerTable";
 import Title from "@admin/app/components/Title";
 
-import { listFarms } from "../../../../_actions/farms/GET/list-farms";
+import { listFarms } from "@admin/_actions/farms/GET/list-farms";
 
 import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
