@@ -19,7 +19,7 @@ interface OrderTableProps {
     data: { detail: string | JSX.Element; style?: string }[];
   }[];
   onRowClick?: (id: string) => void;
-  type?: string;
+  type?: "admin";
 }
 
 const OrderTable = ({ headers, info, type, onRowClick }: OrderTableProps) => {
