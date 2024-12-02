@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { GroupOrderProps } from "./GroupOrder";
 
 interface HeaderDetailProps {
   id: string | undefined;
@@ -7,7 +6,7 @@ interface HeaderDetailProps {
   status?: string;
   selectStatus?: ReactNode;
   time: string;
-  content?: GroupOrderProps | JSX.Element;
+  content?: ReactNode;
 }
 
 const styles = {

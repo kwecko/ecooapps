@@ -1,16 +1,17 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --footer-height: 7.5vh;
-  --max-page-height: 100vh;
+  --footer-height: 7.5dvh;
+  --max-page-height: 100dvh;
   --footered-page-height: calc(var(--max-page-height) - var(--footer-height));
   --min-page-height: var(--footered-page-height);
   --max-w-md: 28rem;
+  --sidebar-width: clamp(150px, 20.83vw, 18.75rem);
 }
 
 * {
@@ -30,20 +31,22 @@ a {
   text-decoration: none;
 }
 
-.PRODUCER, .CONSUMER {
-  --color-default: #3E5155;
-  --color-home-background: #2F4A4D;
-  --color-highlight: #00735E;
-  --color-primary: #545F71;
+.PRODUCER,
+.CONSUMER,
+.ADMIN {
+  --color-default: #3e5155;
+  --color-home-background: #2f4a4d;
+  --color-highlight: #00735e;
+  --color-primary: #545f71;
   --color-secondary: #eef1f4;
-  --color-background: #F7F7F7;
+  --color-background: #f7f7f7;
 }
 
 .CDD {
-  --color-default: #4F4743;
-  --color-home-background: #4F4743;
-  --color-highlight: #4F4743;
-  --color-primary: #545F71;
+  --color-default: #4f4743;
+  --color-home-background: #4f4743;
+  --color-highlight: #4f4743;
+  --color-primary: #545f71;
   --color-secondary: #eef1f4;
-  --color-background: #F7F7F7;
+  --color-background: #f7f7f7;
 }

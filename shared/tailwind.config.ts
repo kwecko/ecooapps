@@ -79,7 +79,7 @@ const config: Config = {
         110: "27.5rem",
         112: "28rem",
         sidebar: "var(--sidebar-width)",
-        fullScreen: "100dvh",
+        "full-dvh": "100dvh",
       },
       height: {
         inherit: "inherit",
