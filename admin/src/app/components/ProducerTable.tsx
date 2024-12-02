@@ -86,10 +86,9 @@ export default function ProducerTable({ farms }: ProducerTableProps) {
           title="Verificar produtor"
         >
           <div className="w-full h-full rounded-md bg-white font-inter text-theme-primary">
-          <div className="w-full h-full rounded-md bg-white font-inter text-theme-primary">
             {[
               { label: "Nome", value: `${selectedFarm.admin.first_name} ${selectedFarm.admin.last_name}` },
-              { label: "Status", value: convertStatus(selectedFarm.status).name, isBold: true },
+              { label: "Status", value: convertStatus(selectedFarm.status).name, isBold: 'font-bold' },
               { label: "Solicitação", value: today.format("DD/MM/YYYY [às] HH:mm:ss") },
               { label: "Negócio", value: selectedFarm.name },
               { label: "Talão", value: selectedFarm.tally },
@@ -97,14 +96,13 @@ export default function ProducerTable({ farms }: ProducerTableProps) {
               { label: "Celular", value: selectedFarm.admin.phone },
             ].map((item, index) => (
               <div key={index}>
-              <div className="flex w-full h-12 items-center pl-4 pt-1">
-                <span className="w-1/4">{item.label}:</span>
-                <span className={`w-3/4 ${item.isBold ? 'font-bold' : ''}`}>{item.value}</span>
-              </div>
-              <hr className="w-full border-theme-background"/>
+                <div className="flex w-full h-12 items-center p-4">
+                  <span className="w-2/6">{item.label}:</span>
+                  <span className={`w-4/6 ${item.isBold}`}>{item.value}</span>
+                </div>
+                <hr className="w-full border-theme-background"/>
               </div>
             ))}
-          </div>
           </div>
           <div className="w-full flex pt-5 gap-4 font-inter font-semibold">
             <Button 

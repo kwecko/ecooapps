@@ -26,7 +26,7 @@ function ModalV2({
       onRequestClose={closeModal}
       overlayClassName="fixed z-10 inset-0 bg-black/50 flex items-center justify-center"
       className={twMerge(
-        "w-full max-w-3xl max-h-95dvh bg-theme-background p-10 rounded-2xl relative m-2 overflow-y-auto",
+        "w-full max-w-lg max-h-95dvh bg-theme-background p-10 rounded-2xl relative m-2 overflow-y-auto inline-block",
         className
       )}
       closeTimeoutMS={200}
