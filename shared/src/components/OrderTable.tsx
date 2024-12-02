@@ -7,9 +7,9 @@ const styles = {
   itemHeader:
     "truncate text-battleship-gray font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
   itemBody: "border-b truncate font-inter text-grayish-blue p-3 text-left",
-  itemHeaderADMIN:
+  itemHeaderAdmin:
     "truncate text-theme-primary font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
-  itemBodyADMIN: "border-b truncate font-inter text-theme-primary p-3 text-left",
+  itemBodyAdmin: "border-b truncate font-inter text-theme-primary p-3 text-left",
 };
 
 interface OrderTableProps {
@@ -41,7 +41,7 @@ const OrderTable = ({ headers, info, type, onRowClick }: OrderTableProps) => {
                 {headers.map((header, index) => (
                   <th
                     key={index}
-                    className={twMerge(styles.itemHeaderADMIN, header.style)}
+                    className={twMerge(styles.itemHeaderAdmin, header.style)}
                   >
                     {header.label}
                   </th>
@@ -58,7 +58,7 @@ const OrderTable = ({ headers, info, type, onRowClick }: OrderTableProps) => {
                   {products.data.map((product, cellIndex) => (
                     <td
                       key={cellIndex}
-                      className={twMerge(styles.itemBodyADMIN, product.style)}
+                      className={twMerge(styles.itemBodyAdmin, product.style)}
                     >
                       {product.detail}
                     </td>
