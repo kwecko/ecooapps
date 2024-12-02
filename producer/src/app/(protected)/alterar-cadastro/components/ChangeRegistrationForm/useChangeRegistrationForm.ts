@@ -3,13 +3,17 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { fetchUserFarm } from "@producer/app/_actions/account/fetch-user-farm";
-import { updateFarm } from "@producer/app/_actions/account/update-farm";
-import { getUser } from "@shared/_actions/account/get-user";
-import { updateUser } from "@shared/_actions/account/update-user";
+import {
+  updateFarm,
+  UpdateFarmRequest,
+} from "@producer/_actions/farms/PATCH/update-farm";
+import { fetchUserFarm } from "@shared/_actions/farms/GET/fetch-user-farm";
+import { fetchProfile } from "@shared/_actions/users/GET/fetch-profile";
+import {
+  updateUser,
+  UpdateUserRequest,
+} from "@shared/_actions/users/PATCH/update-user";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { IUpdateFarm } from "@shared/interfaces/farm";
-import { IUserUpdate } from "@shared/interfaces/user";
 import {
   ChangeRegistrationSchema,
   changeRegistrationSchema,
@@ -34,7 +38,7 @@ export const useChangeRegistrationForm = () => {
       try {
         const [farmResponse, userResponse] = await Promise.all([
           fetchUserFarm(),
-          getUser(),
+          fetchProfile(),
         ]);
 
         if (farmResponse.message || userResponse.message) {
@@ -66,13 +70,13 @@ export const useChangeRegistrationForm = () => {
       }
     });
 
-    const farmData: IUpdateFarm = {
+    const farmData: UpdateFarmRequest = {
       name: data.name,
       tally: data.tally,
       description: data.description,
     };
 
-    const userData: IUserUpdate = {
+    const userData: UpdateUserRequest = {
       first_name: data.first_name,
       last_name: data.last_name,
       email: data.email,

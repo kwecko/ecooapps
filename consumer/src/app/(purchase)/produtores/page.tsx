@@ -1,16 +1,16 @@
 "use client";
 
+import { searchCatalogs } from "@consumer/_actions/catalogs/GET/search-catalogs";
+import RedirectCart from "@consumer/app/_components/redirectCart";
+import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { CatalogDTO, CycleDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
-import RedirectCart from "@consumer/app/_components/redirectCart";
 import ProducerCard from "./components/ProducerCard";
-import { searchCatalogs } from "@consumer/app/_actions/search-catalogs";
-import { ICatalog } from "@shared/interfaces/catalog";
-import { useHandleError } from "@shared/hooks/useHandleError";
 
 export default function Produtores() {
-  const [cycles, setCycles] = useState([] as Cycle[]);
+  const [cycles, setCycles] = useState([] as CycleDTO[]);
   const [cycleId, setCycleId] = useState("" as string);
   const [producers, setProducers] = useState([] as any[]);
   const [page, setPage] = useState(1 as number);
@@ -20,8 +20,20 @@ export default function Produtores() {
 
   useEffect(() => {
     (async () => {
-      const cycles = await fetchCycles();
-      setCycles(cycles);
+      try {
+        setIsLoading(true);
+        const response = await listCycles();
+        if (response.message) {
+          handleError(response.message as string);
+        } else if (response.data) {
+          const cycles: CycleDTO[] = response.data;
+          setCycles(cycles);
+        }
+      } catch {
+        handleError("Erro desconhecido.");
+      } finally {
+        setIsLoading(false);
+      }
     })();
   }, []);
 
@@ -52,7 +64,7 @@ export default function Produtores() {
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
-        const catalogs: ICatalog[] = response.data;
+        const catalogs: CatalogDTO[] = response.data;
         let newProducers = catalogs.map((catalog) => {
           return {
             id: catalog.id,

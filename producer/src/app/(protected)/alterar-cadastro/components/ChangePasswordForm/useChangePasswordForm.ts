@@ -3,23 +3,28 @@ import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { updateUser } from "@shared/_actions/account/update-user";
+import { updateUser } from "@shared/_actions/users/PATCH/update-user";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { IUser } from "@shared/interfaces/user";
+import { UserDTO } from "@shared/interfaces/dtos";
+
+interface ChangePasswordSchema extends UserDTO {
+  password: string;
+  confirmPassword: string;
+}
 
 export const useChangePasswordForm = (token: string) => {
   const { handleError } = useHandleError();
-  const { register, handleSubmit, reset } = useForm<IUser>();
+  const { register, handleSubmit, reset } = useForm<ChangePasswordSchema>();
   const [_, setCookies, removeCookie] = useCookies();
 
   useEffect(() => {
     setCookies("token-reset-password", token);
   }, [token]);
 
-  const handleSubmitForm = async (data: IUser) => {
+  const handleSubmitForm = async (data: ChangePasswordSchema) => {
     Object.keys(data).forEach((key) => {
-      if (!data[key as keyof IUser]) {
-        delete data[key as keyof IUser];
+      if (!data[key as keyof ChangePasswordSchema]) {
+        delete data[key as keyof ChangePasswordSchema];
       }
     });
 

@@ -1,39 +1,39 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
-import { listBags } from "@cdd/app/_actions/bag/list-bags";
+import { listCurrentBags } from "@cdd/_actions/bags/GET/list-current-bags";
 
-import { IBag } from "@shared/interfaces/bag"
-import { BuildStatus, IBagStatus } from "@shared/interfaces/bag-status"
+import { BagStatus, BuildStatus } from "@shared/types/bag-status";
 
+import EmptyBox from "@shared/components/EmptyBox";
 import Loader from "@shared/components/Loader";
-import { useDebounce } from "@shared/hooks/useDebounce";
+import OrderTable from "@shared/components/OrderTable";
 import SearchInput from "@shared/components/SearchInput";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
-import OrderTable from "@shared/components/OrderTable";
+import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import EmptyBox from "@shared/components/EmptyBox";
 
-import { useGetStatus } from "@shared/hooks/useGetStatus"
+import { useGetStatus } from "@shared/hooks/useGetStatus";
+import { BagDTO } from "@shared/interfaces/dtos";
 
 interface BagsProps {
   page: number;
   setTotalItems: (total: number) => void;
 }
 
-export interface IStatus {
+type FilterStatus = {
   name: string;
   key: string[];
-}
+};
 
-const statuses: IStatus[] = [
+const statuses: FilterStatus[] = [
   { name: "Todas", key: ["PENDING", "SEPARATED"] },
   { name: "Pendentes", key: ["PENDING"] },
-  { name: "Separadas", key: ["SEPARATED"] }
+  { name: "Separadas", key: ["SEPARATED"] },
 ];
 
 export default function BagsTable({ page, setTotalItems }: BagsProps) {
@@ -41,18 +41,18 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
 
   const { getStatus } = useGetStatus();
 
-  const [bags, setBags] = useState<IBag[]>([]);
+  const [bags, setBags] = useState<BagDTO[]>([]);
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<BuildStatus>(
     statuses[0].key as BuildStatus
   );
 
-  const debounceSearch = useDebounce(name)
-  const { handleError } = useHandleError()
-  const { getFromStorage } = useLocalStorage()
+  const debounceSearch = useDebounce(name);
+  const { handleError } = useHandleError();
+  const { getFromStorage } = useLocalStorage();
 
-  const handleStatusFilterClick = (status: IStatus) => {
+  const handleStatusFilterClick = (status: FilterStatus) => {
     if (selectedStatus === status.key) {
       setSelectedStatus(statuses[0].key as BuildStatus);
       return;
@@ -63,35 +63,35 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
 
   useEffect(() => {
     (() => {
-      setIsLoading(true)
-      const cycle= getFromStorage("selected-cycle");
+      setIsLoading(true);
+      const cycle = getFromStorage("selected-cycle");
 
       if (!cycle) {
         toast.error("Selecione um ciclo para montar uma sacola!");
         return;
       }
 
-      const { id } = cycle
+      const { id } = cycle;
 
-      listBags({
+      listCurrentBags({
         cycle_id: id,
         page,
         statuses: selectedStatus,
-        name: debounceSearch
+        name: debounceSearch,
       })
         .then((response) => {
           if (response.message) {
-            handleError(response.message)
+            handleError(response.message);
           } else if (response.data) {
             setBags(response.data);
-            setTotalItems(response.data.length)
+            setTotalItems(response.data.length);
             setIsLoading(false);
             return;
           }
         })
         .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
+          toast.error("Erro desconhecido.");
+        });
     })();
   }, [page, debounceSearch, selectedStatus]);
 
@@ -112,40 +112,38 @@ export default function BagsTable({ page, setTotalItems }: BagsProps) {
           data: [
             { detail: bag.id },
             { detail: `${bag.user.first_name} ${bag.user.last_name}` },
-            { detail: getStatus({ type: 'montar', status: bag.status as IBagStatus["build"]}) },
+            {
+              detail: getStatus({
+                type: "montar",
+                status: bag.status as BagStatus["build"],
+              }),
+            },
           ],
         }))
       : [];
 
-    return (
-      <div className="w-full h-full flex flex-col">
-        <div className="sticky top-0 bg-default z-10">
-          <div className="w-full flex gap-2 items-center mt-4 mb-4">
-            <SearchInput onChange={setName} />
-          </div>
-          <StatusFilterButtons
-            statuses={statuses}
-            selectedStatus={selectedStatus}
-            handleStatusFilterClick={handleStatusFilterClick}
-          />
+  return (
+    <div className="w-full h-full flex flex-col">
+      <div className="sticky top-0 bg-default z-10">
+        <div className="w-full flex gap-2 items-center mt-4 mb-4">
+          <SearchInput onChange={setName} />
         </div>
- 
-        {isLoading ? (
-          <Loader
-            className="mt-3"
-            loaderType="component"
-          />
-        ) : debounceSearch && bags.length === 0 ? (
-          <EmptyBox
-            type="search"
-          />
-        ) : bags.length === 0 ? (
-          <EmptyBox
-            type="bag"
-          />
-        ) : (
-          <OrderTable headers={headers} info={info} onRowClick={handleClick} />
-        )}
+        <StatusFilterButtons
+          statuses={statuses}
+          selectedStatus={selectedStatus}
+          handleStatusFilterClick={handleStatusFilterClick}
+        />
       </div>
-    );
+
+      {isLoading ? (
+        <Loader className="mt-3" loaderType="component" />
+      ) : debounceSearch && bags.length === 0 ? (
+        <EmptyBox type="search" />
+      ) : bags.length === 0 ? (
+        <EmptyBox type="box" />
+      ) : (
+        <OrderTable headers={headers} info={info} onRowClick={handleClick} />
+      )}
+    </div>
+  );
 }

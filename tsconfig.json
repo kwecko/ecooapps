@@ -15,7 +15,7 @@
     "incremental": true,
     "paths": {
       "@shared/*": [
-        "./*"
+        "./shared/src/*"
       ],
       "@shared/next/*": [
         "./shared/src/*"
@@ -23,8 +23,14 @@
       "@producer/*": [
         "./producer/src/*"
       ],
+      "@producer/_actions/*": [
+        "./producer/src/app/_actions/*"
+      ],
       "@cdd/*": [
         "./cdd/src/*"
+      ],
+      "@cdd/_actions/*": [
+        "./cdd/src/app/_actions/*"
       ],
       "@admin/*": [
         "./admin/src/*"

@@ -1,18 +1,18 @@
 "use client";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import { OfferDTO } from "@shared/interfaces/dtos";
+import { ReactNode, createContext, useContext, useState } from "react";
 
-interface Order {
-  offer: IOfferWithProduct;
+interface OrderSchema {
+  offer: OfferDTO;
   amount: number;
 }
 
 interface CartContextProps {
-  cart: Order[];
-  setCart: (cart: Order[]) => void;
-  addOrder: (order: Order) => void;
+  cart: OrderSchema[];
+  setCart: (cart: OrderSchema[]) => void;
+  addOrder: (order: OrderSchema) => void;
   removeOrder: (offer_id: string) => void;
-  findOrderByOfferId: (offer_id: string) => Order | undefined;
+  findOrderByOfferId: (offer_id: string) => OrderSchema | undefined;
   updateOrderAmount: (offer_id: string, amount: number) => void;
 }
 
@@ -26,9 +26,9 @@ const CartContext = createContext<CartContextProps>({
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Order[]>([]);
+  const [cart, setCart] = useState<OrderSchema[]>([]);
 
-  const addOrder = (order: Order) => {
+  const addOrder = (order: OrderSchema) => {
     setCart((prevCart) => {
       const existingOrder = prevCart.find(
         (item) => item.offer.id === order.offer.id
@@ -46,10 +46,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const removeOrder = (offer_id: string) => {
-    setCart((prevCart) => prevCart.filter((order) => order.offer.id !== offer_id));
+    setCart((prevCart) =>
+      prevCart.filter((order) => order.offer.id !== offer_id)
+    );
   };
 
-  const findOrderByOfferId = (offer_id: string): Order | undefined => {
+  const findOrderByOfferId = (offer_id: string): OrderSchema | undefined => {
     return cart.find((order) => order.offer.id === offer_id);
   };
 

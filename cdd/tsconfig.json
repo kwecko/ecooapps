@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2021",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -20,13 +24,33 @@
       }
     ],
     "paths": {
-      "@cdd/*": ["./src/*"],
-      "@shared/*": ["./.shared/src/*"],
-      "@shared/warnings": ["./.shared/warnings.ts"],
-      "@shared/next/*": ["./.shared/src/*"],
-      "@shared/global.css": ["./.shared/global.css"]
+      "@cdd/*": [
+        "./src/*"
+      ],
+      "@cdd/_actions/*": [
+        "./src/app/_actions/*"
+      ],
+      "@shared/*": [
+        "./.shared/src/*"
+      ],
+      "@shared/warnings": [
+        "./.shared/warnings.ts"
+      ],
+      "@shared/next/*": [
+        "./.shared/src/*"
+      ],
+      "@shared/global.css": [
+        "./.shared/global.css"
+      ]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

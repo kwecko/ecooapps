@@ -1,8 +1,8 @@
 "use client";
 
-import { getUser } from "@shared/_actions/account/get-user"
-import { useHandleError } from "@shared/hooks/useHandleError";
+import { fetchProfile } from "@shared/_actions/users/GET/fetch-profile";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
+import { useHandleError } from "@shared/hooks/useHandleError";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
@@ -11,33 +11,33 @@ import { useRouter } from "next/navigation";
 
 export function Header() {
   const [name, setName] = useState('');
-  const router = useRouter()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  
+  const router = useRouter();
 
-  const { handleError } = useHandleError()
+  const { handleError } = useHandleError();
 
   useEffect(() => {
     (async () => {
-      await getUser()
+      await fetchProfile()
         .then((response) => {
           if (response.message) {
-            const messageError = response.message;
-
-            handleError(messageError)
+            handleError(response.message);
           } else if (response.data) {
             const { first_name } = response.data;
+
             setName(first_name);
-            setIsLoading(false)
+            setIsLoading(false);
           }
         })
         .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })()
-  }, [])
+          toast.error("Erro desconhecido.");
+        });
+    })();
+  }, []);
 
   const logout = () => {
-    router.push("/api/auth/logout")
+    router.push("/api/auth/logout");
   }
 
   return (
@@ -47,7 +47,12 @@ export function Header() {
           <SkeletonLoader />
         ) : (
           <span className="flex gap-1 items-center text-slate-gray">
-            Olá, <Link href={"/alterar-cadastro"}><strong className="font-semibold underline underline-offset-2">{name}</strong></Link>
+            Olá,{" "}
+            <Link href={"/alterar-cadastro"}>
+              <strong className="font-semibold underline underline-offset-2">
+                {name}
+              </strong>
+            </Link>
             <Link href={"/alterar-cadastro"}>
               <HiOutlinePencilAlt size={16} />
             </Link>

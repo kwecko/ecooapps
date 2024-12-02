@@ -1,16 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import emptyBox from '@shared/assets/public/empty-box.png';
+import emptyBox from "@shared/assets/public/empty-box.png";
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
-type EmptyBoxType = "search" | "bag";
+type EmptyBoxType = "search" | "bag" | "box";
 
 interface EmptyBoxProps {
   type: EmptyBoxType;
 }
 
-export default function EmptyBox ({
-  type
-}: EmptyBoxProps) {
+export default function EmptyBox({ type }: EmptyBoxProps) {
   const [boxText, setBoxText] = useState("");
 
   useEffect(() => {
