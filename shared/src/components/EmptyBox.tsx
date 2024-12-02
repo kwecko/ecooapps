@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import emptyBox from "@shared/assets/images/empty-box.webp";
 
-type EmptyBoxType = "search" | "bag" | "box";
+type EmptyBoxType = "search" | "bag" | "box" | "producer";
 
 interface EmptyBoxProps {
   type: EmptyBoxType;
@@ -15,6 +15,9 @@ export default function EmptyBox({ type }: EmptyBoxProps) {
   useEffect(() => {
     if (type == "search") {
       setBoxText("Não encontramos resultados para a sua pesquisa.");
+      return;
+    } else if (type == "producer") {
+      setBoxText("Nenhum produtor encontrado.");
       return;
     }
     setBoxText("Nenhuma sacola encontrada!");

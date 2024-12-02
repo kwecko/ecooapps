@@ -79,6 +79,7 @@ const config: Config = {
         100: "25rem",
         110: "27.5rem",
         112: "28rem",
+        152: "38rem",
         sidebar: "var(--sidebar-width)",
         "full-dvh": "100dvh",
       },
