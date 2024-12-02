@@ -12,7 +12,7 @@ import Button from "@shared/components/ButtonV2";
 import { LoginSchema } from "@shared/types/login";
 import Input from "@shared/components/CustomInput";
 import { loginSchema } from "@shared/schemas/login";
-import { login } from "@shared/_actions/account/login";
+import { authenticate } from "@shared/_actions/auth/POST/authenticate"
 import { useHandleError } from "@shared/hooks/useHandleError"
 
 export default function LoginForm() {
@@ -42,7 +42,7 @@ export default function LoginForm() {
 
       if (!isValid) return;
 
-      login({
+      authenticate({
         email,
         password,
         appID: 'ADMIN'

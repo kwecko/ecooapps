@@ -1,6 +1,7 @@
-import emptyBox from "@shared/assets/public/empty-box.png";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
+
+import emptyBox from "@shared/assets/images/empty-box.webp";
 
 type EmptyBoxType = "search" | "bag" | "box";
 

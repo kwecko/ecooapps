@@ -1,6 +1,4 @@
-import Image from "next/image";
-
-import LogoDark from "@shared/assets/svg/logo-dark.svg";
+import LogoDard from "@shared/assets/svg/logo-dark"
 
 type CopyrightTypes = "primary" | "secondary";
 
@@ -12,12 +10,7 @@ export default function Copyright({ type }: CopyrightProps) {
   return (
     <div className="w-full flex items-center gap-9 justify-center">
       {type === "primary" && (
-        <Image
-          src={LogoDark}
-          width={112}
-          height={37}
-          alt="e-COO"
-        />
+        <LogoDard />
       )}
       <span
         className={`${
