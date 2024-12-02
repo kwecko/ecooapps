@@ -2,8 +2,9 @@
 
 import Image from "next/image";
 
-import Bag from "@shared/assets/bag.png"
-import LogoLight from "@shared/assets/svg/logo-light.svg";
+import bag from "@shared/assets/images/bag.webp"
+
+import LogoLight from "@shared/assets/svg/logo-light"
 
 import Copyright from "@admin/app/components/Copyright";
 import LoginForm from "@admin/app/login/components/loginForm";
@@ -13,16 +14,10 @@ export default function Login() {
     <div className="w-full h-full flex">
       <div className="w-full h-full flex flex-col items-center bg-theme-home-bg">
         <div className="flex flex-col justify-end items-start h-full gap-6 max-w-lg">
-          <Image
-            src={LogoLight}
-            width={300}
-            height={100}
-            priority
-            alt="e-COO"
-          />
+          <LogoLight />
           <h1 className="text-4xl text-white font-semibold w-80">Painel do Administrador</h1>
           <Image
-            src={Bag}
+            src={bag}
             alt="bag"
             width={426}
             height={533}
