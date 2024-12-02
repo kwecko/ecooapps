@@ -8,7 +8,7 @@ interface IHeaderDetailProps {
   status?: string;
   selectStatus?: ReactNode; 
   time: string;
-  content?: GroupOrderProps;
+  content?: ReactNode;
 }
 
 const styles = {
