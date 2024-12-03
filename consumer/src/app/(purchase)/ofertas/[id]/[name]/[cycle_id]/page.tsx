@@ -40,8 +40,6 @@ export default function Ofertas() {
         cycle_id: cycle.id as string,
         page: page,
       });
-      console.log("response catalog");
-      console.log(response);
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {

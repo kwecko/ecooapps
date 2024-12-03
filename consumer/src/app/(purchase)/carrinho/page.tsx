@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { useCartProvider } from "../../../context/cart";
 import { RiArrowDownSLine } from "react-icons/ri";
 import { RiArrowUpSLine } from "react-icons/ri";
+import { OfferDTO } from "@shared/interfaces/dtos";
 
 export default function FinalizarCompras() {
   const router = useRouter();

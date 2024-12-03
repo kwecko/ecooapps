@@ -59,8 +59,6 @@ export default function Produtores() {
         cycle_id: cycle.id as string,
         page: page,
       });
-      console.log("response");
-      console.log(response);
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
