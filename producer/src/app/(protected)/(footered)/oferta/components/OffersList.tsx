@@ -1,22 +1,21 @@
 "use client";
 
-import React, {
-  useEffect,
-  useState,
-  useMemo,
-  useRef,
-  useCallback,
-} from "react";
+import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
 import Loader from "@shared/components/Loader";
-import OfferCard from "./OfferCard";
-import { twMerge } from "tailwind-merge";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { toast } from "sonner";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
-import { ICatalog } from "@shared/interfaces/catalog";
+import { CatalogDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { useRouter } from "next/navigation";
-import { fetchCatalog } from "@producer/app/_actions/catalogs/fetch-catalog";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+import { toast } from "sonner";
+import { twMerge } from "tailwind-merge";
+import OfferCard from "./OfferCard";
 import OfferListHeading from "./OfferListHeading";
 
 interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -31,7 +30,7 @@ export default function OffersList({
   notFoundMessage,
   ...rest
 }: OffersListProps) {
-  const [offers, setOffers] = useState<IOfferWithProduct[] | []>([]);
+  const [offers, setOffers] = useState<OfferDTO[] | []>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -70,8 +69,8 @@ export default function OffersList({
           handleError(response.message as string);
         } else if (response.data) {
           const dataOffers: {
-            catalog: ICatalog;
-            offers: IOfferWithProduct[];
+            catalog: CatalogDTO;
+            offers: OfferDTO[];
           } = response.data;
 
           setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);

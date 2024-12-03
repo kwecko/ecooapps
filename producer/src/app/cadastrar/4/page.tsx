@@ -1,23 +1,22 @@
-"use client"
+"use client";
 
 import Link from "next/link";
-import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { registerFarm } from "@producer/app/_actions/account/register-farm";
+import { registerFarm } from "@producer/_actions/farms/POST/register-farm";
 
-import Loader from "@shared/components/Loader";
 import ButtonV2 from "@shared/components/ButtonV2";
 import CustomInput from "@shared/components/CustomInput";
-import { useHandleError } from "@shared/hooks/useHandleError"
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
-import { FifthStepRegisterSchema } from "@shared/types/register";
+import Loader from "@shared/components/Loader";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { fifthStepRegisterSchema } from "@shared/schemas/register";
-
+import { FifthStepRegisterSchema } from "@shared/types/register";
 
 export default function FifthStep() {
   const [isPending, starTransition] = useTransition();
@@ -57,31 +56,34 @@ export default function FifthStep() {
 
           handleDeleteFromStorage();
           toast.success("Produtor cadastrado com sucesso!");
-          router.push('/negocio/aguardando-aprovacao')
+          router.push("/negocio/aguardando-aprovacao");
         })
         .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })
+          toast.error("Erro desconhecido.");
+        });
+    });
   };
 
   const handleDeleteFromStorage = () => {
-    deleteFromStorage('register-form-data')
-    deleteFromStorage('register-current-step')
-  }
+    deleteFromStorage("register-form-data");
+    deleteFromStorage("register-current-step");
+  };
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="w-full h-full flex flex-col justify-between mb-2 mt-6">
+    <form
+      onSubmit={handleSubmit(submit)}
+      className="w-full h-full flex flex-col justify-between mb-2 mt-6"
+    >
       <div className="w-full flex flex-col gap-6 mb-3">
         <CustomInput
-          register={register('name')}
+          register={register("name")}
           label="Nome do seu negócio"
           placeholder="Nome do seu negócio"
           type="text"
           errorMessage={errors.name?.message}
         />
         <CustomInput
-          register={register('tally')}
+          register={register("tally")}
           label="Número do Talão"
           placeholder="Insira o número do Talão"
           type="number"
@@ -95,17 +97,17 @@ export default function FifthStep() {
           variant="default"
           className="h-12 flex justify-center items-center"
         >
-          {isPending ? (<Loader loaderType="login" />) : "Finalizar cadastro"}
+          {isPending ? <Loader loaderType="login" /> : "Finalizar cadastro"}
         </ButtonV2>
-        <Link href={'/inicio'}>
+        <Link href={"/inicio"}>
           <ButtonV2
             type="submit"
             variant="transparent"
             border={true}
             className="h-12 flex justify-center items-center mt-0"
             onClick={() => {
-              deleteFromStorage('register-form-data')
-              deleteFromStorage('register-current-step')
+              deleteFromStorage("register-form-data");
+              deleteFromStorage("register-current-step");
             }}
           >
             Tela inicial
@@ -113,5 +115,5 @@ export default function FifthStep() {
         </Link>
       </div>
     </form>
-  )
+  );
 }

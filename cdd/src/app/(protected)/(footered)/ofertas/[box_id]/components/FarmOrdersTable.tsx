@@ -1,26 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import IndividualProductTable from "@shared/components/IndividualProductTable";
 import { notFound, useParams, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
-import IndividualProductTable from "@shared/components/IndividualProductTable";
 
-import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
+import { fetchBox } from "@cdd/_actions/boxes/GET/fetch-box";
 
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
-import { convertStatus } from "@shared/utils/convert-status";
-import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { IFarmOrders } from "@shared/interfaces/farm";
 import TableSkeleton from "@shared/components/TableSkeleton";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { BoxMergeDTO } from "@shared/interfaces/dtos";
+import { convertStatus } from "@shared/utils/convert-status";
+import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
 export default function FarmOrdersTable() {
   const router = useRouter();
   const { box_id } = useParams();
 
-  const [farmOrders, setFarmOrders] = useState<IFarmOrders | null>(null);
+  const [farmOrders, setFarmOrders] = useState<BoxMergeDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const { handleError } = useHandleError();
@@ -39,7 +39,7 @@ export default function FarmOrdersTable() {
         return;
       }
 
-      await getBoxOrders({
+      await fetchBox({
         box_id: box_id as string,
       })
         .then((response: any) => {
@@ -79,14 +79,18 @@ export default function FarmOrdersTable() {
     id: detail.id,
     data: [
       {
-        detail: convertOfferAmount(detail.amount, detail.offer.product.pricing) + " " + convertUnit(detail.offer.product.pricing),
+        detail:
+          convertOfferAmount(detail.amount, detail.offer.product.pricing) +
+          " " +
+          convertUnit(detail.offer.product.pricing),
       },
       { detail: detail.offer.product.name },
       { detail: convertStatus(detail.status).icon, style: "text-center" },
     ],
   }));
-  
-  const status = farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
+
+  const status =
+    farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
 
   return (
     <div className="w-full h-full flex flex-col justify-between">
@@ -97,7 +101,11 @@ export default function FarmOrdersTable() {
         time={getNextSaturdayDate()}
       />
 
-      <IndividualProductTable headers={headers} info={info} farmOrders={farmOrders}/>
+      <IndividualProductTable
+        headers={headers}
+        info={info}
+        farmOrders={farmOrders}
+      />
     </div>
   );
 }

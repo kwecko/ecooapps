@@ -1,9 +1,8 @@
 "use client";
 
-import { getUser } from "@shared/_actions/account/get-user"
-import { useHandleError } from "@shared/hooks/useHandleError";
+import { fetchProfile } from "@shared/_actions/users/GET/fetch-profile";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
-import Link from "next/link";
+import { useHandleError } from "@shared/hooks/useHandleError";
 import { useEffect, useState } from "react";
 import { HiOutlineBell } from "react-icons/hi";
 import { toast } from "sonner";
@@ -11,33 +10,33 @@ import { useRouter } from "next/navigation";
 
 export function Header() {
   const [name, setName] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
+  
   const router = useRouter();
 
-  const { handleError } = useHandleError()
+  const { handleError } = useHandleError();
 
   useEffect(() => {
     (() => {
-      getUser()
-      .then((response) => {
-        if (response.message) {
-          handleError(response.message)
-        } else if (response.data) {
-          const { first_name } = response.data;
-          setName(first_name);
-          setIsLoading(false)
-        }
-      })
-      .catch((error) => {
-        toast.error(error)
-      })
-    })()
-  }, [])
+      fetchProfile()
+        .then((response) => {
+          if (response.message) {
+            handleError(response.message);
+          } else if (response.data) {
+            const { first_name } = response.data;
+            setName(first_name);
+            setIsLoading(false);
+          }
+        })
+        .catch((error) => {
+          toast.error(error);
+        });
+    })();
+  }, []);
 
   const logout = () => {
-    router.push("/api/auth/logout")
+    router.push("/api/auth/logout");
   }
-
 
   return (
     <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 sticky pb-2.5 top-0 z-30 bg-theme-background">

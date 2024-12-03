@@ -1,34 +1,34 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { LuChevronsUpDown } from "react-icons/lu";
-import { FaCheck } from "react-icons/fa6";
-import { toast } from "sonner";
+import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import { CycleDTO } from "@shared/interfaces/dtos";
 import { useRouter } from "next/navigation";
-import Button from "./Button";
+import React, { useEffect, useState } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { LuChevronsUpDown } from "react-icons/lu";
+import { toast } from "sonner";
 import { useCycleProvider } from "../context/cycle/index";
-import { getCycles } from "../_actions/cycles/get-cycles"
-import { useHandleError } from "../hooks/useHandleError"
-import { useLocalStorage } from "../hooks/useLocalStorage"
-import { ICycle } from "../interfaces/cycle";
+import { useHandleError } from "../hooks/useHandleError";
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import Button from "./Button";
 
 export default function SelectCycle() {
-  const [cycles, setCycles] = useState<ICycle[] | undefined>();
+  const [cycles, setCycles] = useState<CycleDTO[] | undefined>();
   const { cycle, setCycle } = useCycleProvider();
 
   const router = useRouter();
-  const { handleError } = useHandleError()
-  const { getFromStorage, setInStorage } = useLocalStorage()
+  const { handleError } = useHandleError();
+  const { getFromStorage, setInStorage } = useLocalStorage();
 
-  const handleCycleChange = (newCycle: ICycle) => {
+  const handleCycleChange = (newCycle: CycleDTO) => {
     setCycle(newCycle);
 
-    setInStorage("selected-cycle", newCycle)
+    setInStorage("selected-cycle", newCycle);
   };
 
   const handleClickButton = () => {
-    const cycle = getFromStorage("selected-cycle")
+    const cycle = getFromStorage("selected-cycle");
 
     if (!cycle) {
       toast.warning("Selecione um ciclo para ver mais informações sobre ele!");
@@ -40,21 +40,20 @@ export default function SelectCycle() {
 
   useEffect(() => {
     (async () => {
-      
-      getCycles()
+      listCycles()
         .then((response) => {
-          if(response.message){
+          if (response.message) {
             const messageError = response.message as string;
             handleError(messageError);
           } else {
-            setCycles(response.data)
+            setCycles(response.data);
           }
         })
         .catch(() => {
-          toast.error("Erro ao buscar os ciclos.")
-        })
+          toast.error("Erro ao buscar os ciclos.");
+        });
 
-      const savedCycle = getFromStorage("selected-cycle")
+      const savedCycle = getFromStorage("selected-cycle");
 
       if (savedCycle) {
         setCycle(savedCycle);
@@ -79,8 +78,11 @@ export default function SelectCycle() {
         {({ open }) => (
           <div className="w-full relative pt-1">
             <Listbox.Button
-              className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${open ? "flex flex-row justify-between items-center rounded-b-none bg-neutral-50 ring-2 ring-slate-gray ring-opacity-50" : ""
-                }`}
+              className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${
+                open
+                  ? "flex flex-row justify-between items-center rounded-b-none bg-neutral-50 ring-2 ring-slate-gray ring-opacity-50"
+                  : ""
+              }`}
             >
               <span className="block truncate text-slate-gray px-3">
                 {cycle === undefined
@@ -99,22 +101,27 @@ export default function SelectCycle() {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute w-full overflow-auto
-               bg-white py-0 text-base shadow-lg rounded-b-2xl ring-2 ring-slate-300 z-10 max-h-60 sm:text-sm">
+              <Listbox.Options
+                className="absolute w-full overflow-auto
+               bg-white py-0 text-base shadow-lg rounded-b-2xl ring-2 ring-slate-300 z-10 max-h-60 sm:text-sm"
+              >
                 {cycles?.map((cycle) => (
                   <Listbox.Option
                     key={cycle.id}
                     className={({ selected }) =>
-                      `relative cursor-default select-none py-2.5 pl-10 pr-4 ${selected
-                        ? "text-slate-gray bg-theme-background"
-                        : "bg-white"
+                      `relative cursor-default select-none py-2.5 pl-10 pr-4 ${
+                        selected
+                          ? "text-slate-gray bg-theme-background"
+                          : "bg-white"
                       }`
                     }
                     value={cycle}
                   >
                     {({ selected }) => (
                       <>
-                        <span className={`block truncate text-slate-gray pl-3.5`}>
+                        <span
+                          className={`block truncate text-slate-gray pl-3.5`}
+                        >
                           {`Ciclo ${cycle.alias}`}
                         </span>
                         {selected && (

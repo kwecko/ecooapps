@@ -1,9 +1,8 @@
+import { ModelPage } from "@shared/components/ModelPage";
 import AddProductButton from "./components/AddProductButton";
 import OffersList from "./components/OffersList";
-import { ModelPage } from "@shared/components/ModelPage";
 
 export default function Home() {
-  
   return (
     <ModelPage
       title="Sua oferta"

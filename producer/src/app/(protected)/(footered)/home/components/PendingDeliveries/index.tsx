@@ -1,26 +1,26 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { Tooltip } from "antd";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
-import { PendingDeliveriesTable } from "./Table";
-import Loader from "@shared/components/Loader";
 import Button from "@shared/components/ButtonV2";
+import Loader from "@shared/components/Loader";
+import { PendingDeliveriesTable } from "./Table";
 
-import { getBoxeCurrent } from "@shared/_actions/boxe/get-boxe-current";
-import { IPendingDeliveries } from "@shared/interfaces/offer";
-import { toast } from "sonner";
-import { useCycleProvider } from "@shared/context/cycle";
-import { useHandleError } from "@shared/hooks/useHandleError"
+import { fetchCurrentBox } from "@shared/_actions/boxes/GET/fetch-current-box";
 import CustomModal from "@shared/components/CustomModal";
+import { useCycleProvider } from "@shared/context/cycle";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { OrderMergeDTO } from "@shared/interfaces/dtos";
+import { toast } from "sonner";
 
 export function PendingDeliveries() {
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
   const [pendingDeliveries, setPendingDeliveries] = useState<
-    IPendingDeliveries[] | undefined
+    OrderMergeDTO[] | undefined
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const { cycle } = useCycleProvider();
@@ -81,12 +81,12 @@ export function PendingDeliveries() {
         return;
       }
 
-      getBoxeCurrent({ cycle_id: cycle.id })
+      fetchCurrentBox({ cycle_id: cycle.id })
         .then((response) => {
           if (response.message) {
             handleError(response.message);
           } else {
-            const data: IPendingDeliveries[] = response.data.orders;
+            const data: OrderMergeDTO[] = response.data.orders;
 
             const ordersFiltered = data.filter(
               (item) => item.status === "PENDING"
