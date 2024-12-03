@@ -1,4 +1,4 @@
-import { FarmDTO, ProductDTO } from "@shared/interfaces/dtos";
+import { ProductDTO } from "@shared/interfaces/dtos";
 
 export interface OfferDTO {
   id: string;
@@ -9,5 +9,4 @@ export interface OfferDTO {
   product: ProductDTO;
   created_at: Date;
   updated_at: Date | null;
-  farm: FarmDTO;
 }

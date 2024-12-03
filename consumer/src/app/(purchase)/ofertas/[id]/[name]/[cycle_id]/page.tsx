@@ -13,6 +13,7 @@ export default function Ofertas() {
   const params = useParams();
 
   const [offers, setOffers] = useState([] as OfferDTO[]);
+  const [farm, setFarm] = useState({} as FarmDTO);
   const [page, setPage] = useState(1 as number);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
@@ -44,6 +45,7 @@ export default function Ofertas() {
         handleError(response.message as string);
       } else if (response.data) {
         const responseFarmCatalogs: CatalogMergeDTO = response.data;
+        setFarm(responseFarmCatalogs.farm as FarmDTO);
         let offersFarm: OfferDTO[] = responseFarmCatalogs?.offers ?? [];
         offersFarm = offersFarm.filter(
           (offer: OfferDTO) =>
@@ -53,8 +55,6 @@ export default function Ofertas() {
           setHasMore(false);
           return;
         }
-
-        offersFarm = offersFarm.map((offer) => { return { ...offer, farm: responseFarmCatalogs?.farm as FarmDTO} });
         
         const newOffers = [...offers, ...offersFarm];
         setOffers(newOffers as OfferDTO[]);
@@ -79,7 +79,7 @@ export default function Ofertas() {
       <div className="px-3 w-full overflow-y-scroll flex flex-col items-center gap-3.5 h-full pt-3.5">
         {offers && offers.length !== 0 ? (
           offers.map((offer, index) => {
-            return <OrderCard key={index} offer={offer} exclude={false} />;
+            return <OrderCard key={index} offer={offer} farm={farm} exclude={false} />;
           })
         ) : (
           <div className="w-full text-center p-2">
