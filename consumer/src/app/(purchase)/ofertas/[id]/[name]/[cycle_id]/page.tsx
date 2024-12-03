@@ -1,10 +1,10 @@
 "use client";
-import { fetchCatalog } from "@consumer/_actions/catalogs/GET/fetch-catalog";
+import { fetchCatalog } from "@consumer/app/_components/GET/fetch-catalog";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { CatalogMergeDTO, OfferDTO } from "@shared/interfaces/dtos";
+import { CatalogMergeDTO, FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { useParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -40,21 +40,24 @@ export default function Ofertas() {
         cycle_id: cycle.id as string,
         page: page,
       });
+      console.log("response catalog");
+      console.log(response);
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
         const responseFarmCatalogs: CatalogMergeDTO = response.data;
-        let offersFarm = responseFarmCatalogs?.offers ?? [];
+        let offersFarm: OfferDTO[] = responseFarmCatalogs?.offers ?? [];
         offersFarm = offersFarm.filter(
           (offer: OfferDTO) =>
             offer.amount >= mapQuantity[offer.product.pricing]
         );
-
         if (offersFarm.length == 0) {
           setHasMore(false);
           return;
         }
 
+        offersFarm = offersFarm.map((offer) => { return { ...offer, farm: responseFarmCatalogs?.farm as FarmDTO} });
+        
         const newOffers = [...offers, ...offersFarm];
         setOffers(newOffers as OfferDTO[]);
         const nextPage = page + 1;

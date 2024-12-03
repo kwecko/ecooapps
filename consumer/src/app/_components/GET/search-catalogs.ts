@@ -18,5 +18,8 @@ export async function searchCatalogs({
       product ? `&product=${product}` : ""
     }`,
   });
+
+  console.log("response");
+  console.log(response);
   return response;
 }

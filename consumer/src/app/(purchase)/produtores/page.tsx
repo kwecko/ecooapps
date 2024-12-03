@@ -1,6 +1,6 @@
 "use client";
 
-import { searchCatalogs } from "@consumer/_actions/catalogs/GET/search-catalogs";
+import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -31,9 +31,7 @@ export default function Produtores() {
         }
       } catch {
         handleError("Erro desconhecido.");
-      } finally {
-        setIsLoading(false);
-      }
+      } 
     })();
   }, []);
 
@@ -46,21 +44,23 @@ export default function Produtores() {
       : "livre";
 
     const cycle = cycles.find(
-      (cycle) => cycle.alias.toLocaleLowerCase() == typeCycle
+      (cycle) => cycle.alias.toLowerCase() == typeCycle
     );
-
     if (!cycle) {
       setIsLoading(false);
       return;
     }
 
     setCycleId(cycle.id as string);
+    localStorage.setItem("selected-cycle", JSON.stringify(cycle));
 
     try {
       const response = await searchCatalogs({
         cycle_id: cycle.id as string,
         page: page,
       });
+      console.log("response");
+      console.log(response);
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
