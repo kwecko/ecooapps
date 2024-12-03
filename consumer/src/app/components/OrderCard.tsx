@@ -2,15 +2,16 @@ import { useCartProvider } from "@consumer/context/cart";
 import { useEffect, useState } from "react";
 
 import { ProductCard } from "@consumer/app/components/ProductCard";
-import { OfferDTO } from "@shared/interfaces/dtos";
+import { FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { FaRegTrashCan } from "react-icons/fa6";
 
 interface OrderCardProps {
   offer: OfferDTO;
+  farm: FarmDTO;
   exclude: boolean;
 }
 
-export default function OrderCard({ offer, exclude = false }: OrderCardProps) {
+export default function OrderCard({ offer, farm, exclude = false }: OrderCardProps) {
   const [count, _setCount] = useState(0);
 
   const setCount = (value: number) => {
@@ -40,6 +41,7 @@ export default function OrderCard({ offer, exclude = false }: OrderCardProps) {
     } else {
       addOrder({
         offer,
+        farm,
         amount: value,
       });
     }

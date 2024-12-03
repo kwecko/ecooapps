@@ -6,9 +6,8 @@ import Modal from "@shared/components/Modal";
 import { formatPrice } from "@shared/utils/format-price";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 import { useCartProvider } from "../../../context/cart";
-import { RiArrowDownSLine } from "react-icons/ri";
-import { RiArrowUpSLine } from "react-icons/ri";
 
 export default function FinalizarCompras() {
   const router = useRouter();
@@ -43,7 +42,7 @@ export default function FinalizarCompras() {
 
   useEffect(() => {
     const groupedByFarm = cart.reduce((acc, item) => {
-      const farmId = item.offer.farm.id;
+      const farmId = item.farm.id;
       if (!acc[farmId]) {
         acc[farmId] = [];
       }
@@ -51,6 +50,7 @@ export default function FinalizarCompras() {
       return acc;
     }, {} as Record<string, typeof cart>); //
 
+    setOpenFarmIds(Object.keys(groupedByFarm));
     setCartByFarm(groupedByFarm);
   }, [cart]);
 
@@ -66,7 +66,7 @@ export default function FinalizarCompras() {
                       onClick={() => toggleAccordion(farmId)}
                       className="w-full flex items-center gap-1.5 font-poppins text-xs font-normal"
                     >
-                      <span>{cartByFarm[farmId][0].offer.farm.name}</span>
+                      <span>{cartByFarm[farmId][0].farm.name}</span>
                       <span>
                         {openFarmIds.includes(farmId) ? (
                           <RiArrowDownSLine />
@@ -83,6 +83,7 @@ export default function FinalizarCompras() {
                           <OrderCard
                             key={index}
                             offer={product.offer}
+                            farm={product.farm}
                             exclude={true}
                           />
                         );

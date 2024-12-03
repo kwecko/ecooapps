@@ -1,9 +1,10 @@
 "use client";
-import { OfferDTO } from "@shared/interfaces/dtos";
+import { FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { ReactNode, createContext, useContext, useState } from "react";
 
 interface OrderSchema {
   offer: OfferDTO;
+  farm: FarmDTO;
   amount: number;
 }
 
