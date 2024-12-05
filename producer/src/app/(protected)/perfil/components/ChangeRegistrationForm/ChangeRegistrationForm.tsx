@@ -128,8 +128,8 @@ export default function ChangeRegistrationForm() {
           />
           <CustomInput
             register={{ ...register("tally") }}
-            placeholder="Número do Talão"
-            label="Número do Talão"
+            placeholder="Inscrição estadual"
+            label="Inscrição estadual"
             inputMode="numeric"
             type="text"
             mask="tally"
@@ -161,6 +161,7 @@ export default function ChangeRegistrationForm() {
               {Array.from({ length: 4 }).map((_, index) => (
                 <Image
                   id={`photo-${index}`}
+                  key={index}
                   priority
                   src="/producer.jpeg"
                   alt="User"
