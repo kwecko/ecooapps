@@ -1,5 +1,4 @@
 import { forwardRef } from "react";
-import { AiOutlineEye } from "react-icons/ai";
 
 import CustomInput from "@shared/components/CustomInput";
 
@@ -25,7 +24,6 @@ const ChangePasswordForm = forwardRef<HTMLFormElement, ChangePasswordFormProps>(
             register={{ ...register("password") }}
             placeholder="Digite sua senha"
             label="Nova senha"
-            icon={<AiOutlineEye />}
             type="password"
             errorMessage={errors.password?.message}
           />
@@ -33,7 +31,6 @@ const ChangePasswordForm = forwardRef<HTMLFormElement, ChangePasswordFormProps>(
             register={{ ...register("confirmPassword") }}
             placeholder="Digite sua senha"
             label="Confirmar senha"
-            icon={<AiOutlineEye />}
             type="password"
             errorMessage={errors.confirmPassword?.message}
           />
