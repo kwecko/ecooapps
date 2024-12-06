@@ -7,7 +7,7 @@ import Title from "@admin/app/components/Title";
 
 import { listFarms } from "@admin/_actions/farms/GET/list-farms";
 
-import SearchInput from "@shared/components/SearchInput";
+import SearchInput from "@admin/app/components/SearchInput";
 import PagingButton from "@shared/components/PagingButton";
 import EmptyBox from "@shared/components/EmptyBox"
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -25,6 +25,7 @@ export default function page() {
   const [isLoading, setIsLoading] = useState(false);
   const debounceSearch = useDebounce(name);
   const { handleError } = useHandleError();
+  const [isChange, setIsChange] = useState<boolean>(false);
 
   const backPage = () => {
     if (page > 1) {
@@ -52,30 +53,26 @@ export default function page() {
           handleError(response.message);
         }
         setFarms(response.data);
-        setTotalItems(response.data.length);
-        console.log(totalItems);
+        setTotalItems(response.data?.length);
         setIsLoading(false);
       });
     })();
-  }, [page, debounceSearch])
+  }, [page, debounceSearch, isChange]);
 
   return (
     <div className="w-full flex flex-col h-full gap-6">
       <div className="flex w-full items-center justify-between pt-8">
         <Title>Produtores</Title>
         <div className="w-2/5">
-          <SearchInput onChange={setName} />
+          <SearchInput placeholder={"Filtrar por agronegócio"} onChange={setName} />
         </div>
       </div>
-      {isLoading ? (
-        <Loader className="mt-3" loaderType="component" />
-      ) : debounceSearch && farms?.length === 0 ? (
-        <EmptyBox type="search"/>
-      ) : farms?.length === 0 ? (
-        <EmptyBox type="producer"/>
-      ) : (
+      {isLoading && <Loader className="mt-3" loaderType="component" />}
+      {!isLoading && debounceSearch && farms?.length === 0 && <EmptyBox type="search" />}
+      {!isLoading && farms?.length === 0 && <EmptyBox type="producer" />}
+      {!isLoading && farms?.length > 0 && (
         <div className="rounded-xl w-full h-full">
-          <ProducerTable farms={farms}/>
+          <ProducerTable farms={farms} isChange={isChange} setIsChange={setIsChange} />
         </div>
       )}
       <div className="flex flex-col items-center">

@@ -13,10 +13,10 @@ export default function EmptyBox({ type }: EmptyBoxProps) {
   const [boxText, setBoxText] = useState("");
 
   useEffect(() => {
-    if (type == "search") {
+    if (type === "search") {
       setBoxText("Não encontramos resultados para a sua pesquisa.");
       return;
-    } else if (type == "producer") {
+    } if (type === "producer") {
       setBoxText("Nenhum produtor encontrado.");
       return;
     }

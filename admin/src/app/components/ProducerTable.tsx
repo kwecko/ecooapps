@@ -15,9 +15,12 @@ import producer from '@shared/assets/images/producer.png';
 
 interface ProducerTableProps {
   farms?: FarmDTO[];
+  isChange: boolean;
+  setIsChange: (value: boolean) => void;
+  className?: string;
 }
 
-export default function ProducerTable({ farms }: ProducerTableProps) {
+export default function ProducerTable({ farms, isChange, setIsChange, className }: ProducerTableProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [selectedFarm, setSelectedFarm] = useState<FarmDTO | null>(null);
   const router = useRouter();
@@ -33,14 +36,15 @@ export default function ProducerTable({ farms }: ProducerTableProps) {
     if (!selectedFarm) return;
     handleFarmStatus({ farm_id: selectedFarm.id, status });
     setIsOpen((prevState) => !prevState);
-    router.push('/');
+    setIsChange(!isChange);
+    router.push("/produtores");
   };
 
   const getColorStatus = (status: "ACTIVE" | "PENDING" | "INACTIVE") => {
     if (status === "ACTIVE") return "bg-rain-forest";
     else if (status === "INACTIVE") return "bg-error";
     return "bg-steel-shadow";
-  }
+  };
 
   const headers = [
     { label: "Foto" },
@@ -78,7 +82,9 @@ export default function ProducerTable({ farms }: ProducerTableProps) {
 
   return (
     <>
-      <OrderTable type="admin" headers={headers} info={info} onRowClick={handleRowClick} />
+      <div className={className}>
+        <OrderTable type="admin" headers={headers} info={info} onRowClick={handleRowClick} />
+      </div>
       {selectedFarm && (
         <ModalV2
           isOpen={isOpen}

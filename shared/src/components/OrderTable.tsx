@@ -9,8 +9,8 @@ const styles = {
     "truncate text-battleship-gray font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
   itemBody: "border-b border-theme-background truncate font-inter text-grayish-blue p-3 text-left",
   itemHeaderAdmin:
-    "truncate text-theme-primary font-inter border-b border-theme-background p-3 text-xs font-semibold text-left",
-  itemBodyAdmin: "border-b border-theme-background truncate font-inter text-theme-primary p-3 text-left",
+    "truncate text-theme-primary font-inter border-b border-theme-[#9BA5B7] pl-3 pb-2 text-base font-semibold text-left",
+  itemBodyAdmin: "border-b border-theme-[#9BA5B7] truncate font-inter text-theme-primary pl-3 text-left",
 };
 
 interface OrderTableProps {
@@ -26,7 +26,7 @@ interface OrderTableProps {
 const OrderTable = ({ headers, info, type, onRowClick }: OrderTableProps) => {
   if (type === "admin") {
     return (
-      <div className="flex bg-white rounded-2xl pt-4 gap-1">
+      <div className="flex bg-white rounded-2xl pt-2 gap-1">
         <div className="w-full max-h-152 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           <table className="w-full border-collapse">
             <thead className="sticky top-0 bg-white z-10">

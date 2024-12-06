@@ -1,6 +1,6 @@
 "use server";
 
-import ApiService from "@shared/service/index";
+import ApiService from "@shared/service";
 
 interface ListFarmsRequest {
   page: number;
