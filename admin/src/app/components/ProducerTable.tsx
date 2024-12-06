@@ -71,7 +71,7 @@ export default function ProducerTable({ farms, isChange, setIsChange, className 
         {
           detail: (
             <Button
-              className={`flex ${getColorStatus(item.status)} text-white justify-center items-center w-25 h-9 text-sm font-semibold rounded-full`}
+              className={`flex ${getColorStatus(item.status)} text-white justify-center items-center w-24 h-9 text-sm font-semibold rounded-full`}
             >
               {convertStatus(item.status).name}
             </Button>
