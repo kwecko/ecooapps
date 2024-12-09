@@ -78,30 +78,12 @@ export default function SendBagMiniTable() {
         if (response.message) {
           handleError(response.message);
         } else {
-          const statusName =
-            status === "RECEIVED"
-              ? "entregue"
-              : status === "DEFERRED"
-              ? "retornada"
-              : "enviada";
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: `A oferta foi ${statusName}!`,
-              description: `A sacola do cliente foi ${statusName}.`,
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: "/enviar-sacola",
-                  name: "Enviar outra sacola",
-                },
-              },
-            })
-          );
-          router.push(`/sucesso`);
+          const statusName = bagStatusOptions.find(
+            (option) => option.value === status
+          )?.label.toLowerCase();
+              
+          toast.success(`A sacola foi ${statusName} com sucesso!`);
+          router.push("/enviar-sacola");
         }
       })
       .catch(() => {
@@ -176,7 +158,9 @@ export default function SendBagMiniTable() {
             ) : (
               <>
                 <span className="text-center mt-6 text-slate-gray">
-                  Sacola já entregue!
+                  {`Sacola já ${bagStatusOptions
+                    .find((option) => option.value === bagOrder.status)
+                    ?.label.toLowerCase()}`}
                 </span>
               </>
             )}
