@@ -5,6 +5,22 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 :root {
   --footer-height: 7.5dvh;
   --max-page-height: 100dvh;
@@ -38,7 +54,7 @@ a {
   --color-home-background: #2f4a4d;
   --color-highlight: #00735e;
   --color-primary: #545f71;
-  --color-secondary: #eef1f4;
+  --color-secondary: #9ba5b7;
   --color-background: #f7f7f7;
 }
 
