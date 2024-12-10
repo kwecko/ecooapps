@@ -25,9 +25,9 @@ export function middleware(request: NextRequest) {
 
   const access_token = request.cookies.get("admin_token")?.value;
 
-  if ((PROTECTED_PAGES.includes(pathname)) && !access_token) {
-    return NextResponse.redirect(new URL("/login", request.url));
-  }
+  // if ((PROTECTED_PAGES.includes(pathname)) && !access_token) {
+  //   return NextResponse.redirect(new URL("/login", request.url));
+  // }
 
   if (PAGES_IN_CONSTRUCTION.includes(pathname)) {
     return NextResponse.redirect(new URL("/em-construcao", request.url));

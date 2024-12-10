@@ -20,6 +20,7 @@ const config: Config = {
         },
         "french-gray": "#D1D1D6",
         "slate-blue": "#507080",
+        "steel-blue-gray": "#9BA5B7",
         "slate-gray": "#2F4A4D",
         "rain-forest": "#00735E",
         "ocean-blue": "#229ED9",

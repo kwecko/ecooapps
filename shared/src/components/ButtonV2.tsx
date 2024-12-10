@@ -24,9 +24,9 @@ interface StyleClasses {
 const styles: StyleClasses = {
   default: "w-full p-3 font-semibold rounded-lg text-base relative",
   variant: {
-    default: "text-white bg-theme-default mt-6",
+    default: "text-white bg-theme-default",
     light: "text-theme-default bg-white",
-    transparent: "text-theme-default mt-6",
+    transparent: "text-theme-default",
   },
   border: "border-theme-default border-2",
 };
