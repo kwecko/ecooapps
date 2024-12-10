@@ -4,6 +4,7 @@ import { twMerge } from "tailwind-merge";
 interface TableHeaderCellProps
   extends React.ThHTMLAttributes<HTMLTableCellElement> {
   children: ReactNode;
+  className?: string;
 }
 
 export default function TableHeaderCell({
@@ -11,10 +12,14 @@ export default function TableHeaderCell({
   ...rest
 }: TableHeaderCellProps) {
   return (
-    <th {...rest} className={twMerge("flex flex-col justify-center items-center w-full h-full px-2.5 py-1 font-semibold text-xs", rest.className)}>
-      <div className="w-full">
-        {children}
-      </div>
+    <th
+      {...rest}
+      className={twMerge(
+        "flex flex-col justify-center items-center h-11.5 font-semibold text-xs lg:text-base lg:text-theme-primary lg:leading-5.5 lg:items-start lg:pl-4",
+        rest.className
+      )}
+    >
+      <div className="">{children}</div>
     </th>
   );
 }

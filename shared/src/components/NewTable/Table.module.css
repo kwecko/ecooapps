@@ -1,23 +1,24 @@
 /* Apply border radius to the first tr in thead if thead exists */
 .table:has(thead) thead tr:first-of-type {
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
 }
 
 /* Apply border radius to the first tr in tbody if thead does not exist */
 .table:not(:has(thead)) tbody tr:first-of-type {
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
 }
 
 /* Apply border radius to the last tr in tbody */
 .table tbody tr:last-of-type {
-    border-bottom-left-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
 }
 
-.table tbody tr, .table thead tr {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: 1fr;
+.table tbody tr,
+.table thead tr {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
 }
