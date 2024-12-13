@@ -7,8 +7,10 @@ import { toast } from "sonner";
 import HeaderDetail from "./HeaderDetail";
 
 import { fetchBox } from "@cdd/_actions/boxes/GET/fetch-box";
+import { handleBoxStatus } from "@cdd/_actions/boxes/PATCH/handle-box-status";
 
 import TableSkeleton from "@shared/components/TableSkeleton";
+import Loader from "@shared/components/Loader";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { BoxMergeDTO } from "@shared/interfaces/dtos";
@@ -17,11 +19,11 @@ import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
 import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
 export default function FarmOrdersTable() {
-  const router = useRouter();
   const { box_id } = useParams();
 
   const [farmOrders, setFarmOrders] = useState<BoxMergeDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOrdersLoading, setIsOrdersLoading] = useState(false);
 
   const { handleError } = useHandleError();
   const { getFromStorage } = useLocalStorage();
@@ -30,36 +32,83 @@ export default function FarmOrdersTable() {
     notFound();
   }
 
-  useEffect(() => {
-    (async () => {
-      const cycle = getFromStorage("selected-cycle");
+  const fetchBoxData = async () => {
+    const cycle = getFromStorage("selected-cycle");
 
-      if (!cycle) {
-        toast.error("Selecione um ciclo para receber ofertas!");
-        return;
-      }
+    if (!cycle) {
+      toast.error("Selecione um ciclo para receber ofertas!");
+      return;
+    }
 
-      await fetchBox({
-        box_id: box_id as string,
+    await fetchBox({
+      box_id: box_id as string,
+    })
+      .then((response: any) => {
+        if (response.message) {
+          const messageError = response.message as string;
+          handleError(messageError);
+        } else if (response.data) {
+          setFarmOrders(response.data);
+          return;
+        }
       })
-        .then((response: any) => {
-          if (response.message) {
-            const messageError = response.message as string;
+      .catch((error) => {
+        toast.error(error);
+      });
+  };
 
-            handleError(messageError);
-          } else if (response.data) {
-            setFarmOrders(response.data);
-            return;
-          }
-        })
-        .catch((error) => {
-          toast.error(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    })();
+  useEffect(() => {
+    fetchBoxData().finally(() => {
+      setIsLoading(false);
+    });
   }, [box_id]);
+
+  const handleApproveFarmOffer = async (order_id: string) => {
+    setIsOrdersLoading(true);
+
+    await handleBoxStatus({
+      box_id: box_id as string,
+      order_id: order_id as string,
+      status: "RECEIVED",
+    })
+      .then(async (response) => {
+        if (response.message) {
+          handleError(response.message);
+        } else {
+          toast.success("Oferta aprovada com sucesso!");
+          await fetchBoxData();
+        }
+      })
+      .catch(() => {
+        toast.error("Erro desconhecido.");
+      })
+      .finally(() => {
+        setIsOrdersLoading(false);
+      });
+  };
+
+  const handleRejectFarmOffer = async (order_id: string) => {
+    setIsOrdersLoading(true);
+    await handleBoxStatus({
+      box_id: box_id as string,
+      order_id: order_id as string,
+      status: "CANCELLED",
+    })
+      .then(async (response) => {
+        if (response.message) {
+          handleError(response.message);
+        } else {
+          toast.success("Oferta rejeitada com sucesso!");
+          await fetchBoxData();
+        }
+      })
+      .catch(() => {
+        toast.error("Erro desconhecido.");
+      })
+      .finally(() => {
+        setIsOrdersLoading(false);
+      });
+  };
 
   if (isLoading) {
     return <TableSkeleton />;
@@ -100,12 +149,17 @@ export default function FarmOrdersTable() {
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
       />
-
-      <IndividualProductTable
-        headers={headers}
-        info={info}
-        farmOrders={farmOrders}
-      />
+      {isOrdersLoading ? (
+        <Loader className="mt-3" loaderType="component" />
+      ) : (
+        <IndividualProductTable
+          headers={headers}
+          info={info}
+          farmOrders={farmOrders}
+          onApprove={handleApproveFarmOffer}
+          onReject={handleRejectFarmOffer}
+        />
+      )}
     </div>
   );
 }
