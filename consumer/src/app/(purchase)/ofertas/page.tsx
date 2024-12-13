@@ -1,16 +1,20 @@
 "use client";
-import { fetchCatalog } from "@consumer/app/_components/GET/fetch-catalog";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import OrderCard from "@consumer/app/components/OrderCard";
+import { fetchCatalog } from "@consumer/app_producer_screen/_components/GET/fetch-catalog";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogMergeDTO, FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
 export default function Ofertas() {
-  const params = useParams();
+
+  const searchParams = useSearchParams();
+  const data = searchParams.get('data');
+  const params = data ? JSON.parse(decodeURIComponent(data as string)) : null;
+
 
   const [offers, setOffers] = useState([] as OfferDTO[]);
   const [farm, setFarm] = useState({} as FarmDTO);
@@ -51,6 +55,7 @@ export default function Ofertas() {
           (offer: OfferDTO) =>
             offer.amount >= mapQuantity[offer.product.pricing]
         );
+
         if (offersFarm.length == 0) {
           setHasMore(false);
           return;
