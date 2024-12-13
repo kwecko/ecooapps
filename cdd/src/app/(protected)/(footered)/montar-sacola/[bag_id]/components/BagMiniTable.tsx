@@ -53,80 +53,40 @@ export default function BagMiniTable() {
   }, [bag_id]);
 
   const handleStatusBag = (bag_id: string, status: BagStatus["build"]) => {
-    if (status === "PENDING") {
-      handleBag({
-        bag_id,
-        status: "SEPARATED",
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string;
-
-            handleError(messageError);
-          } else {
-            sessionStorage.setItem(
-              "data-sucess",
-              JSON.stringify({
-                title: "A sacola está pronta!",
-                description: "A sacola do cliente está pronta.",
-                button: {
-                  secondary: {
-                    router: "/",
-                    name: "Voltar para a tela inicial",
-                  },
-                  primary: {
-                    router: "/montar-sacola",
-                    name: "Enviar sacola agora",
-                  },
-                },
-              })
-            );
-
-            router.push("/sucesso");
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-        });
-    } else if (status === "SEPARATED") {
-      handleBag({
-        bag_id,
-        status: "PENDING",
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string;
-
-            handleError(messageError);
-          } else {
-            sessionStorage.setItem(
-              "data-sucess",
-              JSON.stringify({
-                title: "A sacola foi alterada!",
-                description:
-                  "A sacola do cliente está pendente para ser montada",
-                button: {
-                  secondary: {
-                    router: "/",
-                    name: "Voltar para a tela inicial",
-                  },
-                  primary: {
-                    router: "/montar-sacola",
-                    name: "Enviar sacola agora",
-                  },
-                },
-              })
-            );
-
-            router.push("/sucesso");
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-        });
+    const statusConfig = {
+      PENDING: {
+        nextStatus: "SEPARATED",
+        successMessage: "Sacola preparada com sucesso!",
+      },
+      SEPARATED: {
+        nextStatus: "PENDING",
+        successMessage: "A sacola foi alterada com sucesso!",
+      }
+    };
+  
+    const config = statusConfig[status];
+    
+    if (!config) {
+      return;
     }
+
+    handleBag({
+      bag_id,
+      status: config.nextStatus as BagStatus["build"]
+    })
+      .then((response) => {
+        if (response.message) {
+          handleError(response.message);
+          return;
+        }
+        
+        toast.success(config.successMessage);
+        router.push("/montar-sacola");
+      })
+      .catch((error) => {
+        console.error("Erro ao atualizar status da sacola:", error);
+        toast.error("Erro ao atualizar status da sacola. Tente novamente.");
+      });
   };
 
   return (
