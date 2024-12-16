@@ -1,7 +1,7 @@
 "use client";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import OrderCard from "@consumer/app/components/OrderCard";
-import { fetchCatalog } from "@consumer/app_producer_screen/_components/GET/fetch-catalog";
+import { fetchCatalog } from "@consumer/app/_components/GET/fetch-catalog";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogMergeDTO, FarmDTO, OfferDTO } from "@shared/interfaces/dtos";

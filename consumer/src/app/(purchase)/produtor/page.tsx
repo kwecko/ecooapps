@@ -1,6 +1,5 @@
 "use client";
 
-import { Catalog } from "@consumer/app/_actions/fetch-catalogs";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import ModalV2 from "@shared/components/ModalV2";
 import Image, { ImageLoader } from "next/image";
@@ -8,6 +7,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import FarmPhotos from "./components/FarmPhotos";
+import { CatalogDTO } from "@shared/interfaces/dtos";
 
 export default function Produtor() {
   const searchParams = useSearchParams();
@@ -15,7 +15,7 @@ export default function Produtor() {
 
   const [showPhotos, setShowPhotos] = useState(false);
 
-  const catalog: Catalog = data
+  const catalog: CatalogDTO = data
     ? JSON.parse(decodeURIComponent(data as string)).catalog
     : null;
 
