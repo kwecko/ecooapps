@@ -47,7 +47,7 @@ export default function page() {
             label="Data inicial"
           />
           <DateInput
-            label="Data inicial"
+            label="Data final"
           />
         </div>
         
