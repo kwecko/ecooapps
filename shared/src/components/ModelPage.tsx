@@ -11,7 +11,7 @@ interface ConfirmationPageProps {
   subtitleClassName?: string;
   buttonArea?: React.ReactNode;
   children?: React.ReactNode;
-  overflowAuto?: boolean
+  overflowAuto?: boolean;
 }
 
 export function ModelPage({
@@ -22,12 +22,17 @@ export function ModelPage({
   subtitleClassName,
   buttonArea,
   children,
-  overflowAuto
+  overflowAuto,
 }: ConfirmationPageProps): React.JSX.Element {
-  const overflow = overflowAuto ? 'overflow-y-auto' : "overflow-hidden"
+  const overflow = overflowAuto ? "overflow-y-auto" : "overflow-hidden";
 
   return (
-    <div className={twMerge("w-full h-[inherit] shrink-0 p-4 pt-5 pb-4 flex flex-col justify-stretch items-center gap-4 text-theme-default overflow-hidden bg-theme-background ", overflow)}>
+    <div
+      className={twMerge(
+        "w-full h-inherit shrink-0 p-4 pt-5 pb-4 flex flex-col justify-stretch items-center gap-4 text-theme-default overflow-hidden bg-theme-background ",
+        overflow
+      )}
+    >
       {title && (
         <div
           className={twMerge(
@@ -44,7 +49,12 @@ export function ModelPage({
             {title}
           </h1>
           {subtitle && (
-            <h2 className={twMerge("pb-0 px-8 text-sm font-medium text-center",subtitleClassName)}>
+            <h2
+              className={twMerge(
+                "pb-0 px-8 text-sm font-medium text-center",
+                subtitleClassName
+              )}
+            >
               {subtitle}
             </h2>
           )}

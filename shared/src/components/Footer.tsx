@@ -1,26 +1,23 @@
 "use client";
 
+import InfoModal from "@shared/components/InfoModal";
+import { getFooteredPageInfo } from "@shared/utils/data/footered-pages-info";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
-import { getFooteredPageInfo } from "@shared/utils/data/footered-pages-info";
-import InfoModal from "@shared/components/InfoModal";
 
 import Button from "./Button";
 
-const PagesWithGenericParams = ['aguardando-aprovacao', 'perfil-rejeitado'];
+const PagesWithGenericParams = ["aguardando-aprovacao", "perfil-rejeitado"];
 
-export default function Footer({
-  appID,
-}: {
-  appID: string;
-}) {
+export default function Footer({ appID }: { appID: string }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const convertPathname = (path: string) => {
-    const uuidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
+    const uuidRegex =
+      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
     const params = path.split("/");
 
@@ -29,7 +26,7 @@ export default function Footer({
       if (PagesWithGenericParams.includes(param)) return "[generic]";
       return param;
     });
-  
+
     return convertedParams.join("/");
   };
 
@@ -37,22 +34,27 @@ export default function Footer({
 
   const footerPageInfo = getFooteredPageInfo(appID)[convertedPathname];
 
-  if(!footerPageInfo) {
+  if (!footerPageInfo) {
     throw new Error("Error when fetching footer information");
   }
 
-  const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } = footerPageInfo;
+  const { hasPreviousPage, returnPath, hasHelpButton, helpInfo } =
+    footerPageInfo;
 
   if (!hasPreviousPage && !hasHelpButton) {
     throw new Error("Footer component must have at least one button");
   }
 
   if (hasPreviousPage && !returnPath) {
-    throw new Error("Footer component must have a return path if hasPreviousPage is true");
+    throw new Error(
+      "Footer component must have a return path if hasPreviousPage is true"
+    );
   }
 
   if (hasHelpButton && !helpInfo) {
-    throw new Error("Footer component must have help info if hasHelpButton is true");
+    throw new Error(
+      "Footer component must have help info if hasHelpButton is true"
+    );
   }
 
   const handleReturn = () => {
@@ -64,10 +66,11 @@ export default function Footer({
   };
 
   const ReturnButton = () => (
-    <Link href={returnPath ? returnPath : "#"} className="flex items-center">
-      <LuChevronLeft
-        className="w-7.5 h-7.5 text-theme-default"
-      />
+    <Link
+      href={returnPath ? returnPath : "#"}
+      className="flex items-center -translate-y-1 gap-1.25"
+    >
+      <LuChevronLeft className="w-7.5 h-7.5 text-theme-default" />
       <Button
         className={
           "flex items-center gap-2 text-sm font-medium text-theme-default w-auto"
@@ -83,7 +86,7 @@ export default function Footer({
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
-  }
+  };
 
   const HelpButton = () => (
     <InfoModal
@@ -92,7 +95,10 @@ export default function Footer({
       icon="?"
       titleCloseModal={helpInfo?.closeButtonText || ""}
       buttonOpenModal={
-        <button className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full justify-center text-white text-3xl leading-5.5 font-normal self-center" onClick={handleOpenModal}>
+        <button
+          className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full justify-center text-white text-3xl leading-5.5 font-normal self-center -translate-y-3.5"
+          onClick={handleOpenModal}
+        >
           ?
         </button>
       }
@@ -115,7 +121,7 @@ export default function Footer({
     <>
       {hasPreviousPage || hasHelpButton ? (
         <div
-          className={`flex w-full items-center ${justify()} w-full p-5
+          className={`flex w-full items-center ${justify()} w-full p-5 pr-4.5 pl-3.5
           static bottom-0 h-[var(--footer-height)] bg-theme-background z-50
           `}
         >

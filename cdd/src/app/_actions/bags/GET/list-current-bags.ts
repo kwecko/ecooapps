@@ -2,31 +2,32 @@
 
 import ApiService from "@shared/service";
 
-interface ListCurrentBagsRequest {
+type BagStatus =
+  | "PENDING"
+  | "SEPARATED"
+  | "DISPATCHED"
+  | "RECEIVED"
+  | "DEFERRED"
+  | "CANCELLED";
+
+export interface ListCurrentBagsRequest {
   page: number;
   cycle_id: string;
-  statuses: (
-    | "PENDING"
-    | "SEPARATED"
-    | "DISPATCHED"
-    | "RECEIVED"
-    | "DEFERRED"
-    | "CANCELLED"
-  )[];
-  name?: string;
+  statuses: BagStatus[];
+  user?: string;
 }
 
 export async function listCurrentBags({
   page,
   cycle_id,
   statuses,
-  name,
+  user,
 }: ListCurrentBagsRequest) {
   const statusParams = statuses
     .map((singleStatus) => `${singleStatus}`)
     .join(",");
   const url = `/bags/current?page=${page}&cycle_id=${cycle_id}&statuses=${statusParams}${
-    name ? `&name=${name}` : ""
+    user ? `&user=${user}` : ""
   }`;
 
   const response = ApiService.GET({

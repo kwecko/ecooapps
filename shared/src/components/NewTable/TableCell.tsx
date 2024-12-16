@@ -11,7 +11,7 @@ export default function TableCell({ children, ...rest }: TableCellProps) {
     <td
       {...rest}
       className={twMerge(
-        "flex justify-center items-center text-base leading-5.5 tracking-tight-2 font-normal text-theme-primary overflow-x-hidden lg:justify-start lg:pl-4",
+        "px-2.5 h-11.5 flex justify-center items-center text-base leading-5.5 tracking-tight-2 font-normal text-theme-primary overflow-x-hidden lg:justify-start lg:pl-4",
         rest.className
       )}
     >

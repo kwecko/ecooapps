@@ -7,14 +7,13 @@ interface MiniTableHeaderCellProps
   children: ReactNode;
 }
 
-export default function MiniTableHeaderCell({ children,
+export default function MiniTableHeaderCell({
+  children,
   className,
-  ...rest }: MiniTableHeaderCellProps) {
+  ...rest
+}: MiniTableHeaderCellProps) {
   return (
-    <th
-      {...rest}
-      className={twMerge("text-left font-normal", className)}
-    >
+    <th {...rest} className={twMerge("text-left font-normal", className)}>
       {children}
     </th>
   );

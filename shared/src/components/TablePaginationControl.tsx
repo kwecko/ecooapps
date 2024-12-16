@@ -2,8 +2,17 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { twMerge } from "tailwind-merge";
 
-export default function TablePaginationControl() {
+interface TablePaginationControlProps
+  extends React.HTMLAttributes<HTMLDivElement> {
+  className?: string;
+}
+
+export default function TablePaginationControl({
+  className,
+  ...rest
+}: TablePaginationControlProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -17,7 +26,13 @@ export default function TablePaginationControl() {
     return params.toString();
   };
   return (
-    <div className="gap-5 flex items-center text-theme-primary font-semibold font-inter font-base leading-5.5 tracking-tight-2">
+    <div
+      {...rest}
+      className={twMerge(
+        "gap-5 flex items-center text-theme-primary font-semibold font-inter font-base leading-5.5 tracking-tight-2",
+        className
+      )}
+    >
       {prev && (
         <Link
           href={{
