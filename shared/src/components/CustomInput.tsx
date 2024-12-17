@@ -5,6 +5,8 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { Masks } from "@shared/types/register";
 import { maskCellphone, maskCPF, maskTally } from "@shared/utils/index";
 
+import React from "react";
+import { twMerge } from "tailwind-merge";
 import InfoModal from "./InfoModal";
 
 interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -13,6 +15,7 @@ interface CustomInputProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegisterReturn;
   type?: string;
   mask?: Masks;
+  disabled?: boolean;
 }
 
 export default function CustomInput({
@@ -22,6 +25,7 @@ export default function CustomInput({
   type,
   mask,
   maxLength,
+  disabled,
   ...inputProps
 }: CustomInputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -71,9 +75,13 @@ export default function CustomInput({
           <input
             {...register}
             onChange={handleInputChange}
-            className="w-full rounded-lg border border-slate-gray px-3 h-12 text-slate-gray focus:outline-none"
+            className={twMerge(
+              "w-full rounded-lg border border-slate-gray px-3 h-12 text-slate-gray focus:outline-none",
+              disabled && "bg-gray-100 cursor-not-allowed text-gray-500"
+            )}
             type={type === "password" && showPassword ? "text" : type}
             {...inputProps}
+            disabled={disabled}
           />
           {type === "password" && (
             <button
