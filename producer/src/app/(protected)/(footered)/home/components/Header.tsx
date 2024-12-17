@@ -48,13 +48,11 @@ export function Header() {
         ) : (
           <span className="flex gap-1 items-center text-slate-gray">
             Olá,{" "}
-            <Link href={"/alterar-cadastro"}>
+            <Link href={"/perfil"} className="flex gap-1 items-center">
               <strong className="font-semibold underline underline-offset-2">
                 {name}!
               </strong>
-            </Link>
-            <Link href={"/alterar-cadastro"}>
-              <HiOutlinePencilAlt size={16} />
+              <HiOutlinePencilAlt size={18} />
             </Link>
           </span>
         )}
