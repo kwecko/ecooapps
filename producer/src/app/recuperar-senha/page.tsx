@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 
 import Loading from "@producer/app/loading";
+import { requestPasswordUpdate } from "@shared/_actions/auth/POST/request-password-update";
 import { schemaForgotPassword } from "@shared/schemas/forgot-password";
 
 import { zodResolver } from "@hookform/resolvers/zod";

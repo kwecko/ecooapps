@@ -4,12 +4,22 @@ import SkeletonLoader from "@shared/components/SkeletonLoader";
 import useFetchProfile from "@shared/hooks/users/useFetchProfile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
 import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
 export function Header() {
   const {
     data: { first_name },
     isLoading,
   } = useFetchProfile();
+=======
+import { useEffect, useState } from "react";
+import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
+import { toast } from "sonner";
+
+export function Header() {
+  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+>>>>>>> develop
 
   const router = useRouter();
 
@@ -18,20 +28,22 @@ export function Header() {
   };
 
   return (
-    <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 pb-2.5 top-0 z-10 bg-theme-background">
+    <header className="w-full flex items-start justify-between px-3 text-lg leading-5.5 top-0 z-10 bg-theme-background pb-2.5">
       <div className="flex-shrink">
         {isLoading ? (
           <SkeletonLoader />
         ) : (
           <span className="flex gap-1 items-center text-slate-gray">
             Olá,{" "}
-            <Link href={"/alterar-cadastro"}>
+            <Link href={"/perfil"} className="flex gap-1 items-center">
               <strong className="font-semibold underline underline-offset-2">
+<<<<<<< HEAD
                 {first_name}!
+=======
+                {name}!
+>>>>>>> develop
               </strong>
-            </Link>
-            <Link href={"/alterar-cadastro"}>
-              <HiOutlinePencilAlt size={16} />
+              <HiOutlinePencilAlt size={18} />
             </Link>
           </span>
         )}

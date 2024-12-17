@@ -3,18 +3,28 @@ import { useCookies } from "react-cookie";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { updateUser } from "@shared/_actions/users/PATCH/update-user";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { UserDTO } from "@shared/interfaces/dtos";
-
-interface ChangePasswordSchema extends UserDTO {
-  password: string;
-  confirmPassword: string;
-}
+import {
+  changePasswordSchema,
+  ChangePasswordSchema,
+} from "@shared/schemas/change-password";
 
 export const useChangePasswordForm = (token: string) => {
   const { handleError } = useHandleError();
-  const { register, handleSubmit, reset } = useForm<ChangePasswordSchema>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<ChangePasswordSchema>({
+    resolver: zodResolver(changePasswordSchema),
+    mode: "onChange",
+    defaultValues: {
+      password: "",
+      confirmPassword: "",
+    },
+  });
   const [_, setCookies, removeCookie] = useCookies();
 
   useEffect(() => {
@@ -22,19 +32,11 @@ export const useChangePasswordForm = (token: string) => {
   }, [token]);
 
   const handleSubmitForm = async (data: ChangePasswordSchema) => {
-    Object.keys(data).forEach((key) => {
-      if (!data[key as keyof ChangePasswordSchema]) {
-        delete data[key as keyof ChangePasswordSchema];
-      }
-    });
-
-    if (data.password && data.password.length < 8) {
-      toast.error("Senha deve ter pelo menos 8 caracteres.");
-      return;
-    }
-
     try {
-      const response = await updateUser(data);
+      const formData = new FormData();
+      formData.append("password", data.password);
+
+      const response = await updateUser(formData);
       if (response?.message) {
         toast.error(response.message);
         return;
@@ -42,7 +44,7 @@ export const useChangePasswordForm = (token: string) => {
 
       removeCookie("token-reset-password");
       toast.success("Senha atualizada com sucesso!");
-      window.location.href = "/inicio";
+      window.location.href = "/login";
     } catch (error) {
       handleError(error as string);
       toast.error("Erro ao atualizar a senha.");
@@ -50,6 +52,7 @@ export const useChangePasswordForm = (token: string) => {
   };
 
   return {
+    errors,
     register,
     handleSubmit,
     handleSubmitForm,
