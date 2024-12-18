@@ -15,7 +15,6 @@ export default function Ofertas() {
   const data = searchParams.get('data');
   const params = data ? JSON.parse(decodeURIComponent(data as string)) : null;
 
-
   const [offers, setOffers] = useState([] as OfferDTO[]);
   const [farm, setFarm] = useState({} as FarmDTO);
   const [page, setPage] = useState(1 as number);
