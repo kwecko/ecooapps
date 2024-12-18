@@ -12,23 +12,23 @@ export default function ProducerCard(catalog: CatalogDTO) {
         <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
           {catalog.farm.admin.photo ? (
             <Image
-              className="rounded-xl h-24 w-24"
+              className="w-full h-full object-cover rounded-2.5"
               loader={imageLoader}
               src={catalog.farm.admin.photo}
-              width={100}
-              height={100}
+              width={80}
+              height={80}
               alt={`${catalog.farm.name.toLowerCase()}.jpg`}
             />
           ) : (
             <Image
-              className="rounded-xl h-24 w-24"
+              className="w-full h-full object-cover rounded-2.5"
               src={
                 catalog.farm.tally != "123456789"
                   ? "/produtor.jpg"
                   : "/produtor2.jpeg"
               }
-              width={100}
-              height={100}
+              width={80}
+              height={80}
               alt="produtor.jpg"
             />
           )}
