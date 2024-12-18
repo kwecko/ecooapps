@@ -28,5 +28,6 @@
     "Email",
     "Telefone",
     "CPF",
-    "Número"
+    "Número",
+    "Produto"
   ]

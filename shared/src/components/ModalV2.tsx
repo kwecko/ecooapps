@@ -11,6 +11,7 @@ interface ModalV2Props {
   children: React.ReactNode;
   className?: string;
   title: string;
+  iconClose?: boolean;
 }
 
 function ModalV2({
@@ -19,6 +20,7 @@ function ModalV2({
   children,
   className,
   title,
+  iconClose = false,
 }: ModalV2Props) {
   return (
     <Modal
@@ -33,12 +35,19 @@ function ModalV2({
       ariaHideApp={false}
     >
       <div className="relative mb-5">
-        <h1 className="text-center pt-5 font-semibold text-xl text-text-heading">
+        <h1
+          className={twMerge(
+            "text-center font-semibold text-xl text-text-heading",
+            !iconClose && "pt-5"
+          )}
+        >
           {title}
         </h1>
-        <button className="absolute top-0 right-0" onClick={closeModal}>
-          <IoMdClose size={20} className="text-table-primary" />
-        </button>
+        {!iconClose && (
+          <button className="absolute top-0 right-0" onClick={closeModal}>
+            <IoMdClose size={20} className="text-table-primary" />
+          </button>
+        )}
       </div>
       {children}
     </Modal>

@@ -20,6 +20,7 @@ export default function DeleteProductModal({ isOpen, closeModal, product }: Prod
       closeModal={closeModal}
       className="w-152 bg-white text-coal-black"
       title="Atenção"
+      iconClose={true}
     >
       <div className="w-full flex flex-col gap-5 items-center">
         <span className="w-86 text-center text-theme-primary">

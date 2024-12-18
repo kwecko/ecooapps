@@ -25,6 +25,7 @@ export default function useProductsPage() {
 
   // Consts
   const debounceSearch = useDebounce(name);
+  
   const { handleError } = useHandleError();
 
   useEffect(() => {

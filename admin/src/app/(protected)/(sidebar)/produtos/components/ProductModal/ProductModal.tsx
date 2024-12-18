@@ -50,6 +50,7 @@ export default function ProductModal({
     if (product) {
       setValue("name", product.name);
       setValue("pricing", product.pricing);
+      
       if (product.image) {
         setCurrentPreview(imageLoader({ src: product.image }));
       }
@@ -69,6 +70,7 @@ export default function ProductModal({
       closeModal={closeModal}
       className="w-152 bg-white text-coal-black"
       title={isEdit ? "Editar produto" : "Cadastrar produto"}
+      iconClose={true}
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
@@ -148,14 +150,13 @@ export default function ProductModal({
                 handleRemoveFile();
                 setCurrentPreview(null);
               }}
-              className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
+              className="absolute top-0 right-0 bg-error text-white rounded-full w-5 h-5 flex items-center justify-center"
             >
               <FiX size={12} />
             </button>
           </div>
         )}
 
-        {/* Botões de Ação */}
         <div className="flex justify-between items-center gap-4">
           <ButtonV2
             variant="default"

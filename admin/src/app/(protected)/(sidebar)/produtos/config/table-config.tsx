@@ -27,7 +27,7 @@ export function getProductTableColumns(
             className="rounded-lg"
           />
         ) : (
-          <div>...</div>
+          null
         );
       },
     },
@@ -83,7 +83,7 @@ export function getProductTableColumns(
             onClick={() => toggleModal("isOpenDeleteProductModal", row)}
             className="flex justify-center items-center"
           >
-            <FaRegTrashAlt className="hover:text-red-500 transition-colors delay-150" size={20} />
+            <FaRegTrashAlt className="hover:text-error transition-colors delay-150" size={20} />
           </button>
         );
       },

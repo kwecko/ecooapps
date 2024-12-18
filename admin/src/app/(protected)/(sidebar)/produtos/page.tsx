@@ -66,7 +66,6 @@ function ProductsPage() {
             data={products}
             columns={getProductTableColumns(imageLoader, toggleModal)}
             gridColumns={16}
-            noDataMessage="Nenhum produto encontrado."
           />
         )}
 
