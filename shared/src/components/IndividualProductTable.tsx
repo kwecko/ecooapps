@@ -21,7 +21,7 @@ interface TableProps {
     id: string;
     data: { detail: string | JSX.Element; style?: string }[];
   }[];
-  farmOrders: BoxDTO
+  farmOrders: BoxDTO;
   onApprove: (order_id: string) => void;
   onReject: (order_id: string) => void;
 }
@@ -35,14 +35,10 @@ const IndividualProductTable = ({
 }: TableProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState<OrderDTOll>(
-    null
-  );
+  const [selectedOrder, setSelectedOrder] = useState<OrderDTO | null>(null);
 
   const handleRowClick = (id: string) => {
-    const order = farmOrders.orders.find(
-      (order: OrderDTOorder.id === id
-    );
+    const order = farmOrders.orders.find((order: OrderDTO) => order.id === id);
     setSelectedOrder(order || null);
     setModalOpen(true);
   };

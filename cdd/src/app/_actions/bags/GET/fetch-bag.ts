@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service";
 
-interface FetchBagRequest {
+export interface FetchBagRequest {
   bag_id: string;
   page: number;
 }
