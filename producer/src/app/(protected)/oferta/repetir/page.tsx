@@ -1,11 +1,10 @@
 "use client";
 
 import Button from "@shared/components/Button";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { LuChevronLeft, LuX } from "react-icons/lu";
 import {
   InputAmount,
@@ -14,9 +13,9 @@ import {
   ReviewOffer,
 } from "../components";
 
-import { OfferProducts } from "@producer/_actions/offers/POST/offer-products";
 import { toast } from "sonner";
 
+import useCreateOffer from "@producer/hooks/catalogs/useCreateOffer";
 import Loader from "@shared/components/Loader";
 import { OfferDTO } from "@shared/interfaces/dtos";
 
@@ -25,13 +24,7 @@ export default function Home() {
 
   const router = useRouter();
 
-  const LocalStorage = useLocalStorage();
-
-  const cycle = useMemo(
-    () => LocalStorage.getFromStorage("selected-cycle"),
-    []
-  );
-  const cycleId = cycle?.id ?? "";
+  const { createOffer } = useCreateOffer();
 
   const [offer, setOffer] = useState<OfferDTO>({} as OfferDTO);
 
@@ -82,36 +75,16 @@ export default function Home() {
   };
 
   const submitOffer = async () => {
-    await OfferProducts({
-      cycle_id: cycleId,
+    const success = await createOffer({
       product_id: offer.product.id,
       amount:
         offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       description: offer.description ?? undefined,
-    })
-      .then((response) => {
-        if (response.message) {
-          if (
-            response.message.includes("Oferta") &&
-            response.message.includes("já existe")
-          ) {
-            toast.error(
-              `Oferta para o produto ${offer.product.name} já existe. Tente editar a oferta.`
-            );
-            router.push("/oferta");
-            return;
-          }
-          toast.error(response.message as string);
-          return;
-        } else {
-          toast.success("Oferta cadastrada com sucesso");
-          router.push("/oferta");
-        }
-      })
-      .catch((error) => {
-        toast.error("Erro ao cadastrar a oferta");
-      });
+    });
+    if (!success) return;
+    toast.success("Oferta cadastrada com sucesso");
+    router.push("/oferta");
   };
 
   return (
@@ -158,7 +131,6 @@ export default function Home() {
             )}
             {currentStep === 4 && (
               <ReviewOffer
-                cycleId={cycleId}
                 productId={offer.product.id}
                 productName={offer.product.name}
                 amount={offer.amount}

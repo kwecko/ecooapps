@@ -16,15 +16,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="overflow-hidden">
       <body
-        className={`${process.env.APP_ID} w-screen h-full-dvh font-poppins`}
+        className={`${process.env.APP_ID} w-screen h-full-dvh font-poppins flex flex-row justify-center overflow-y-auto`}
       >
-        <div className="flex flex-row justify-center h-full w-full">
-          <Toaster richColors position="top-right" />
-          <div className="relative max-w-md h-full w-full">
-            <ClientValidation>{children}</ClientValidation>
-          </div>
+        <Toaster richColors position="top-center" duration={2500} invert />
+        <div className="relative max-w-md h-inherit w-full">
+          <ClientValidation>{children}</ClientValidation>
         </div>
       </body>
     </html>

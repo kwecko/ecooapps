@@ -1,16 +1,13 @@
 import Button from "@shared/components/Button";
 import { MiniTable } from "@shared/components/MiniTable";
-import { useRouter } from "next/navigation";
-import { formatPrice } from "@shared/utils/format-price";
+import { ModelPage } from "@shared/components/ModelPage";
 import { addTaxToPrice } from "@shared/utils/convert-tax";
 import { convertUnitFull } from "@shared/utils/convert-unit";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { ModelPage } from "@shared/components/ModelPage";
+import { formatPrice } from "@shared/utils/format-price";
 
 import pageSettings from "./page-settings";
 
 interface ReviewOfferProps {
-  cycleId: string;
   productId: string;
   productName: string;
   amount: number;
@@ -23,10 +20,6 @@ interface ReviewOfferProps {
 export default function ReviewOffer(props: ReviewOfferProps) {
   const { title, subtitle } = pageSettings.review;
 
-  const router = useRouter();
-
-  const { handleError } = useHandleError();
-
   const rows = [
     {
       header: "Produto:",
@@ -34,13 +27,16 @@ export default function ReviewOffer(props: ReviewOfferProps) {
     },
     {
       header: "Quantidade:",
-      content: `${props.amount} ${convertUnitFull(props.pricing || "", props.amount > 1)}`,
+      content: `${props.amount} ${convertUnitFull(
+        props.pricing || "",
+        props.amount > 1
+      )}`,
     },
     {
       header: "Preço:",
-      content: `${formatPrice(props.price)} / ${
-        convertUnitFull(props.pricing || "")
-      }`,
+      content: `${formatPrice(props.price)} / ${convertUnitFull(
+        props.pricing || ""
+      )}`,
     },
     {
       header: "Taxa:",

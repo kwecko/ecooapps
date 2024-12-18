@@ -4,7 +4,7 @@ import OrderCard from "@consumer/app/components/OrderCard";
 import { fetchCatalog } from "@consumer/app/_components/GET/fetch-catalog";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { CatalogMergeDTO, FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
+import { CatalogDTO, FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -48,7 +48,7 @@ export default function Ofertas() {
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
-        const responseFarmCatalogs: CatalogMergeDTO = response.data;
+        const responseFarmCatalogs: CatalogDTO = response.data;
         setFarm(responseFarmCatalogs.farm as FarmDTO);
         let offersFarm: OfferDTO[] = responseFarmCatalogs?.offers ?? [];
         offersFarm = offersFarm.filter(
@@ -60,7 +60,7 @@ export default function Ofertas() {
           setHasMore(false);
           return;
         }
-        
+
         const newOffers = [...offers, ...offersFarm];
         setOffers(newOffers as OfferDTO[]);
         const nextPage = page + 1;
@@ -84,7 +84,14 @@ export default function Ofertas() {
       <div className="px-3 w-full overflow-y-scroll flex flex-col items-center gap-3.5 h-full pt-3.5">
         {offers && offers.length !== 0 ? (
           offers.map((offer, index) => {
-            return <OrderCard key={index} offer={offer} farm={farm} exclude={false} />;
+            return (
+              <OrderCard
+                key={index}
+                offer={offer}
+                farm={farm}
+                exclude={false}
+              />
+            );
           })
         ) : (
           <div className="w-full text-center p-2">

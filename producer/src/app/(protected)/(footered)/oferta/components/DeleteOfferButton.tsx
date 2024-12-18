@@ -1,17 +1,17 @@
-import { deleteOffer } from "@producer/_actions/offers/DELETE/delete-offer";
+import useUpdateCatalog from "@producer/hooks/catalogs/useUpdateCatalog";
 import Modal from "@shared/components/Modal";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
-import { toast } from "sonner";
-
 interface DeleteOfferButtonProps {
+  catalogId: string;
   offerId: string;
   productName: string;
   onDeleteCard: (offerId: string) => void;
 }
 
 export default function DeleteOfferButton({
+  catalogId,
   offerId,
   productName,
   onDeleteCard,
@@ -23,21 +23,17 @@ export default function DeleteOfferButton({
     setIsModalOpen(true);
   };
 
-  const DeleteOffer = async () => {
-    try {
-      const response = await deleteOffer({ offer_id: offerId });
+  const { deleteOffers } = useUpdateCatalog();
 
-      if (response.message) {
-        handleError(response.message as string);
-      } else {
-        toast.success("Oferta removida com sucesso!");
-        onDeleteCard(offerId);
-      }
-    } catch {
-      handleError("Erro desconhecido.");
-    } finally {
-      setIsModalOpen(false);
-    }
+  const DeleteOffer = async () => {
+    const success = await deleteOffers({
+      catalog_id: catalogId,
+      offers: [{ id: offerId }],
+    });
+
+    if (!success) return;
+    onDeleteCard(offerId);
+    setIsModalOpen(false);
   };
 
   return (
@@ -50,7 +46,6 @@ export default function DeleteOfferButton({
       titleCloseModal="Manter"
       titleConfirmModal="Remover"
       titleContentModal="Deseja remover a oferta?"
-      titleOpenModal="Remover oferta"
       isOpen={isModalOpen}
       setIsOpen={setIsModalOpen}
       buttonOpenModal={

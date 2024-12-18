@@ -1,25 +1,25 @@
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
 import { steps } from "./app/cadastrar/data";
 
-const PAGES_IN_CONSTRUCTION = process.env.PAGES_IN_CONSTRUCTION?.split(",") || [];
+const PAGES_IN_CONSTRUCTION =
+  process.env.PAGES_IN_CONSTRUCTION?.split(",") || [];
 
 const PROTECTED_PAGES = [
   "/",
   "/oferta",
-  "/sucesso",
   "/relatorios",
   "/cadastrar/4",
-  "/alterar-cadastro",
   "/informacoes-ciclo",
-  "/negocio"
+  "/negocio",
+  "/perfil",
 ];
 
 export const config = {
   matcher: [
-    ...PROTECTED_PAGES.map(page => `${page}/:path*`),
-    ...PAGES_IN_CONSTRUCTION.map(page => `${page}/:path*`),
+    ...PROTECTED_PAGES.map((page) => `${page}/:path*`),
+    ...PAGES_IN_CONSTRUCTION.map((page) => `${page}/:path*`),
   ],
 };
 
@@ -37,20 +37,29 @@ export function middleware(request: NextRequest) {
     }
   }
 
-  if ((PROTECTED_PAGES.includes(pathname)) && !access_token) {
+  if (PROTECTED_PAGES.includes(pathname) && !access_token) {
     return NextResponse.redirect(new URL("/inicio", request.url));
   }
 
-  if (access_token && !farmStatus && pathname !== "/cadastrar/4" && PROTECTED_PAGES.includes(pathname)) {
+  if (
+    access_token &&
+    !farmStatus &&
+    pathname !== "/cadastrar/4" &&
+    PROTECTED_PAGES.includes(pathname)
+  ) {
     return NextResponse.redirect(new URL("/cadastrar/4", request.url));
   }
 
   if (PROTECTED_PAGES.includes(pathname) && farmStatus === "PENDING") {
-    return NextResponse.redirect(new URL("/negocio/aguardando-aprovacao", request.url));
+    return NextResponse.redirect(
+      new URL("/negocio/aguardando-aprovacao", request.url)
+    );
   }
 
   if (PROTECTED_PAGES.includes(pathname) && farmStatus === "INACTIVE") {
-    return NextResponse.redirect(new URL("/negocio/perfil-rejeitado", request.url));
+    return NextResponse.redirect(
+      new URL("/negocio/perfil-rejeitado", request.url)
+    );
   }
 
   if (PAGES_IN_CONSTRUCTION.includes(pathname)) {
