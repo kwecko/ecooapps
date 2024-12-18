@@ -2,23 +2,29 @@
 import { useCartProvider } from "@consumer/context/cart";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 
 export default function Header() {
   const pathname = usePathname();
 
   const listPath = decodeURI(pathname).split("/");
   const path = listPath[1];
-  const titlePath = listPath[3];
+
+  const searchParams = useSearchParams();
+  const data = searchParams.get('data');
+  const data_title: any = data ? JSON.parse(decodeURIComponent(data as string)).title : null;
+
 
   const mapPath: any = {
     inicio: { title: "Pesquisa de Produtos", back: null },
     produtores: { title: "Produtores", back: "/inicio" },
-    ofertas: { title: titlePath, back: "/produtores" },
+    produtor: { title: data_title, back: "/produtores" },
+    ofertas: { title: data_title, back: "/produtores" },
     carrinho: { title: "Carrinho", back: "/produtores" },
   };
 
-  const title = mapPath[path]?.title ?? "Null";
+  const title = mapPath[path]?.title;
   const linkBack = mapPath[path]?.back;
 
   const { cart } = useCartProvider();
