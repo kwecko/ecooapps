@@ -29,11 +29,11 @@ export default function Produtor() {
 
       <div className="flex absolute top-36 left-5 font-poppins">
         <div className="w-25 h-25 z-10">
-          {catalog.farm.image ? (
+          {catalog.farm.admin.photo ? (
             <Image
               className="rounded-xl h-24 w-24"
               loader={imageLoader}
-              src={catalog.farm.image}
+              src={catalog.farm.admin.photo}
               width={100}
               height={100}
               alt={`${catalog.farm.name.toLowerCase()}.jpg`}

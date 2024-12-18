@@ -3,7 +3,6 @@ import { UserDTO } from "@shared/interfaces/dtos";
 export interface FarmDTO {
   id: string;
   name: string;
-  image: string | null;
   status: "PENDING" | "ACTIVE" | "INACTIVE";
   tally: string;
   tax: number;
