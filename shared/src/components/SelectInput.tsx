@@ -31,7 +31,7 @@ export default function Select({
     if (defaultOption && !disabled) {
       setSelectedOption(defaultOption);
     } else {
-      setSelectedOption(null); // Não seleciona nada quando desabilitado
+      setSelectedOption(null);
     }
   }, [defaultOption, disabled]);
 

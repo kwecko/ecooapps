@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FiPaperclip, FiX } from "react-icons/fi";
 
 import Loader from "@shared/components/Loader";
@@ -10,14 +10,26 @@ import Input from "@shared/components/CustomInput";
 import SelectInput from "@shared/components/SelectInput";
 
 import useProductModal from "./index";
-import { categoryOptions, commercializationOptions, perishableOptions } from "./data";
+import {
+  categoryOptions,
+  commercializationOptions,
+  perishableOptions,
+} from "./data";
+import { ProductDTO } from "@shared/interfaces/dtos";
 
 interface ProductModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  product: ProductDTO | null;
+  imageLoader: (args: { src: string }) => string;
 }
 
-export default function ProductModal({ isOpen, closeModal }: ProductModalProps) {
+export default function ProductModal({
+  isOpen,
+  closeModal,
+  product,
+  imageLoader,
+}: ProductModalProps) {
   const {
     register,
     setValue,
@@ -30,14 +42,38 @@ export default function ProductModal({ isOpen, closeModal }: ProductModalProps) 
     onSubmit,
   } = useProductModal({ closeModal });
 
+  const [currentPreview, setCurrentPreview] = useState<string | null>(null);
+
+  const isEdit = !!product;
+
+  useEffect(() => {
+    if (product) {
+      setValue("name", product.name);
+      setValue("pricing", product.pricing);
+      if (product.image) {
+        setCurrentPreview(imageLoader({ src: product.image }));
+      }
+    } else {
+      setCurrentPreview(null);
+    }
+  }, [product, setValue, imageLoader]);
+
+  const handleFileUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    handleFileChange(e); 
+    setCurrentPreview(previewImage || currentPreview);
+  };
+
   return (
     <ModalV2
       isOpen={isOpen}
       closeModal={closeModal}
-      className="w-152 bg-white"
-      title="Cadastrar produto"
+      className="w-152 bg-white text-coal-black"
+      title={isEdit ? "Editar produto" : "Cadastrar produto"}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-5"
+      >
         <Input
           label="Qual o nome do produto?"
           placeholder="Morango Orgânico"
@@ -66,10 +102,14 @@ export default function ProductModal({ isOpen, closeModal }: ProductModalProps) 
           <SelectInput
             label="Comercialização"
             options={commercializationOptions}
+            defaultOption={commercializationOptions.find(
+              (option) => option.value === product?.pricing
+            ) ?? commercializationOptions[0]}
             onChange={(value) => setValue("pricing", value)}
-            defaultOption={commercializationOptions[0]}
           />
-          {errors.pricing && <p className="text-red-500 text-sm">{errors.pricing.message}</p>}
+          {errors.pricing && (
+            <p className="text-red-500 text-sm">{errors.pricing.message}</p>
+          )}
         </div>
 
         <div className="pb-5">
@@ -86,7 +126,7 @@ export default function ProductModal({ isOpen, closeModal }: ProductModalProps) 
           <input
             id="file-upload"
             type="file"
-            onChange={handleFileChange}
+            onChange={handleFileUpdate}
             className="hidden"
             accept="image/png, image/jpeg"
           />
@@ -95,16 +135,19 @@ export default function ProductModal({ isOpen, closeModal }: ProductModalProps) 
           )}
         </div>
 
-        {previewImage && (
+        {(currentPreview || previewImage) && (
           <div className="relative w-18 h-18">
             <img
-              src={previewImage}
+              src={previewImage || currentPreview!}
               alt="Pré-visualização"
               className="w-full h-full object-contain rounded-md border"
             />
             <button
               type="button"
-              onClick={handleRemoveFile}
+              onClick={() => {
+                handleRemoveFile();
+                setCurrentPreview(null);
+              }}
               className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center"
             >
               <FiX size={12} />
@@ -112,6 +155,7 @@ export default function ProductModal({ isOpen, closeModal }: ProductModalProps) 
           </div>
         )}
 
+        {/* Botões de Ação */}
         <div className="flex justify-between items-center gap-4">
           <ButtonV2
             variant="default"
@@ -127,7 +171,7 @@ export default function ProductModal({ isOpen, closeModal }: ProductModalProps) 
             className="bg-rain-forest border-none"
           >
             {isPending && <Loader loaderType="login" />}
-            {!isPending && "Salvar"}
+            {!isPending && (isEdit ? "Salvar alterações" : "Salvar")}
           </ButtonV2>
         </div>
       </form>

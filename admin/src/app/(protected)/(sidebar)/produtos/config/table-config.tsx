@@ -3,9 +3,13 @@ import Image from "next/image"
 import { LuPencil } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
 
+import { ModalKeys } from "..";
 import { ProductDTO } from "@shared/interfaces/dtos"
 
-export function getProductTableColumns(imageLoader: (args: { src: string }) => string) {
+export function getProductTableColumns(
+  imageLoader: (args: { src: string }) => string,
+  toggleModal: (modalName: ModalKeys, product?: ProductDTO) => void
+) {
   return [
     {
       header: "Imagem",
@@ -23,7 +27,7 @@ export function getProductTableColumns(imageLoader: (args: { src: string }) => s
             className="rounded-lg"
           />
         ) : (
-          <div>Carregando...</div>
+          <div>...</div>
         );
       },
     },
@@ -56,13 +60,12 @@ export function getProductTableColumns(imageLoader: (args: { src: string }) => s
       header: "",
       key: "edit",
       colSpan: 1,
-      
-      render: function renderEdit() {
+      render: function renderEdit(row: ProductDTO) {
         return (
           <button
             type="button"
-            onClick={() => alert("Editar produto")}
-            className="flex justify-center items-center"
+            onClick={() => toggleModal("isOpenCreateProductModal", row)}
+            className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
           >
             <LuPencil size={20} />
           </button>
@@ -73,14 +76,14 @@ export function getProductTableColumns(imageLoader: (args: { src: string }) => s
       header: "",
       key: "delete",
       colSpan: 1,
-      render: function renderDelete() {
+      render: function renderDelete(row: ProductDTO) {
         return (
           <button
             type="button"
-            onClick={() => alert("Deletar produto")}
+            onClick={() => toggleModal("isOpenDeleteProductModal", row)}
             className="flex justify-center items-center"
           >
-            <FaRegTrashAlt size={20} />
+            <FaRegTrashAlt className="hover:text-red-500 transition-colors delay-150" size={20} />
           </button>
         );
       },

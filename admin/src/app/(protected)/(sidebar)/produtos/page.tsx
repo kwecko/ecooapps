@@ -1,20 +1,20 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
 import { FaPlus } from "react-icons/fa6";
 
 import Title from "@admin/app/components/Title";
+import { getProductTableColumns } from "./config/table-config";
+import ProductModal from "./components/ProductModal/ProductModal";
 import useProductsPage from "@admin/app/(protected)/(sidebar)/produtos";
-import ProductModal from "@admin/app/(protected)/(sidebar)/produtos/components/ProductModal/ProductModal";
-import { getProductTableColumns } from "@admin/app/(protected)/(sidebar)/produtos/config/table-config";
+import DeleteProductModal from "./components/DeleteProductModal/DeleteProductModal";
 
-import Loader from "@shared/components/Loader";
 import Button from "@shared/components/ButtonV2";
 import EmptyBox from "@shared/components/EmptyBox";
 import SearchInput from "@shared/components/SearchInput";
 import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
+import TableSkeleton from "@admin/app/components/TableSkeleton";
 
 function ProductsPage() {
   const {
@@ -26,13 +26,11 @@ function ProductsPage() {
     products,
     isPending,
     imageLoader,
+    toggleModal,
+    isOpenCreateProductModal,
+    isOpenDeleteProductModal,
+    selectedProduct
   } = useProductsPage();
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const toggleModal = () => {
-    setIsModalOpen(!isModalOpen)
-  }
 
   return (
     <div className="w-full h-full overflow-hidden flex flex-col gap-5">
@@ -48,7 +46,7 @@ function ProductsPage() {
           <Button
             variant="default"
             className="flex w-64 justify-center items-center gap-3 bg-rain-forest"
-            onClick={toggleModal} 
+            onClick={() => toggleModal('isOpenCreateProductModal')} 
           >
             Cadastrar produto
             <FaPlus size={18} />
@@ -58,12 +56,7 @@ function ProductsPage() {
 
       <div className="w-full h-full flex flex-col gap-5 overflow-auto justify-between items-center">
         {isPending && (
-          <Loader
-            className="pt-10"
-            width="40"
-            height="40"
-            loaderType="component"
-          />
+          <TableSkeleton />
         )}
 
         {!isPending && name && products.length === 0 && <EmptyBox type="search" />}
@@ -71,7 +64,7 @@ function ProductsPage() {
         {!isPending && products.length > 0 && (
           <GenericTable
             data={products}
-            columns={getProductTableColumns(imageLoader)}
+            columns={getProductTableColumns(imageLoader, toggleModal)}
             gridColumns={16}
             noDataMessage="Nenhum produto encontrado."
           />
@@ -82,7 +75,22 @@ function ProductsPage() {
         )}
       </div>
 
-      {isModalOpen && <ProductModal isOpen={isModalOpen} closeModal={toggleModal} />}
+      {isOpenCreateProductModal && 
+        <ProductModal 
+          isOpen={isOpenCreateProductModal} 
+          closeModal={() => toggleModal('isOpenCreateProductModal')} 
+          product={selectedProduct}
+          imageLoader={imageLoader}
+        />
+      }
+
+      {isOpenDeleteProductModal &&
+        <DeleteProductModal 
+          isOpen={isOpenDeleteProductModal}
+          closeModal={() => toggleModal('isOpenDeleteProductModal')}
+          product={selectedProduct}
+        />
+      }
     </div>
   );
 }
