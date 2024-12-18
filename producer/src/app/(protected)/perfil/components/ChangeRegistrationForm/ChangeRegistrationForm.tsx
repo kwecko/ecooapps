@@ -26,7 +26,6 @@ export default function ChangeRegistrationForm() {
     setCharCount,
   } = useChangeRegistrationForm();
 
-  console.log(photo);
   return (
     <form
       onSubmit={handleSubmit(handleSubmitForm)}

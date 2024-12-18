@@ -18,15 +18,9 @@ export default function SelectCycle() {
   const { cycle, setCycle } = useCycleProvider();
 
   const checkCycleInStorage = () => {
-    console.log("checkCycleInStorage");
-    ("");
     const cycleFromStorage = getFromStorage("selected-cycle");
 
     if (cycleFromStorage) {
-      console.log("cycle", cycleFromStorage);
-      console.log("cycle", cycleFromStorage);
-      console.log("cycle", cycleFromStorage);
-      console.log("cycle", cycleFromStorage);
       handleCycleChange(cycleFromStorage);
     }
   };

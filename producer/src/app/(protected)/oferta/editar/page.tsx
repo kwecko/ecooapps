@@ -90,7 +90,6 @@ export default function Home() {
         },
       ],
     });
-    console.log(success);
     if (!success) return;
     toast.success("Oferta atualizada com sucesso!");
     router.push("/oferta");
