@@ -59,17 +59,26 @@ export const useChangeRegistrationForm = () => {
         }
 
         const data = { ...farmResponse.data, ...userResponse.data };
-
-        if (
-          data.photo.startsWith(
-            "file:///___/rest-api/src/test/storage/temp/users/"
-          )
-        ) {
-          setPhoto(`/api/image?file=${data.photo}`);
+        console.log("data", data);
+        if (data.photo && typeof data.photo === "string") {
+          if (
+            data.photo.startsWith(
+              "file:///___/rest-api/src/test/storage/temp/users/"
+            )
+          ) {
+            console.log("data.photo", data.photo);
+            setPhoto(`/api/image?file=${data.photo}`);
+          } else {
+            setPhoto(data.photo);
+          }
         } else {
-          setPhoto(data.photo);
+          setPhoto(null);
         }
-        setCharCount(data.description.length);
+        if (data.description && typeof data.description === "string") {
+          setCharCount(data.description.length);
+        } else {
+          setCharCount(0);
+        }
 
         reset(data);
       } catch (error) {
@@ -85,6 +94,7 @@ export const useChangeRegistrationForm = () => {
   };
 
   const confirmSubmission = async () => {
+    console.log("confirmSubmission");
     if (!formData) return;
 
     const isValid = await trigger();
@@ -104,6 +114,7 @@ export const useChangeRegistrationForm = () => {
     userFormData.append("first_name", data.first_name || "");
     userFormData.append("last_name", data.last_name || "");
     if (data.photo) {
+      console.log("data.photo", data.photo);
       userFormData.append("photo", data.photo);
     }
     userFormData.append("email", data.email || "");
@@ -115,10 +126,13 @@ export const useChangeRegistrationForm = () => {
     };
 
     try {
+      console.log("try");
       const [farmResponse, userResponse] = await Promise.all([
         updateFarm(farmData),
         updateUser(userFormData),
       ]);
+
+      console.log("responses", farmResponse, userResponse);
 
       if (farmResponse.message || userResponse.message) {
         handleError(farmResponse.message || userResponse.message);

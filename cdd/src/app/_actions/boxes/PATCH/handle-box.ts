@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service";
 
-interface HandleBoxRequest {
+export interface HandleBoxRequest {
   box_id: string;
   order_id: string;
   status: "RECEIVED" | "CANCELLED";

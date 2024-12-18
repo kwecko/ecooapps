@@ -13,6 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   const imagePath = path.join(rootPath, filePath);
+  console.log(imagePath);
 
   try {
     const imageBuffer = await fs.readFile(imagePath);

@@ -1,36 +1,53 @@
 "use client";
 
 import { Listbox, Transition } from "@headlessui/react";
-import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import useListCycles from "@shared/hooks/cycles/useListCycles";
 import { CycleDTO } from "@shared/interfaces/dtos";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { FaCheck } from "react-icons/fa6";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { toast } from "sonner";
 import { useCycleProvider } from "../context/cycle/index";
-import { useHandleError } from "../hooks/useHandleError";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import Button from "./Button";
 
 export default function SelectCycle() {
-  const [cycles, setCycles] = useState<CycleDTO[] | undefined>();
+  const { data: cycles, isLoading, listCycles } = useListCycles();
+
   const { cycle, setCycle } = useCycleProvider();
 
+  const checkCycleInStorage = () => {
+    console.log("checkCycleInStorage");
+    ("");
+    const cycleFromStorage = getFromStorage("selected-cycle");
+
+    if (cycleFromStorage) {
+      console.log("cycle", cycleFromStorage);
+      console.log("cycle", cycleFromStorage);
+      console.log("cycle", cycleFromStorage);
+      console.log("cycle", cycleFromStorage);
+      handleCycleChange(cycleFromStorage);
+    }
+  };
+
+  useEffect(() => {
+    listCycles();
+    checkCycleInStorage();
+  }, []);
+
   const router = useRouter();
-  const { handleError } = useHandleError();
   const { getFromStorage, setInStorage } = useLocalStorage();
 
   const handleCycleChange = (newCycle: CycleDTO) => {
     setCycle(newCycle);
-
     setInStorage("selected-cycle", newCycle);
   };
 
   const handleClickButton = () => {
-    const cycle = getFromStorage("selected-cycle");
+    const cycleFromStorage = getFromStorage("selected-cycle");
 
-    if (!cycle) {
+    if (!cycleFromStorage && !cycle) {
       toast.warning("Selecione um ciclo para ver mais informações sobre ele!");
       return;
     }
@@ -38,31 +55,8 @@ export default function SelectCycle() {
     router.push("/informacoes-ciclo");
   };
 
-  useEffect(() => {
-    (async () => {
-      listCycles()
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string;
-            handleError(messageError);
-          } else {
-            setCycles(response.data);
-          }
-        })
-        .catch(() => {
-          toast.error("Erro ao buscar os ciclos.");
-        });
-
-      const savedCycle = getFromStorage("selected-cycle");
-
-      if (savedCycle) {
-        setCycle(savedCycle);
-      }
-    })();
-  }, []);
-
   return (
-    <div className="w-full flex flex-col gap-2 pt-5.5">
+    <div className="w-full flex flex-col gap-2">
       <span className="font-inter text-sm leading-4.75 text-slate-gray pl-3.5 tracking-tight-2">
         Para começar, selecione o{" "}
         <Button
@@ -85,9 +79,7 @@ export default function SelectCycle() {
               }`}
             >
               <span className="block truncate text-slate-gray px-3">
-                {cycle === undefined
-                  ? "Selecione um ciclo"
-                  : `Ciclo ${cycle.alias}`}
+                {cycle === null ? "Selecione um ciclo" : `Ciclo ${cycle.alias}`}
               </span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5">
                 <LuChevronsUpDown

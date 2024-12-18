@@ -1,16 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { toast } from "sonner";
 
-import { isUnderConstruction } from "@shared/next/library/is-under-construction";
 import Button from "@shared/components/Button";
 import Card from "@shared/components/Card";
-import { useCycleProvider } from "@shared/context/cycle";
 import CustomModal from "@shared/components/CustomModal";
+import { useCycleProvider } from "@shared/context/cycle";
+import { isUnderConstruction } from "@shared/next/library/is-under-construction";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 export function ProductMenu() {
@@ -21,7 +21,7 @@ export function ProductMenu() {
   const [isOfferingDay, setIsOfferingDay] = useState<boolean>(false);
 
   useEffect(() => {
-    if (cycle !== undefined) {
+    if (cycle !== null) {
       const diaAtual = new Date().getDay() + 1;
       const { offer } = cycle;
 
@@ -30,17 +30,17 @@ export function ProductMenu() {
         return;
       }
 
-      setIsOfferingDay(false)
+      setIsOfferingDay(false);
     }
   }, [cycle]);
 
   const handleClickOfferProductButton = () => {
-    if(!cycle){
+    if (!cycle) {
       toast.warning("Selecione um ciclo para começar uma oferta!");
       return;
     }
 
-    const { id } = cycle
+    const { id } = cycle;
 
     localStorage.setItem(
       "offer-products-data",
@@ -52,14 +52,12 @@ export function ProductMenu() {
     router.push("/oferta");
   };
 
-  const handleClickInfoButton = () => {
-    
-  }
+  const handleClickInfoButton = () => {};
 
   return (
-    <Card className="gap-3.5 p-5 w-full text-theme-default">
-      <div className="flex justify-between gap-2 items-start pr-0 pl-1">
-        <span className="font-normal text-base leading-5.5 tracking-tight">
+    <Card className="w-full p-5 text-theme-default gap-3.5">
+      <div className="flex justify-between items-start gap-2">
+        <span className="pt-0.5 pl-1 font-normal text-base leading-5.5 tracking-tight-2">
           Ofereça os seus produtos clicando no botão abaixo
         </span>
         <CustomModal
@@ -82,9 +80,7 @@ export function ProductMenu() {
           Fazer uma oferta
         </Button>
         <Link href={"/relatorios"}>
-          <Button
-            className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default"
-          >
+          <Button className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default">
             Gerar relatórios
           </Button>
         </Link>

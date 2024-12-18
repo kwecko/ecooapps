@@ -122,7 +122,7 @@ export default function Footer({ appID }: { appID: string }) {
       {hasPreviousPage || hasHelpButton ? (
         <div
           className={`flex w-full items-center ${justify()} w-full p-5 pr-4.5 pl-3.5
-          static bottom-0 h-[var(--footer-height)] bg-theme-background z-50
+          h-footer bg-theme-background z-10
           `}
         >
           {hasPreviousPage && <ReturnButton />}

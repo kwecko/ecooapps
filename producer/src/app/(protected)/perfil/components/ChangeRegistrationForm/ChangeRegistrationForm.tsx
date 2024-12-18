@@ -26,6 +26,7 @@ export default function ChangeRegistrationForm() {
     setCharCount,
   } = useChangeRegistrationForm();
 
+  console.log(photo);
   return (
     <form
       onSubmit={handleSubmit(handleSubmitForm)}
@@ -150,7 +151,7 @@ export default function ChangeRegistrationForm() {
               }}
             />
             <p className="text-right text-slate-gray text-xs mt-1">{`${
-              charCount || getValues("description")?.length
+              charCount || getValues("description")?.length || 0
             }/500`}</p>
           </div>
           <div className="relative flex flex-col text-slate-gray w-full">

@@ -1,45 +1,26 @@
 "use client";
 
-import { fetchProfile } from "@shared/_actions/users/GET/fetch-profile";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
-import { useHandleError } from "@shared/hooks/useHandleError";
+
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import { HiOutlineBell } from "react-icons/hi";
-import { toast } from "sonner";
+
+import useFetchProfile from "@shared/hooks/users/useFetchProfile";
 
 export function Header() {
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const {
+    data: { first_name },
+    isLoading,
+  } = useFetchProfile();
 
   const router = useRouter();
-
-  const { handleError } = useHandleError();
-
-  useEffect(() => {
-    (() => {
-      fetchProfile()
-        .then((response) => {
-          if (response.message) {
-            handleError(response.message);
-          } else if (response.data) {
-            const { first_name } = response.data;
-            setName(first_name);
-            setIsLoading(false);
-          }
-        })
-        .catch((error) => {
-          toast.error(error);
-        });
-    })();
-  }, []);
 
   const logout = () => {
     router.push("/api/auth/logout");
   };
 
   return (
-    <header className="w-full flex items-start justify-between px-3 text-lg leading-5.5 top-0 z-10 bg-theme-background">
+    <header className="w-full flex items-start justify-between px-3 text-lg leading-5.5 top-0 z-10 bg-theme-background pb-5.5">
       <div className="flex-shrink">
         {isLoading ? (
           <SkeletonLoader />
@@ -47,7 +28,7 @@ export function Header() {
           <span className="flex gap-1 items-center text-slate-gray">
             Olá,{" "}
             <strong className="font-semibold underline underline-offset-2">
-              {name}!
+              {first_name}!
             </strong>
           </span>
         )}

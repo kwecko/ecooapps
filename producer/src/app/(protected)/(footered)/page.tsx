@@ -8,14 +8,12 @@ import { ProductMenu } from "./home/components/ProductMenu";
 
 export default function Home() {
   return (
-    <div className="px-4 pb-10 pt-10 h-[var(--min-page-height)]">
-      <div className="flex flex-col gap-5">
-        <Header />
-        <SelectCycle />
-        <CycloInformation />
-        <ProductMenu />
-        <PendingDeliveries />
-      </div>
+    <div className="px-4 pt-9.5 h-full flex flex-col gap-5 overflow-y-auto">
+      <Header />
+      <SelectCycle />
+      <CycloInformation />
+      <ProductMenu />
+      <PendingDeliveries />
     </div>
   );
 }

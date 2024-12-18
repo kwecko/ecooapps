@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form";
 
 import Loading from "@producer/app/loading";
-import { requestPasswordUpdate } from "@shared/_actions/auth/POST/request-password-update";
 import { schemaForgotPassword } from "@shared/schemas/forgot-password";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,6 +10,7 @@ import ButtonV2 from "@shared/components/ButtonV2";
 import CustomInput from "@shared/components/CustomInput";
 import { ModelPage } from "@shared/components/ModelPage";
 import useRequestPassword from "@shared/hooks/auth/useRequestPasswordUpdate";
+import router from "next/router";
 
 export default function Page() {
   const { requestPasswordUpdate, isLoading } = useRequestPassword();
@@ -24,7 +24,23 @@ export default function Page() {
   });
 
   const onSubmit = async (email: { email: string }) => {
-    requestPasswordUpdate(email);
+    const success = await requestPasswordUpdate(email);
+    if (!success) return;
+    sessionStorage.setItem(
+      "data-success",
+      JSON.stringify({
+        title: "Código de verificação enviado",
+        description:
+          "Confira o seu email e a caixa de spam para redefinir a sua senha.",
+        button: {
+          primary: {
+            router: "/login",
+            name: "Voltar para a tela de login",
+          },
+        },
+      })
+    );
+    router.push("/sucesso");
   };
 
   if (isLoading) {
