@@ -1,15 +1,18 @@
 import { twMerge } from "tailwind-merge";
 
-import { IoCloseSharp } from "react-icons/io5";
-import { HiDotsHorizontal } from "react-icons/hi";
+import React from "react";
 import { FaCheck, FaExclamation } from "react-icons/fa6";
+import { HiDotsHorizontal } from "react-icons/hi";
+import { IoCloseSharp } from "react-icons/io5";
 
 type GetStatusType = "oferta" | "montar" | "enviar" | "farm";
 
 export type OfertaStatus = Array<"PENDING" | "CANCELLED" | "VERIFIED">;
 type FarmStatus = "ACTIVE" | "INACTIVE" | "PENDING";
 export type MontarStatus = Array<"PENDING" | "SEPARATED">;
-export type EnviarStatus = Array<"SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED">;
+export type EnviarStatus = Array<
+  "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
+>;
 
 export type StatusMap = {
   oferta: "PENDING" | "CANCELLED" | "VERIFIED";
@@ -91,20 +94,23 @@ export function useGetStatus() {
         content: <HiDotsHorizontal className="p-0.5" color="white" />,
         color: "bg-walnut-brown",
       },
-    }
+    },
   };
 
-  const getStatus = <T extends GetStatusType>({ type, status }: UseGetStatusProps<T>) => {
+  const getStatus = <T extends GetStatusType>({
+    type,
+    status,
+  }: UseGetStatusProps<T>) => {
     const statusInfo = getStatusInfo[type][status];
 
     return (
       <div
         className={twMerge(
           "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 rounded-full",
-          statusInfo.color
+          statusInfo?.color
         )}
       >
-        {statusInfo.content}
+        {statusInfo?.content}
       </div>
     );
   };

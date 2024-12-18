@@ -11,6 +11,7 @@ import EditOfferButton from "./EditOfferButton";
 
 interface OfferCardProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "ref"> {
+  catalogId: string;
   offer: OfferDTO;
   onDeleteCard?: (offerId: string) => void;
   editable?: boolean;
@@ -18,7 +19,7 @@ interface OfferCardProps
 }
 
 const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
-  ({ offer, onDeleteCard, editable, repeatable, ...rest }, ref) => {
+  ({ catalogId, offer, onDeleteCard, editable, repeatable, ...rest }, ref) => {
     const imageLoader: ImageLoader = ({ src }) => {
       return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
     };
@@ -70,6 +71,7 @@ const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
         <div className="flex flex-row h-full justify-end shrink-0 grow-0 basis-16 gap-2.5 align-start grayscale-0">
           {onDeleteCard && (
             <DeleteOfferButton
+              catalogId={catalogId}
               offerId={offer.id}
               productName={offer.product.name}
               onDeleteCard={onDeleteCard}

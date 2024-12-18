@@ -26,7 +26,7 @@ export default function Success() {
   );
 
   useEffect(() => {
-    const storedData = sessionStorage.getItem("data-sucess");
+    const storedData = sessionStorage.getItem("data-success");
     if (storedData) {
       setData(JSON.parse(storedData));
     }

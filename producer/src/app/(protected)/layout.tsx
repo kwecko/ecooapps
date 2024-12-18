@@ -1,7 +1,8 @@
-"use client"
+"use client";
 
-import { SessionExpiredWrapper } from "@shared/context/session";
 import SessionExpiredModal from "@shared/components/SessionExpiredModal";
+import { CycleProvider } from "@shared/context/cycle";
+import { SessionExpiredWrapper } from "@shared/context/session";
 
 export default function ProtectedLayout({
   children,
@@ -17,7 +18,7 @@ export default function ProtectedLayout({
           buttonLabel="Ir para o Login"
           bgButton="#00735E"
         />
-        {children}
+        <CycleProvider>{children}</CycleProvider>
       </SessionExpiredWrapper>
     </>
   );

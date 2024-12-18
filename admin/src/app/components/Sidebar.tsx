@@ -1,3 +1,5 @@
+"use client";
+
 import {
   HiOutlineAnnotation,
   HiOutlineCalculator,
@@ -9,9 +11,16 @@ import {
   HiOutlineUserAdd,
 } from "react-icons/hi";
 
+import { useRouter } from "next/navigation";
 import Navlink from "./Navlink";
 
 export default function Sidebar() {
+  const router = useRouter();
+
+  const logout = () => {
+    router.push("/api/auth/logout");
+  };
+
   return (
     <nav className="bg-theme-home-bg min-w-sidebar box-border p-4 h-full flex flex-col justify-between">
       <section className="flex flex-col items-center">
@@ -38,7 +47,7 @@ export default function Sidebar() {
         <Navlink href="/configuracoes" icon={<HiOutlineCog />}>
           Configurações
         </Navlink>
-        <Navlink href="/api/auth/logout" icon={<HiOutlineLogin />}>
+        <Navlink onClick={logout} icon={<HiOutlineLogin />}>
           Sair
         </Navlink>
       </section>
