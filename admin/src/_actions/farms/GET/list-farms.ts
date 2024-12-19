@@ -9,8 +9,7 @@ export interface ListFarmsRequest {
 
 export async function listFarms({ page, farm = "" }: ListFarmsRequest) {
   const response = ApiService.GET({
-    url: `/farms?page=${page}&name=${farm}`,
+    url: `/farms?page=${page}&farm=${farm}`,
   });
-
   return response;
 }
