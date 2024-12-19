@@ -26,7 +26,7 @@ export default function useListStats() {
         setIsLoading(false);
       });
     })();
-  });
+  },[]);
 
   const updateData = (newData: RevenueData) => {
     setData(newData);
