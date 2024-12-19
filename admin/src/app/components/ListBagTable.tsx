@@ -27,6 +27,7 @@ export default function ListBagsTable() {
       header: "Cliente", 
       colSpan: 6, 
       key: "client",
+      className: "h-12",
       render: (row: BagMergeDTO) => {
         return (
           <div>
@@ -69,7 +70,6 @@ export default function ListBagsTable() {
           gridColumns={16}
           columns={farmTableColumns}
           data={bags}
-          rowSize="h-12"
         />
       )}
     </div>

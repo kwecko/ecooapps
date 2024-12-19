@@ -16,7 +16,6 @@ interface GenericTableProps<T> {
   className?: string;
   gridColumns?: number;
   noDataMessage?: string;
-  rowSize?: string;
   onRowClick?: (rowData: T, rowIndex: number) => void;
 }
 
@@ -30,7 +29,6 @@ const GenericTable = <T,>({
   className,
   gridColumns = 12,
   noDataMessage = "No data available",
-  rowSize,
   onRowClick,
 }: GenericTableProps<T>): JSX.Element => {
   const validatedGridColumns = Math.max(gridColumns, 1);
@@ -97,22 +95,6 @@ const GenericTable = <T,>({
                     ? column.key
                     : `col-${colIndex}`
                 }
-                className={`truncate ${rowSize}`}
-                style={{
-                  gridColumn: `span ${Math.min(
-                    column.colSpan || 1,
-                    validatedGridColumns
-                  )} / span ${Math.min(
-                    column.colSpan || 1,
-                    validatedGridColumns
-                  )}`,
-                }}
-              >
-                  key={
-                    typeof column.key === "string"
-                      ? column.key
-                      : `col-${colIndex}`
-                  }
                   className={twMerge("truncate", column.className)}
                   style={{
                     gridColumn: `span ${Math.min(

@@ -37,6 +37,7 @@ export default function ListFarmsTable() {
       header: "Foto",
       key: "admin.photo",
       colSpan: 2,
+      className: "h-12",
       render: (row: FarmDTO) => {
         return (
           <Image
@@ -80,7 +81,6 @@ export default function ListFarmsTable() {
           gridColumns={16}
           columns={farmTableColumns}
           data={farms}
-          rowSize="h-12"
         />
       )}
       <TablePaginationControl />
