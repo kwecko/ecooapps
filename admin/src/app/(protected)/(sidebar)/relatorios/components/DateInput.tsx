@@ -36,10 +36,8 @@ export default function DateInput({
             placeholder:text-gray-400 
             focus:outline-none focus:ring-1 focus:ring-gray-400
             disabled:bg-gray-100 disabled:cursor-not-allowed
-            [&::-webkit-calendar-picker-indicator]:opacity-0
             ${disabled && "opacity-60"}`}
         />
-        <FiCalendar className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
       </div>
     </div>
   );
