@@ -55,8 +55,8 @@ export default function MonthsGraph({
       tooltip: {
         callbacks: {
           label: (context: any) => {
-            const value = context.raw; // Valor da barra
-            return `R$${value.toLocaleString('pt-BR')}`; // Formatação para R$1.893
+            const value = context.raw;
+            return `R$${value.toLocaleString('pt-BR')}`;
           },
         },
         backgroundColor: '#ffffff',
