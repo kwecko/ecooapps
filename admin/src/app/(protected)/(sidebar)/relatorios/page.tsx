@@ -1,25 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import { useReportGenerator } from "@shared/hooks/useReportGenerator";
 
 import Title from "@admin/app/components/Title";
 import SelectInput from "./components/SelectInput";
 import DateInput from "./components/DateInput";
 import Button from "@shared/components/Button";
 import Copyright from "@admin/app/components/Copyright";
-
+import { AdminReportActions } from "@shared/types/report";
 
 export default function page() {
+  const { generateAdminReport } = useReportGenerator();
 
-  const [reportType, setReportType] = useState<string | undefined>(undefined);
-  const reportTypeOptions = [
-    { value: "ECONOMY", label: "Fluxo de caixa" },
-    { value: "EXPENSES", label: "Despesas" },
-  ];
-
-  const [currentStatus, setCurrentStatus] = useState<string | undefined>(
-    undefined
+  const reportTypeOptions: {
+    value: AdminReportActions;
+    label: string;
+  }[] = [{ value: "sales", label: "Vendas" }];
+  const [reportType, setReportType] = useState<AdminReportActions>(
+    reportTypeOptions[0].value
   );
+
+  const [initialDate, setInitialDate] = useState<Date | undefined>(undefined);
+  const [finalDate, setFinalDate] = useState<Date | undefined>(undefined);
+
+  const handleChangeInitialDate = (value: Date) => setInitialDate(value);
+  const handleChangeFinalDate = (value: Date) => setFinalDate(value);
+
+  const handleGenerateReport = () => {
+    const formattedInitialDate = initialDate
+      ? initialDate.toISOString().split("T")[0]
+      : undefined;
+    const formattedFinalDate = finalDate
+      ? finalDate.toISOString().split("T")[0]
+      : undefined;
+
+    generateAdminReport(reportType, formattedInitialDate, formattedFinalDate);
+  };
 
   return (
     <div className="flex flex-col w-full gap-6">
@@ -39,29 +57,35 @@ export default function page() {
           options={reportTypeOptions}
           onChange={() => {}}
           disabled={true}
-          defaultOption={{ value: "No options", label: "Sem opções disponíveis" }}
+          defaultOption={{
+            value: "No options",
+            label: "Sem opções disponíveis",
+          }}
         />
 
         <div className="flex gap-4">
           <DateInput
             label="Data inicial"
+            value={initialDate}
+            onChange={handleChangeInitialDate}
           />
           <DateInput
             label="Data final"
+            value={finalDate}
+            onChange={handleChangeFinalDate}
           />
         </div>
-        
-        <Button 
+
+        <Button
           className="w-full h-12 mt-4 rounded-md font-inter font-semibold text-white bg-rain-forest"
-          onChange={() => {}}
+          onClick={handleGenerateReport}
         >
           Emitir relatório
         </Button>
-          
+
         <div className="mt-80 mr-25">
           <Copyright type="primary" />
         </div>
-
       </div>
     </div>
   );
