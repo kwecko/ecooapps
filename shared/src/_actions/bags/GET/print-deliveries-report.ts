@@ -3,7 +3,7 @@
 import { cookies } from "next/headers";
 
 interface PrintDeliveriesReportRequest {
-  cycle_id: string;
+  cycle_id?: string;
 }
 
 export async function printDeliveriesReport({
