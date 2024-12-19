@@ -2,17 +2,14 @@
 
 import ApiService from "@shared/service";
 
-interface ListFarmsRequest {
+export interface ListFarmsRequest {
   page: number;
   farm?: string;
 }
 
-export async function listFarms({ 
-  page,
-  farm = "",
-}: ListFarmsRequest) {
+export async function listFarms({ page, farm = "" }: ListFarmsRequest) {
   const response = ApiService.GET({
-    url: `/farms?page=${page}&farm=${farm}`,
+    url: `/farms?page=${page}&name=${farm}`,
   });
 
   return response;

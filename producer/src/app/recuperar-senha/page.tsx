@@ -1,12 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-
 import { useForm } from "react-hook-form";
 
-import { requestPasswordUpdate } from "@producer/_actions/users/POST/request-password-update";
 import Loading from "@producer/app/loading";
 import { schemaForgotPassword } from "@shared/schemas/forgot-password";
 
@@ -14,10 +9,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonV2 from "@shared/components/ButtonV2";
 import CustomInput from "@shared/components/CustomInput";
 import { ModelPage } from "@shared/components/ModelPage";
+import useRequestPassword from "@shared/hooks/auth/useRequestPasswordUpdate";
+import router from "next/router";
 
-function RecuperarSenha() {
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
+export default function Page() {
+  const { requestPasswordUpdate, isLoading } = useRequestPassword();
 
   const {
     register,
@@ -28,35 +24,23 @@ function RecuperarSenha() {
   });
 
   const onSubmit = async (email: { email: string }) => {
-    try {
-      setIsLoading(true);
-      const data = await requestPasswordUpdate(email);
-
-      if (data.message) {
-        return toast.error(data.message);
-      }
-
-      sessionStorage.setItem(
-        "data-sucess",
-        JSON.stringify({
-          title: "Código de verificação enviado",
-          description:
-            "Confira o seu email e a caixa de spam para redefinir a sua senha.",
-          button: {
-            primary: {
-              router: "/login",
-              name: "Voltar para a tela de login",
-            },
+    const success = await requestPasswordUpdate(email);
+    if (!success) return;
+    sessionStorage.setItem(
+      "data-success",
+      JSON.stringify({
+        title: "Código de verificação enviado",
+        description:
+          "Confira o seu email e a caixa de spam para redefinir a sua senha.",
+        button: {
+          primary: {
+            router: "/login",
+            name: "Voltar para a tela de login",
           },
-        })
-      );
-
-      router.push("/sucesso");
-    } catch {
-      toast.error("Erro desconhecido");
-    } finally {
-      setIsLoading(false);
-    }
+        },
+      })
+    );
+    router.push("/sucesso");
   };
 
   if (isLoading) {
@@ -83,5 +67,3 @@ function RecuperarSenha() {
     </ModelPage>
   );
 }
-
-export default RecuperarSenha;

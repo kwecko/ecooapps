@@ -17,7 +17,7 @@ export async function printDeliveriesReport({
 
   try {
     const response = await fetch(
-      `${process.env.API_URL}/bags/report/${cycle_id}`,
+      `${process.env.API_URL}/reports?cycle_id=${cycle_id}`,
       {
         method: "GET",
         headers: {

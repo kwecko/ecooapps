@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service";
 
-interface OfferProductsRequest {
+export interface CreateOfferRequest {
   cycle_id: string;
   product_id: string;
   amount: number;
@@ -10,15 +10,15 @@ interface OfferProductsRequest {
   description?: string;
 }
 
-export async function OfferProducts({
+export async function createOffer({
   cycle_id,
   product_id,
   amount,
   price,
   description,
-}: OfferProductsRequest) {
+}: CreateOfferRequest) {
   const response = ApiService.POST({
-    url: `/offers`,
+    url: "/catalogs",
     data: {
       product_id,
       cycle_id,

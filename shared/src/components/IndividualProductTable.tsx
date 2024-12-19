@@ -6,7 +6,7 @@ import EmptyBoxInformation from "@shared/components/EmptyBoxInformation";
 import { convertUnit } from "@shared/utils/convert-unit";
 import CustomModal from "./CustomModal";
 
-import { BoxMergeDTO, OrderMergeDTO } from "@shared/interfaces/dtos";
+import { BoxDTO, OrderDTO } from "@shared/interfaces/dtos";
 import { convertOfferAmount } from "../utils/convert-unit";
 
 const styles = {
@@ -21,7 +21,7 @@ interface TableProps {
     id: string;
     data: { detail: string | JSX.Element; style?: string }[];
   }[];
-  farmOrders: BoxMergeDTO;
+  farmOrders: BoxDTO;
   onApprove: (order_id: string) => void;
   onReject: (order_id: string) => void;
 }
@@ -35,14 +35,10 @@ const IndividualProductTable = ({
 }: TableProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState<OrderMergeDTO | null>(
-    null
-  );
+  const [selectedOrder, setSelectedOrder] = useState<OrderDTO | null>(null);
 
   const handleRowClick = (id: string) => {
-    const order = farmOrders.orders.find(
-      (order: OrderMergeDTO) => order.id === id
-    );
+    const order = farmOrders.orders.find((order: OrderDTO) => order.id === id);
     setSelectedOrder(order || null);
     setModalOpen(true);
   };

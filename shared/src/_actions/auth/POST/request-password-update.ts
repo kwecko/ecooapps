@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service";
 
-interface RequestPasswordUpdateRequest {
+export interface RequestPasswordUpdateRequest {
   email: string;
 }
 
@@ -10,7 +10,7 @@ export async function requestPasswordUpdate({
   email,
 }: RequestPasswordUpdateRequest) {
   const response = ApiService.POST({
-    url: `/me/password`,
+    url: "/auth/password",
     data: {
       email: email,
     },

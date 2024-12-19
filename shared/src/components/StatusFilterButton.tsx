@@ -9,15 +9,14 @@ type FilterStatus = {
 };
 
 interface StatusFilterButtonsProps {
-  selectedStatus: string[];
+  selectedStatus: string;
   handleStatusFilterClick: (status: FilterStatus) => void;
   statuses: FilterStatus[];
   disabled?: boolean;
 }
 
 const style = {
-  button:
-    "text-sm text-white font-semibold px-2 rounded-2xl flex items-center h-6",
+  button: "text-sm text-white font-semibold px-2 rounded flex items-center h-6",
 };
 
 export default function StatusFilterButtons({
@@ -35,13 +34,13 @@ export default function StatusFilterButtons({
           onClick={() => handleStatusFilterClick(status)}
           className={twMerge(
             style.button,
-            selectedStatus === status.key
+            selectedStatus === status.name
               ? "bg-walnut-brown"
               : "bg-battleship-gray"
           )}
         >
           {status.name}
-          {selectedStatus === status.key && <HiX className="ml-1" />}
+          {selectedStatus === status.name && <HiX className="ml-1" />}
         </button>
       ))}
     </div>

@@ -6,6 +6,7 @@ export interface ColumnProps<T> {
   key: keyof T | string;
   header: string;
   colSpan?: number;
+  className?: string;
   render?: (item: T) => ReactNode;
 }
 
@@ -48,10 +49,10 @@ const GenericTable = <T,>({
         >
           {columns.map((column, index) => (
             <Table.HeaderCell
-            key={
-              typeof column.key === "string" ? column.key : `header-${index}`
-            }
-              className="truncate"
+              key={
+                typeof column.key === "string" ? column.key : `header-${index}`
+              }
+              className={twMerge("truncate", column.className)}
               style={{
                 gridColumn: `span ${Math.min(
                   column.colSpan || 1,
@@ -107,6 +108,22 @@ const GenericTable = <T,>({
                   )}`,
                 }}
               >
+                  key={
+                    typeof column.key === "string"
+                      ? column.key
+                      : `col-${colIndex}`
+                  }
+                  className={twMerge("truncate", column.className)}
+                  style={{
+                    gridColumn: `span ${Math.min(
+                      column.colSpan || 1,
+                      validatedGridColumns
+                    )} / span ${Math.min(
+                      column.colSpan || 1,
+                      validatedGridColumns
+                    )}`,
+                  }}
+                >
                   {column.render
                     ? column.render(row)
                     : String(

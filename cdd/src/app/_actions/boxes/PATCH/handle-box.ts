@@ -2,19 +2,19 @@
 
 import ApiService from "@shared/service";
 
-interface HandleBoxStatusRequest {
+export interface HandleBoxRequest {
   box_id: string;
   order_id: string;
   status: "RECEIVED" | "CANCELLED";
 }
 
-export async function handleBoxStatus({
+export async function handleBox({
   box_id,
   order_id,
   status,
-}: HandleBoxStatusRequest) {
+}: HandleBoxRequest) {
   const response = await ApiService.PATCH({
-    url: `/boxes/${box_id}`,
+    url: `/boxes/${box_id}/handle`,
     data: {
       orders: [
         {

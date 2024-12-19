@@ -9,7 +9,7 @@ export interface UpdateFarmRequest {
 
 export async function updateFarm({ name, description }: UpdateFarmRequest) {
   const response = ApiService.PATCH({
-    url: "/farms",
+    url: "/farms/own",
     data: {
       name,
       description,

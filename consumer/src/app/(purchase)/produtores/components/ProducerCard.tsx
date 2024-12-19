@@ -1,34 +1,41 @@
-import Image from "next/image";
+import { CatalogDTO } from "@shared/interfaces/dtos";
+import Image, { ImageLoader } from "next/image";
 import Link from "next/link";
 
-interface ProducerCardProps {
-  id: string;
-  name: string;
-  tally: string;
-  cycleId: string;
-}
-
-export default function ProducerCard({
-  id,
-  name,
-  tally,
-  cycleId,
-}: ProducerCardProps) {
+const imageLoader: ImageLoader = ({ src }) => {
+  return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
+};
+export default function ProducerCard(catalog: CatalogDTO) {
   return (
-    <Link href={`/ofertas/${id}/${name}/${cycleId}`}>
+    <Link href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalog: catalog, title: catalog.farm.name }))}`}>
       <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">
         <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
-          <Image
-            src={tally != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
-            className="w-full h-full object-cover rounded-2.5"
-            width={80}
-            height={80}
-            alt={`produtor.jpg`}
-          />
+          {catalog.farm.admin.photo ? (
+            <Image
+              className="w-full h-full object-cover rounded-2.5"
+              loader={imageLoader}
+              src={catalog.farm.admin.photo}
+              width={80}
+              height={80}
+              alt={`${catalog.farm.name.toLowerCase()}.jpg`}
+            />
+          ) : (
+            <Image
+              className="w-full h-full object-cover rounded-2.5"
+              src={
+                catalog.farm.tally != "123456789"
+                  ? "/produtor.jpg"
+                  : "/produtor2.jpeg"
+              }
+              width={80}
+              height={80}
+              alt="produtor.jpg"
+            />
+          )}
         </div>
         <div className="grow flex flex-col items-center justify-center min-h-20 mt-2 mb-2">
           <span className="w-full text-left text-base text-theme-home-bg">
-            {name}
+            {catalog.farm.name}
           </span>
         </div>
         <div className="flex min-w-24 min-h-20 items-center justify-center m-2">

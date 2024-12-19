@@ -1,5 +1,4 @@
 "use client";
-
 import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
 import RedirectCart from "@consumer/app/_components/redirectCart";
 import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
@@ -64,11 +63,7 @@ export default function Produtores() {
       } else if (response.data) {
         const catalogs: CatalogDTO[] = response.data;
         let newProducers = catalogs.map((catalog) => {
-          return {
-            id: catalog.id,
-            name: catalog.farm.name,
-            tally: catalog.farm.tally,
-          };
+          return catalog;
         });
 
         if (newProducers.length == 0) {
@@ -98,13 +93,7 @@ export default function Produtores() {
         {producers && producers.length !== 0
           ? producers.map((producer) => {
               return (
-                <ProducerCard
-                  key={producer.id}
-                  id={producer.id}
-                  name={producer.name}
-                  tally={producer.tally}
-                  cycleId={cycleId}
-                />
+                <ProducerCard key={producer.id} {...producer}/>
               );
             })
           : null}

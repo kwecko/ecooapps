@@ -59,17 +59,24 @@ export const useChangeRegistrationForm = () => {
         }
 
         const data = { ...farmResponse.data, ...userResponse.data };
-
-        if (
-          data.photo.startsWith(
-            "file:///___/rest-api/src/test/storage/temp/users/"
-          )
-        ) {
-          setPhoto(`/api/image?file=${data.photo}`);
+        if (data.photo && typeof data.photo === "string") {
+          if (
+            data.photo.startsWith(
+              "file:///___/rest-api/src/test/storage/temp/users/"
+            )
+          ) {
+            setPhoto(`/api/image?file=${data.photo}`);
+          } else {
+            setPhoto(data.photo);
+          }
         } else {
-          setPhoto(data.photo);
+          setPhoto(null);
         }
-        setCharCount(data.description.length);
+        if (data.description && typeof data.description === "string") {
+          setCharCount(data.description.length);
+        } else {
+          setCharCount(0);
+        }
 
         reset(data);
       } catch (error) {

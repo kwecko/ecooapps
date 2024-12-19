@@ -11,7 +11,7 @@ export default function TableRow({ children, ...rest }: TableRowProps) {
     <tr
       {...rest}
       className={twMerge(
-        "bg-white hover:bg-gray-100 transition-colors lg:border-b lg:border-theme-secondary lg:last:border-0",
+        "bg-white hover:bg-gray-100 transition-colors lg:border-b lg:border-theme-secondary lg:last:border-0 h-min",
         rest.className
       )}
     >
