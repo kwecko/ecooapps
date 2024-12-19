@@ -11,9 +11,9 @@ export function useReportGenerator() {
 
   const adminReportActions: Record<
     AdminReportActions,
-    (date_from: string, date_to: string) => Promise<any>
+    (date_from?: string, date_to?: string) => Promise<any>
   > = {
-    sales: (date_from: string, date_to: string) =>
+    sales: (date_from?: string, date_to?: string) =>
       fetchSalesReport({ date_from, date_to }),
   };
 
@@ -35,8 +35,8 @@ export function useReportGenerator() {
 
   const generateAdminReport = async (
     type: AdminReportActions,
-    date_from: string,
-    date_to: string
+    date_from?: string,
+    date_to?: string
   ) => {
     try {
       const action = adminReportActions[type];
