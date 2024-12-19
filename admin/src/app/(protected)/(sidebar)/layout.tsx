@@ -8,7 +8,7 @@ export default function SidebarLayout({
   return (
     <>
      <Sidebar />
-     <main className="w-full h-full p-15 pt-24">
+     <main className="w-full h-full p-15">
       {children}
      </main>
     </>

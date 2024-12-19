@@ -27,12 +27,12 @@ export default function DaysGraph({
       {
         data: labels,
         fill: true,
-        backgroundColor: 'rgba(0, 140, 119, 0.1)', // Preenchimento verde claro
-        borderColor: '#008C77', // Linha verde escura
-        pointBackgroundColor: '#008C77', // Cor dos pontos
-        pointRadius: 6, // Tamanho dos pontos
-        borderWidth: 3, // Espessura da linha
-        tension: 0.4, // Curvatura suave
+        backgroundColor: 'rgba(0, 140, 119, 0.1)',
+        borderColor: '#008C77',
+        pointBackgroundColor: '#008C77',
+        pointRadius: 6,
+        borderWidth: 3,
+        tension: 0.4,
       },
     ],
   };
@@ -41,33 +41,33 @@ export default function DaysGraph({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false }, // Remove legenda
+      legend: { display: false },
       tooltip: {
-        backgroundColor: '#EEF1F4', // Cor de fundo da tooltip
-        titleFont: { size: 14 }, // Aumenta a fonte do título
-        bodyFont: { size: 14 }, // Aumenta a fonte do corpo
+        backgroundColor: '#EEF1F4',
+        titleFont: { size: 14 },
+        bodyFont: { size: 14 },
         callbacks: {
-          title: () => '', // Remove o título da tooltip
-          label: (context: any) => `${context.parsed.y}`, // Mostra o valor diretamente
+          title: () => '',
+          label: (context: any) => `${context.parsed.y}`,
         },
         usePointStyle: true,
         pointStyle: '',
-        titleColor: '#00735E', // Cor da fonte do título da tooltip
-        bodyColor: '#00735E', // Cor da fonte do corpo da tooltip
+        titleColor: '#00735E',
+        bodyColor: '#00735E',
       },
     },
     scales: {
       x: {
-        display: false, // Remove o eixo X
+        display: false,
       },
       y: {
         beginAtZero: true,
-        grid: { color: 'rgba(229, 231, 235, 1)' }, // Grade suave
+        grid: { color: 'rgba(229, 231, 235, 1)' },
         ticks: {
           color: '#6B7280',
           font: { size: 12 },
-          stepSize: 1, // Define o intervalo dos ticks para 1
-          callback: (value: string | number) => `${value}`, // Exibe os valores como números inteiros
+          stepSize: 1,
+          callback: (value: string | number) => `${value}`,
         },
         title: {
           display: true,
@@ -79,7 +79,7 @@ export default function DaysGraph({
   };
 
   return (
-    <div style={{ height: '300px', width: '100%' }}>
+    <div style={{ height: '100%', width: '100%' }}>
       <Line data={data} options={options} />
     </div>
   );

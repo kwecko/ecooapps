@@ -44,34 +44,34 @@ export default function Home() {
 
   return (
     <div className="grid grid-cols-10 h-full gap-14 overflow-hidden ">
-      <div className="flex flex-col h-full justify-between col-span-6 gap-14">
+      <div className="flex flex-col h-full col-span-6 gap-12">
         <Card
           title="Informações de acesso"
-          className="w-full flex flex-col gap-4 justify-between items-stretch p-5"
+          className="w-full flex flex-col gap-4 justify-between items-stretch p-6"
           size="h-44 p-5"
         >
           <div className="text-xs font-inter">Unidade:</div>
           <div className="text-4xl font-semibold text-slate-blue">
             Armazém FURG
           </div>
-          <div className="text-xs font-inter">
+          <div className="text-xs font-inter mt-12">
             Acessado dia: <span className="font-bold"> {date} </span>| Hora:{" "}
             <span className="font-bold"> {time} </span>
           </div>
         </Card>
 
         <Card title="Últimas vendas" className="w-2/3">
-          <div className="max-h-72 overflow-y-auto">
+          <div className="max-h-112 overflow-y-auto">
             <ListBagsTable />
           </div>
         </Card>
 
-        <div className="self-start">
+        <div className="mt-auto mr-auto">
           <Copyright type="primary" />
         </div>
       </div>
 
-      <div className="flex flex-col col-span-4 gap-12 overflow-y-auto">
+      <div className="flex flex-col col-span-4">
         <Card title="Vendas nesse mês" className="w-full" size="h-44 p-5">
           <div className="flex items-top justify-between gap-20">
             <div className="text-4xl font-semibold text-rain-forest">
@@ -101,20 +101,27 @@ export default function Home() {
             Visualizar as vendas
           </Button>
         </Card>
-
-        <Card
-          title="Faturamento dos últimos meses"
-          className="w-full"
-          size="h-50 p-5"
-        >
-          <div className="h-40">
-            {stats?.monthly && <MonthsGraph stats={stats?.monthly} />}
-          </div>
-        </Card>
-
-        <Card title="Vendas por dia" className="w-full">
-          {stats?.daily && <DaysGraph stats={stats?.daily} />}
-        </Card>
+        
+        <div className="mt-12">
+          <Card
+            title="Faturamento dos últimos meses"
+            className="w-full"
+            size="h-50 p-5"
+          >
+            <div className="h-40">
+              {stats?.monthly && <MonthsGraph stats={stats?.monthly} />}
+            </div>
+          </Card>
+        </div>
+        
+        <div className="mt-5">
+          <Card title="Vendas por dia" className="w-full" size="h-50 p-5">
+            <div className="h-40">
+              {stats?.daily && <DaysGraph stats={stats?.daily} />}
+            </div>
+          </Card>
+        </div>
+        
       </div>
     </div>
   );
