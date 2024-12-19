@@ -1,15 +1,12 @@
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import EmptyBoxInformation from "@shared/components/EmptyBoxInformation";
-import { useHandleError } from "@shared/hooks/useHandleError";
 import { convertUnit } from "@shared/utils/convert-unit";
 import CustomModal from "./CustomModal";
 
-import { handleBoxStatus } from "@cdd/_actions/boxes/PATCH/handle-box-status";
-import { BoxMergeDTO, OrderMergeDTO } from "@shared/interfaces/dtos";
-import { toast } from "sonner";
+import { BoxDTO, OrderDTO } from "@shared/interfaces/dtos";
 import { convertOfferAmount } from "../utils/convert-unit";
 
 const styles = {
@@ -24,96 +21,40 @@ interface TableProps {
     id: string;
     data: { detail: string | JSX.Element; style?: string }[];
   }[];
-  farmOrders: BoxMergeDTO;
-  onRowClick?: (id: string) => void;
+  farmOrders: BoxDTO;
+  onApprove: (order_id: string) => void;
+  onReject: (order_id: string) => void;
 }
 
-const IndividualProductTable = ({ headers, info, farmOrders }: TableProps) => {
-  const router = useRouter();
-
+const IndividualProductTable = ({
+  headers,
+  info,
+  farmOrders,
+  onApprove,
+  onReject,
+}: TableProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState<OrderMergeDTO | null>(
-    null
-  );
-  const { handleError } = useHandleError();
+  const [selectedOrder, setSelectedOrder] = useState<OrderDTO | null>(null);
 
   const handleRowClick = (id: string) => {
-    const order = farmOrders.orders.find(
-      (order: OrderMergeDTO) => order.id === id
-    );
+    const order = farmOrders.orders.find((order: OrderDTO) => order.id === id);
     setSelectedOrder(order || null);
     setModalOpen(true);
   };
 
   const handleApprove = () => {
-    handleBoxStatus({
-      box_id: box_id as string,
-      order_id: selectedOrder?.id as string,
-      status: "RECEIVED",
-    })
-      .then((response) => {
-        if (response.message) {
-          handleError(response.message);
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi aprovada!",
-              description: "A oferta do produtor foi aprovada.",
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: `/ofertas/${box_id}`,
-                  name: "Verificar outra oferta",
-                },
-              },
-            })
-          );
-          router.push("/sucesso");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
+    if (selectedOrder) {
+      onApprove(selectedOrder.id);
+      setSelectedOrder(null);
+    }
   };
 
   const handleReject = () => {
-    handleBoxStatus({
-      box_id: box_id as string,
-      order_id: selectedOrder?.id as string,
-      status: "CANCELLED",
-    })
-      .then((response) => {
-        if (response.message) {
-          handleError(response.message);
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi reprovada!",
-              description: "A oferta do produtor foi reprovada.",
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: `/ofertas/${box_id}`,
-                  name: "Verificar outra oferta",
-                },
-              },
-            })
-          );
-          router.push("/sucesso");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
+    if (selectedOrder) {
+      onReject(selectedOrder.id);
+      setSelectedOrder(null);
+    }
   };
 
   const box_id = useParams().box_id;

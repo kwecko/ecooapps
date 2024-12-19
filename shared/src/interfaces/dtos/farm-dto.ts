@@ -7,6 +7,7 @@ export interface FarmDTO {
   tally: string;
   tax: number;
   description: string | null;
+  admin_id: string;
   admin: UserDTO;
   created_at: Date;
   updated_at: Date | null;

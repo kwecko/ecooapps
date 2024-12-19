@@ -1,13 +1,13 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiOutlineInformationCircle } from "react-icons/hi";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { useCycleProvider } from "@shared/context/cycle";
 import Button from "@shared/components/Button";
 import Loader from "@shared/components/Loader";
+import { useCycleProvider } from "@shared/context/cycle";
 
 export default function CycloInformation() {
   const { cycle } = useCycleProvider();
@@ -26,7 +26,7 @@ export default function CycloInformation() {
 
   useEffect(() => {
     setIsLoading(true);
-    if (cycle !== undefined) {
+    if (cycle !== null) {
       const diaAtual = new Date().getDay() + 1;
 
       const { offer, order, deliver } = cycle;
@@ -40,26 +40,30 @@ export default function CycloInformation() {
         setMessage(" entregar ao CDD");
       }
     }
+    setIsLoading(false);
   }, [cycle]);
 
   return (
     <>
-      {isLoading ? (
-        <div className="flex justify-center mt-3">
+      {isLoading && !cycle && (
+        <div className="flex justify-center">
           <Loader loaderType="component" />
         </div>
-      ) : !isLoading && cycle && (
-        <div className="w-full rounded-2xl bg-white text-theme-default p-5 tracking-tight leading-5.5 text-base flex flex-row justify-between items-start gap-2">
-          <p>
+      )}
+      {!isLoading && cycle && (
+        <div className="w-full rounded-2xl bg-white text-theme-default p-5 tracking-tight-2 text-base leading-5.5 flex flex-row justify-between items-start gap-2">
+          <p className="pl-1">
             É hora de:{" "}
-            <span className="text-rain-forest font-extrabold tracking-normal">{message}</span>
+            <span className="text-theme-highlight font-extrabold tracking-normal">
+              {message}
+            </span>
           </p>
 
           <Button onClick={handleClickButton} type="button">
             <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
           </Button>
         </div>
-      )}   
+      )}
     </>
   );
 }

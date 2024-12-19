@@ -30,7 +30,7 @@ export default function ListFarmsTable() {
     isLoading,
   } = useListFarms({
     page,
-    query,
+    farm: query,
   });
 
   const farmTableColumns = [
@@ -45,7 +45,7 @@ export default function ListFarmsTable() {
             width={68}
             height={68}
             alt="Foto do produtor"
-            className="rounded-lg"
+            className="rounded-lg max-h-[68px]"
           />
         );
       },
@@ -63,6 +63,7 @@ export default function ListFarmsTable() {
       },
     },
   ];
+
   return (
     <div className="w-full h-full flex flex-col justify-between items-center gap-6">
       <TableSearchInput

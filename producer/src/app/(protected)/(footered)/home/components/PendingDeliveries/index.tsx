@@ -2,31 +2,17 @@
 
 import { Tooltip } from "antd";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 import Button from "@shared/components/ButtonV2";
-import Loader from "@shared/components/Loader";
-import { PendingDeliveriesTable } from "./Table";
+import Card from "@shared/components/Card";
+import { PendingDeliveriesTable } from "./PendingDeliveriesTable";
 
-import { fetchCurrentBox } from "@shared/_actions/boxes/GET/fetch-current-box";
 import CustomModal from "@shared/components/CustomModal";
-import { useCycleProvider } from "@shared/context/cycle";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { OrderMergeDTO } from "@shared/interfaces/dtos";
 import { toast } from "sonner";
 
 export function PendingDeliveries() {
-  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const [pendingDeliveries, setPendingDeliveries] = useState<
-    OrderMergeDTO[] | undefined
-  >([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { cycle } = useCycleProvider();
-
-  const { handleError } = useHandleError();
-
   const address = [
     "UNIVERSIDADE FEDERAL DO RIO GRANDE - FURG CAMPUS CARREIROS",
     "Av. Itália, km 8, s/n - Bairro Carreiros CEP: 96203-900 - Rio Grande/RS",
@@ -38,7 +24,6 @@ export function PendingDeliveries() {
       .writeText(address.reduce((acc, curr) => `${acc}\n${curr}`))
       .then(() => {
         toast.success("Endereço copiado para a área de transferência.");
-        setIsTooltipVisible(false);
       });
   };
 
@@ -70,56 +55,16 @@ export function PendingDeliveries() {
     </div>
   );
 
-  useEffect(() => {
-    // IIFE
-    (async () => {
-      setIsLoading(true);
-
-      if (!cycle) {
-        setPendingDeliveries(undefined);
-        setIsLoading(false);
-        return;
-      }
-
-      fetchCurrentBox({ cycle_id: cycle.id })
-        .then((response) => {
-          if (response.message) {
-            handleError(response.message);
-          } else {
-            const data: OrderMergeDTO[] = response.data.orders;
-
-            const ordersFiltered = data.filter(
-              (item) => item.status === "PENDING"
-            );
-
-            setPendingDeliveries(ordersFiltered);
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    })();
-  }, [cycle]);
-
-  if (isLoading) {
-    return <Loader loaderType="component" className="mt-10" />;
-  }
-
   return (
-    <div
-      className={`w-full py-5.5 px-6 rounded-2xl bg-white flex flex-col justify-around gap-4 max-h-96 overflow-y-auto`}
-    >
-      <div className="flex justify-between items-start">
-        <div className="flex flex-col">
+    <Card className="w-full py-5.5 px-5 rounded-2xl bg-white flex flex-col justify-around gap-5 max-h-96">
+      <div className="flex justify-between items-start gap-2">
+        <div className="pt-0 pl-1 flex flex-col text-base leading-5.5 tracking-tight-2 gap-1.75">
           <span className="text-theme-default">Entregas pendentes</span>
           <div className="flex gap-2">
-            <span className="text-xs text-battleship-gray gap-2 flex">
-              CDD - FURG{"   "}
+            <span className="text-xs text-battleship-gray gap-2.75 flex items-start justify-start">
+              CDD - FURG
               <Tooltip title={tooltipContent} trigger="click" color="white">
-                <button className="font-semibold bg-battleship-gray text-white text-xs rounded-md h-4.5 w-24">
+                <button className="font-semibold bg-battleship-gray text-white text-xs py-0.25 px-2.5 rounded-1">
                   ver endereço
                 </button>
               </Tooltip>
@@ -136,7 +81,7 @@ export function PendingDeliveries() {
           }
         />
       </div>
-      <PendingDeliveriesTable pendingDeliveries={pendingDeliveries} />
-    </div>
+      <PendingDeliveriesTable />
+    </Card>
   );
 }

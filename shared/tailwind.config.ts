@@ -57,6 +57,8 @@ const config: Config = {
       spacing: {
         "10-negative": "-0.625rem",
         inherit: "inherit",
+        0.25: "0.0625rem",
+        0.75: "0.1875rem",
         1.25: ".3125rem",
         1.75: "0.4375rem",
         2.75: "0.6875rem",
@@ -67,6 +69,7 @@ const config: Config = {
         5.5: "1.375rem",
         7.5: "1.875rem",
         8.5: "2.125rem",
+        9.5: "2.375rem",
         11.5: "2.875rem",
         12.25: "3.0625rem",
         12.5: "3.125rem",
@@ -123,6 +126,9 @@ const config: Config = {
       fontSize: {
         xxs: "0.625rem",
         "4.25xl": "2.5rem",
+      },
+      borderRadius: {
+        1: "0.25rem",
       },
     },
   },

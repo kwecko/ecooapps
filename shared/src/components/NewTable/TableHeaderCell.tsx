@@ -15,7 +15,7 @@ export default function TableHeaderCell({
     <th
       {...rest}
       className={twMerge(
-        "flex flex-col justify-center items-center h-11.5 font-semibold text-xs lg:text-base lg:text-theme-primary lg:leading-5.5 lg:items-start lg:pl-4",
+        "flex flex-col justify-center items-center h-7.5 last-of-type:-translate-x-1 lg:h-11.5 font-semibold text-xs lg:text-base lg:text-theme-primary lg:leading-5.5 lg:items-start lg:pl-4 ",
         rest.className
       )}
     >
