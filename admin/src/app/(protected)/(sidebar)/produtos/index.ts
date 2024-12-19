@@ -1,14 +1,17 @@
 "use client";
 
-import { toast } from "sonner";
 import { useEffect, useState, useTransition } from "react";
+import { toast } from "sonner";
 
-import { ProductDTO } from "@shared/interfaces/dtos";
+import { listProducts } from "@shared/_actions/products/GET/list-products";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { listProducts } from "@shared/_actions/products/GET/list-products";
+import { ProductDTO } from "@shared/interfaces/dtos";
 
-export type ModalKeys = "isOpenCreateProductModal" | "isOpenDeleteProductModal" | "isOpenUpdateProductModal";
+export type ModalKeys =
+  | "isOpenCreateProductModal"
+  | "isOpenDeleteProductModal"
+  | "isOpenUpdateProductModal";
 
 export default function useProductsPage() {
   // States
@@ -18,15 +21,21 @@ export default function useProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState<Record<ModalKeys, boolean>>({
     isOpenCreateProductModal: false,
     isOpenDeleteProductModal: false,
-    isOpenUpdateProductModal: false
+    isOpenUpdateProductModal: false,
   });
   const [products, setProducts] = useState<ProductDTO[]>([]);
-  const { isOpenCreateProductModal, isOpenDeleteProductModal, isOpenUpdateProductModal } = isModalOpen;
-  const [selectedProduct, setSelectedProduct] = useState<ProductDTO | null>(null);
+  const {
+    isOpenCreateProductModal,
+    isOpenDeleteProductModal,
+    isOpenUpdateProductModal,
+  } = isModalOpen;
+  const [selectedProduct, setSelectedProduct] = useState<ProductDTO | null>(
+    null
+  );
 
   // Consts
   const debounceSearch = useDebounce(name);
-  
+
   const { handleError } = useHandleError();
 
   useEffect(() => {
@@ -36,7 +45,7 @@ export default function useProductsPage() {
   }, [debounceSearch, page]);
 
   // Functions
-  function getProducts({page, product}: {page: number, product: string}) {
+  function getProducts({ page, product }: { page: number; product: string }) {
     listProducts({ page, product })
       .then((response) => {
         if (response.message) return handleError(response.message);
@@ -59,9 +68,9 @@ export default function useProductsPage() {
       setPage((prev) => prev - 1);
     }
   }
-  
+
   function reloadProducts() {
-    setName(""); 
+    setName("");
     getProducts({ page: 1, product: "" });
   }
 
@@ -77,9 +86,12 @@ export default function useProductsPage() {
     }
 
     setSelectedProduct(null);
-  }
+  };
 
   function imageLoader({ src }: { src: string }) {
+    if (src.includes("https://res.cloudinary.com")) {
+      return src;
+    }
     return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
   }
 
@@ -98,6 +110,6 @@ export default function useProductsPage() {
     isOpenDeleteProductModal,
     isOpenUpdateProductModal,
     selectedProduct,
-    reloadProducts
+    reloadProducts,
   };
 }
