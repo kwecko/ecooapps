@@ -29,7 +29,7 @@ export default function ListFarmsTable() {
     isLoading,
   } = useListFarms({
     page,
-    query,
+    farm: query,
   });
 
   const farmTableColumns = [

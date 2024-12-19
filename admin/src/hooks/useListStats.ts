@@ -1,6 +1,5 @@
 import { listStats } from "@admin/_actions/farms/GET/list-stats";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { BagMergeDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 
 interface RevenueData {

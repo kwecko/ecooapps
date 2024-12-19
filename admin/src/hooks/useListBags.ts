@@ -1,6 +1,6 @@
 import { listBags } from "@admin/_actions/farms/GET/list-bags";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { BagMergeDTO } from "@shared/interfaces/dtos";
+import { BagDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 
 interface UseListBagsProps {
@@ -8,7 +8,7 @@ interface UseListBagsProps {
 }
 
 export default function useListBags({ page }: UseListBagsProps) {
-  const [data, setData] = useState<BagMergeDTO[]>([] as BagMergeDTO[]);
+  const [data, setData] = useState<BagDTO[]>([] as BagDTO[]);
 
   const [isLoading, setIsLoading] = useState(false);
   const { handleError } = useHandleError();
@@ -27,7 +27,7 @@ export default function useListBags({ page }: UseListBagsProps) {
     })();
   }, [page]);
 
-  const updateData = (newData: BagMergeDTO[]) => {
+  const updateData = (newData: BagDTO[]) => {
     setData(newData);
   };
 

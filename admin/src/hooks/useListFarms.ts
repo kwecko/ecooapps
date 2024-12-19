@@ -23,9 +23,6 @@ export default function useListFarms({ page, farm }: UseListFarmsProps) {
         if (response.message) {
           handleError(response.message);
         }
-        console.log(response.data);
-        console.log(response.data);
-        console.log(response.data);
         setData(response.data);
         setIsLoading(false);
       });

@@ -1,15 +1,15 @@
 import GenericTable from "@shared/components/GenericTable";
 import useListBags from "@admin/hooks/useListBags";
 import usePageQueryParams from "@shared/hooks/usePageQueryParams";
-import { BagMergeDTO } from "@shared/interfaces/dtos";
-import { useState, useEffect } from "react";
+import { BagDTO } from "@shared/interfaces/dtos";
+import { useState } from "react";
 
 export default function ListBagsTable() {
-  const [selectedRow, setSelectedRow] = useState<BagMergeDTO>({} as BagMergeDTO);
+  const [selectedRow, setSelectedRow] = useState<BagDTO>({} as BagDTO);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleRowClick = (rowData: BagMergeDTO, rowIndex: number) => {
+  const handleRowClick = (rowData: BagDTO, rowIndex: number) => {
     setSelectedRow(rowData);
     setIsOpen(true);
   };
@@ -28,7 +28,7 @@ export default function ListBagsTable() {
       colSpan: 6, 
       key: "client",
       className: "h-12",
-      render: (row: BagMergeDTO) => {
+      render: (row: BagDTO) => {
         return (
           <div>
             {`${row.user.first_name} ${row.user.last_name}`}
@@ -40,7 +40,7 @@ export default function ListBagsTable() {
       header: "Valor",  
       colSpan: 3, 
       key: "value",
-      render: (row: BagMergeDTO) => {
+      render: (row: BagDTO) => {
         return (
           <div>
             {`R$ ${row.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
@@ -52,7 +52,7 @@ export default function ListBagsTable() {
       header: "Data da venda", 
       colSpan: 4, 
       key: "date",
-      render: (row: BagMergeDTO) => {
+      render: (row: BagDTO) => {
         return (
             <div>
               {new Date(row.created_at).toLocaleDateString('pt-BR').split('/').join('/')}
