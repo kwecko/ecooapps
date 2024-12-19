@@ -1,5 +1,5 @@
+import React, { ReactNode } from "react";
 import { Table } from "@shared/components/NewTable";
-import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 export interface ColumnProps<T> {
@@ -15,6 +15,7 @@ interface GenericTableProps<T> {
   className?: string;
   gridColumns?: number;
   noDataMessage?: string;
+  rowSize?: string;
   onRowClick?: (rowData: T, rowIndex: number) => void;
 }
 
@@ -28,6 +29,7 @@ const GenericTable = <T,>({
   className,
   gridColumns = 12,
   noDataMessage = "No data available",
+  rowSize,
   onRowClick,
 }: GenericTableProps<T>): JSX.Element => {
   const validatedGridColumns = Math.max(gridColumns, 1);
@@ -46,9 +48,9 @@ const GenericTable = <T,>({
         >
           {columns.map((column, index) => (
             <Table.HeaderCell
-              key={
-                typeof column.key === "string" ? column.key : `header-${index}`
-              }
+            key={
+              typeof column.key === "string" ? column.key : `header-${index}`
+            }
               className="truncate"
               style={{
                 gridColumn: `span ${Math.min(
@@ -89,22 +91,22 @@ const GenericTable = <T,>({
             >
               {columns.map((column, colIndex) => (
                 <Table.Cell
-                  key={
-                    typeof column.key === "string"
-                      ? column.key
-                      : `col-${colIndex}`
-                  }
-                  className="truncate"
-                  style={{
-                    gridColumn: `span ${Math.min(
-                      column.colSpan || 1,
-                      validatedGridColumns
-                    )} / span ${Math.min(
-                      column.colSpan || 1,
-                      validatedGridColumns
-                    )}`,
-                  }}
-                >
+                key={
+                  typeof column.key === "string"
+                    ? column.key
+                    : `col-${colIndex}`
+                }
+                className={`truncate ${rowSize}`}
+                style={{
+                  gridColumn: `span ${Math.min(
+                    column.colSpan || 1,
+                    validatedGridColumns
+                  )} / span ${Math.min(
+                    column.colSpan || 1,
+                    validatedGridColumns
+                  )}`,
+                }}
+              >
                   {column.render
                     ? column.render(row)
                     : String(

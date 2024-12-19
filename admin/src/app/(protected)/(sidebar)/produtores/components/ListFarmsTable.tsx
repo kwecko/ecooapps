@@ -79,6 +79,7 @@ export default function ListFarmsTable() {
           gridColumns={16}
           columns={farmTableColumns}
           data={farms}
+          rowSize="h-12"
         />
       )}
       <TablePaginationControl />

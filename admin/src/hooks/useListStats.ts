@@ -1,23 +1,24 @@
-import { listBags } from "@admin/_actions/farms/GET/list-bags";
+import { listStats } from "@admin/_actions/farms/GET/list-stats";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { BagMergeDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 
-interface UseListBagsProps {
-  page: number;
+interface RevenueData {
+  revenue: number;
+  monthly: Record<string, number>;
+  daily: Record<string, number>;
 }
 
-export default function useListBags({ page }: UseListBagsProps) {
-  const [data, setData] = useState<BagMergeDTO[]>([] as BagMergeDTO[]);
+export default function useListStats() {
+  const [data, setData] = useState<RevenueData>({} as RevenueData);
 
   const [isLoading, setIsLoading] = useState(false);
   const { handleError } = useHandleError();
   useEffect(() => {
     (() => {
       setIsLoading(true);
-      listBags({
-        page: page,
-      }).then((response) => {
+      listStats().
+      then((response) => {
         if (response.message) {
           handleError(response.message);
         }
@@ -25,9 +26,9 @@ export default function useListBags({ page }: UseListBagsProps) {
         setIsLoading(false);
       });
     })();
-  }, [page]);
+  });
 
-  const updateData = (newData: BagMergeDTO[]) => {
+  const updateData = (newData: RevenueData) => {
     setData(newData);
   };
 
