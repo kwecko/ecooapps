@@ -69,7 +69,6 @@ export default function OffersList({
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
-          console.log(response.data);
           const dataOffers: CatalogDTO = response.data;
 
           setCatalogId(dataOffers.id);
