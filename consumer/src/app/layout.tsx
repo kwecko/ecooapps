@@ -16,6 +16,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  console.log("RootLayout carregado!");
   return (
     <html lang="pt-BR">
       <head>
