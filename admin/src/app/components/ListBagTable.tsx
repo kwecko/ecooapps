@@ -1,12 +1,7 @@
 import GenericTable from "@shared/components/GenericTable";
 import useListBags from "@admin/hooks/useListBags";
-import EmptyBox from "@shared/components/EmptyBox";
-import Loader from "@shared/components/Loader";
-import TablePaginationControl from "@shared/components/TablePaginationControl";
-import TableSearchInput from "@shared/components/TableSearchInput";
 import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagMergeDTO } from "@shared/interfaces/dtos";
-import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function ListBagsTable() {
@@ -18,7 +13,7 @@ export default function ListBagsTable() {
     setSelectedRow(rowData);
     setIsOpen(true);
   };
-  const { page, query } = usePageQueryParams();
+  const { page } = usePageQueryParams();
   const {
     data: bags,
     updateData,
