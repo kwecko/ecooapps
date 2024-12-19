@@ -8,7 +8,7 @@ import { useDebounce } from "@shared/hooks/useDebounce";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { listProducts } from "@shared/_actions/products/GET/list-products";
 
-export type ModalKeys = "isOpenCreateProductModal" | "isOpenDeleteProductModal";
+export type ModalKeys = "isOpenCreateProductModal" | "isOpenDeleteProductModal" | "isOpenUpdateProductModal";
 
 export default function useProductsPage() {
   // States
@@ -17,10 +17,11 @@ export default function useProductsPage() {
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState<Record<ModalKeys, boolean>>({
     isOpenCreateProductModal: false,
-    isOpenDeleteProductModal: false
+    isOpenDeleteProductModal: false,
+    isOpenUpdateProductModal: false
   });
   const [products, setProducts] = useState<ProductDTO[]>([]);
-  const { isOpenCreateProductModal, isOpenDeleteProductModal } = isModalOpen;
+  const { isOpenCreateProductModal, isOpenDeleteProductModal, isOpenUpdateProductModal } = isModalOpen;
   const [selectedProduct, setSelectedProduct] = useState<ProductDTO | null>(null);
 
   // Consts
@@ -58,6 +59,11 @@ export default function useProductsPage() {
       setPage((prev) => prev - 1);
     }
   }
+  
+  function reloadProducts() {
+    setName(""); 
+    getProducts({ page: 1, product: "" });
+  }
 
   const toggleModal = (value: ModalKeys, product?: ProductDTO) => {
     setIsModalOpen((prev) => ({
@@ -90,6 +96,8 @@ export default function useProductsPage() {
     toggleModal,
     isOpenCreateProductModal,
     isOpenDeleteProductModal,
-    selectedProduct
+    isOpenUpdateProductModal,
+    selectedProduct,
+    reloadProducts
   };
 }

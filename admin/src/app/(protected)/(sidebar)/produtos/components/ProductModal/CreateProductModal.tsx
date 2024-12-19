@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import Image from "next/image";
+
 import { FiPaperclip, FiX } from "react-icons/fi";
 
 import Loader from "@shared/components/Loader";
@@ -17,19 +18,21 @@ import {
 } from "./data";
 import { ProductDTO } from "@shared/interfaces/dtos";
 
-interface ProductModalProps {
+interface CreateProductModalProps {
   isOpen: boolean;
   closeModal: () => void;
   product: ProductDTO | null;
   imageLoader: (args: { src: string }) => string;
+  reloadProducts: () => void;
 }
 
-export default function ProductModal({
+export default function CreateProductModal({
   isOpen,
   closeModal,
   product,
   imageLoader,
-}: ProductModalProps) {
+  reloadProducts
+}: CreateProductModalProps) {
   const {
     register,
     setValue,
@@ -40,36 +43,14 @@ export default function ProductModal({
     handleFileChange,
     handleRemoveFile,
     onSubmit,
-  } = useProductModal({ closeModal });
-
-  const [currentPreview, setCurrentPreview] = useState<string | null>(null);
-
-  const isEdit = !!product;
-
-  useEffect(() => {
-    if (product) {
-      setValue("name", product.name);
-      setValue("pricing", product.pricing);
-      
-      if (product.image) {
-        setCurrentPreview(imageLoader({ src: product.image }));
-      }
-    } else {
-      setCurrentPreview(null);
-    }
-  }, [product, setValue, imageLoader]);
-
-  const handleFileUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleFileChange(e); 
-    setCurrentPreview(previewImage || currentPreview);
-  };
+  } = useProductModal({ closeModal, reloadProducts });
 
   return (
     <ModalV2
       isOpen={isOpen}
       closeModal={closeModal}
       className="w-152 bg-white text-coal-black"
-      title={isEdit ? "Editar produto" : "Cadastrar produto"}
+      title="Cadastrar produto"
       iconClose={true}
     >
       <form
@@ -128,7 +109,7 @@ export default function ProductModal({
           <input
             id="file-upload"
             type="file"
-            onChange={handleFileUpdate}
+            onChange={handleFileChange}
             className="hidden"
             accept="image/png, image/jpeg"
           />
@@ -137,18 +118,20 @@ export default function ProductModal({
           )}
         </div>
 
-        {(currentPreview || previewImage) && (
+        {(previewImage) && (
           <div className="relative w-18 h-18">
-            <img
-              src={previewImage || currentPreview!}
+            <Image
+              src={previewImage}
               alt="Pré-visualização"
+              loader={imageLoader}
+              width={72}
+              height={72}
               className="w-full h-full object-contain rounded-md border"
             />
             <button
               type="button"
               onClick={() => {
                 handleRemoveFile();
-                setCurrentPreview(null);
               }}
               className="absolute top-0 right-0 bg-error text-white rounded-full w-5 h-5 flex items-center justify-center"
             >
@@ -172,7 +155,7 @@ export default function ProductModal({
             className="bg-rain-forest border-none"
           >
             {isPending && <Loader loaderType="login" />}
-            {!isPending && (isEdit ? "Salvar alterações" : "Salvar")}
+            {!isPending && "Salvar"}
           </ButtonV2>
         </div>
       </form>

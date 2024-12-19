@@ -5,14 +5,23 @@ import ModalV2 from "@shared/components/ModalV2";
 import ButtonV2 from "@shared/components/ButtonV2";
 import { ProductDTO } from "@shared/interfaces/dtos";
 
-interface ProductModalProps {
+interface DeleteProductModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  product: ProductDTO | null
+  product: ProductDTO | null;
+  reloadProducts: () => void;
 }
 
-export default function DeleteProductModal({ isOpen, closeModal, product }: ProductModalProps) {
-  const { isPending, handleDelete } = useDeleteProductModal()
+export default function DeleteProductModal({
+  isOpen,
+  closeModal,
+  product,
+  reloadProducts,
+}: DeleteProductModalProps) {
+  const { isPending, handleDelete } = useDeleteProductModal({
+    closeModal,
+    reloadProducts,
+  });
 
   return (
     <ModalV2
@@ -24,8 +33,8 @@ export default function DeleteProductModal({ isOpen, closeModal, product }: Prod
     >
       <div className="w-full flex flex-col gap-5 items-center">
         <span className="w-86 text-center text-theme-primary">
-          Você confirma que quer excluir o produto 
-          "{product?.name}" comercializado em {product?.pricing === "WEIGHT" ? "kilo" : "unidade"}
+          Você confirma que quer excluir o produto "{product?.name}" comercializado em{" "}
+          {product?.pricing === "WEIGHT" ? "kilo" : "unidade"}
         </span>
         <div className="w-full flex justify-between items-center gap-4">
           <ButtonV2
@@ -42,8 +51,7 @@ export default function DeleteProductModal({ isOpen, closeModal, product }: Prod
             onClick={() => handleDelete(product?.id as string)}
             className="bg-error border-none"
           >
-            {isPending && <Loader loaderType="login" />}
-            {!isPending && "Excluir"}
+            {isPending ? <Loader loaderType="login" /> : "Excluir"}
           </ButtonV2>
         </div>
       </div>

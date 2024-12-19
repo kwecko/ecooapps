@@ -64,7 +64,7 @@ export function getProductTableColumns(
         return (
           <button
             type="button"
-            onClick={() => toggleModal("isOpenCreateProductModal", row)}
+            onClick={() => toggleModal("isOpenUpdateProductModal", row)}
             className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
           >
             <LuPencil size={20} />

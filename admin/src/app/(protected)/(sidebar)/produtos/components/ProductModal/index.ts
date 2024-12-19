@@ -8,14 +8,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 import { useHandleError } from "@shared/hooks/useHandleError";
 
-import { productSchema, ProductSchema } from "@admin/schemas/products";
+import { ProductSchema, productSchema } from "@admin/schemas/products";
 import { registerProduct } from "@admin/_actions/products/POST/register-product";
 
 interface UseProductModalProps {
-  closeModal: () => void,
+  closeModal: () => void;
+  reloadProducts: () => void;
 }
 
-export default function useProductModal({ closeModal }: UseProductModalProps) {
+export default function useProductModal({ 
+  closeModal, 
+  reloadProducts 
+}: UseProductModalProps) {
   // States
   const [isPending, startTransition] = useTransition();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -59,6 +63,7 @@ export default function useProductModal({ closeModal }: UseProductModalProps) {
           toast.success("Produto cadastrado com sucesso!");
           closeModal();
           reset();
+          reloadProducts();
         })
         .catch(() => {
           toast.error("Erro desconhecido.");

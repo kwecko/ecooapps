@@ -5,7 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 
 import Title from "@admin/app/components/Title";
 import { getProductTableColumns } from "./config/table-config";
-import ProductModal from "./components/ProductModal/ProductModal";
+import CreateProductModal from "./components/ProductModal/CreateProductModal";
 import useProductsPage from "@admin/app/(protected)/(sidebar)/produtos";
 import DeleteProductModal from "./components/DeleteProductModal/DeleteProductModal";
 
@@ -15,6 +15,7 @@ import SearchInput from "@shared/components/SearchInput";
 import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
 import TableSkeleton from "@admin/app/components/TableSkeleton";
+import UpdateProductModal from "./components/UpdateProductModal/UpdateProductModal";
 
 function ProductsPage() {
   const {
@@ -29,7 +30,9 @@ function ProductsPage() {
     toggleModal,
     isOpenCreateProductModal,
     isOpenDeleteProductModal,
-    selectedProduct
+    isOpenUpdateProductModal,
+    selectedProduct,
+    reloadProducts,
   } = useProductsPage();
 
   return (
@@ -40,6 +43,7 @@ function ProductsPage() {
           <SearchInput
             placeholder="Filtrar por nome ou categoria"
             onChange={setName}
+            value={name}
             type="secondary"
             className="w-86"
           />
@@ -75,10 +79,21 @@ function ProductsPage() {
       </div>
 
       {isOpenCreateProductModal && 
-        <ProductModal 
+        <CreateProductModal 
           isOpen={isOpenCreateProductModal} 
           closeModal={() => toggleModal('isOpenCreateProductModal')} 
           product={selectedProduct}
+          imageLoader={imageLoader}
+          reloadProducts={reloadProducts}
+        />
+      }
+
+      {isOpenUpdateProductModal && 
+        <UpdateProductModal 
+          isOpen={isOpenUpdateProductModal}
+          closeModal={() => toggleModal('isOpenUpdateProductModal')}
+          product={selectedProduct}
+          reloadProducts={reloadProducts}
           imageLoader={imageLoader}
         />
       }
@@ -88,6 +103,7 @@ function ProductsPage() {
           isOpen={isOpenDeleteProductModal}
           closeModal={() => toggleModal('isOpenDeleteProductModal')}
           product={selectedProduct}
+          reloadProducts={reloadProducts}
         />
       }
     </div>
