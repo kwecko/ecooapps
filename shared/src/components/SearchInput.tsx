@@ -1,10 +1,8 @@
 import React from "react";
-
 import { twMerge } from "tailwind-merge";
-
 import { HiOutlineSearch, HiOutlineFilter } from "react-icons/hi";
 
-interface SearchInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface SearchInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
   onChange: (value: string) => void;
   type?: "primary" | "secondary";
 }
