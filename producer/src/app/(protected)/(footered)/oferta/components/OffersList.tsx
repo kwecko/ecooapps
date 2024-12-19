@@ -30,7 +30,8 @@ export default function OffersList({
   notFoundMessage,
   ...rest
 }: OffersListProps) {
-  const [offers, setOffers] = useState<OfferDTO[] | []>([]);
+  const [offers, setOffers] = useState<OfferDTO[]>([] as OfferDTO[]);
+  const [catalogId, setCatalogId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [hasMore, setHasMore] = useState<boolean>(true);
@@ -68,11 +69,10 @@ export default function OffersList({
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
-          const dataOffers: {
-            catalog: CatalogDTO;
-            offers: OfferDTO[];
-          } = response.data;
+          console.log(response.data);
+          const dataOffers: CatalogDTO = response.data;
 
+          setCatalogId(dataOffers.id);
           setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
 
           setHasMore(dataOffers.offers.length > 0);
@@ -130,11 +130,12 @@ export default function OffersList({
               {offers.map((offer, index) => (
                 <OfferCard
                   ref={index === offers.length - 1 ? lastProductRef : null}
-                  key={offer.id}
+                  key={`offer-${offer.id}-${index}`}
                   offer={offer}
                   onDeleteCard={type === "current" ? onDeleteCard : undefined}
                   editable={type === "current"}
                   repeatable={type === "last"}
+                  catalogId={catalogId}
                 />
               ))}
             </div>

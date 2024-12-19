@@ -7,7 +7,7 @@ import { SetOnCookie } from "@shared/utils/set-on-cookie";
 import { SetTokenCookie } from "@shared/utils/set-token-cookie";
 import { validateAccess } from "@shared/utils/validate-app-access";
 
-interface AuthenticateRequest {
+export interface AuthenticateRequest {
   email: string;
   password: string;
   appID: AppID;

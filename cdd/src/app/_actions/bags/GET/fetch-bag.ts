@@ -2,13 +2,14 @@
 
 import ApiService from "@shared/service";
 
-interface FetchBagRequest {
+export interface FetchBagRequest {
   bag_id: string;
+  page: number;
 }
 
-export async function fetchBag({ bag_id }: FetchBagRequest) {
+export async function fetchBag({ bag_id, page = 1 }: FetchBagRequest) {
   const response = ApiService.GET({
-    url: `/bags/${bag_id}`,
+    url: `/bags/${bag_id}?page=${page}`,
   });
 
   return response;

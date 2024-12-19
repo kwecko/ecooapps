@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ModelPage } from "@shared/components/ModelPage";
 import SendBagMiniTable from "./components/SendBagMiniTable";
@@ -8,8 +8,10 @@ export default async function Home() {
     <ModelPage
       title="Conteúdo da sacola"
       titleGap="gap-2"
+      titleClassName="px-0"
       subtitle="Marque a sacola como enviada assim que ela estiver a caminho do cliente"
-      overflowAuto={true}
+      subtitleClassName="px-6"
+      overflowAuto
     >
       <div className="w-full h-[82%] overflow-y-auto">
         <SendBagMiniTable />

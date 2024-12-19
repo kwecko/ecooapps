@@ -2,12 +2,12 @@
 
 import SendTelegram from "@consumer/app/_components/sendTelegram";
 import OrderCard from "@consumer/app/components/OrderCard";
-import Modal from "@shared/components/Modal";
 import { formatPrice } from "@shared/utils/format-price";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
 import { useCartProvider } from "../../../context/cart";
+import Modal from "@shared/components/Modal";
 
 export default function FinalizarCompras() {
   const router = useRouter();

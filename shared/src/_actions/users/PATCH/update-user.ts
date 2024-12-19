@@ -2,19 +2,13 @@
 
 import ApiService from "@shared/service";
 
-export interface UpdateUserRequest {
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  cpf?: string;
-  phone?: string;
-  password?: string;
-}
-
-export async function updateUser(data: UpdateUserRequest) {
+export async function updateUser(data: FormData) {
   const response = ApiService.PATCH({
     url: "/me",
-    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data: data,
   });
 
   return response;

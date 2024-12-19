@@ -1,11 +1,12 @@
 import { Table } from "@shared/components/NewTable";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 export interface ColumnProps<T> {
   key: keyof T | string;
   header: string;
   colSpan?: number;
+  className?: string;
   render?: (item: T) => ReactNode;
 }
 
@@ -49,7 +50,7 @@ const GenericTable = <T,>({
               key={
                 typeof column.key === "string" ? column.key : `header-${index}`
               }
-              className="truncate"
+              className={twMerge("truncate", column.className)}
               style={{
                 gridColumn: `span ${Math.min(
                   column.colSpan || 1,
@@ -94,7 +95,7 @@ const GenericTable = <T,>({
                       ? column.key
                       : `col-${colIndex}`
                   }
-                  className="truncate"
+                  className={twMerge("truncate", column.className)}
                   style={{
                     gridColumn: `span ${Math.min(
                       column.colSpan || 1,

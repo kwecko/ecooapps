@@ -1,28 +1,19 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { listCurrentBags } from "@cdd/_actions/bags/GET/list-current-bags";
+import { BagStatus } from "@shared/types/bag-status";
 
-import { BagStatus, SendStatus } from "@shared/types/bag-status";
-
+import useListCurrentBags from "@cdd/hooks/bags/useListCurrentBags";
 import EmptyBox from "@shared/components/EmptyBox";
-import Loader from "@shared/components/Loader";
-import OrderTable from "@shared/components/OrderTable";
-import SearchInput from "@shared/components/SearchInput";
+import GenericTable from "@shared/components/GenericTable";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
+import TableSearchInput from "@shared/components/TableSearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { useGetStatus } from "@shared/hooks/useGetStatus";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagDTO } from "@shared/interfaces/dtos";
-
-interface BagsProps {
-  page: number;
-  setTotalItems: (total: number) => void;
-}
 
 type FilterStatus = {
   name: string;
@@ -30,70 +21,48 @@ type FilterStatus = {
 };
 
 const statuses: FilterStatus[] = [
-  { name: "Todas", key: ["SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
-  { name: "Separadas", key: ["SEPARATED"] },
-  { name: "Enviadas", key: ["DISPATCHED"] },
-  { name: "Entregues", key: ["RECEIVED"] },
-  { name: "Retornadas", key: ["DEFERRED"] },
+  { name: "todas", key: ["SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
+  { name: "separadas", key: ["SEPARATED"] },
+  { name: "enviadas", key: ["DISPATCHED"] },
+  { name: "entregues", key: ["RECEIVED"] },
+  { name: "retornadas", key: ["DEFERRED"] },
 ];
 
-export default function SendBagTable({ page, setTotalItems }: BagsProps) {
+export default function SendBagTable() {
   const router = useRouter();
 
   const { getStatus } = useGetStatus();
 
-  const [bags, setBags] = useState<BagDTO[]>([]);
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedStatus, setSelectedStatus] = useState<SendStatus>(
-    statuses[0].key as SendStatus
-  );
+  const searchParams = useSearchParams();
+  const selectedStatus = searchParams.get("status") ?? "todas";
+  const pathname = usePathname();
 
-  const debounceSearch = useDebounce(name);
-  const { handleError } = useHandleError();
-  const { getFromStorage } = useLocalStorage();
+  const { page, query } = usePageQueryParams();
+  const debounceSearch = useDebounce(query, 300);
 
-  const handleStatusFilterClick = (status: FilterStatus) => {
-    if (selectedStatus === status.key) {
-      setSelectedStatus(statuses[0].key as SendStatus);
-      return;
-    }
-    setSelectedStatus(status.key as SendStatus);
+  const setSelectedStatus = (status: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("status", status);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
-  useEffect(() => {
-    (() => {
-      setIsLoading(true);
-      const cycle = getFromStorage("selected-cycle");
+  const { data: bags, isLoading } = useListCurrentBags({
+    page,
+    statuses: statuses.find((status) => status.name === selectedStatus)
+      ?.key as BagStatus["send"][],
+    user: debounceSearch,
+  });
 
-      if (!cycle) {
-        toast.error("Selecione um ciclo para montar uma sacola!");
-        return;
-      }
+  const handleStatusFilterClick = (status: FilterStatus) => {
+    if (status.name === selectedStatus) {
+      setSelectedStatus("todas");
+      return;
+    }
 
-      const { id } = cycle;
+    const statusName = status.name;
 
-      listCurrentBags({
-        cycle_id: id,
-        page,
-        statuses: selectedStatus,
-        name: debounceSearch,
-      })
-        .then((response) => {
-          if (response.message) {
-            handleError(response.message);
-          } else if (response.data) {
-            setBags(response.data);
-            setTotalItems(response.data.length);
-            setIsLoading(false);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-        });
-    })();
-  }, [page, debounceSearch, selectedStatus]);
+    setSelectedStatus(statusName);
+  };
 
   const handleClick = (id: string) => {
     router.push(`/enviar-sacola/${id}`);
@@ -123,28 +92,61 @@ export default function SendBagTable({ page, setTotalItems }: BagsProps) {
       : [];
 
   return (
-    <div className="w-full h-full flex flex-col">
-      <div className="sticky top-0 bg-default z-10">
-        <div className="w-full flex gap-2 items-center mt-4 mb-4">
-          <SearchInput onChange={setName} />
-        </div>
+    <div className="flex flex-col gap-2.5 w-full items-center justify-between h-full">
+      <div className="w-full flex flex-col gap-2.5 justify-start items-center">
+        <TableSearchInput
+          placeholder={"Filtrar por cliente..."}
+          icon="search"
+          className="lg:self-end w-full"
+        />
         <StatusFilterButtons
           statuses={statuses}
           selectedStatus={selectedStatus}
-          handleStatusFilterClick={handleStatusFilterClick}
+          handleStatusFilterClick={(status: FilterStatus) =>
+            handleStatusFilterClick(status)
+          }
         />
       </div>
-
-      {isLoading ? (
-        <Loader className="mt-3" loaderType="component" />
-      ) : debounceSearch && bags.length === 0 ? (
-        <EmptyBox type="search" />
-      ) : bags.length === 0 ? (
-        <EmptyBox type="box" />
-      ) : (
-        <div className="overflow-y-auto h-full">
-          <OrderTable headers={headers} info={info} onRowClick={handleClick} />
-        </div>
+      {!isLoading && (
+        <>
+          {bags?.length === 0 && (
+            <>
+              {debounceSearch && <EmptyBox type="search" />}
+              {!debounceSearch && <EmptyBox type="box" />}
+            </>
+          )}
+          {bags?.length > 0 && (
+            <GenericTable
+              gridColumns={12}
+              columns={[
+                {
+                  header: "Código",
+                  key: "id",
+                  colSpan: 4,
+                },
+                {
+                  header: "Cliente",
+                  key: "user.first_name",
+                  colSpan: 6,
+                },
+                {
+                  header: "Status",
+                  key: "status",
+                  colSpan: 2,
+                  className: "items-center justify-center w-full",
+                  render: (row: BagDTO) =>
+                    getStatus({
+                      type: "montar",
+                      status: row.status as BagStatus["build"],
+                    }),
+                },
+              ]}
+              data={bags}
+              onRowClick={(row) => handleClick(row.id)}
+            />
+          )}
+          <TablePaginationControl className="justify-self-end" />
+        </>
       )}
     </div>
   );
