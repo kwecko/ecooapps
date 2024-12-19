@@ -72,6 +72,11 @@ export function useHandleError() {
         return;
       }
 
+      if(words[0] === 'Produto'){
+        toast.error(`Produto já cadastrado`);
+        return;
+      }
+
       toast.error(`${words[0]} não encontrado.`);
       return;
     }

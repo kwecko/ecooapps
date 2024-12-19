@@ -12,6 +12,7 @@ import Image from "next/image";
 import { useState } from "react";
 import FarmStatusChip from "./FarmStatusChip";
 import UpdateFarmStatusModal from "./UpdateFarmStatusModal";
+import TableSkeleton from "@admin/app/components/TableSkeleton";
 
 export default function ListFarmsTable() {
   const [selectedRow, setSelectedRow] = useState<FarmDTO>({} as FarmDTO);
@@ -69,7 +70,7 @@ export default function ListFarmsTable() {
         placeholder={"Filtrar por fazenda"}
         className="lg:self-end"
       />
-      {isLoading && <Loader className="mt-3" loaderType="component" />}
+      {isLoading && <TableSkeleton />}
       {!isLoading && query && farms?.length === 0 && <EmptyBox type="search" />}
       {!isLoading && !query && farms?.length === 0 && (
         <EmptyBox type="producer" />
