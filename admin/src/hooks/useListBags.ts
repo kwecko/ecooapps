@@ -1,24 +1,22 @@
-import {
-  listFarms,
-  ListFarmsRequest,
-} from "@admin/_actions/farms/GET/list-farms";
+import { listBags } from "@admin/_actions/farms/GET/list-bags";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { FarmDTO } from "@shared/interfaces/dtos";
+import { BagDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 
-interface UseListFarmsProps extends ListFarmsRequest {}
+interface UseListBagsProps {
+  page: number;
+}
 
-export default function useListFarms({ page, farm }: UseListFarmsProps) {
-  const [data, setData] = useState<FarmDTO[]>([] as FarmDTO[]);
+export default function useListBags({ page }: UseListBagsProps) {
+  const [data, setData] = useState<BagDTO[]>([] as BagDTO[]);
 
   const [isLoading, setIsLoading] = useState(false);
   const { handleError } = useHandleError();
   useEffect(() => {
     (() => {
       setIsLoading(true);
-      listFarms({
-        page,
-        farm,
+      listBags({
+        page: page,
       }).then((response) => {
         if (response.message) {
           handleError(response.message);
@@ -27,9 +25,9 @@ export default function useListFarms({ page, farm }: UseListFarmsProps) {
         setIsLoading(false);
       });
     })();
-  }, [page, farm]);
+  }, [page]);
 
-  const updateData = (newData: FarmDTO[]) => {
+  const updateData = (newData: BagDTO[]) => {
     setData(newData);
   };
 

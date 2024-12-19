@@ -1,25 +1,23 @@
-import {
-  listFarms,
-  ListFarmsRequest,
-} from "@admin/_actions/farms/GET/list-farms";
+import { listStats } from "@admin/_actions/farms/GET/list-stats";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { FarmDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 
-interface UseListFarmsProps extends ListFarmsRequest {}
+interface RevenueData {
+  revenue: number;
+  monthly: Record<string, number>;
+  daily: Record<string, number>;
+}
 
-export default function useListFarms({ page, farm }: UseListFarmsProps) {
-  const [data, setData] = useState<FarmDTO[]>([] as FarmDTO[]);
+export default function useListStats() {
+  const [data, setData] = useState<RevenueData>({} as RevenueData);
 
   const [isLoading, setIsLoading] = useState(false);
   const { handleError } = useHandleError();
   useEffect(() => {
     (() => {
       setIsLoading(true);
-      listFarms({
-        page,
-        farm,
-      }).then((response) => {
+      listStats().
+      then((response) => {
         if (response.message) {
           handleError(response.message);
         }
@@ -27,9 +25,9 @@ export default function useListFarms({ page, farm }: UseListFarmsProps) {
         setIsLoading(false);
       });
     })();
-  }, [page, farm]);
+  },[]);
 
-  const updateData = (newData: FarmDTO[]) => {
+  const updateData = (newData: RevenueData) => {
     setData(newData);
   };
 
