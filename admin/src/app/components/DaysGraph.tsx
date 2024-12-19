@@ -47,7 +47,7 @@ export default function DaysGraph({
         titleFont: { size: 14 }, // Aumenta a fonte do título
         bodyFont: { size: 14 }, // Aumenta a fonte do corpo
         callbacks: {
-          title: () => null, // Remove o título da tooltip
+          title: () => '', // Remove o título da tooltip
           label: (context: any) => `${context.parsed.y}`, // Mostra o valor diretamente
         },
         usePointStyle: true,
@@ -67,7 +67,7 @@ export default function DaysGraph({
           color: '#6B7280',
           font: { size: 12 },
           stepSize: 1, // Define o intervalo dos ticks para 1
-          callback: (value: number) => `${value}`, // Exibe os valores como números inteiros
+          callback: (value: string | number) => `${value}`, // Exibe os valores como números inteiros
         },
         title: {
           display: true,

@@ -29,7 +29,7 @@ export default function ListFarmsTable() {
     isLoading,
   } = useListFarms({
     page,
-    farm: query,
+    query,
   });
 
   const farmTableColumns = [
@@ -37,7 +37,6 @@ export default function ListFarmsTable() {
       header: "Foto",
       key: "admin.photo",
       colSpan: 2,
-      className: "h-12",
       render: (row: FarmDTO) => {
         return (
           <Image
