@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Footer from "@shared/components/Footer";
 import { CycleProvider } from "@shared/context/cycle";
@@ -10,15 +10,9 @@ export default function LayoutWithFooter({
 }) {
   return (
     <CycleProvider>
-      <div className="flex flex-col justify-between w-full bg-theme-background h-fullScreen">
-        <div className="h-[var(--min-page-height)] overflow-y-auto">
-          {children}
-        </div>
-        <div className="mt-auto">
-          <Footer
-            appID={"CDD"}
-          />
-        </div>
+      <div className="flex flex-col justify-between w-full bg-theme-background h-full-dvh">
+        <div className="h-footered-page overflow-y-auto">{children}</div>
+        <Footer appID={"CDD"} />
       </div>
     </CycleProvider>
   );

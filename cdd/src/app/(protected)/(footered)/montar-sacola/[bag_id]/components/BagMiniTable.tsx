@@ -1,152 +1,83 @@
-'use client'
+"use client";
 
-import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { fetchBag } from "@cdd/app/_actions/bag/fetch-bag";
-import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
+import { notFound, useParams } from "next/navigation";
 
+import useFetchBag from "@cdd/hooks/bags/useFetchBag";
+import useHandleBag from "@cdd/hooks/bags/useHandleBag";
 import GroupOrder from "@shared/components/GroupOrder";
-import Modal from "@shared/components/Modal";
-import { IBagOrder } from "@shared/interfaces/bag";
-import TableSkeleton from "@shared/components/TableSkeleton";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
-import convertStatus from "@shared/utils/convert-status";
 import HeaderDetail from "@shared/components/HeaderDetail";
-import { IBagStatus } from "@shared/interfaces/bag-status";
+import Modal from "@shared/components/Modal";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
+import TableSkeleton from "@shared/components/TableSkeleton";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { BagStatus } from "@shared/types/bag-status";
+import convertStatus from "@shared/utils/convert-status";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
 export default function BagMiniTable() {
-  const router = useRouter()
   const { bag_id } = useParams();
 
-  const [bagOrder, setBagOrder] = useState<IBagOrder>();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { handleError } = useHandleError()
-
   if (!bag_id) {
-    notFound()
+    notFound();
   }
 
-  useEffect(() => {
-    (() => {
-      setIsLoading(true)
-      fetchBag({
-        bag_id: bag_id as string
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+  const { page } = usePageQueryParams();
 
-            handleError(messageError)
-          } else if (response.data) {
-            setBagOrder(response.data)
-            setIsLoading(false)
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })()
-  }, [bag_id]);
+  const { data: bag, isLoading: isLoadingFetchBag } = useFetchBag({
+    bag_id: bag_id.toString(),
+    page,
+  });
 
-  const handleStatusBag = (bag_id: string, status: IBagStatus["build"]) => {
-    if (status === 'PENDING') {
-      handleBag({
-        bag_id,
-        status: "SEPARATED"
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+  const { handleBag, isLoading: isLoadingHandleBag } = useHandleBag();
 
-            handleError(messageError)
-          } else {
-            sessionStorage.setItem(
-              "data-sucess",
-              JSON.stringify({
-                title: "A sacola está pronta!",
-                description: "A sacola do cliente está pronta.",
-                button: {
-                  secondary: {
-                    router: "/",
-                    name: "Voltar para a tela inicial",
-                  },
-                  primary: {
-                    router: "/montar-sacola",
-                    name: "Enviar sacola agora"
-                  },
-                },
-              })
-            );
+  const handleStatusBag = (bag_id: string, status: BagStatus["build"]) => {
+    const statusConfig = {
+      PENDING: {
+        nextStatus: "SEPARATED",
+        successMessage: "Sacola preparada com sucesso!",
+      },
+      SEPARATED: {
+        nextStatus: "PENDING",
+        successMessage: "A sacola foi alterada com sucesso!",
+      },
+    };
 
-            router.push("/sucesso");
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    } else if (status === "SEPARATED") {
-      handleBag({
-        bag_id,
-        status: "PENDING"
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+    const config = statusConfig[status];
 
-            handleError(messageError)
-          } else {
-            sessionStorage.setItem(
-              "data-sucess",
-              JSON.stringify({
-                title: "A sacola foi alterada!",
-                description: "A sacola do cliente está pendente para ser montada",
-                button: {
-                  secondary: {
-                    router: "/",
-                    name: "Voltar para a tela inicial",
-                  },
-                  primary: {
-                    router: "/montar-sacola",
-                    name: "Enviar sacola agora"
-                  },
-                }
-              })
-            );
-
-            router.push("/sucesso");
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
+    if (!config) {
+      return;
     }
-  }
+
+    handleBag({
+      bag_id,
+      status: config.nextStatus as BagStatus["build"],
+      successMessage: config.successMessage,
+      successRedirect: "/montar-sacola",
+    });
+  };
+
+  const isLoading = isLoadingFetchBag || isLoadingHandleBag;
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
-      {isLoading ? (
-        <TableSkeleton />
-      ) : bagOrder ? (
+    <div className="w-full h-full flex flex-col justify-between items-center gap-3">
+      {isLoading && <TableSkeleton />}
+      {!isLoading && !bag && (
+        <span className="text-center text-red-500">
+          Erro ao carregar os dados da sacola
+        </span>
+      )}
+      {!isLoading && bag && (
         <>
           <HeaderDetail
-            id={bagOrder.id}
-            status={convertStatus(bagOrder.status)?.name}
-            name={`${bagOrder.user.first_name} ${bagOrder.user.last_name}`}
+            id={bag.id}
+            status={convertStatus(bag.status)?.name}
+            name={`${bag.user.first_name} ${bag.user.last_name}`}
             time={getNextSaturdayDate()}
-            content={
-              <GroupOrder 
-                orders={bagOrder.orders} 
-              />
-            }
+            content={<GroupOrder orders={bag.orders} />}
           />
-          <div className="w-full h-[10%] flex justify-center items-end">
-            {bagOrder?.status === "PENDING" ? (
+          <TablePaginationControl />
+          <div className="w-full h-[15%] flex justify-center items-end">
+            {bag?.status === "PENDING" ? (
               <Modal
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao marcar a sacola como pronta, o cliente será notificado."
@@ -157,10 +88,10 @@ export default function BagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "PENDING")
+                  handleStatusBag(bag_id as string, "PENDING");
                 }}
               />
-              ) : (
+            ) : (
               <Modal
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao alterar o status para pendente, a sacola deverá ser montada novamente."
@@ -171,16 +102,13 @@ export default function BagMiniTable() {
                 bgConfirmModal="#FF7070"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "SEPARATED")
+                  handleStatusBag(bag_id as string, "SEPARATED");
                 }}
               />
             )}
           </div>
         </>
-      ) : (
-        <span className="text-center text-red-500">Erro ao carregar os dados da sacola</span>
       )}
     </div>
   );
 }
-

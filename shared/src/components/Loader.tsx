@@ -1,10 +1,14 @@
+import { twMerge } from "tailwind-merge";
+
 interface LoaderProps {
   className?: string;
   loaderType: "page" | "component" | "login";
+  width?: string;
+  height?: string;
 }
 
-export default function Loader({ className, loaderType }: LoaderProps) {
-  const size =
+export default function Loader({ className, loaderType, width, height }: LoaderProps) {
+  const defaultSize =
     loaderType === "page"
       ? "w-12 h-12"
       : loaderType === "login"
@@ -16,11 +20,17 @@ export default function Loader({ className, loaderType }: LoaderProps) {
       ? "flex items-center justify-center min-h-screen"
       : "w-full flex items-center justify-center";
 
+  const customSize = width && height ? `w-[${width}] h-[${height}]` : "";
+
   return (
-    <div className={`${centering} space-x-2 overflow-hidden`}>
+    <div className={twMerge(centering, "space-x-2 overflow-hidden", className)}>
       <svg
         aria-hidden="true"
-        className={`animate-spin text-gray-200 fill-theme-default ${size} ${className || ''}`}
+        className={twMerge(
+          "animate-spin text-gray-200 fill-theme-default",
+          customSize || defaultSize
+        )}
+        style={width && height ? { width, height } : {}}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
@@ -37,3 +47,4 @@ export default function Loader({ className, loaderType }: LoaderProps) {
     </div>
   );
 }
+

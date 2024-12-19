@@ -1,65 +1,69 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { toast } from "sonner";
-import HeaderDetail from "./HeaderDetail";
 import IndividualProductTable from "@shared/components/IndividualProductTable";
+import { notFound, useParams } from "next/navigation";
+import { useState } from "react";
+import HeaderDetail from "./HeaderDetail";
 
-import { getBoxOrders } from "@cdd/app/_actions/box/get-box-orders";
-
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
-import { convertStatus } from "@shared/utils/convert-status";
-import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { IFarmOrders } from "@shared/interfaces/farm";
+import useFetchBox from "@cdd/hooks/boxes/useFetchBox";
+import useHandleBox from "@cdd/hooks/boxes/useHandleBox";
+import EmptyBoxInformation from "@shared/components/EmptyBoxInformation";
+import Loader from "@shared/components/Loader";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
 import TableSkeleton from "@shared/components/TableSkeleton";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { convertStatus } from "@shared/utils/convert-status";
+import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
 export default function FarmOrdersTable() {
-  const router = useRouter();
   const { box_id } = useParams();
-
-  const [farmOrders, setFarmOrders] = useState<IFarmOrders | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { handleError } = useHandleError();
-  const { getFromStorage } = useLocalStorage();
 
   if (!box_id) {
     notFound();
   }
 
-  useEffect(() => {
-    (async () => {
-      const cycle = getFromStorage("selected-cycle");
+  const { page } = usePageQueryParams();
 
-      if (!cycle) {
-        toast.error("Selecione um ciclo para receber ofertas!");
-        return;
-      }
+  const {
+    data: farmOrders,
+    isLoading,
+    fetchBox,
+  } = useFetchBox({ box_id: box_id.toString(), page: page });
 
-      await getBoxOrders({
-        box_id: box_id as string,
-      })
-        .then((response: any) => {
-          if (response.message) {
-            const messageError = response.message as string;
+  const { handleBox } = useHandleBox();
 
-            handleError(messageError);
-          } else if (response.data) {
-            setFarmOrders(response.data);
-            return;
-          }
-        })
-        .catch((error) => {
-          toast.error(error);
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    })();
-  }, [box_id]);
+  const [isOrdersLoading, setIsOrdersLoading] = useState(false);
+
+  const handleApproveFarmOffer = async (order_id: string) => {
+    setIsOrdersLoading(true);
+
+    await handleBox({
+      box_id: box_id as string,
+      order_id: order_id as string,
+      status: "RECEIVED",
+      successMessage: "Oferta aprovada com sucesso!",
+    });
+
+    await fetchBox().finally(() => {
+      setIsOrdersLoading(false);
+    });
+  };
+
+  const handleRejectFarmOffer = async (order_id: string) => {
+    setIsOrdersLoading(true);
+
+    await handleBox({
+      box_id: box_id as string,
+      order_id: order_id as string,
+      status: "CANCELLED",
+      successMessage: "Oferta rejeitada com sucesso!",
+    });
+
+    await fetchBox().finally(() => {
+      setIsOrdersLoading(false);
+    });
+  };
 
   if (isLoading) {
     return <TableSkeleton />;
@@ -79,25 +83,48 @@ export default function FarmOrdersTable() {
     id: detail.id,
     data: [
       {
-        detail: convertOfferAmount(detail.amount, detail.offer.product.pricing) + " " + convertUnit(detail.offer.product.pricing),
+        detail:
+          convertOfferAmount(detail.amount, detail.offer.product.pricing) +
+          " " +
+          convertUnit(detail.offer.product.pricing),
       },
       { detail: detail.offer.product.name },
       { detail: convertStatus(detail.status).icon, style: "text-center" },
     ],
   }));
-  
-  const status = farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
+
+  const status =
+    farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
 
   return (
-    <div className="w-full h-full flex flex-col justify-between">
+    <div className="w-full h-full flex flex-col justify-between gap-2 items-center">
       <HeaderDetail
         id={farmOrders?.id.split("-", 1).toString().toUpperCase()}
         status={convertStatus(status).name}
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
       />
-
-      <IndividualProductTable headers={headers} info={info} farmOrders={farmOrders}/>
+      {isOrdersLoading ? (
+        <Loader className="mt-3" loaderType="component" />
+      ) : (
+        <>
+          {farmOrders.orders.length === 0 && (
+            <EmptyBoxInformation style="m-auto">
+              Nenhuma Caixa Encontrada!
+            </EmptyBoxInformation>
+          )}
+          {farmOrders.orders.length > 0 && (
+            <IndividualProductTable
+              headers={headers}
+              info={info}
+              farmOrders={farmOrders}
+              onApprove={handleApproveFarmOffer}
+              onReject={handleRejectFarmOffer}
+            />
+          )}
+          <TablePaginationControl />
+        </>
+      )}
     </div>
   );
 }

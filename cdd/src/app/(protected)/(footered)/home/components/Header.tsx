@@ -1,52 +1,35 @@
 "use client";
 
-import { getUser } from "@shared/_actions/account/get-user"
-import { useHandleError } from "@shared/hooks/useHandleError";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { HiOutlineBell } from "react-icons/hi";
-import { toast } from "sonner";
+
 import { useRouter } from "next/navigation";
+import { HiOutlineBell } from "react-icons/hi";
+
+import useFetchProfile from "@shared/hooks/users/useFetchProfile";
 
 export function Header() {
-  const [name, setName] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const {
+    data: { first_name },
+    isLoading,
+  } = useFetchProfile();
+
   const router = useRouter();
 
-  const { handleError } = useHandleError()
-
-  useEffect(() => {
-    (() => {
-      getUser()
-      .then((response) => {
-        if (response.message) {
-          handleError(response.message)
-        } else if (response.data) {
-          const { first_name } = response.data;
-          setName(first_name);
-          setIsLoading(false)
-        }
-      })
-      .catch((error) => {
-        toast.error(error)
-      })
-    })()
-  }, [])
-
   const logout = () => {
-    router.push("/api/auth/logout")
-  }
-
+    router.push("/api/auth/logout");
+  };
 
   return (
-    <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 sticky pb-2.5 top-0 z-30 bg-theme-background">
+    <header className="w-full flex items-start justify-between px-3 text-lg leading-5.5 top-0 z-10 bg-theme-background pb-5.5">
       <div className="flex-shrink">
         {isLoading ? (
           <SkeletonLoader />
         ) : (
-          <span className="text-slate-gray">
-            Olá, <strong className="font-semibold">{name}</strong>
+          <span className="flex gap-1 items-center text-slate-gray">
+            Olá,{" "}
+            <strong className="font-semibold underline underline-offset-2">
+              {first_name}!
+            </strong>
           </span>
         )}
       </div>
@@ -54,11 +37,11 @@ export function Header() {
         <button disabled className="text-theme-primary">
           <HiOutlineBell size={24} />
         </button>
-        <button 
+        <button
           onClick={logout}
-          title="Sair" 
-          type="button" 
-          aria-label="Sair" 
+          title="Sair"
+          type="button"
+          aria-label="Sair"
           className="pt-0.5 text-slate-gray"
         >
           Sair

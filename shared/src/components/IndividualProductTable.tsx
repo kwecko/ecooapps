@@ -1,16 +1,12 @@
+import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { twMerge } from "tailwind-merge";
 
-import EmptyBoxInformation from '@shared/components/EmptyBoxInformation';
-import CustomModal from "./CustomModal";
-import { IFarmOrders } from "@shared/interfaces/farm";
-import { IOrder } from "@shared/interfaces/order";
+import EmptyBoxInformation from "@shared/components/EmptyBoxInformation";
 import { convertUnit } from "@shared/utils/convert-unit";
-import { useHandleError } from "@shared/hooks/useHandleError";
+import CustomModal from "./CustomModal";
 
-import { toast } from "sonner";
-import { handleOrderDelivery } from "@cdd/app/_actions/order/handle-order-delivery";
+import { BoxDTO, OrderDTO } from "@shared/interfaces/dtos";
 import { convertOfferAmount } from "../utils/convert-unit";
 
 const styles = {
@@ -19,111 +15,63 @@ const styles = {
   itemBody: "border-b truncate text-grayish-blue p-3 text-left",
 };
 
-interface ITableProps {
+interface TableProps {
   headers: Array<{ label: string; style?: string }>;
   info: {
     id: string;
     data: { detail: string | JSX.Element; style?: string }[];
   }[];
-  farmOrders: IFarmOrders;
-  onRowClick?: (id: string) => void;
+  farmOrders: BoxDTO;
+  onApprove: (order_id: string) => void;
+  onReject: (order_id: string) => void;
 }
 
-const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
-  const router = useRouter();
-
+const IndividualProductTable = ({
+  headers,
+  info,
+  farmOrders,
+  onApprove,
+  onReject,
+}: TableProps) => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [statusText, setStatusText] = useState("");
-  const [selectedOrder, setSelectedOrder] = useState<IOrder | null>(null);
-  const { handleError } = useHandleError();
+  const [selectedOrder, setSelectedOrder] = useState<OrderDTO | null>(null);
 
   const handleRowClick = (id: string) => {
-    const order = farmOrders.orders.find((order: IOrder) => order.id === id);
+    const order = farmOrders.orders.find((order: OrderDTO) => order.id === id);
     setSelectedOrder(order || null);
     setModalOpen(true);
   };
 
   const handleApprove = () => {
-    handleOrderDelivery({
-      box_id: box_id as string,
-      order_id: selectedOrder?.id as string,
-      status: "RECEIVED",
-    })
-      .then((response) => {
-        if (response.message) {
-          handleError(response.message);
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi aprovada!",
-              description: "A oferta do produtor foi aprovada.",
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: `/ofertas/${box_id}`,
-                  name: "Verificar outra oferta"
-                },
-              }
-            })
-          );
-          router.push("/sucesso");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
+    if (selectedOrder) {
+      onApprove(selectedOrder.id);
+      setSelectedOrder(null);
+    }
   };
 
   const handleReject = () => {
-    handleOrderDelivery({
-      box_id: box_id as string,
-      order_id: selectedOrder?.id as string,
-      status: "CANCELLED",
-    })
-      .then((response) => {
-        if (response.message) {
-          handleError(response.message);
-        } else {
-          sessionStorage.setItem(
-            "data-sucess",
-            JSON.stringify({
-              title: "A oferta foi reprovada!",
-              description: "A oferta do produtor foi reprovada.",
-              button: {
-                secondary: {
-                  router: "/",
-                  name: "Voltar para a tela inicial",
-                },
-                primary: {
-                  router: `/ofertas/${box_id}`,
-                  name: "Verificar outra oferta"
-                },
-              }
-            })
-          );
-          router.push("/sucesso");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
+    if (selectedOrder) {
+      onReject(selectedOrder.id);
+      setSelectedOrder(null);
+    }
   };
 
   const box_id = useParams().box_id;
 
   if (!info.length) {
     return (
-      <EmptyBoxInformation style="m-auto">Nenhuma Caixa Encontrada!</EmptyBoxInformation>
+      <EmptyBoxInformation style="m-auto">
+        Nenhuma Caixa Encontrada!
+      </EmptyBoxInformation>
     );
   }
 
   useEffect(() => {
     if (selectedOrder) {
-      setStatusText(selectedOrder.status === "RECEIVED" ? "aprovado" : "rejeitado");
+      setStatusText(
+        selectedOrder.status === "RECEIVED" ? "aprovado" : "rejeitado"
+      );
     }
   }, [selectedOrder]);
 
@@ -165,7 +113,10 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
       {selectedOrder && selectedOrder.status === "PENDING" && (
         <CustomModal
           titleContentModal={selectedOrder?.offer.product.name}
-          subtitleContentModal={`Quantidade: ${convertOfferAmount(selectedOrder?.amount, selectedOrder.offer.product.pricing)} ${convertUnit(selectedOrder.offer.product.pricing)}`}
+          subtitleContentModal={`Quantidade: ${convertOfferAmount(
+            selectedOrder?.amount,
+            selectedOrder.offer.product.pricing
+          )} ${convertUnit(selectedOrder.offer.product.pricing)}`}
           contentModal="Confira a quantidade e a qualidade do produto. Se estiver tudo certo, clique em aprovar."
           titleConfirmModal="Aprovar"
           titleCloseModal="Rejeitar"
@@ -178,10 +129,13 @@ const IndividualProductTable = ({ headers, info, farmOrders }: ITableProps) => {
           rejectAction={handleReject}
         />
       )}
-      {selectedOrder && (selectedOrder.status !== "PENDING") && (
+      {selectedOrder && selectedOrder.status !== "PENDING" && (
         <CustomModal
           titleContentModal={selectedOrder?.offer.product.name}
-          subtitleContentModal={`Quantidade: ${convertOfferAmount(selectedOrder?.amount, selectedOrder.offer.product.pricing)} ${convertUnit(selectedOrder.offer.product.pricing)}`}
+          subtitleContentModal={`Quantidade: ${convertOfferAmount(
+            selectedOrder?.amount,
+            selectedOrder.offer.product.pricing
+          )} ${convertUnit(selectedOrder.offer.product.pricing)}`}
           contentModal={`O produto foi marcado como ${statusText}. Após terminar de conferir a sacola, siga para a montagem.`}
           isOpen={isModalOpen}
           setIsOpen={setModalOpen}

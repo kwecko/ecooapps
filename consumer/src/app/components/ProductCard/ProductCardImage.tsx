@@ -1,11 +1,11 @@
-import Image, { ImageLoader } from "next/image";
+import { ProductDTO } from "@shared/interfaces/dtos";
 import {
   convertPricingToGrams,
   convertPricingToQuantityInGrams,
 } from "@shared/utils/convert-unit";
-import { IProduct } from "@shared/interfaces/offer";
+import Image, { ImageLoader } from "next/image";
 
-export const ProductCardImage = ({ product }: { product: IProduct }) => {
+export const ProductCardImage = ({ product }: { product: ProductDTO }) => {
   const imageLoader: ImageLoader = ({ src }) => {
     return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
   };
@@ -21,8 +21,9 @@ export const ProductCardImage = ({ product }: { product: IProduct }) => {
       />
       <div className="absolute flex justify-center bottom-0 right-0 bg-theme-default text-white items-center w-12 h-5 rounded-tl-xl rounded-br-xl text-xs">
         {`${
-          product.pricing === "UNIT" ?
-           "" : convertPricingToQuantityInGrams(product.pricing)
+          product.pricing === "UNIT"
+            ? ""
+            : convertPricingToQuantityInGrams(product.pricing)
         }${convertPricingToGrams(product.pricing)}`}
       </div>
     </div>

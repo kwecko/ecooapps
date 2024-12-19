@@ -14,6 +14,8 @@ export const convertStatus = (status: string) => {
     CANCELLED: "Cancelado",
     DEFERRED: "Retornado",
     VERIFIED: "Verificado",
+    ACTIVE: "Aprovado",
+    INACTIVE: "Rejeitado"
   };
 
   const colorStatus: Record<string, string> = {

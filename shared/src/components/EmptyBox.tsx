@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import emptyBox from '@shared/assets/public/empty-box.png';
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
-type EmptyBoxType = "search" | "bag";
+import emptyBox from "@shared/assets/images/empty-box.webp";
+
+type EmptyBoxType = "search" | "bag" | "box" | "producer";
 
 interface EmptyBoxProps {
   type: EmptyBoxType;
 }
 
-export default function EmptyBox ({
-  type
-}: EmptyBoxProps) {
+export default function EmptyBox({ type }: EmptyBoxProps) {
   const [boxText, setBoxText] = useState("");
 
   useEffect(() => {
-    if (type == "search") {
+    if (type === "search") {
       setBoxText("Não encontramos resultados para a sua pesquisa.");
+      return;
+    } if (type === "producer") {
+      setBoxText("Nenhum produtor encontrado.");
       return;
     }
     setBoxText("Nenhuma sacola encontrada!");

@@ -1,23 +1,25 @@
-import React from "react";
-import { IOfferWithProduct } from "@shared/interfaces/offer";
-import Image, { ImageLoader } from "next/image";
-import EditOfferButton from "./EditOfferButton";
-import DeleteOfferButton from "./DeleteOfferButton";
-import {
-  convertUnitFull,
-  convertOfferAmount,
-} from "@shared/utils/convert-unit";
+import { OfferDTO } from "@shared/interfaces/dtos";
 import { removeTaxFromPrice } from "@shared/utils/convert-tax";
+import {
+  convertOfferAmount,
+  convertUnitFull,
+} from "@shared/utils/convert-unit";
+import Image, { ImageLoader } from "next/image";
+import React from "react";
+import DeleteOfferButton from "./DeleteOfferButton";
+import EditOfferButton from "./EditOfferButton";
 
-interface OfferCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'ref'> {
-  offer: IOfferWithProduct;
+interface OfferCardProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, "ref"> {
+  catalogId: string;
+  offer: OfferDTO;
   onDeleteCard?: (offerId: string) => void;
   editable?: boolean;
   repeatable?: boolean;
 }
 
 const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
-  ({ offer, onDeleteCard, editable, repeatable, ...rest }, ref) => {
+  ({ catalogId, offer, onDeleteCard, editable, repeatable, ...rest }, ref) => {
     const imageLoader: ImageLoader = ({ src }) => {
       return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
     };
@@ -69,6 +71,7 @@ const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
         <div className="flex flex-row h-full justify-end shrink-0 grow-0 basis-16 gap-2.5 align-start grayscale-0">
           {onDeleteCard && (
             <DeleteOfferButton
+              catalogId={catalogId}
               offerId={offer.id}
               productName={offer.product.name}
               onDeleteCard={onDeleteCard}

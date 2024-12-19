@@ -1,27 +1,26 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import React, { useTransition } from "react";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Loader from "@shared/components/Loader";
-import { LoginSchema } from "@shared/types/login";
 import ButtonV2 from "@shared/components/ButtonV2";
-import { loginSchema } from "@shared/schemas/login";
-import { AppID } from "@shared/library/types/app-id";
-import { login } from "@shared/_actions/account/login";
 import CustomInput from "@shared/components/CustomInput";
-import { useHandleError } from "@shared/hooks/useHandleError";
+import Loader from "@shared/components/Loader";
+import { AppID } from "@shared/library/types/app-id";
+import { loginSchema } from "@shared/schemas/login";
+import { LoginSchema } from "@shared/types/login";
+
+import useAuthenticate from "@shared/hooks/auth/useAuthenticate";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function FormLogin({ appID }: { appID: AppID }) {
   const [isPending, starTransition] = useTransition();
 
   const router = useRouter();
-
-  const { handleError } = useHandleError();
+  const { authenticate } = useAuthenticate();
 
   const {
     register,
@@ -37,28 +36,20 @@ export default function FormLogin({ appID }: { appID: AppID }) {
     },
   });
 
-  const onSubmit = ({ email, password }: LoginSchema) => {
+  const onSubmit = async ({ email, password }: LoginSchema) => {
     starTransition(async () => {
       const isValid = await trigger();
 
       if (!isValid) return;
 
-      login({
+      const success = await authenticate({
         email,
         password,
         appID,
-      })
-        .then((response) => {
-          if (response.message) {
-            handleError(response.message);  
-            return;
-          } 
+      });
 
-          router.push("/");
-        })
-        .catch(() => {
-          toast.error("Erro ao efetuar login");
-        });
+      if (!success) return;
+      router.push("/");
     });
   };
 

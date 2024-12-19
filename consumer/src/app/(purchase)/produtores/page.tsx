@@ -1,16 +1,15 @@
 "use client";
-
+import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
+import RedirectCart from "@consumer/app/_components/redirectCart";
+import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { CatalogDTO, CycleDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
-import RedirectCart from "@consumer/app/_components/redirectCart";
 import ProducerCard from "./components/ProducerCard";
-import { searchCatalogs } from "@consumer/app/_actions/search-catalogs";
-import { ICatalog } from "@shared/interfaces/catalog";
-import { useHandleError } from "@shared/hooks/useHandleError";
 
 export default function Produtores() {
-  const [cycles, setCycles] = useState([] as Cycle[]);
+  const [cycles, setCycles] = useState([] as CycleDTO[]);
   const [cycleId, setCycleId] = useState("" as string);
   const [producers, setProducers] = useState([] as any[]);
   const [page, setPage] = useState(1 as number);
@@ -20,8 +19,18 @@ export default function Produtores() {
 
   useEffect(() => {
     (async () => {
-      const cycles = await fetchCycles();
-      setCycles(cycles);
+      try {
+        setIsLoading(true);
+        const response = await listCycles();
+        if (response.message) {
+          handleError(response.message as string);
+        } else if (response.data) {
+          const cycles: CycleDTO[] = response.data;
+          setCycles(cycles);
+        }
+      } catch {
+        handleError("Erro desconhecido.");
+      } 
     })();
   }, []);
 
@@ -34,15 +43,15 @@ export default function Produtores() {
       : "livre";
 
     const cycle = cycles.find(
-      (cycle) => cycle.alias.toLocaleLowerCase() == typeCycle
+      (cycle) => cycle.alias.toLowerCase() == typeCycle
     );
-
     if (!cycle) {
       setIsLoading(false);
       return;
     }
 
     setCycleId(cycle.id as string);
+    localStorage.setItem("selected-cycle", JSON.stringify(cycle));
 
     try {
       const response = await searchCatalogs({
@@ -52,13 +61,9 @@ export default function Produtores() {
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
-        const catalogs: ICatalog[] = response.data;
+        const catalogs: CatalogDTO[] = response.data;
         let newProducers = catalogs.map((catalog) => {
-          return {
-            id: catalog.id,
-            name: catalog.farm.name,
-            tally: catalog.farm.tally,
-          };
+          return catalog;
         });
 
         if (newProducers.length == 0) {
@@ -88,13 +93,7 @@ export default function Produtores() {
         {producers && producers.length !== 0
           ? producers.map((producer) => {
               return (
-                <ProducerCard
-                  key={producer.id}
-                  id={producer.id}
-                  name={producer.name}
-                  tally={producer.tally}
-                  cycleId={cycleId}
-                />
+                <ProducerCard key={producer.id} {...producer}/>
               );
             })
           : null}
