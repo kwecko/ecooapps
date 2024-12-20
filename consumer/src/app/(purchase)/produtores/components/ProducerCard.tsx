@@ -3,7 +3,7 @@ import Image, { ImageLoader } from "next/image";
 import Link from "next/link";
 
 const imageLoader: ImageLoader = ({ src }) => {
-  return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
+  return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/users/${src}`;
 };
 export default function ProducerCard(catalog: CatalogDTO) {
   return (
