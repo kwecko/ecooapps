@@ -20,7 +20,7 @@ export default function Produtor() {
     : null;
 
   const imageLoader: ImageLoader = ({ src }) => {
-    return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/users/${src}`;
+    return `${src}`;
   };
 
   return (
