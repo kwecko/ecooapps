@@ -16,12 +16,7 @@ interface InputAmountProps {
 }
 
 function validateValue(value: string) {
-  if (!isInteger(value)) {
-    toast.error("O valor deve ser um número inteiro.");
-    return false;
-  }
-
-  if (!(value === "" || parseInt(value) >= 1)) {
+  if (!(value === "" || parseInt(value) >= 0)) {
     toast.error("A quantidade mínima permitida é 1.");
     return false;
   }
@@ -88,6 +83,7 @@ export default function InputAmount({
         )}
       >
         <Input
+          placeholder="Peso em quilogramas..."
           onChange={handleChange}
           className="text-theme-primary w-full text-sm"
           type="number"
