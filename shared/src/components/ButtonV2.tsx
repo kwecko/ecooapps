@@ -9,6 +9,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant: "default" | "light" | "transparent";
   border?: boolean;
   notification?: string;
+  className?: string;
 }
 
 interface StyleClasses {
@@ -52,7 +53,15 @@ export default function ButtonV2({
   );
 
   return (
-    <button disabled={isDisabled} className={buttonClasses} {...rest}>
+    <button
+      {...rest}
+      disabled={isDisabled}
+      className={twMerge(
+        "lg:text-base lg:font-inter lg:tracking-tight-2 lg:leading-5.5 lg:font-semibold",
+        buttonClasses,
+        className
+      )}
+    >
       {children}
       {notification && (
         <span className="absolute top-0 right-0 mt-10-negative mr-10-negative flex h-5 w-5">
