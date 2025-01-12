@@ -6,7 +6,7 @@ import { useReportGenerator } from "@shared/hooks/useReportGenerator";
 
 import Title from "@admin/app/components/Title";
 import SelectInput from "./components/SelectInput";
-import DateInput from "./components/DateInput";
+import DateInput from "@shared/components/DateInput";
 import Button from "@shared/components/Button";
 import Copyright from "@admin/app/components/Copyright";
 import { AdminReportActions } from "@shared/types/report";
