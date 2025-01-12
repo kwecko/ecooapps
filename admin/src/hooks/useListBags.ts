@@ -1,4 +1,4 @@
-import { listBags } from "@admin/_actions/farms/GET/list-bags";
+import { listBags } from "@admin/_actions/bags/list-bags";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { BagDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
