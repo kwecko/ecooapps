@@ -2,7 +2,11 @@
 
 import Footer from "@shared/components/Footer";
 
-export function LayoutWithFooter({ children }: { children: React.ReactNode }) {
+export default function LayoutWithFooter({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col justify-between w-full bg-theme-background h-inherit">
       <div className="h-footered-page overflow-y-auto">{children}</div>
@@ -12,5 +16,3 @@ export function LayoutWithFooter({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
-export default LayoutWithFooter;
