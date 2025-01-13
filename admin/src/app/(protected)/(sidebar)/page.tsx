@@ -76,7 +76,7 @@ export default function Home() {
           <div className="flex items-top justify-between gap-20">
             <div className="text-4xl font-semibold text-rain-forest">
               {stats?.revenue
-                ? `R$ ${(stats.revenue - stats.revenue * 0.2).toLocaleString(
+                ? `R$ ${(stats.revenue).toLocaleString(
                     "pt-BR",
                     { minimumFractionDigits: 2, maximumFractionDigits: 2 }
                   )}`
