@@ -7,9 +7,19 @@ export interface ListFarmsRequest {
   farm?: string;
 }
 
-export async function listFarms({ page, farm = "" }: ListFarmsRequest) {
+export async function listFarms({ page, farm }: ListFarmsRequest) {
+  const params = new URLSearchParams();
+
+  params.append("page", page.toString());
+  if (farm) {
+    params.append("farm", farm);
+  }
+
+  const queryString = params.toString();
+  const url = `/farms${queryString ? `?${queryString}` : ""}`;
+
   const response = ApiService.GET({
-    url: `/farms?page=${page}&farm=${farm}`,
+    url,
   });
   return response;
 }
