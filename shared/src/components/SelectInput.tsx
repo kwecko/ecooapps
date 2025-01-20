@@ -88,7 +88,7 @@ export default function Select({
       </div>
 
       {!disabled && isOpen && (
-        <ul className="absolute mt-1 w-full bg-white border border-slate-gray rounded-lg shadow-lg max-h-48 overflow-auto z-10">
+        <ul className="mt-1 w-full bg-white border border-slate-gray rounded-lg shadow-lg max-h-48 overflow-auto z-10">
           {options.map((option) => (
             <li
               key={option.value}
