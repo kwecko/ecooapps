@@ -15,7 +15,7 @@ export default function sendTelegram() {
     return () => {
       tg.offEvent("mainButtonClicked", sendData);
     };
-  }, [tg]);
+  }, [tg, cart, totalPurchase]);
 
   useEffect(() => {
     tg.MainButton.setParams({
