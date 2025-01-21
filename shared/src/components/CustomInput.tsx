@@ -69,14 +69,14 @@ export default function CustomInput({
 
   return (
     <div className="w-full flex flex-col">
-      <label className="text-slate-gray font-inter">
+      <label className="text-theme-home-bg lg:text-theme-primary font-normal font-inter text-sm leading-4.75 tracking-tight-2">
         <span className="text-sm">{label}</span>
         <div className="relative mt-1 w-full">
           <input
             {...register}
             onChange={handleInputChange}
             className={twMerge(
-              "w-full rounded-lg border border-slate-gray px-3 h-12 text-slate-gray focus:outline-none",
+              "w-full rounded-lg border px-3 h-12 text-slate-gray focus:outline-none border-theme-home-bg text-theme-home-bg p-3 font-inter font-normal tracking-tight-2 lg:border-theme-primary lg:text-theme-primary lg:text-base",
               disabled && "bg-gray-100 cursor-not-allowed text-gray-500"
             )}
             type={type === "password" && showPassword ? "text" : type}

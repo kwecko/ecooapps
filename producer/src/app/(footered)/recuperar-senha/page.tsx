@@ -10,10 +10,12 @@ import ButtonV2 from "@shared/components/ButtonV2";
 import CustomInput from "@shared/components/CustomInput";
 import { ModelPage } from "@shared/components/ModelPage";
 import useRequestPassword from "@shared/hooks/auth/useRequestPasswordUpdate";
-import router from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
   const { requestPasswordUpdate, isLoading } = useRequestPassword();
+
+  const router = useRouter();
 
   const {
     register,
@@ -52,9 +54,15 @@ export default function Page() {
       title="Esqueci a senha"
       subtitle="Enviaremos um código de verificação para o email abaixo"
       overflowAuto={true}
+      titleClassName="pt-29 px-9.5"
+      subtitleClassName="leading-5.5"
+      titleGap="gap-2.75"
     >
-      <div className="w-full flex flex-col justify-start items-center gap-9 mt-3">
-        <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
+      <div className="w-full flex flex-col justify-start items-center gap-9">
+        <form
+          className="w-full flex flex-col gap-5"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <CustomInput
             label="E-mail"
             register={register("email")}
