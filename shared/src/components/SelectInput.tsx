@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegisterReturn } from "react-hook-form";
 import { FiChevronDown } from "react-icons/fi";
 
 interface Option {
@@ -11,10 +11,14 @@ export interface SelectProps {
   options: Option[];
   placeholder?: string;
   label?: string;
-  onChange: (value: any) => void;
+  onChange?: (value: any) => void;
   disabled?: boolean;
   defaultOption?: Option;
-  register?: UseFormRegister<any>;
+  register?: UseFormRegisterReturn;
+  useOnChange?: boolean;
+  useUseRef?: boolean;
+  errorMessage?: string;
+  clear?: boolean;
 }
 
 export default function Select({
@@ -25,10 +29,20 @@ export default function Select({
   disabled = false,
   defaultOption,
   register,
+  useOnChange = true,
+  useUseRef = true,
+  errorMessage,
+  clear = false,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<Option | null>(null);
-  const selectRef = useRef<HTMLDivElement>(null);
+  const selectRef = useUseRef ? useRef<HTMLDivElement>(null) : null;
+
+  useEffect(() => {
+    if (clear) {
+      setSelectedOption(null);
+    }
+  }, [clear]);
 
   useEffect(() => {
     if (defaultOption && !disabled) {
@@ -42,13 +56,20 @@ export default function Select({
     if (disabled) return;
     setSelectedOption(option);
     setIsOpen(false);
-    onChange(option.value);
+    useOnChange && onChange && onChange(option.value);
+    register?.onChange({
+      target: {
+        name: register.name,
+        value: option.value,
+      },
+    });
   };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        selectRef.current &&
+        useUseRef &&
+        selectRef?.current &&
         !selectRef.current.contains(event.target as Node)
       ) {
         setIsOpen(false);
@@ -63,7 +84,7 @@ export default function Select({
 
   return (
     <div
-      ref={selectRef}
+      ref={useUseRef ? selectRef : undefined}
       className="relative w-full pt-2 lg:flex lg:flex-col lg:gap-1.75 text-theme-home-bg lg:text-theme-primary lg:font-inter"
       {...register}
     >
@@ -93,6 +114,9 @@ export default function Select({
           }`}
         />
       </div>
+      {errorMessage && (
+        <span className="text-sm text-red-500 mt-1">{errorMessage}</span>
+      )}
 
       {!disabled && isOpen && (
         <ul className="absolute mt-1 lg:top-22.5 w-full bg-white border border-slate-gray lg:border-theme-primary rounded-lg shadow-lg max-h-48 overflow-auto z-10">
