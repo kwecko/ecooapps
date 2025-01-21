@@ -49,8 +49,7 @@ function TextInput({
         onChange={handleInputChange}
         className={twMerge(
           "resize-none",
-          "w-full rounded-lg border border-theme-home-bg text-theme-home-bg px-3 h-12 focus:outline-none p-3 font-inter font-normal tracking-tight-2",
-          "lg:border-theme-primary lg:text-theme-primary",
+          "w-full rounded-lg border border-theme-home-bg text-theme-home-bg px-3 h-12 focus:outline-none p-3 font-inter font-normal tracking-tight-2 lg:border-theme-primary lg:text-theme-primary",
           disabled && "bg-gray-100 cursor-not-allowed text-gray-500",
           className
         )}
