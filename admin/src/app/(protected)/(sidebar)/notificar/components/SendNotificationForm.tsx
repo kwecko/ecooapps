@@ -1,48 +1,96 @@
 "use client";
 
+import useSendNotification from "@admin/hooks/useSendNotification";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ButtonV2 from "@shared/components/ButtonV2";
+import CustomInput from "@shared/components/CustomInput";
+import CustomModal from "@shared/components/CustomModal";
 import Select from "@shared/components/SelectInput";
 import TextInput from "@shared/components/TextInput";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { HiOutlinePaperClip } from "react-icons/hi";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export default function SendNotificationForm() {
   const sendNotificationFormSchema = z.object({
-    public: z.enum([
-      "online_customers",
-      "offline_customers",
-      "all_customers",
-      "all_producers",
-    ]),
-    message: z.string().max(2000),
+    title: z.string().min(1, { message: "Título é obrigatório" }),
+    message: z.string().min(1, { message: "Mensagem é obrigatória" }),
+    role: z
+      .enum(["USER", "PRODUCER"], { message: "" })
+      .refine((data) => data !== null, {
+        message: "Selecione o público",
+      }),
   });
+
+  type SendNotificationFormSchema = z.infer<typeof sendNotificationFormSchema>;
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [confirmSend, setConfirmSend] = useState(false);
+  const [formData, setFormData] = useState<SendNotificationFormSchema | null>(
+    null
+  );
+  const [clearOptions, setClearOptions] = useState(false);
+
+  const { sendNotification } = useSendNotification();
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
+    formState: { errors, isValid },
+    reset,
+  } = useForm<SendNotificationFormSchema>({
     resolver: zodResolver(sendNotificationFormSchema),
     mode: "onChange",
     defaultValues: {
-      public: "online_customers",
+      title: "",
       message: "",
+      role: undefined,
     },
   });
 
+  const handleSubmitForm = async (data: SendNotificationFormSchema) => {
+    if (data.role === null) return;
+    setFormData(data);
+    setIsOpen(true);
+  };
+
+  const confirmSubmission = async () => {
+    if (!formData) return;
+    setClearOptions(false);
+    const success = await sendNotification(formData);
+    if (success) {
+      setFormData(null);
+      reset();
+      setClearOptions(true);
+      toast.success("Notificação enviada com sucesso!");
+    }
+  };
+
   return (
-    <form className="flex flex-col gap-5 h-full overflow-y-auto">
+    <form
+      className="flex flex-col gap-5 h-full overflow-y-auto"
+      onSubmit={handleSubmit(handleSubmitForm)}
+    >
       <Select
+        clear={clearOptions}
+        useOnChange={false}
+        useUseRef={false}
         label="Selecione o público"
         options={[
-          { value: "online_customers", label: "Clientes online" },
-          { value: "offline_customers", label: "Clientes offline" },
-          { value: "all_customers", label: "Todos os clientes" },
-          { value: "all_producers", label: "Todos os produtores" },
+          { value: "undefined", label: "Selecione..." },
+          { value: "USER", label: "Todos usuários" },
+          { value: "PRODUCER", label: "Todos produtores" },
         ]}
-        {...register("public")}
+        register={register("role")}
+        errorMessage={errors.role?.message}
+      />
+      <CustomInput
+        name="title"
+        type="text"
+        label="Título da notificação"
+        register={register("title")}
+        errorMessage={errors.title?.message}
       />
       <TextInput
         name="message"
@@ -50,21 +98,28 @@ export default function SendNotificationForm() {
         maxLength={2000}
         className="min-h-40"
         register={register}
+        errorMessage={errors.message?.message}
       />
-      <label className="flex items-center gap-3 cursor-pointer">
-        <HiOutlinePaperClip className="text-theme-primary" size={18} />
-        <span className="text-theme-primary font-inter text-sm leading-4.75 tracking-tight-2 underline underline-offset-[3px] font-normal">
-          Clique aqui para{" "}
-          <strong className="font-bold">anexar arquivos</strong>
-        </span>
-      </label>
       <ButtonV2
         variant="default"
         type="submit"
-        className="bg-theme-highlight mt-2.5"
+        className="bg-theme-highlight"
+        disabled={!isValid}
       >
         Enviar notificação
       </ButtonV2>
+      <CustomModal
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        approveAction={confirmSubmission}
+        rejectAction={() => setIsOpen(false)}
+        titleConfirmModal="Enviar"
+        bgConfirmModal="#00735E"
+        titleCloseModal="Cancelar"
+        bgCloseModal="#EEF1F4"
+        titleContentModal="Atenção"
+        contentModal="Você confirma que quer enviar uma nova mensagem para o público “Clientes online”?"
+      />
     </form>
   );
 }
