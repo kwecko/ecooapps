@@ -7,7 +7,9 @@ import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { LuChevronLeft } from "react-icons/lu";
 
+import { requestHelp } from "@shared/_actions/help/POST/request-help";
 import Button from "./Button";
+import { toast } from "sonner";
 
 const PagesWithGenericParams = ["aguardando-aprovacao", "perfil-rejeitado"];
 
@@ -82,30 +84,82 @@ export default function Footer({ appID }: { appID: string }) {
     </Link>
   );
 
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const HelpButton = () => {
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+    const [isModalOpen, setIsModalOpen] = React.useState(false);
+    const [text, setText] = React.useState("");
+
+    const handleOpenModal = () => {
+      setIsModalOpen(true);
+    };
+
+    const handleSendHelpMessage = () => {
+      requestHelp({ message: text })
+      toast.success("Mensagem enviada com sucesso!");
+      setIsModalOpen(false);
+    }
+
+    if (appID === "PRODUCER") {
+      return (
+        <InfoModal
+          titleContentModal={"Obter ajuda"}
+          contentModal={
+            <>
+              {"Escreva na área abaixo uma mensagem para a nossa equipe:"}
+              <textarea
+                className="p-4 w-full h-48 mt-4 border border-theme-primary text-slate-gray rounded-lg font-inter font-light box-border resize-none"
+                placeholder="Digite aqui a sua dúvida ou problema com o nosso sistema"
+                onChange={(e) => setText(e.target.value)}
+                value={text}
+              />
+            </> 
+          }
+          icon="?"
+          window_size="max-w-sm"
+          text_align="text-center"
+          text_size="text-lg font-inter font-light text-slate-gray"
+          titleCloseModal={"Enviar mensagem"}
+          buttonRequest={
+            <button
+              type="button"
+              className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
+              onClick={handleSendHelpMessage}
+            >
+              {"Enviar mensagem"}
+            </button>
+          }
+          buttonOpenModal={
+            <button
+              className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full justify-center text-white text-3xl leading-5.5 font-normal self-center -translate-y-3.5"
+              onClick={handleOpenModal}
+            >
+              ?
+            </button>
+          }
+          isOpen={isModalOpen}
+          setIsOpen={setIsModalOpen}
+        />
+      );
+    }
+    return (
+      <InfoModal
+        titleContentModal={helpInfo?.title || ""}
+        contentModal={helpInfo?.content || ""}
+        icon="?"
+        titleCloseModal={helpInfo?.closeButtonText || ""}
+        buttonOpenModal={
+          <button
+            className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full justify-center text-white text-3xl leading-5.5 font-normal self-center -translate-y-3.5"
+            onClick={handleOpenModal}
+          >
+            ?
+          </button>
+        }
+        isOpen={isModalOpen}
+        setIsOpen={setIsModalOpen}
+      />
+    );
   };
-
-  const HelpButton = () => (
-    <InfoModal
-      titleContentModal={helpInfo?.title || ""}
-      contentModal={helpInfo?.content || ""}
-      icon="?"
-      titleCloseModal={helpInfo?.closeButtonText || ""}
-      buttonOpenModal={
-        <button
-          className="z-10 flex items-center gap-2 bg-theme-default w-12.5 h-12.5 rounded-full justify-center text-white text-3xl leading-5.5 font-normal self-center -translate-y-3.5"
-          onClick={handleOpenModal}
-        >
-          ?
-        </button>
-      }
-      isOpen={isModalOpen}
-      setIsOpen={setIsModalOpen}
-    />
-  );
 
   function justify() {
     if (hasPreviousPage && hasHelpButton) {
