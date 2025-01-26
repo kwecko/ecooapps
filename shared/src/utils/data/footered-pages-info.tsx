@@ -89,7 +89,9 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Como funciona o ciclo?",
       content: (
         <p>
-          Semanalmente, o ciclo é aberto para que você possa fazer suas ofertas. Durante a semana, os dias são reservados para etapas específicas do ciclo. Para saber mais, clique no botão abaixo.
+          Semanalmente, o ciclo é aberto para que você possa fazer suas ofertas.
+          Durante a semana, os dias são reservados para etapas específicas do
+          ciclo. Para saber mais, clique no botão abaixo.
         </p>
       ),
       closeButtonText: "Saiba mais",
@@ -104,10 +106,15 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Esqueceu a senha?",
       content: (
         <p>
-          A tela de "Esqueceu a senha?" é um recurso essencial para recuperar o acesso à sua conta quando você não lembra sua senha atual. Ao acessar essa tela, você insere o e-mail cadastrado, e um link de recuperação é enviado para ele. Esse link direciona você para uma página onde pode definir uma nova senha. É uma maneira simples e segura de garantir que você recupere o controle da sua conta sem complicações.
+          A tela de "Esqueceu a senha?" é um recurso essencial para recuperar o
+          acesso à sua conta quando você não lembra sua senha atual. Ao acessar
+          essa tela, você insere o e-mail cadastrado, e um link de recuperação é
+          enviado para ele. Esse link direciona você para uma página onde pode
+          definir uma nova senha. É uma maneira simples e segura de garantir que
+          você recupere o controle da sua conta sem complicações.
         </p>
       ),
-      closeButtonText: "Saiba mais",
+      closeButtonText: "Entendi",
       redirectPath: "",
     },
   },
@@ -117,7 +124,7 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
     hasHelpButton: false,
     helpInfo: {
       title: "",
-      content: (<></>),
+      content: <></>,
       closeButtonText: "",
       redirectPath: "",
     },
@@ -136,7 +143,7 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       ),
       closeButtonText: "Ok, entendi",
       redirectPath: "",
-    }
+    },
   },
   "/relatorios": {
     hasPreviousPage: true,
@@ -209,8 +216,8 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Como enviar uma sacola?",
       content: (
         <p>
-          Para enviar uma sacola, você deve clicar no botão "enviar" e
-          seguir os passos indicados.
+          Para enviar uma sacola, você deve clicar no botão "enviar" e seguir os
+          passos indicados.
         </p>
       ),
       closeButtonText: "Ok, entendi",
@@ -225,8 +232,8 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Como enviar uma sacola?",
       content: (
         <p>
-          Para enviar uma sacola, você deve clicar no botão "enviar" e
-          seguir os passos indicados.
+          Para enviar uma sacola, você deve clicar no botão "enviar" e seguir os
+          passos indicados.
         </p>
       ),
       closeButtonText: "Ok, entendi",
@@ -247,8 +254,8 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Como montar uma sacola?",
       content: (
         <p>
-          Para montar uma sacola, você deve clicar no botão "montar" e
-          seguir os passos indicados.
+          Para montar uma sacola, você deve clicar no botão "montar" e seguir os
+          passos indicados.
         </p>
       ),
       closeButtonText: "Ok, entendi",
@@ -263,8 +270,8 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Como montar uma sacola?",
       content: (
         <p>
-          Para montar uma sacola, você deve clicar no botão "montar" e
-          seguir os passos indicados.
+          Para montar uma sacola, você deve clicar no botão "montar" e seguir os
+          passos indicados.
         </p>
       ),
       closeButtonText: "Ok, entendi",
@@ -323,7 +330,9 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Como funciona o ciclo?",
       content: (
         <p>
-          Semanalmente, o ciclo é aberto para que você possa fazer suas ofertas. Durante a semana, os dias são reservados para etapas específicas do ciclo. Para saber mais, clique no botão abaixo.
+          Semanalmente, o ciclo é aberto para que você possa fazer suas ofertas.
+          Durante a semana, os dias são reservados para etapas específicas do
+          ciclo. Para saber mais, clique no botão abaixo.
         </p>
       ),
       closeButtonText: "Saiba mais",
@@ -344,7 +353,7 @@ const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       ),
       closeButtonText: "Ok, entendi",
       redirectPath: "",
-    }
+    },
   },
 };
 
@@ -385,9 +394,9 @@ const consumerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       ),
       closeButtonText: "Ok, entendi",
       redirectPath: "",
-    }
+    },
   },
-}
+};
 
 export function getFooteredPageInfo(appID: string) {
   const apps: Record<string, Record<string, FooteredPageInfo>> = {
