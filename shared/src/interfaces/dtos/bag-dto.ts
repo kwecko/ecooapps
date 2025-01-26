@@ -27,6 +27,6 @@ export interface BagDTO {
   user: UserDTO;
   orders: OrderDTO[];
   payments: PaymentDTO[];
-  created_at: Date;
-  updated_at: Date | null;
+  created_at: string;
+  updated_at: string | null;
 }
