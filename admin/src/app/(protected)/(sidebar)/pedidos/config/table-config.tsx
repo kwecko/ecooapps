@@ -1,6 +1,7 @@
 import { GrView } from "react-icons/gr";
 
 import { convertStatus } from "@shared/utils/convert-status";
+import { formatDateToDateAndTime } from "@shared/utils/date-handlers";
 
 import { BagDTO } from "@shared/interfaces/dtos";
 
@@ -8,24 +9,18 @@ function formatPrice(value: number): string {
   return `R$ ${value.toFixed(2).replace(".", ",")}`;
 }
 
-function formatDate(value: string): string {
-  const date = new Date(value);
-  const formattedDate = date.toLocaleDateString("pt-BR");
-  const formattedTime = date.toLocaleTimeString("pt-BR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-  return `${formattedDate} | ${formattedTime}`;
-}
-
-export function getBagsTableColumns() {
+export const getBagsTableColumns = ({
+  navigateToBagDetails,
+}: {
+  navigateToBagDetails: (id: string) => void;
+}) => {
   return [
     {
       header: "Data da venda",
       key: "sales_date",
       colSpan: 4,
       render: function renderDate(row: BagDTO) {
-        return formatDate(row.created_at);
+        return formatDateToDateAndTime(row.created_at);
       },
     },
     {
@@ -65,7 +60,13 @@ export function getBagsTableColumns() {
       key: "status",
       colSpan: 2,
       render: function renderStatus(row: BagDTO) {
-        return convertStatus(row.status).name;
+        return (
+          <span
+            className={`font-semibold ${convertStatus(row.status).nameColor}`}
+          >
+            {convertStatus(row.status).name}
+          </span>
+        );
       },
     },
     {
@@ -76,7 +77,7 @@ export function getBagsTableColumns() {
         return (
           <button
             type="button"
-            onClick={() => {}}
+            onClick={() => navigateToBagDetails(row.id)}
             className="flex justify-center items-center"
           >
             <GrView
@@ -88,4 +89,4 @@ export function getBagsTableColumns() {
       },
     },
   ];
-}
+};
