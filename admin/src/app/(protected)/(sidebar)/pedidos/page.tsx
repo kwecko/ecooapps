@@ -21,9 +21,9 @@ function BagsPage() {
     nextPage,
     prevPage,
     isPending,
-    reloadBags,
     handleChangeInitialDate,
     handleChangeFinalDate,
+    navigateToBagDetails,
   } = useBagsPage();
 
   return (
@@ -52,7 +52,9 @@ function BagsPage() {
         {!isPending && bags.length > 0 && (
           <GenericTable
             data={bags}
-            columns={getBagsTableColumns()}
+            columns={getBagsTableColumns({
+              navigateToBagDetails,
+            })}
             gridColumns={16}
           />
         )}
