@@ -60,8 +60,10 @@ export default function InputDescription({
           value={description}
           onChange={handleChange}
           className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-56"
+          placeholder="Ex: Arroz orgânico, livre de agrotóxicos; o cliente verá essa descrição na compra."
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/200`}</p>
+        <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/200`}
+        </p>
       </div>
     </ModelPage>
   );

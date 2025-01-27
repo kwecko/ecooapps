@@ -33,14 +33,14 @@ export default function ReviewOffer(props: ReviewOfferProps) {
       )}`,
     },
     {
-      header: "Preço:",
+      header: "Preço de custo:",
       content: `${formatPrice(props.price)} / ${convertUnitFull(
         props.pricing || ""
       )}`,
     },
     {
-      header: "Taxa:",
-      content: `+20% = ${formatPrice(addTaxToPrice(props.price, 0.2))}`,
+      header: "Preço de venda (+20%):",
+      content: `${formatPrice(addTaxToPrice(props.price, 0.2))}`,
     },
     {
       header: "Descrição:",
