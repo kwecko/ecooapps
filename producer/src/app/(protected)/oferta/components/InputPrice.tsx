@@ -73,7 +73,7 @@ export default function InputPrice({
           label="Preço"
         />
         <span className="text-xs text-gray-500 pt-1 pl-2">
-          Preço + taxa: {formatPrice(addTaxToPrice(price, 0.2))}
+          Preço + taxa (20%): {formatPrice(addTaxToPrice(price, 0.2))}
         </span>
       </div>
     </ModelPage>

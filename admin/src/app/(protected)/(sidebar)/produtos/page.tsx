@@ -37,23 +37,26 @@ function ProductsPage() {
 
   return (
     <div className="w-full flex flex-col h-full gap-6 overflow-y-hidden items-stretch relative">
-      <Title>Produtos</Title>
-      <div className="flex absolute right-0 gap-3 items-center">
-        <SearchInput
-          placeholder="Filtrar por nome ou categoria"
-          onChange={setName}
-          value={name}
-          type="secondary"
-          className="w-86"
-        />
-        <Button
-          variant="default"
-          className="flex w-64 justify-center items-center gap-3 bg-rain-forest"
-          onClick={() => toggleModal("isOpenCreateProductModal")}
-        >
-          Cadastrar produto
-          <FaPlus size={18} />
-        </Button>
+      <div className="flex justify-between items-center w-full">
+        <Title>Produtos</Title>
+
+        <div className="flex gap-3 items-center">
+          <SearchInput
+            placeholder="Filtrar por nome ou categoria"
+            onChange={setName}
+            value={name}
+            type="secondary"
+            className="w-86"
+          />
+          <Button
+            variant="default"
+            className="flex w-64 justify-center items-center gap-3 bg-rain-forest"
+            onClick={() => toggleModal("isOpenCreateProductModal")}
+          >
+            Cadastrar produto
+            <FaPlus size={18} />
+          </Button>
+        </div>
       </div>
       <div className="w-full h-full flex flex-col gap-5 overflow-auto justify-between items-center">
         {isPending && <TableSkeleton />}
