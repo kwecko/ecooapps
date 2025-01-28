@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { toast } from "sonner";
 import { useCallback } from "react";
@@ -12,90 +12,103 @@ export function useHandleError() {
 
   const router = useRouter();
 
-  const handleError = useCallback((errorCode: string) => {
-    if (errorCode in errorsMapper) {
-      const errorMessage = errorsMapper[errorCode];
+  const handleError = useCallback(
+    (errorCode: string) => {
+      if (errorCode in errorsMapper) {
+        const errorMessage = errorsMapper[errorCode];
 
-      if(errorCode === "Sessão expirada.") {
-        setSessionExpired(true);
-        return;
-      }
+        if (errorCode === "Sessão expirada.") {
+          setSessionExpired(true);
+          return;
+        }
 
-      if(errorCode === "💥 Ocorreu um erro interno." || errorCode === "Erro desconhecido") {
-        toast.error(errorMessage)
-        setTimeout(() => {  
-          router.push("/")
-        }, 2000)
+        if (
+          errorCode === "💥 Ocorreu um erro interno." ||
+          errorCode === "Erro desconhecido"
+        ) {
+          toast.error(errorMessage);
+          setTimeout(() => {
+            router.push("/");
+          }, 2000);
 
-        return;
-      }
+          return;
+        }
 
-      if(errorCode === "Você não é administrador de um agronegócio.") {
-        toast.warning(errorMessage);
-        router.push("/cadastrar/4");
-        return;
-      }
+        if (errorCode === "Você não é administrador de um agronegócio.") {
+          toast.warning(errorMessage);
+          router.push("/cadastrar/4");
+          return;
+        }
 
-      if(errorCode === "Você está tentando acessar um app apenas para administradores!" || errorCode === "Você está tentando acessar um app apenas para administradores ou produtores!") {
+        if (
+          errorCode ===
+            "Você está tentando acessar um app apenas para administradores!" ||
+          errorCode ===
+            "Você está tentando acessar um app apenas para administradores ou produtores!"
+        ) {
+          toast.error(errorMessage);
+          setTimeout(() => {
+            router.push("/telegram");
+          }, 1000);
+
+          return;
+        }
+
         toast.error(errorMessage);
-        setTimeout(() => {
-          router.push("/telegram");
-        }, 1000);
-
         return;
       }
 
-      toast.error(errorMessage);
-      return;
-    } 
+      const words = errorCode.split(" ");
 
-    const words = errorCode.split(" ");
+      if (genericErrorsMapper.includes(words[0])) {
+        if (words[0] === "Email") {
+          toast.error(`Email ${words[1]} já cadastrado`);
+          return;
+        }
 
-    if(genericErrorsMapper.includes(words[0])) {
-      if(words[0] === 'Email'){
-        toast.error(`Email ${words[1]} já cadastrado`);
+        if (words[0] === "Telefone") {
+          toast.error(`Telefone ${words[1]} ${words[2]} já cadastrado`);
+          return;
+        }
+
+        if (words[0] === "CPF") {
+          toast.error(`CPF ${words[1]} já cadastrado`);
+          return;
+        }
+
+        if (words[0] === "Número") {
+          toast.error(`Número de Talão ${words[1]} já cadastrado`);
+          return;
+        }
+
+        if (words[0] === "Produto") {
+          toast.error(`Produto já cadastrado`);
+          return;
+        }
+
+        toast.error(`${words[0]} não encontrado.`);
         return;
       }
 
-      if(words[0] === 'Telefone'){
-        toast.error(`Telefone ${words[1]} ${words[2]} já cadastrado`);
+      if (genericErrorsMapper.includes(words[1])) {
+        toast.error(`${words[0]} ${words[1]} já existe.`);
         return;
       }
 
-      if(words[0] === 'CPF'){
-        toast.error(`CPF ${words[1]} já cadastrado`);
+      if (genericErrorsMapper.includes(words[2])) {
+        toast.error(`Peso inválido ${words[2]} para o produto.`);
         return;
       }
 
-      if(words[0] === 'Número'){
-        toast.error(`Número de Talão ${words[1]} já cadastrado`);
+      if (genericErrorsMapper.includes(words[3])) {
+        toast.error(`Não é possivel ${words[3]} produtos hoje.`);
         return;
       }
 
-      if(words[0] === 'Produto'){
-        toast.error(`Produto já cadastrado`);
-        return;
-      }
-
-      toast.error(`${words[0]} não encontrado.`);
-      return;
-    }
-
-    if(genericErrorsMapper.includes(words[1])) {
-      toast.error(`${words[0]} ${words[1]} já existe.`);
-      return;
-    }
-
-    if(genericErrorsMapper.includes(words[2])){
-      toast.error(`Peso inválido ${words[2]} para o produto.`);
-      return;
-    }
-
-    if(genericErrorsMapper.includes(words[3])) {
-      toast.error(`Não é possivel ${words[3]} produtos hoje.`);
-      return;
-    }
-  }, [setSessionExpired]);
+      toast.error("Erro desconhecido.");
+    },
+    [setSessionExpired]
+  );
 
   return { handleError };
 }
