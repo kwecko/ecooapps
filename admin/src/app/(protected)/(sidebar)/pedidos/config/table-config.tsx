@@ -1,13 +1,10 @@
 import { GrView } from "react-icons/gr";
 
 import { convertStatus } from "@shared/utils/convert-status";
+import { formatPrice } from "@shared/utils/format-price";
 import { formatDateToDateAndTime } from "@shared/utils/date-handlers";
 
 import { BagDTO } from "@shared/interfaces/dtos";
-
-function formatPrice(value: number): string {
-  return `R$ ${value.toFixed(2).replace(".", ",")}`;
-}
 
 export const getBagsTableColumns = ({
   navigateToBagDetails,
