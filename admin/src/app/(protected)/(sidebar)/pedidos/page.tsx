@@ -28,7 +28,7 @@ function BagsPage() {
 
   return (
     <div className="w-full flex flex-col h-full gap-6 overflow-y-hidden items-stretch relative">
-      <div className="flex justify-between items-center w-full">
+      <div className="flex justify-between items-start w-full">
         <Title>Pedidos</Title>
 
         <div className="flex gap-3 items-center">
