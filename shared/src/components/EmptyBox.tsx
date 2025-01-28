@@ -16,7 +16,8 @@ export default function EmptyBox({ type }: EmptyBoxProps) {
     if (type === "search") {
       setBoxText("Não encontramos resultados para a sua pesquisa.");
       return;
-    } if (type === "producer") {
+    }
+    if (type === "producer") {
       setBoxText("Nenhum produtor encontrado.");
       return;
     }
@@ -25,7 +26,7 @@ export default function EmptyBox({ type }: EmptyBoxProps) {
 
   return (
     <div className="flex-grow flex h-full">
-      <div className="flex flex-col w-full pb-20 justify-center gap-4 items-center">
+      <div className="flex flex-col w-full justify-center gap-4 items-center">
         <Image
           src={emptyBox}
           alt="bag"
