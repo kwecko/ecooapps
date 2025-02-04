@@ -1,18 +1,24 @@
-import GenericTable from "@shared/components/GenericTable";
-
-import useListFarms from "@admin/hooks/useListFarms";
-import producer from "@shared/assets/images/producer.png";
-import EmptyBox from "@shared/components/EmptyBox";
-import Loader from "@shared/components/Loader";
-import TablePaginationControl from "@shared/components/TablePaginationControl";
-import TableSearchInput from "@shared/components/TableSearchInput";
-import usePageQueryParams from "@shared/hooks/usePageQueryParams";
-import { FarmDTO } from "@shared/interfaces/dtos";
 import Image from "next/image";
 import { useState } from "react";
+
+import EmptyBox from "@shared/components/EmptyBox";
+import GenericTable from "@shared/components/GenericTable";
+import Loader from "@shared/components/Loader";
+import PagingButton from "@shared/components/PagingButton";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
+import TableSearchInput from "@shared/components/TableSearchInput";
+import TableSkeleton from "@admin/app/components/TableSkeleton";
+import SearchInput from "@shared/components/SearchInput";
+
+import useListFarms from "@admin/hooks/useListFarms";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+
 import FarmStatusChip from "./FarmStatusChip";
 import UpdateFarmStatusModal from "./UpdateFarmStatusModal";
-import TableSkeleton from "@admin/app/components/TableSkeleton";
+
+import { FarmDTO } from "@shared/interfaces/dtos";
+
+import producer from "@shared/assets/images/producer.png";
 
 export default function ListFarmsTable() {
   const [selectedRow, setSelectedRow] = useState<FarmDTO>({} as FarmDTO);
@@ -23,15 +29,30 @@ export default function ListFarmsTable() {
     setSelectedRow(rowData);
     setIsOpen(true);
   };
-  const { page, query } = usePageQueryParams();
+  const [page, setPage] = useState(1);
+  const [farm, setFarm] = useState<string | any>();
+
   const {
     data: farms,
     updateData,
     isLoading,
   } = useListFarms({
     page,
-    farm: query,
+    ...(farm && { farm }),
   });
+
+  const nextPage = () => {
+    if (farms.length < 20) {
+      return;
+    }
+    setPage((prev) => prev + 1);
+  };
+
+  const prevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
+  };
 
   const farmTableColumns = [
     {
@@ -66,13 +87,19 @@ export default function ListFarmsTable() {
 
   return (
     <div className="w-full h-full flex flex-col justify-between items-center gap-6">
-      <TableSearchInput
-        placeholder={"Filtrar por fazenda"}
-        className="lg:self-end"
-      />
+      <div className="w-full flex items-center justify-end gap-4">
+        <SearchInput
+          placeholder="Filtrar por fazenda"
+          onChange={setFarm}
+          value={farm}
+          type="secondary"
+          className="self-end"
+        />
+      </div>
+
       {isLoading && <TableSkeleton />}
-      {!isLoading && query && farms?.length === 0 && <EmptyBox type="search" />}
-      {!isLoading && !query && farms?.length === 0 && (
+      {!isLoading && farm && farms?.length === 0 && <EmptyBox type="search" />}
+      {!isLoading && !farm && farms?.length === 0 && (
         <EmptyBox type="producer" />
       )}
       {!isLoading && farms?.length > 0 && (
@@ -83,7 +110,9 @@ export default function ListFarmsTable() {
           data={farms}
         />
       )}
-      <TablePaginationControl />
+      {!isLoading && (farms.length > 0 || page !== 1) && (
+        <PagingButton value={page} nextPage={nextPage} backPage={prevPage} />
+      )}
       <UpdateFarmStatusModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}

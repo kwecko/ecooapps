@@ -104,8 +104,6 @@ export function useHandleError() {
         toast.error(`Não é possivel ${words[3]} produtos hoje.`);
         return;
       }
-
-      toast.error("Erro desconhecido.");
     },
     [setSessionExpired]
   );

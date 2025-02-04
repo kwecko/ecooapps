@@ -67,6 +67,7 @@ export default function OffersList({
         });
 
         if (response.message) {
+          console.log("Erro 1");
           handleError(response.message as string);
         } else if (response.data) {
           const dataOffers: CatalogDTO = response.data;
@@ -77,6 +78,7 @@ export default function OffersList({
           setHasMore(dataOffers.offers.length > 0);
         }
       } catch {
+        console.log("Erro 2");
         handleError("Erro desconhecido.");
       } finally {
         setIsLoading(false);
