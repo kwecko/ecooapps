@@ -42,15 +42,17 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
       overflowAuto={true}
     >
       <div className="w-full h-full flex flex-col">
-        <div className='flex space-x-3 mb-3 mt-8'>
-          <DateInput
-            label="Data inicial"
-            disabled={true}
-          />
-          <DateInput
-            label="Data final"
-            disabled={true}
-          />
+        <div className='flex flex-col mb-3 mt-8 gap-6'>
+        <DateInput
+          label="Data inicial"
+          disabled={true}
+          onChange={() => {}}
+        />
+        <DateInput
+          label="Data final"
+          disabled={true}
+          onChange={() => {}}
+        />
         </div>
         <div className="w-full h-full flex flex-col justify-between mb-2 mt-8">
           <div className="w-full flex flex-col gap-2.5 pb-4">
