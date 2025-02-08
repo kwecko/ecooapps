@@ -26,9 +26,10 @@ function HeaderDetail({
     {
       title: "Status:",
       value: selectStatus ?? status,
+      className: selectStatus ? "!overflow-visible" : "",
     },
     {
-      title: "Produtor:",
+      title: "Consumidor:",
       value: name,
     },
     {
@@ -47,7 +48,11 @@ function HeaderDetail({
         {rows.map((row, index) => (
           <MiniTable.Row key={index}>
             <MiniTable.HeaderCell>{row.title}</MiniTable.HeaderCell>
-            <MiniTable.Cell className="col-span-2">{row.value}</MiniTable.Cell>
+            <MiniTable.Cell
+              className={`col-span-2 relative ${row.className || ""}`}
+            >
+              {row.value}
+            </MiniTable.Cell>
           </MiniTable.Row>
         ))}
       </MiniTable.Body>
