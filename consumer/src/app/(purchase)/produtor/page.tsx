@@ -8,6 +8,7 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import FarmPhotos from "./components/FarmPhotos";
 import { CatalogDTO } from "@shared/interfaces/dtos";
+import { HiOutlinePhotograph, HiOutlineShoppingBag } from "react-icons/hi";
 
 export default function Produtor() {
   const searchParams = useSearchParams();
@@ -62,15 +63,9 @@ export default function Produtor() {
       <div className="flex ml-5 text-xs gap-4 mt-12">
         <button
           onClick={() => setShowPhotos(true)}
-          className="flex items-center gap-2  w-36 h-10 bg-theme-secondary text-theme-primary font-bold rounded-md"
+          className="flex items-center gap-2  w-36 h-10 bg-tertiary text-theme-primary font-bold rounded-md"
         >
-          <Image
-            src="/photograph.png"
-            className="ml-6 w-6 h-6 float-left mr-1"
-            width={16}
-            height={16}
-            alt="photograph"
-          />
+          <HiOutlinePhotograph  className="ml-6 w-6 h-6 float-left mr-1" />
           <p>Ver Fotos</p>
         </button>
         <ModalV2
@@ -90,13 +85,7 @@ export default function Produtor() {
           )}`}
         >
           <button className="flex items-center gap-2 w-44 h-10 bg-theme-highlight text-white font-bold rounded-md">
-            <Image
-              src="/shop-bag.png"
-              className="ml-7 w-6 h-6 float-left mr-1"
-              width={16}
-              height={16}
-              alt="shop-bag"
-            />
+            <HiOutlineShoppingBag className="ml-7 w-6 h-6 float-left mr-1" />
             <p>Ver Produtos</p>
           </button>
         </Link>
