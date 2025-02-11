@@ -41,12 +41,12 @@ export default function OpenPaymentsGraph({ stats }: Stats) {
         day: "2-digit",
         month: "2-digit",
       })
-    ), // Tratando as datas no formato "DD/MM"
+    ),
     datasets: [
       {
-        label: "", // Sem título no topo
+        label: "",
         backgroundColor: "#9BA5B7",
-        data: stats.daily.map((day) => day.sum), // Usando os valores de "sum"
+        data: stats.daily.map((day) => day.sum),
         borderRadius: 5,
         barThickness: 50,
         hoverBackgroundColor: "#00735E",
@@ -59,7 +59,7 @@ export default function OpenPaymentsGraph({ stats }: Stats) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Sem legenda
+        display: false,
       },
       tooltip: {
         callbacks: {

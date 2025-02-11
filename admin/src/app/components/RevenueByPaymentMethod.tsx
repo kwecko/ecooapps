@@ -38,12 +38,12 @@ interface Stats {
 
 export default function RevenueByPaymentMethod({ stats }: Stats) {
   const data = {
-    labels: stats.daily.map(() => ""), // Mantém o eixo X sem legendas (aberto para futura personalização)
+    labels: stats.daily.map(() => ""),
     datasets: [
       {
-        label: "", // Remove o texto "Faturamento"
+        label: "",
         backgroundColor: "#9BA5B7",
-        data: stats.daily.map((day) => day.sum), // Usa os valores de `sum`
+        data: stats.daily.map((day) => day.sum),
         borderRadius: 5,
         barThickness: 50,
         hoverBackgroundColor: "#00735E",
@@ -56,7 +56,7 @@ export default function RevenueByPaymentMethod({ stats }: Stats) {
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        display: false, // Remove a legenda
+        display: false,
       },
       tooltip: {
         callbacks: {
