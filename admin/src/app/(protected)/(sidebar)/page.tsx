@@ -46,6 +46,10 @@ export default function Home() {
     setTime(new Date().toLocaleTimeString("pt-BR"));
   }, []);
 
+  useEffect(() => {
+    console.log(stats);
+  }, [stats]);
+
   return (
     <div className="h-full overflow-hidden">
       <div className="grid grid-cols-10 h-full gap-14 overflow-y-auto">
@@ -92,7 +96,7 @@ export default function Home() {
               </button>
             </div>
 
-            <div className="font-inter text-theme-primary bg-blue-500">
+            <div className="font-inter text-theme-primary">
               Produtores:{" "}
               {stats?.revenue
                 ? `R$ ${((stats.revenue) - (stats.revenue * 0.2)).toLocaleString("pt-BR", {
@@ -101,7 +105,7 @@ export default function Home() {
                 : ""}
             </div>
 
-            <div className="font-inter text-theme-primary bg-red-500">
+            <div className="font-inter text-theme-primary">
               Taxas:{" "}
               {stats?.revenue
                 ? `R$ ${(stats.revenue * 0.2).toLocaleString("pt-BR", {
@@ -128,15 +132,15 @@ export default function Home() {
                     <MonthsGraph stats={stats?.monthly} />
                   )}
                   {selectedGraph === "Vendas por tipo de pagamento" && (
-                    <RevenueByPaymentMethod stats={"a"} />
+                    <RevenueByPaymentMethod stats={stats?.revenueByMethod} />
                   )}
                   {selectedGraph === "Pagamentos em aberto" && (
-                    <OpenPaymentsGraph stats={"a"} />
+                    <OpenPaymentsGraph stats={stats?.openPayments} />
                   )}
                 </div>
               </div>
             </Card>
-            <div className="flex gap-4 mt-4 justify-center">
+            <div className="flex gap-4 mt-2 justify-center">
               <Button
                 className={`${
                   selectedGraph === "Vendas nos últimos meses"
