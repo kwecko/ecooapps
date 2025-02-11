@@ -46,10 +46,6 @@ export default function Home() {
     setTime(new Date().toLocaleTimeString("pt-BR"));
   }, []);
 
-  useEffect(() => {
-    console.log(stats);
-  }, [stats]);
-
   return (
     <div className="h-full overflow-hidden">
       <div className="grid grid-cols-10 h-full gap-14 overflow-y-auto">
