@@ -38,7 +38,12 @@ interface Stats {
 
 export default function RevenueByPaymentMethod({ stats }: Stats) {
   const data = {
-    labels: stats.daily.map(() => ""),
+    labels: stats.daily.map((day) =>
+      new Date(day.date).toLocaleDateString("pt-BR", {
+        day: "2-digit",
+        month: "2-digit",
+      })
+    ), // Convertendo as datas para o formato "DD/MM"
     datasets: [
       {
         label: "",
