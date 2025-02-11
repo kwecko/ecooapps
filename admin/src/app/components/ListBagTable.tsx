@@ -2,7 +2,7 @@ import GenericTable from "@shared/components/GenericTable";
 import useListBags from "@admin/hooks/useListBags";
 import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagDTO } from "@shared/interfaces/dtos";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ListBagsTable() {
   const [selectedRow, setSelectedRow] = useState<BagDTO>({} as BagDTO);
