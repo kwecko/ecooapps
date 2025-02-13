@@ -1,10 +1,12 @@
 import { toast } from "sonner";
 
 import { printDeliveriesReport } from "@shared/_actions/bags/GET/print-deliveries-report";
-import { fetchSalesReport } from "@shared/_actions/bags/GET/fetch-sales-report";
+import { printOffersReport } from "@shared/_actions/bags/GET/print-offers-report";
 
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { AdminReportActions, ReportActions } from "@shared/types/report";
+import { fetchSalesReport } from "@shared/_actions/bags/GET/fetch-sales-report";
+import { fetchInboundReports } from "@shared/_actions/bags/GET/fetch-inbound-report";
 
 export function useReportGenerator() {
   const { handleError } = useHandleError();
@@ -17,12 +19,11 @@ export function useReportGenerator() {
       fetchSalesReport({ date_from, date_to }),
   };
 
-  const reportActions: Record<ReportActions, (id: string) => Promise<any>> = {
-    "list-bags": (id: string) => printDeliveriesReport({ cycle_id: id }),
+  const reportActions: Record<ReportActions, (id: string, since?: string, before?: string) => Promise<any>> = {
+    "list-bags": (id: string) => printDeliveriesReport({ cycle_id: id, type: "pdf" }),
+    "list-bags-withdrawn": (id: string) => printDeliveriesReport({ cycle_id: id, withdraw: true, type: "pdf" }),
+    "cash-flow-cdd": (id: string) => printOffersReport({ cycle_id: id }),
     "list-offers": () => {
-      return Promise.resolve();
-    },
-    "cash-flow-cdd": () => {
       return Promise.resolve();
     },
     "cash-flow-producer": () => {
@@ -31,6 +32,8 @@ export function useReportGenerator() {
     "offer-history": () => {
       return Promise.resolve();
     },
+    "fetch-inbound": 
+      (id: string, since?: string, before?: string) => fetchInboundReports({ cycle_id: id, since, before}),
   };
 
   const generateAdminReport = async (
@@ -68,7 +71,7 @@ export function useReportGenerator() {
     }
   };
 
-  const generateReport = async (type: ReportActions, id: string) => {
+  const generateReport = async (type: ReportActions, id: string, since?: string, before?: string) => {
     try {
       const action = reportActions[type];
 
@@ -77,7 +80,7 @@ export function useReportGenerator() {
         return;
       }
 
-      const response = await action(id);
+      const response = await action(id, since, before);
 
       if (response?.message) {
         const messageError = response.message as string;

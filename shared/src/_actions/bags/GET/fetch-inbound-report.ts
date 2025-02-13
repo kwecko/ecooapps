@@ -4,20 +4,25 @@ import { cookies } from "next/headers";
 
 interface PrintDeliveriesReportRequest {
   cycle_id?: string;
-  withdraw?: boolean;
-  type?: string;
+  since?: string
+  before?: string
 }
 
-export async function printDeliveriesReport({
+export async function fetchInboundReports({
   cycle_id,
-  withdraw,
-  type = "pdf",
+  since,
+  before
 }: PrintDeliveriesReportRequest) {
   const token = cookies().get("cdd_token");
 
   if (!token) {
     return "Erro";
   }
+
+  console.log(cycle_id)
+
+  console.log(since)
+  console.log(before)
 
   try {
     const queryParams = new URLSearchParams();
@@ -26,14 +31,16 @@ export async function printDeliveriesReport({
       queryParams.append("cycle_id", cycle_id);
     }
 
-    if (withdraw !== undefined) {
-      queryParams.append("withdraw", withdraw ? "true" : "false");
+    if (since) {
+      queryParams.append("since", since);
     }
 
-    queryParams.append("type", type);
-    
+    if (before) {
+      queryParams.append("before", before);
+    }
+
     const response = await fetch(
-      `${process.env.API_URL}/reports/sales?${queryParams.toString()}`,
+      `${process.env.API_URL}/reports/inbound?${queryParams.toString()}`,
       {
         method: "GET",
         headers: {
@@ -48,8 +55,12 @@ export async function printDeliveriesReport({
       return response.json();
     }
 
-    return await response.arrayBuffer();
+    const data = await response.arrayBuffer();
+
+    return data;
   } catch (error) {
-    return { message: "Erro desconhecido." };
+    return {
+      message: "Erro desconhecido.",
+    };
   }
 }
