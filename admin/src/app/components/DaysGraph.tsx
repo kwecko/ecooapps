@@ -51,14 +51,14 @@ export default function DaysGraph({
           label: (context: any) => `${context.parsed.y}`,
         },
         usePointStyle: true,
-        pointStyle: '',
         titleColor: '#00735E',
         bodyColor: '#00735E',
       },
     },
     scales: {
       x: {
-        display: false,
+        grid: { display: false },
+        ticks: { color: '#6B7280' },
       },
       y: {
         beginAtZero: true,
@@ -66,13 +66,7 @@ export default function DaysGraph({
         ticks: {
           color: '#6B7280',
           font: { size: 12 },
-          stepSize: 1,
-          callback: (value: string | number) => `${value}`,
-        },
-        title: {
-          display: true,
-          color: '#6B7280',
-          font: { size: 14 },
+          stepSize: 10,
         },
       },
     },

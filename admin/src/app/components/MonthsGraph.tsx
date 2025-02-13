@@ -77,10 +77,10 @@ export default function MonthsGraph({
         ticks: {
           color: '#9BA5B7',
           callback: function (value: any) {
-            return `R$${(value / 1000).toFixed(0)}k`;
+            return value === 0 ? `R$0` : `R$${(value).toFixed(0)}`;
           },
         },
-        beginAtZero: true,
+        min: 0,
       },
     },
   };

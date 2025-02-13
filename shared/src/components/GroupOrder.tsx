@@ -17,25 +17,25 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
   } = {};
 
   orders.forEach((order) => {
-    const productName = order.offer.product.name;
-    const productKey = `${productName}-${order.offer.catalog.farm.name}`;
+    const unit = convertUnit(order.offer.product.pricing);
+    const productKey = `${order.offer.product.name}-${order.offer.catalog.farm.name}-${unit}`;
 
     if (description[productKey]) {
       description[productKey].amount = parseFloat(
-        (
-          description[productKey].amount +
-          convertOfferAmount(order.amount, order.offer.product.pricing)
-        ).toFixed(1)
+      (
+        description[productKey].amount +
+        convertOfferAmount(order.amount, order.offer.product.pricing)
+      ).toFixed(1)
       );
     } else {
       description[productKey] = {
-        amount: parseFloat(
-          convertOfferAmount(order.amount, order.offer.product.pricing).toFixed(
-            1
-          )
-        ),
-        unit: convertUnit(order.offer.product.pricing),
-        farmName: order.offer.catalog.farm.name,
+      amount: parseFloat(
+        convertOfferAmount(order.amount, order.offer.product.pricing).toFixed(
+        1
+        )
+      ),
+      unit: unit,
+      farmName: order.offer.catalog.farm.name,
       };
     }
   });
