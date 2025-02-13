@@ -1,6 +1,7 @@
 import { CatalogDTO } from "@shared/interfaces/dtos";
 import Image, { ImageLoader } from "next/image";
 import Link from "next/link";
+import { SlArrowRight } from "react-icons/sl";
 
 const imageLoader: ImageLoader = ({ src }) => {
   return `${src}`;
@@ -9,10 +10,10 @@ export default function ProducerCard(catalog: CatalogDTO) {
   return (
     <Link href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalog: catalog, title: catalog.farm.name }))}`}>
       <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">
-        <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
+        <div className="flex ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-2xl">
           {catalog.farm.admin.photo ? (
             <Image
-              className="w-full h-full object-cover rounded-2.5"
+              className="rounded-xl w-20 h-20"
               loader={imageLoader}
               src={catalog.farm.admin.photo}
               width={80}
@@ -21,7 +22,7 @@ export default function ProducerCard(catalog: CatalogDTO) {
             />
           ) : (
             <Image
-              className="w-full h-full object-cover rounded-2.5"
+              className="rounded-xl w-20 h-20"
               src={
                 catalog.farm.tally != "123456789"
                   ? "/produtor.jpg"
@@ -39,7 +40,7 @@ export default function ProducerCard(catalog: CatalogDTO) {
           </span>
         </div>
         <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-          <Image src="/arrow.png" alt="arrow" width={10} height={7} />
+            <SlArrowRight className="text-slate-gray" />        
         </div>
       </div>
     </Link>

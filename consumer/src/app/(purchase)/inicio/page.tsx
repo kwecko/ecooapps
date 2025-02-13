@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import RedirectCart from "../../_components/redirectCart";
 import React from "react";
+import { SlArrowRight } from "react-icons/sl";
 
 
 export default function Inicio() {
@@ -28,12 +29,7 @@ export default function Inicio() {
             </span>
           </div>
           <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-            <Image
-              src="/arrow.png"
-              alt="arrow"
-              width={10}
-              height={7}
-            ></Image>
+            <SlArrowRight className="text-slate-gray" />         
           </div>
         </div>
 
@@ -54,12 +50,7 @@ export default function Inicio() {
             </span>
           </div>
           <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-              <Image
-                src="/arrow.png"
-                alt="arrow"
-                width={10}
-                height={7}
-              ></Image>
+            <SlArrowRight className="text-slate-gray" />
           </div>
         </div>
         </Link>
