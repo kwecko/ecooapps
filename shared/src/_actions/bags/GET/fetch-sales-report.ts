@@ -13,6 +13,7 @@ export async function fetchSalesReport({
   try {
     const params = new URLSearchParams();
 
+    params.append("type", "spreadsheet");
     if (date_from) {
       params.append("since", date_from);
     }
@@ -22,7 +23,7 @@ export async function fetchSalesReport({
     }
 
     const queryString = params.toString();
-    const url = `/reports/bags${queryString ? `?${queryString}` : ""}`;
+    const url = `/reports/sales${queryString ? `?${queryString}` : ""}`;
 
     const response = await ApiService.GET({
       url,
