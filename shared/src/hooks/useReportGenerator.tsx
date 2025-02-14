@@ -19,9 +19,14 @@ export function useReportGenerator() {
       fetchSalesReport({ date_from, date_to }),
   };
 
-  const reportActions: Record<ReportActions, (id: string, since?: string, before?: string) => Promise<any>> = {
-    "list-bags": (id: string) => printDeliveriesReport({ cycle_id: id, type: "pdf" }),
-    "list-bags-withdrawn": (id: string) => printDeliveriesReport({ cycle_id: id, withdraw: true, type: "pdf" }),
+  const reportActions: Record<
+    ReportActions,
+    (id: string, since?: string, before?: string) => Promise<any>
+  > = {
+    "list-bags": (id: string) =>
+      printDeliveriesReport({ cycle_id: id, type: "pdf" }),
+    "list-bags-withdrawn": (id: string) =>
+      printDeliveriesReport({ cycle_id: id, withdraw: true, type: "pdf" }),
     "cash-flow-cdd": (id: string) => printOffersReport({ cycle_id: id }),
     "list-offers": () => {
       return Promise.resolve();
@@ -32,8 +37,8 @@ export function useReportGenerator() {
     "offer-history": () => {
       return Promise.resolve();
     },
-    "fetch-inbound": 
-      (id: string, since?: string, before?: string) => fetchInboundReports({ cycle_id: id, since, before}),
+    "fetch-inbound": (id: string, since?: string, before?: string) =>
+      fetchInboundReports({ cycle_id: id, since, before }),
   };
 
   const generateAdminReport = async (
@@ -66,12 +71,18 @@ export function useReportGenerator() {
         link.download = `relatorio-${type}.xlsx`;
         link.click();
       }
+      toast.success("Relatório gerado com sucesso.");
     } catch (error) {
       toast.error("Erro desconhecido.");
     }
   };
 
-  const generateReport = async (type: ReportActions, id: string, since?: string, before?: string) => {
+  const generateReport = async (
+    type: ReportActions,
+    id: string,
+    since?: string,
+    before?: string
+  ) => {
     try {
       const action = reportActions[type];
 
@@ -94,6 +105,7 @@ export function useReportGenerator() {
         link.click();
         document.body.removeChild(link);
       }
+      toast.success("Relatório gerado com sucesso.");
     } catch (error) {
       toast.error("Erro desconhecido.");
     }
