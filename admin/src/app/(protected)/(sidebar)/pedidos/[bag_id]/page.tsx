@@ -40,8 +40,8 @@ const BagDetailsPage = () => {
 
   return (
     <>
-      <div className="w-full flex flex-col gap-6">
-        <Title>Detalhes do Pedidos</Title>
+      <div className="w-full h-[105%] overflow-auto flex flex-col gap-6">
+        <Title>Detalhes dos Pedidos</Title>
         <div className="grid grid-cols-2 gap-6">
           <div>
             <h3 className="text-lg font-medium mb-2 ml-2">
