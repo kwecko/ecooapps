@@ -17,6 +17,7 @@ import {
   perishableOptions,
 } from "./data";
 import { ProductDTO } from "@shared/interfaces/dtos";
+import { useEffect } from "react";
 
 interface CreateProductModalProps {
   isOpen: boolean;
@@ -68,11 +69,14 @@ export default function CreateProductModal({
         <SelectInput
           label="Selecione a categoria do produto"
           options={categoryOptions}
-          defaultOption={categoryOptions[0]}
-          onChange={() => {}}
-          disabled
+          defaultOption={categoryOptions.find(
+            (option) => option.value === product?.category
+          ) ?? categoryOptions[0]}
+          onChange={(value) => {setValue("category", value); console.log(value)}}
         />
-
+        {errors.category && (
+          <p className="text-red-500 text-sm">{errors.category.message}</p>
+        )}
         <div className="grid grid-cols-2 gap-4">
           <SelectInput
             label="Produto perecível?"
@@ -81,7 +85,7 @@ export default function CreateProductModal({
             onChange={() => {}}
             disabled
           />
-
+          
           <SelectInput
             label="Comercialização"
             options={commercializationOptions}

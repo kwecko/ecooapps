@@ -3,6 +3,7 @@ import { z } from "zod";
 export const productSchema = z.object({
   name: z.string().min(1, "O nome do produto é obrigatório"),
   pricing: z.enum(["UNIT", "WEIGHT"]),
+  category: z.enum(["24538b64-06b5-4bab-ad94-72667ef52633", "1ead891c-4690-4499-92c2-e5d6655893b7"]),
   image: z
     .custom<File>((file) => file instanceof File, {
       message: "A imagem é obrigatória",
