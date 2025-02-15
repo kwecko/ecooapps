@@ -5,7 +5,8 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { getBagById } from "@admin/_actions/bags/get-bag-by-id";
-import { updateBagById } from "@admin/_actions/bags/update-bag-by-id";
+import { updatePaymentById } from "@admin/_actions/payment/update-payment-by-id";
+
 import { useHandleError } from "@shared/hooks/useHandleError";
 
 import { BagDTO, PaymentDTO } from "@shared/interfaces/dtos";
@@ -95,17 +96,12 @@ const useBagDetailsPage = () => {
     if (!selectedPayment) return;
 
     setLoadingUpdatePayment(true);
-    updateBagById({
-      bagId: bag_id.toString(),
+    updatePaymentById({
+      paymentId: selectedPayment.id,
       data: {
-        payments: [
-          {
-            id: selectedPayment.id,
-            status: selectedPayment.status,
-            method: selectedPayment.method,
-            flag: selectedPayment.flag,
-          },
-        ],
+        status: selectedPayment.status,
+        method: selectedPayment.method,
+        flag: selectedPayment.flag,
       },
     })
       .then((response) => {
