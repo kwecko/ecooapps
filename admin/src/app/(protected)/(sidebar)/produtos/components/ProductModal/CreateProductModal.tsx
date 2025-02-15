@@ -17,7 +17,6 @@ import {
   perishableOptions,
 } from "./data";
 import { ProductDTO } from "@shared/interfaces/dtos";
-import { useEffect } from "react";
 
 interface CreateProductModalProps {
   isOpen: boolean;
@@ -70,9 +69,9 @@ export default function CreateProductModal({
           label="Selecione a categoria do produto"
           options={categoryOptions}
           defaultOption={categoryOptions.find(
-            (option) => option.value === product?.category
+            (option) => option.value === product?.category.id
           ) ?? categoryOptions[0]}
-          onChange={(value) => {setValue("category", value); console.log(value)}}
+          onChange={(value) => {setValue("category", value);}}
         />
         {errors.category && (
           <p className="text-red-500 text-sm">{errors.category.message}</p>

@@ -61,9 +61,10 @@ export default function UpdateProductModal({
         <SelectInput
           label="Categoria"
           options={categoryOptions}
-          defaultOption={categoryOptions[0]}
-          onChange={() => {}}
-          disabled
+          defaultOption={categoryOptions.find(
+            (option) => option.value === product?.category.id
+          ) ?? categoryOptions[0]}
+          onChange={(value) => {setValue("category", value);}}
         />
 
         <div className="grid grid-cols-2 gap-4">

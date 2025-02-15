@@ -3,8 +3,15 @@ export interface ProductDTO {
   name: string;
   image: string;
   pricing: "UNIT" | "WEIGHT";
-  category: "24538b64-06b5-4bab-ad94-72667ef52633" | "1ead891c-4690-4499-92c2-e5d6655893b7";
-  archived: boolean;
+  category: Category;
+  category_id: string;
   created_at: Date;
   updated_at: Date | null;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  created_at: string;
+  updated_at: string | null;
 }
