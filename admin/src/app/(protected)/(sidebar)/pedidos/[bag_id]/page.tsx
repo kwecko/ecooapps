@@ -151,8 +151,8 @@ const BagDetailsPage = () => {
                         {farm.items.map((item, index) => (
                           <p key={index} className="text-sm">
                             {item.offer.product.pricing === "UNIT"
-                              ? `${item.offer.amount}un`
-                              : `${item.offer.amount}g`}{" "}
+                              ? `${item.amount}un`
+                              : `${item.amount}g`}{" "}
                             - {item.offer.product.name}
                           </p>
                         ))}
