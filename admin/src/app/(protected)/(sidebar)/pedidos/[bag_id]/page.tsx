@@ -38,6 +38,8 @@ const BagDetailsPage = () => {
 
   if (!bagDetails) return null;
 
+  const tax = bagDetails.price * (bagDetails.orders[0].offer.catalog.farm.tax) / 100;
+
   return (
     <>
       <div className="w-full flex flex-col gap-6">
@@ -95,7 +97,7 @@ const BagDetailsPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Taxas:</p>
-                    <p className="flex-1">R$ --</p>
+                    <p className="flex-1">R${formatPrice(tax)}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Entrega:</p>
@@ -104,7 +106,7 @@ const BagDetailsPage = () => {
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Total:</p>
                     <p className="font-semibold flex-1">
-                      {formatPrice(bagDetails.price)}
+                      {formatPrice(bagDetails.price + tax)}
                     </p>
                   </div>
                 </div>
