@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 
 import { FiPaperclip, FiX } from "react-icons/fi";
@@ -10,13 +11,17 @@ import ButtonV2 from "@shared/components/ButtonV2";
 import Input from "@shared/components/CustomInput";
 import SelectInput from "@shared/components/SelectInput";
 
+import { ProductDTO } from "@shared/interfaces/dtos";
+
+import { useHandleError } from "@shared/hooks/useHandleError";
+
 import useProductModal from "./index";
 import {
-  categoryOptions,
   commercializationOptions,
   perishableOptions,
 } from "./data";
-import { ProductDTO } from "@shared/interfaces/dtos";
+
+import { listCategories } from "@admin/_actions/categories/GET/list-categories";
 
 interface CreateProductModalProps {
   isOpen: boolean;
@@ -44,6 +49,33 @@ export default function CreateProductModal({
     handleRemoveFile,
     onSubmit,
   } = useProductModal({ closeModal, reloadProducts });
+
+  const [categoryOptions, setCategoryOptions] = useState<{ value: string; label: string }[]>([]);
+  const { handleError } = useHandleError();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await listCategories({ page: 1 });
+
+        if (response.message) {
+          handleError(response.message);
+          return;
+        }
+
+        const options = response.data.map(({ id, name }: { id: string; name: string }) => ({
+          value: id,
+          label: name,
+        }));
+
+        setCategoryOptions(options);
+      } catch (error) {
+        handleError("Erro ao buscar categorias.");
+      }
+    }
+
+    fetchCategories();
+  }, []);
 
   return (
     <ModalV2
