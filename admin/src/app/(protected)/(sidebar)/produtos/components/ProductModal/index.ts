@@ -44,7 +44,7 @@ export default function useProductModal({
   });
 
   // Functions
-  const onSubmit = ({ name, pricing, image }: ProductSchema) => {
+  const onSubmit = ({ name, pricing, category, image }: ProductSchema) => {
     startTransition(async () => {
       const isValid = await trigger();
 
@@ -54,6 +54,7 @@ export default function useProductModal({
 
       dataForm.append("name", name);
       dataForm.append("pricing", pricing);
+      dataForm.append("category_id", category);
       dataForm.append("image", image)
   
       registerProduct(dataForm)
