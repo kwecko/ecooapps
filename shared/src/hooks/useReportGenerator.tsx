@@ -70,8 +70,8 @@ export function useReportGenerator() {
         link.href = URL.createObjectURL(blob);
         link.download = `relatorio-${type}.xlsx`;
         link.click();
+        toast.success("Relatório gerado com sucesso.");
       }
-      toast.success("Relatório gerado com sucesso.");
     } catch (error) {
       toast.error("Erro desconhecido.");
     }
