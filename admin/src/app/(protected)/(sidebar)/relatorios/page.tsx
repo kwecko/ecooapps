@@ -29,12 +29,15 @@ export default function page() {
   const handleChangeFinalDate = (value: Date) => setFinalDate(value);
 
   const handleGenerateReport = () => {
-    const formattedInitialDate = initialDate
-      ? initialDate.toISOString().split("T")[0]
-      : undefined;
-    const formattedFinalDate = finalDate
-      ? finalDate.toISOString().split("T")[0]
-      : undefined;
+    const formatDate = (date?: Date) =>
+      date
+        ? `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
+            .toString()
+            .padStart(2, "0")}-${date.getFullYear()}`
+        : undefined;
+
+    const formattedInitialDate = formatDate(initialDate);
+    const formattedFinalDate = formatDate(finalDate);
 
     generateAdminReport(reportType, formattedInitialDate, formattedFinalDate);
   };

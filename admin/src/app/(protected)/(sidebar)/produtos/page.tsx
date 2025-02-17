@@ -16,6 +16,7 @@ import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
 import SearchInput from "@shared/components/SearchInput";
 import UpdateProductModal from "./components/UpdateProductModal/UpdateProductModal";
+import { useEffect } from "react";
 
 function ProductsPage() {
   const {

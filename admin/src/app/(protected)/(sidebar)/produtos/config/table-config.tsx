@@ -36,8 +36,8 @@ export function getProductTableColumns(
       header: "Categoria",
       key: "category",
       colSpan: 4,
-      render: function renderCategory() {
-        return "---"
+      render: function renderCategory(row: ProductDTO) {
+        return row.category.name;
       },
     },
     {

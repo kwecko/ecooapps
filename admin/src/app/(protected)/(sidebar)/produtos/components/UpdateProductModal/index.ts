@@ -52,7 +52,7 @@ export default function useUpdateProductModal({
   });
 
   // Functions
-  const onSubmit = ({ name, pricing, image }: UpdateProductSchema) => {
+  const onSubmit = ({ name, pricing, category, image }: UpdateProductSchema) => {
     startTransition(async () => {
       const isValid = await trigger();
 
@@ -62,6 +62,7 @@ export default function useUpdateProductModal({
 
       if (name) dataForm.append("name", name);
       if (pricing) dataForm.append("pricing", pricing);
+      if (category) dataForm.append("category_id", category);
       if (image) dataForm.append("image", image);
 
       if (product?.id) {

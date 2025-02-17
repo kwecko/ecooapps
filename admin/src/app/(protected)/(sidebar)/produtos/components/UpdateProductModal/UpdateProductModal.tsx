@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { FiPaperclip, FiX } from "react-icons/fi";
 import Image from "next/image";
 
@@ -9,10 +10,13 @@ import ButtonV2 from "@shared/components/ButtonV2";
 import Input from "@shared/components/CustomInput";
 import SelectInput from "@shared/components/SelectInput";
 
+import { useHandleError } from "@shared/hooks/useHandleError";
+
 import { ProductDTO } from "@shared/interfaces/dtos";
-import { categoryOptions, commercializationOptions, perishableOptions } from "./data";
+import { commercializationOptions, perishableOptions } from "./data";
 import useUpdateProductModal from ".";
-import useProductsPage from "../..";
+
+import { listCategories } from "@admin/_actions/categories/GET/list-categories";
 
 interface UpdateProductModalProps {
   isOpen: boolean;
@@ -41,6 +45,33 @@ export default function UpdateProductModal({
     onSubmit,
   } = useUpdateProductModal({ closeModal, reloadProducts, product });
 
+  const [categoryOptions, setCategoryOptions] = useState<{ value: string; label: string }[]>([]);
+  const { handleError } = useHandleError();
+
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const response = await listCategories({ page: 1 });
+
+        if (response.message) {
+          handleError(response.message);
+          return;
+        }
+
+        const options = response.data.map(({ id, name }: { id: string; name: string }) => ({
+          value: id,
+          label: name,
+        }));
+
+        setCategoryOptions(options);
+      } catch (error) {
+        handleError("Erro ao buscar categorias.");
+      }
+    }
+
+    fetchCategories();
+  }, []);
+
   return (
     <ModalV2
       isOpen={isOpen}
@@ -61,9 +92,10 @@ export default function UpdateProductModal({
         <SelectInput
           label="Categoria"
           options={categoryOptions}
-          defaultOption={categoryOptions[0]}
-          onChange={() => {}}
-          disabled
+          defaultOption={categoryOptions.find(
+            (option) => option.value === product?.category.id
+          ) ?? categoryOptions[0]}
+          onChange={(value) => {setValue("category", value);}}
         />
 
         <div className="grid grid-cols-2 gap-4">
