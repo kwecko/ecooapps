@@ -81,7 +81,7 @@ const GenericTable = <T,>({
           data.map((row, rowIndex) => (
             <Table.Row
               key={`row-${rowIndex}`}
-              className="cursor-pointer"
+              className={onRowClick ? "cursor-pointer" : ""}
               style={{
                 display: "grid",
                 gridTemplateColumns: `repeat(${validatedGridColumns}, 1fr)`,
