@@ -17,7 +17,8 @@ import PagingButton from "@shared/components/PagingButton";
 
 import EditPaymentModal from "./components/EditPaymentModal";
 
-import { OrderDTO } from "@shared/interfaces/dtos";
+import { OrderDTO, PaymentDTO } from "@shared/interfaces/dtos";
+import Button from "@shared/components/Button";
 
 const BagDetailsPage = () => {
   const {
@@ -75,6 +76,18 @@ const BagDetailsPage = () => {
                     </p>
                   </div>
                   <div className="flex justify-between items-center">
+                    <p className="text-sm font-medium w-32">Email:</p>
+                    <p className="flex-1">
+                      {bagDetails.user.email}
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <p className="text-sm font-medium w-32">Cpf:</p>
+                    <p className="flex-1">
+                      {bagDetails.user.cpf}
+                    </p>
+                  </div>
+                  <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Data:</p>
                     <p className="flex-1">
                       {formatDateToDateAndTime(bagDetails.created_at)}
@@ -97,7 +110,7 @@ const BagDetailsPage = () => {
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Taxas:</p>
-                    <p className="flex-1">R${formatPrice(tax)}</p>
+                    <p className="flex-1">{formatPrice(tax)}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Entrega:</p>
@@ -171,7 +184,17 @@ const BagDetailsPage = () => {
               {isPending && <TableSkeleton />}
 
               {!isPending && bagDetails.payments.length === 0 && (
-                <EmptyBox type="search" />
+                <div className="flex-grow flex flex-col h-full pt-6">
+                  <EmptyBox type="payment" />
+                  <div className="flex justify-center items-center h-full pr-18 pl-18">
+                    <Button
+                      onClick={() => selectBagPayment({ method: "CREDIT" } as PaymentDTO)}
+                      className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
+                    >
+                      Adicionar forma de pagamento
+                    </Button>
+                  </div>
+                </div>
               )}
 
               {!isPending && bagDetails.payments.length > 0 && (
