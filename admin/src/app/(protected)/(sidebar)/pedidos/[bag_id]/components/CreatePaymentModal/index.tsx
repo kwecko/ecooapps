@@ -6,7 +6,8 @@ import SelectInput from "@shared/components/SelectInput";
 import { formatDateToDateAndTime } from "@shared/utils/date-handlers";
 import { formatPrice } from "@shared/utils/format-price";
 
-import { BagDTO, PaymentDTO } from "@shared/interfaces/dtos";
+import { BagDTO } from "@shared/interfaces/dtos";
+import { CreatePaymentDTO } from "@shared/interfaces/dtos/payment-dto";
 
 import {
   paymentFlagOptions,
@@ -14,26 +15,30 @@ import {
   paymentStatusOptions,
 } from "./constants";
 import Loader from "@shared/components/Loader";
+import { useState } from "react";
 
 interface EditPaymentModalProps {
   isOpen: boolean;
-  payment: PaymentDTO | any;
+  payment: CreatePaymentDTO | any;
   bag: BagDTO;
   loading: boolean;
+  createNewPayment: () => void;
   closeModal: () => void;
-  editPayment: (key: string, value: string) => void;
-  updatePayment: () => void;
+
 }
 
-export default function EditPaymentModal({
+export default function CreatePaymentModal({
   isOpen,
-  payment,
   bag,
   loading,
+  payment,
+  createNewPayment,
   closeModal,
-  editPayment,
-  updatePayment,
 }: EditPaymentModalProps) {
+
+  const today = new Date();
+  const todayString = today.toISOString().split("T")[0];
+
   return (
     <ModalV2
       isOpen={isOpen}
@@ -46,17 +51,13 @@ export default function EditPaymentModal({
         <div className="p-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <p className="text-sm font-medium w-32">ID Pagamento:</p>
-              <p className="flex-1">{payment.id}</p>
-            </div>
-            <div className="flex justify-between items-center">
               <p className="text-sm font-medium w-32">Valor:</p>
               <p className="flex-1">{formatPrice(bag.price)}</p>
             </div>
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium w-32">Data:</p>
               <p className="font-semibold flex-1">
-                {formatDateToDateAndTime(payment.created_at)}
+                {formatDateToDateAndTime(todayString)}
               </p>
             </div>
           </div>
@@ -67,13 +68,11 @@ export default function EditPaymentModal({
         <SelectInput
           label="Selecione o método de pagamento"
           options={paymentMethodOptions}
-          defaultOption={paymentMethodOptions.find(
-            (option) => option.value === payment.method
-          )}
-          onChange={(value) => editPayment("method", value)}
+          defaultOption={paymentMethodOptions[0]}
+          onChange={(value) => createNewPayment()}
         />
       </div>
-      {["CREDIT", "DEBIT"].includes(payment.method) && (
+       {["CREDIT", "DEBIT"].includes(payment.method) && (
         <SelectInput
           label="Selecione a bandeira do cartão"
           options={paymentFlagOptions}
@@ -83,7 +82,7 @@ export default function EditPaymentModal({
           onChange={(value) => editPayment("flag", value)}
         />
       )}
-      <div className="mt-2">
+      {/*<div className="mt-2">
         <SelectInput
           label="Selecione o status do pagamento"
           options={paymentStatusOptions}
@@ -92,7 +91,7 @@ export default function EditPaymentModal({
           )}
           onChange={(value) => editPayment("status", value)}
         />
-      </div>
+      </div> */}
 
       <div className="flex gap-2 mt-4">
         <button
@@ -104,7 +103,7 @@ export default function EditPaymentModal({
 
         <button
           className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
-          onClick={() => updatePayment()}
+          onClick={() => createNewPayment()}
         >
           {loading ? <Loader loaderType="component" /> : "Salvar"}
         </button>

@@ -6,17 +6,22 @@ import { toast } from "sonner";
 
 import { getBagById } from "@admin/_actions/bags/get-bag-by-id";
 import { updatePaymentById } from "@admin/_actions/payment/update-payment-by-id";
+import { createPayment } from "@admin/_actions/payment/create-bag-payment";
 
 import { useHandleError } from "@shared/hooks/useHandleError";
 
-import { BagDTO, PaymentDTO } from "@shared/interfaces/dtos";
+import { BagDTO } from "@shared/interfaces/dtos";
+import { PaymentDTO, CreatePaymentDTO } from "@shared/interfaces/dtos/payment-dto";
 
 const useBagDetailsPage = () => {
   const [isPending, startTransition] = useTransition();
   const [bagDetails, setBagDetails] = useState<BagDTO>();
   const [paymentsPage, setPaymentsPage] = useState(1);
   const [selectedPayment, setSelectedPayment] = useState<PaymentDTO | null>();
+  const [newPayment, setNewPayment] = useState<CreatePaymentDTO | null>();
+  const [createPaymentModalIsOpen, setCreatePaymentModalIsOpen] = useState(false);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
+  const [loadingCreatePayment, setLoadingCreatePayment] = useState(false);
   const [loadingUpdatePayment, setLoadingUpdatePayment] = useState(false);
 
   const { bag_id } = useParams();
@@ -29,6 +34,7 @@ const useBagDetailsPage = () => {
 
   useEffect(() => {
     startTransition(() => {
+      console.log("paymentsPage", paymentsPage);
       getBagDetails({ bagId: bag_id.toString(), paymentsPage });
     });
   }, [paymentsPage]);
@@ -72,10 +78,18 @@ const useBagDetailsPage = () => {
     setPaymentModalIsOpen(true);
   };
 
+  const createBagNewPayment = () => {
+    setNewPayment(newPayment);
+    setCreatePaymentModalIsOpen(true);
+  };
+
   const closePaymentModal = () => {
     setPaymentModalIsOpen(false);
+    setCreatePaymentModalIsOpen(false);
     setSelectedPayment(null);
   };
+
+  
 
   const editSelectedPayment = (key: string, value: string) => {
     if (!selectedPayment) return;
@@ -90,6 +104,22 @@ const useBagDetailsPage = () => {
     }
 
     setSelectedPayment(updatedPayment);
+  };
+
+  const createSelectedPayment = (value: CreatePaymentDTO) => {
+
+    setLoadingCreatePayment(true);
+    createPayment({
+      data: {
+        bag_id: value.bag_id,
+        method: value.method,
+        flag: value.flag,
+      }
+    }).then((response) => {
+      if (response.message) return handleError(response.message);
+      closePaymentModal();
+      toast.success("Pagamento criado com sucesso.");
+    })
   };
 
   const updateSelectedPayment = async () => {
@@ -138,8 +168,12 @@ const useBagDetailsPage = () => {
     bagDetails,
     isPending,
     paymentsPage,
+    createPaymentModalIsOpen,
     paymentModalIsOpen,
+    createPayment,
     selectedPayment,
+    newPayment,
+    loadingCreatePayment,
     loadingUpdatePayment,
     nextPaymentsPage,
     prevPaymentsPage,
