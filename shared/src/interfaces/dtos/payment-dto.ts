@@ -14,4 +14,5 @@ export interface CreatePaymentDTO {
   bag_id: string;
   method: "CREDIT" | "DEBIT" | "CASH" | "PIX";
   flag?: "MASTERCARD" | "VISA" | "OTHER" | null;
+  status: "PENDING" | "DONE" | "FAILED";
 }

@@ -19,10 +19,9 @@ import { useState } from "react";
 
 interface EditPaymentModalProps {
   isOpen: boolean;
-  payment: CreatePaymentDTO | any;
   bag: BagDTO;
   loading: boolean;
-  createNewPayment: () => void;
+  createNewPayment: (payment: CreatePaymentDTO) => void;
   closeModal: () => void;
 
 }
@@ -31,13 +30,16 @@ export default function CreatePaymentModal({
   isOpen,
   bag,
   loading,
-  payment,
   createNewPayment,
   closeModal,
 }: EditPaymentModalProps) {
 
   const today = new Date();
   const todayString = today.toISOString().split("T")[0];
+
+  const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH", status: "PENDING" } as CreatePaymentDTO);
+
+  console.log(payment);
 
   return (
     <ModalV2
@@ -68,30 +70,36 @@ export default function CreatePaymentModal({
         <SelectInput
           label="Selecione o método de pagamento"
           options={paymentMethodOptions}
-          defaultOption={paymentMethodOptions[0]}
-          onChange={(value) => createNewPayment()}
+          defaultOption={paymentMethodOptions.find(
+            (option) => option.value === payment.method
+          )}
+          onChange={(value) => {
+            setPayment((prevPayment) => {
+              return {
+                ...prevPayment,
+                method: value,
+              } as CreatePaymentDTO;
+            })
+          }}
         />
       </div>
-       {["CREDIT", "DEBIT"].includes(payment.method) && (
+      {["CREDIT", "DEBIT"].includes(payment.method) && (
         <SelectInput
           label="Selecione a bandeira do cartão"
           options={paymentFlagOptions}
           defaultOption={paymentFlagOptions.find(
             (option) => option.value === payment.flag
           )}
-          onChange={(value) => editPayment("flag", value)}
+          onChange={(value) => {
+            setPayment((prevPayment) => {
+              return {
+                ...prevPayment,
+                flag: value,
+              } as CreatePaymentDTO;
+            })
+          }}
         />
       )}
-      {/*<div className="mt-2">
-        <SelectInput
-          label="Selecione o status do pagamento"
-          options={paymentStatusOptions}
-          defaultOption={paymentStatusOptions.find(
-            (option) => option.value === payment.status
-          )}
-          onChange={(value) => editPayment("status", value)}
-        />
-      </div> */}
 
       <div className="flex gap-2 mt-4">
         <button
@@ -103,7 +111,10 @@ export default function CreatePaymentModal({
 
         <button
           className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
-          onClick={() => createNewPayment()}
+          onClick={() => {
+            console.log(payment);
+            createNewPayment(payment)
+          }}
         >
           {loading ? <Loader loaderType="component" /> : "Salvar"}
         </button>

@@ -78,18 +78,15 @@ const useBagDetailsPage = () => {
     setPaymentModalIsOpen(true);
   };
 
-  const createBagNewPayment = () => {
-    setNewPayment(newPayment);
+  const startNewPayment = () => {
     setCreatePaymentModalIsOpen(true);
-  };
+  }
 
   const closePaymentModal = () => {
     setPaymentModalIsOpen(false);
     setCreatePaymentModalIsOpen(false);
     setSelectedPayment(null);
   };
-
-  
 
   const editSelectedPayment = (key: string, value: string) => {
     if (!selectedPayment) return;
@@ -106,7 +103,7 @@ const useBagDetailsPage = () => {
     setSelectedPayment(updatedPayment);
   };
 
-  const createSelectedPayment = (value: CreatePaymentDTO) => {
+  const createNewPayment = (value: CreatePaymentDTO) => {
 
     setLoadingCreatePayment(true);
     createPayment({
@@ -120,6 +117,12 @@ const useBagDetailsPage = () => {
       closePaymentModal();
       toast.success("Pagamento criado com sucesso.");
     })
+    .catch(() => {
+      toast.error("Erro desconhecido.");
+    })
+    .finally(() => {
+      setLoadingCreatePayment(false);
+    });
   };
 
   const updateSelectedPayment = async () => {
@@ -170,7 +173,6 @@ const useBagDetailsPage = () => {
     paymentsPage,
     createPaymentModalIsOpen,
     paymentModalIsOpen,
-    createPayment,
     selectedPayment,
     newPayment,
     loadingCreatePayment,
@@ -179,8 +181,10 @@ const useBagDetailsPage = () => {
     prevPaymentsPage,
     navigateToBagsList,
     selectBagPayment,
+    createNewPayment,
     closePaymentModal,
     editSelectedPayment,
+    startNewPayment,
     updateSelectedPayment,
   };
 };

@@ -28,23 +28,24 @@ const BagDetailsPage = () => {
     paymentsPage,
     createPaymentModalIsOpen,
     paymentModalIsOpen,
-    createPayment,
     selectedPayment,
+    newPayment,
     loadingCreatePayment,
     loadingUpdatePayment,
     nextPaymentsPage,
     prevPaymentsPage,
     navigateToBagsList,
     selectBagPayment,
+    createNewPayment,
     closePaymentModal,
     editSelectedPayment,
     updateSelectedPayment,
+    startNewPayment,
   } = useBagDetailsPage();
 
   if (!bagDetails) return null;
 
   const tax = bagDetails.price * (bagDetails.orders[0].offer.catalog.farm.tax) / 100;
-
   return (
     <>
       <div className="w-full flex flex-col gap-6">
@@ -192,7 +193,7 @@ const BagDetailsPage = () => {
                   <EmptyBox type="payment" />
                   <div className="flex justify-center items-center h-full pr-18 pl-18">
                     <Button
-                      onClick={() => createBagPayment()}
+                      onClick={() => startNewPayment()}
                       className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
                     >
                       Adicionar forma de pagamento
@@ -252,7 +253,7 @@ const BagDetailsPage = () => {
           isOpen={createPaymentModalIsOpen}
           bag={bagDetails}
           loading={loadingCreatePayment}
-          createNewPayment={}
+          createNewPayment={createNewPayment}
           closeModal={() => closePaymentModal()}
         />
       )}
