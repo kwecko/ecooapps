@@ -124,9 +124,12 @@ export default function Home() {
             {currentStep === 2 && (
               <InputPrice
                 handleNextStep={handleNextStep}
-                price={offer.price}
+                price={offer.price ?? 0}
+                expires_at={offer.expires_at ?? new Date()}
+                perishable={offer.product.perishable}
+                setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at })}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
-              />
+            />
             )}
             {currentStep === 3 && (
               <InputDescription
@@ -139,12 +142,13 @@ export default function Home() {
             )}
             {currentStep === 4 && (
               <ReviewOffer
-                productId={offer.product.id}
-                productName={offer.product.name}
-                amount={offer.amount}
-                price={offer.price}
+                productId={offer.product.id ?? ""}
+                productName={offer.product.name ?? ""}
+                amount={offer.amount ?? 0}
+                price={offer.price ?? 0}
                 description={offer.description ?? ""}
-                pricing={offer.product.pricing}
+                pricing={offer.product.pricing ?? "UNIT"}
+                expires_at={offer.product.perishable ? offer.expires_at : null}
                 submitAction={updateOffer}
               />
             )}

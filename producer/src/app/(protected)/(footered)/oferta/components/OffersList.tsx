@@ -22,11 +22,13 @@ interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   type: "last" | "current";
   notFoundMessage: string;
+  isOfferingDay: boolean;
 }
 
 export default function OffersList({
   title,
   type,
+  isOfferingDay,
   notFoundMessage,
   ...rest
 }: OffersListProps) {
@@ -37,6 +39,7 @@ export default function OffersList({
   const [hasMore, setHasMore] = useState<boolean>(true);
   const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
+  const offerType = isOfferingDay ? "current" : null;
   const { handleError } = useHandleError();
 
   const LocalStorage = useLocalStorage();
@@ -133,8 +136,8 @@ export default function OffersList({
                   ref={index === offers.length - 1 ? lastProductRef : null}
                   key={`offer-${offer.id}-${index}`}
                   offer={offer}
-                  onDeleteCard={type === "current" ? onDeleteCard : undefined}
-                  editable={type === "current"}
+                  onDeleteCard={type === offerType ? onDeleteCard : undefined}
+                  editable={type === offerType}
                   repeatable={type === "last"}
                   catalogId={catalogId}
                 />

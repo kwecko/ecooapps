@@ -10,7 +10,6 @@ import Button from "@shared/components/Button";
 import Card from "@shared/components/Card";
 import CustomModal from "@shared/components/CustomModal";
 import { useCycleProvider } from "@shared/context/cycle";
-import { isUnderConstruction } from "@shared/next/library/is-under-construction";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
 export function ProductMenu() {
@@ -52,8 +51,6 @@ export function ProductMenu() {
     router.push("/oferta");
   };
 
-  const handleClickInfoButton = () => {};
-
   return (
     <Card className="w-full p-5 text-theme-default gap-3.5">
       <div className="flex justify-between items-start gap-2">
@@ -74,10 +71,11 @@ export function ProductMenu() {
         <Button
           onClick={handleClickOfferProductButton}
           className="w-full h-12 bg-theme-default rounded-md text-white"
-          disabled={!isOfferingDay || isUnderConstruction("/oferta")}
+          // disabled={!isOfferingDay || isUnderConstruction("/oferta")}
           href="/"
         >
-          Fazer uma oferta
+          {isOfferingDay ? "Ofertar produtos" : "Visualizar ofertas"}
+          {/* Fazer uma oferta */}
         </Button>
         <Link href={"/relatorios"}>
           <Button className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default">
