@@ -78,7 +78,7 @@ export default function SendBagMiniTable() {
             }
             selectStatus={
               currentStatus !== "SEPARATED" ? (
-                <div className="w-full">
+                <div className="w-[110px]">
                   <SelectInput
                     placeholder="Selecione o status"
                     options={bagStatusOptions}
