@@ -18,7 +18,6 @@ const useBagDetailsPage = () => {
   const [bagDetails, setBagDetails] = useState<BagDTO>();
   const [paymentsPage, setPaymentsPage] = useState(1);
   const [selectedPayment, setSelectedPayment] = useState<PaymentDTO | null>();
-  const [newPayment, setNewPayment] = useState<CreatePaymentDTO | null>();
   const [createPaymentModalIsOpen, setCreatePaymentModalIsOpen] = useState(false);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
   const [loadingCreatePayment, setLoadingCreatePayment] = useState(false);
@@ -34,10 +33,9 @@ const useBagDetailsPage = () => {
 
   useEffect(() => {
     startTransition(() => {
-      console.log("paymentsPage", paymentsPage);
       getBagDetails({ bagId: bag_id.toString(), paymentsPage });
     });
-  }, [paymentsPage]);
+  }, [paymentsPage, loadingCreatePayment]);
 
   const getBagDetails = ({
     bagId,
@@ -174,7 +172,6 @@ const useBagDetailsPage = () => {
     createPaymentModalIsOpen,
     paymentModalIsOpen,
     selectedPayment,
-    newPayment,
     loadingCreatePayment,
     loadingUpdatePayment,
     nextPaymentsPage,

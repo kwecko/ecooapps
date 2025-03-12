@@ -39,8 +39,6 @@ export default function CreatePaymentModal({
 
   const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH", status: "PENDING" } as CreatePaymentDTO);
 
-  console.log(payment);
-
   return (
     <ModalV2
       isOpen={isOpen}
@@ -112,7 +110,6 @@ export default function CreatePaymentModal({
         <button
           className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
           onClick={() => {
-            console.log(payment);
             createNewPayment(payment)
           }}
         >

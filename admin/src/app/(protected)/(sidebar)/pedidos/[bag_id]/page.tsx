@@ -29,7 +29,6 @@ const BagDetailsPage = () => {
     createPaymentModalIsOpen,
     paymentModalIsOpen,
     selectedPayment,
-    newPayment,
     loadingCreatePayment,
     loadingUpdatePayment,
     nextPaymentsPage,
