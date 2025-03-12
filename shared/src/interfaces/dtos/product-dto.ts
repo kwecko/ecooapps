@@ -7,6 +7,7 @@ export interface ProductDTO {
   category_id: string;
   created_at: Date;
   updated_at: Date | null;
+  perishable: boolean;
 }
 
 interface Category {
