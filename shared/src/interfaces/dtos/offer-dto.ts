@@ -11,4 +11,5 @@ export interface OfferDTO {
   product: ProductDTO;
   created_at: Date;
   updated_at: Date | null;
+  expires_at: Date | null;
 }

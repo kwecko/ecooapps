@@ -19,7 +19,7 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
     event: ChangeEvent<HTMLInputElement>
   ) => void | string | undefined;
   onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  value?: string | number;
+  value?: string | number | Date;
   defaultValue?: string;
   maxLength?: number;
   minLength?: number;
@@ -77,7 +77,7 @@ export default function Input({
           onChange={onChange}
           onFocus={onFocus}
           defaultValue={defaultValue}
-          value={value}
+          value={value instanceof Date ? value.toISOString().split('T')[0] : value}
           maxLength={maxLength}
           minLength={minLength}
           autoComplete={autoComplete}
