@@ -48,6 +48,11 @@ export default function InputPrice({
       );
       return;
     }
+    if (perishable && !expires_at) {
+      toast.error("A data de validade não é válida. Por favor, insira uma data válida."
+      );
+      return;
+    }
 
     handleNextStep();
   };
