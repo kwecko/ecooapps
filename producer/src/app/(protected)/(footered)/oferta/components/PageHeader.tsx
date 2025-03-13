@@ -11,7 +11,7 @@ export default function PageHeader() {
           Adicione produtos à sua oferta
         </span>
       </div>
-      <AddProductButton />
+      <AddProductButton disabled={false}/>
     </div>
   );
 }
