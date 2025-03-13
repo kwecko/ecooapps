@@ -101,7 +101,7 @@ export default function Home() {
           <InputPrice
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
-            expires_at={offer.expires_at || undefined}
+            expires_at={offer.expires_at ?? undefined}
             perishable={offer.product.perishable}
             setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at })}
             setPrice={(price) => setOffer({ ...offer, price: price })}
