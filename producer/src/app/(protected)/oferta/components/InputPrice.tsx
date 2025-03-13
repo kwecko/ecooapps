@@ -48,6 +48,11 @@ export default function InputPrice({
       );
       return;
     }
+    if (perishable && !expires_at) {
+      toast.error("A data de validade não é válida. Por favor, insira uma data válida."
+      );
+      return;
+    }
 
     handleNextStep();
   };
@@ -89,11 +94,12 @@ export default function InputPrice({
               if (setExpiresAt && e.target.valueAsDate) {
                 const date = e.target.valueAsDate;
                 date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
+                
                 if (date < new Date()) {
                   toast.error("A data não pode estar no passado. Por favor, insira uma data válida.");
                   return;
                 }
+
               setExpiresAt(date);
               }
             }}
