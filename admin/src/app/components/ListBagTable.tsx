@@ -22,6 +22,8 @@ export default function ListBagsTable() {
     page,
   });
 
+  console.log(bags);
+
   const farmTableColumns = [
     { 
       header: "Cliente", 
@@ -43,7 +45,7 @@ export default function ListBagsTable() {
       render: (row: BagDTO) => {
         return (
           <div>
-            {`R$ ${row.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            {`R$ ${row.total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           </div>
         );
       } 
