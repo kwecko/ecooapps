@@ -22,8 +22,6 @@ export default function ListBagsTable() {
     page,
   });
 
-  console.log(bags);
-
   const farmTableColumns = [
     { 
       header: "Cliente", 
