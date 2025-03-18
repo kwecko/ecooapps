@@ -33,7 +33,7 @@ export const getBagsTableColumns = ({
       key: "price",
       colSpan: 2,
       render: function renderPrice(row: BagDTO) {
-        return formatPrice(row.total);
+        return formatPrice(row.subtotal);
       },
     },
     {
@@ -41,7 +41,7 @@ export const getBagsTableColumns = ({
       key: "fees",
       colSpan: 2,
       render: function renderFees(row: BagDTO) {
-        return "---";
+        return formatPrice(row.fee);
       },
     },
     {
@@ -49,7 +49,7 @@ export const getBagsTableColumns = ({
       key: "shipping",
       colSpan: 2,
       render: function renderShipping(row: BagDTO) {
-        return "---";
+        return formatPrice(row.shipping);
       },
     },
     {

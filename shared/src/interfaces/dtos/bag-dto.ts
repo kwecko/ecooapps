@@ -18,8 +18,9 @@ export interface BagDTO {
   paid: boolean;
   open: boolean;
   total: number;
+  fee: number;
   subtotal: number;
-  delivery_fee: number;
+  shipping: number;
   code: string;
   cycle_id: string;
   cycle: CycleDTO;
