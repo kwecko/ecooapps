@@ -44,7 +44,10 @@ const BagDetailsPage = () => {
 
   if (!bagDetails) return null;
 
-  const tax = bagDetails.total * (bagDetails.orders[0].offer.catalog.farm.tax) / 100;
+  const tax = bagDetails.total * (bagDetails.orders[0].offer.catalog.fee) / 100;
+
+  console.log("bagDetails:", bagDetails);
+
   return (
     <>
       <div className="w-full h-[105%] overflow-auto flex flex-col gap-6">

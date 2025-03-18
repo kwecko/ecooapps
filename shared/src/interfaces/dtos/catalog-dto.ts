@@ -6,6 +6,7 @@ export interface CatalogDTO {
   cycle: CycleDTO;
   farm_id: string;
   farm: FarmDTO;
+  fee: number;
   offers: OfferDTO[];
   created_at: Date;
   updated_at: Date | null;
