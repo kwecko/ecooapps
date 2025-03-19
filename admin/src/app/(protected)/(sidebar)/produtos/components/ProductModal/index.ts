@@ -40,11 +40,14 @@ export default function useProductModal({
     defaultValues: {
       name: "",
       pricing: "UNIT",
+      category: "",
+      archived: false,
+      perishable: true,
     },
   });
 
   // Functions
-  const onSubmit = ({ name, pricing, category, image }: ProductSchema) => {
+  const onSubmit = ({ name, pricing, category, image, perishable }: ProductSchema) => {
     startTransition(async () => {
       const isValid = await trigger();
 
@@ -56,6 +59,7 @@ export default function useProductModal({
       dataForm.append("pricing", pricing);
       dataForm.append("category_id", category);
       dataForm.append("image", image)
+      dataForm.append("perishable", perishable.toString());
   
       registerProduct(dataForm)
         .then((response) => {

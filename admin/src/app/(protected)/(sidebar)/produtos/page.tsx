@@ -36,6 +36,8 @@ function ProductsPage() {
     reloadProducts,
   } = useProductsPage();
 
+  console.log(products);
+
   return (
     <div className="w-full flex flex-col h-full gap-6 overflow-y-hidden items-stretch relative">
       <div className="flex justify-between items-center w-full">

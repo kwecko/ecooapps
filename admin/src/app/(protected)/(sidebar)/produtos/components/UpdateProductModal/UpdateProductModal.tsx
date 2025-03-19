@@ -100,11 +100,12 @@ export default function UpdateProductModal({
 
         <div className="grid grid-cols-2 gap-4">
           <SelectInput
-            label="Produto Perecível?"
+            label="Produto perecível?"
             options={perishableOptions}
-            defaultOption={perishableOptions[0]}
-            onChange={() => {}}
-            disabled
+            defaultOption={perishableOptions.find(
+              (option) => option.value === product?.perishable
+            ) ?? perishableOptions[0]}
+            onChange={(value) => setValue("perishable", value)}
           />
 
           <SelectInput

@@ -19,6 +19,7 @@ import useProductModal from "./index";
 import {
   commercializationOptions,
   perishableOptions,
+  archivedOptions,
 } from "./data";
 
 import { listCategories } from "@admin/_actions/categories/GET/list-categories";
@@ -112,11 +113,21 @@ export default function CreateProductModal({
           <SelectInput
             label="Produto perecível?"
             options={perishableOptions}
-            defaultOption={perishableOptions[0]}
-            onChange={() => {}}
-            disabled
+            defaultOption={perishableOptions.find(
+              (option) => option.value === product?.perishable
+            ) ?? perishableOptions[0]}
+            onChange={(value) => setValue("perishable", value)}
           />
           
+          <SelectInput
+            label="Oculto?"
+            options={perishableOptions}
+            defaultOption={archivedOptions.find(
+              (option) => option.value === product?.perishable
+            ) ?? archivedOptions[0]}
+            onChange={(value) => setValue("archived", value)}
+          />
+
           <SelectInput
             label="Comercialização"
             options={commercializationOptions}
