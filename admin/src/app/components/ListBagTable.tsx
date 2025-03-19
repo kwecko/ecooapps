@@ -43,7 +43,7 @@ export default function ListBagsTable() {
       render: (row: BagDTO) => {
         return (
           <div>
-            {`R$ ${row.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+            {`R$ ${row.total.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
           </div>
         );
       } 
