@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { LuPencil } from "react-icons/lu";
+import { LuEye, LuPencil } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 import { ModalKeys } from "..";
@@ -58,8 +58,24 @@ export function getProductTableColumns(
     },
     {
       header: "",
+      key: "hide",
+      colSpan: 0.5,
+      render: function renderEdit(row: ProductDTO) {
+        return (
+            <button
+            type="button"
+            onClick={() => toggleModal("isOpenUpdateProductModal", row)}
+            className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
+            >
+            <LuEye size={20} />
+            </button>
+        );
+      },
+    },
+    {
+      header: "",
       key: "edit",
-      colSpan: 1,
+      colSpan: 0.5,
       render: function renderEdit(row: ProductDTO) {
         return (
           <button
@@ -75,7 +91,7 @@ export function getProductTableColumns(
     {
       header: "",
       key: "delete",
-      colSpan: 1,
+      colSpan: 0.5,
       render: function renderDelete(row: ProductDTO) {
         return (
           <button
