@@ -45,15 +45,15 @@ export function getProductTableColumns(
       key: "pricing",
       colSpan: 2,
       render: function renderPricing(row: ProductDTO) {
-        return row.pricing === "WEIGHT" ? "kilo" : "unidade";
+        return row.pricing === "WEIGHT" ? "Kilo" : "Unidade";
       },
     },
     {
       header: "Perecivel",
       key: "perishable",
       colSpan: 2,
-      render: function renderCategory() {
-        return "---"
+      render: function renderCategory(row: ProductDTO) {
+        return row.perishable ? "Sim" : "Não";
       },
     },
     {
