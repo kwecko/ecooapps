@@ -30,7 +30,7 @@ export const getBagsTableColumns = ({
     },
     {
       header: "Preço",
-      key: "price",
+      key: "subtotal",
       colSpan: 2,
       render: function renderPrice(row: BagDTO) {
         return formatPrice(row.subtotal);

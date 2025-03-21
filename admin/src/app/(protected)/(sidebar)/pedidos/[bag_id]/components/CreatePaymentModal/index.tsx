@@ -17,7 +17,7 @@ import {
 import Loader from "@shared/components/Loader";
 import { useState } from "react";
 
-interface EditPaymentModalProps {
+interface CreatePaymentModalProps {
   isOpen: boolean;
   bag: BagDTO;
   loading: boolean;
@@ -32,12 +32,14 @@ export default function CreatePaymentModal({
   loading,
   createNewPayment,
   closeModal,
-}: EditPaymentModalProps) {
+}: CreatePaymentModalProps) {
 
   const today = new Date();
   const todayString = today.toISOString().split("T")[0];
 
-  const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH", status: "PENDING" } as CreatePaymentDTO);
+  const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH" } as CreatePaymentDTO);
+
+  console.log(payment);
 
   return (
     <ModalV2
