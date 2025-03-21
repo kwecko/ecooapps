@@ -46,8 +46,6 @@ export default function useProductModal({
   // Functions
   const onSubmit = ({ name, pricing, category, perishable, image }: ProductSchema) => {
 
-    console.log(name, pricing, category, perishable, image);
-
     startTransition(async () => {
       const isValid = await trigger();
 
