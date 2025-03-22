@@ -7,9 +7,16 @@ interface ListProductsRequest {
   page: number;
 }
 
-export async function listProducts({ product, page }: ListProductsRequest) {
+export async function listProducts({ page, product }: ListProductsRequest) {
+  
+  if (!product) {
+    const response = ApiService.GET({
+      url: `/products?page=${page}`,
+    });
+    return response;
+  }
   const response = ApiService.GET({
-    url: `/products?page=${page}&product=${product}`,
+    url: `/products?page=${page}&name=${product}`,
   });
 
   return response;

@@ -41,13 +41,14 @@ export default function useProductModal({
       name: "",
       pricing: "UNIT",
       category: "",
-      archived: false,
+      // archived: false,
       perishable: true,
     },
   });
 
   // Functions
-  const onSubmit = ({ name, pricing, category, image, perishable }: ProductSchema) => {
+  const onSubmit = ({ name, pricing, category, image, perishable, archived }: ProductSchema) => {
+
     startTransition(async () => {
       const isValid = await trigger();
 
@@ -59,8 +60,9 @@ export default function useProductModal({
       dataForm.append("pricing", pricing);
       dataForm.append("category_id", category);
       dataForm.append("image", image)
-      dataForm.append("perishable", perishable.toString());
-  
+      dataForm.append("perishable", String(perishable));
+      dataForm.append("archived", String(archived));
+
       registerProduct(dataForm)
         .then((response) => {
           if (response.message) return handleError(response.message);

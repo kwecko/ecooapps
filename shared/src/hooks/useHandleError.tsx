@@ -60,6 +60,8 @@ export function useHandleError() {
 
       const words = errorCode.split(" ");
 
+      console.log(words);
+
       if (genericErrorsMapper.includes(words[0])) {
         if (words[0] === "Email") {
           toast.error(`Email ${words[1]} já cadastrado`);

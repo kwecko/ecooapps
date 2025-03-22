@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { LuEye, LuPencil } from "react-icons/lu";
+import { LuEye, LuEyeOff, LuPencil } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 import { ModalKeys } from "..";
@@ -63,11 +63,11 @@ export function getProductTableColumns(
       render: function renderEdit(row: ProductDTO) {
         return (
             <button
-            type="button"
-            onClick={() => toggleModal("isOpenUpdateProductModal", row)}
-            className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
+              type="button"
+              onClick={() => toggleModal("isArchivedProductModal", row)}
+              className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
             >
-            <LuEye size={20} />
+              {row.archived ? <LuEyeOff size={20} /> : <LuEye size={20} />}
             </button>
         );
       },
@@ -88,21 +88,21 @@ export function getProductTableColumns(
         );
       },
     },
-    {
-      header: "",
-      key: "delete",
-      colSpan: 0.5,
-      render: function renderDelete(row: ProductDTO) {
-        return (
-          <button
-            type="button"
-            onClick={() => toggleModal("isOpenDeleteProductModal", row)}
-            className="flex justify-center items-center"
-          >
-            <FaRegTrashAlt className="hover:text-error transition-colors delay-150" size={20} />
-          </button>
-        );
-      },
-    },
+    // {
+    //   header: "",
+    //   key: "delete",
+    //   colSpan: 0.5,
+    //   render: function renderDelete(row: ProductDTO) {
+    //     return (
+    //       <button
+    //         type="button"
+    //         onClick={() => toggleModal("isOpenDeleteProductModal", row)}
+    //         className="flex justify-center items-center"
+    //       >
+    //         <FaRegTrashAlt className="hover:text-error transition-colors delay-150" size={20} />
+    //       </button>
+    //     );
+    //   },
+    // },
   ];
 }
