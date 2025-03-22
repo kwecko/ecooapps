@@ -59,6 +59,7 @@ export default function useProductModal({
       dataForm.append("name", name);
       dataForm.append("pricing", pricing);
       dataForm.append("category_id", category);
+      dataForm.append("perishable", perishable);
       dataForm.append("image", image)
       dataForm.append("perishable", String(perishable));
       dataForm.append("archived", String(archived));
