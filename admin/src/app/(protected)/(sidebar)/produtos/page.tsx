@@ -63,10 +63,10 @@ function ProductsPage() {
         </div>
       </div>
       <div className="flex justify-start w-full">
-        <div className="flex w-36 justify-center gap-2">
+        <div className="flex justify-center gap-2">
           <button
             className={`flex justify-center items-center bg-white text-theme-primary rounded-full border border-theme-primary w-8 h-8 ${
-              archived === undefined ? "bg-french-gray" : "hover:bg-theme-background"
+              archived === undefined ? "bg-[#D1D1D6]" : "hover:bg-theme-background"
             }`}
             onClick={() => setArchived(undefined)}
           >
@@ -74,7 +74,7 @@ function ProductsPage() {
           </button>
           <button
             className={`flex justify-center items-center bg-white text-theme-primary rounded-full border border-theme-primary w-8 h-8 ${
-              archived === false ? "bg-french-gray" : "hover:bg-theme-background"
+              archived === false ? "bg-[#D1D1D6]" : "hover:bg-theme-background"
             }`}
             onClick={() => setArchived(false)}
           >
@@ -82,7 +82,7 @@ function ProductsPage() {
           </button>
           <button
             className={`flex justify-center items-center bg-white text-theme-primary rounded-full border border-theme-primary w-8 h-8 ${
-              archived === true ? "bg-french-gray" : "hover:bg-theme-background"
+              archived === true ? "bg-[#D1D1D6]" : "hover:bg-theme-background"
             }`}
             onClick={() => setArchived(true)}
           >
