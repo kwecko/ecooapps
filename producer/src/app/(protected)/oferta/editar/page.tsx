@@ -1,11 +1,18 @@
 "use client";
 
-import Button from "@shared/components/Button";
-import { removeTaxFromPrice } from "@shared/utils/convert-tax";
-import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LuChevronLeft, LuX } from "react-icons/lu";
+import { toast } from "sonner";
+
+import { updateOffer } from "@producer/_actions/offers/PATCH/update-offer";
+import { removeTaxFromPrice } from "@shared/utils/convert-tax";
+import { convertOfferAmount } from "@shared/utils/convert-unit";
+import { useHandleError } from "@shared/hooks/useHandleError";
+
+import Button from "@shared/components/Button";
+import Loader from "@shared/components/Loader";
+import { OfferDTO } from "@shared/interfaces/dtos";
 import {
   InputAmount,
   InputDescription,
@@ -13,32 +20,22 @@ import {
   ReviewOffer,
 } from "../components";
 
-import { toast } from "sonner";
-
-import useUpdateCatalog from "@producer/hooks/catalogs/useUpdateCatalog";
-import Loader from "@shared/components/Loader";
-import { OfferDTO } from "@shared/interfaces/dtos";
-
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { updateOffers } = useUpdateCatalog();
-  const router = useRouter();
-
-  const [catalogId, setCatalogId] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [offer, setOffer] = useState<OfferDTO>({} as OfferDTO);
-
   const [currentStep, setCurrentStep] = useState<number>(1);
 
-  const minStep = 1;
-  const maxStep = 4;
+  const router = useRouter();
+  const { handleError } = useHandleError();
+
+  const minStep: number = 1;
+  const maxStep: number = 4;
 
   useEffect(() => {
     setIsLoading(true);
     const storedOfferData = sessionStorage.getItem("edit-offer-data");
     if (storedOfferData) {
       const offerData: OfferDTO = JSON.parse(storedOfferData);
-      setCatalogId(offerData.catalog_id);
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
@@ -75,22 +72,28 @@ export default function Home() {
     router.push("/oferta");
   };
 
-  const updateOffer = async () => {
-    const success = await updateOffers({
-      catalog_id: catalogId,
-      offers: [
-        {
-          id: offer.id,
+  const onUpdateOffer = async () => {
+    try {
+      const response =await updateOffer({
+        offer_id: offer.id,
+        data: {
           amount:
-            offer.product.pricing === "UNIT"
-              ? offer.amount
-              : offer.amount * 1000,
-          price: offer.price,
-          description: offer.description ?? undefined,
-        },
-      ],
-    });
-    if (!success) return;
+              offer.product.pricing === "UNIT"
+                ? offer.amount
+                : offer.amount * 1000,
+            price: offer.price,
+            description: offer.description ?? undefined,
+          },
+      });
+      if (response.message) {
+        handleError(response.message as string);
+        return;
+      }
+    } catch (error) {
+      handleError(error as string);
+      return;
+    }
+    
     toast.success("Oferta atualizada com sucesso!");
     router.push("/oferta");
   };
@@ -149,7 +152,7 @@ export default function Home() {
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? offer.expires_at : null}
-                submitAction={updateOffer}
+                submitAction={onUpdateOffer}
               />
             )}
           </div>
