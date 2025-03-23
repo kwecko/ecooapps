@@ -104,6 +104,8 @@ export function useHandleError() {
         toast.error(`Não é possivel ${words[3]} produtos hoje.`);
         return;
       }
+
+      toast.error("Um erro inesperado ocorreu.");
     },
     [setSessionExpired]
   );

@@ -8,14 +8,21 @@ interface ListProductsRequest {
 }
 
 export async function listProducts({ product, page }: ListProductsRequest) {
+  const params = new URLSearchParams();
+
+  params.append("page", page.toString());
+
   if (product) {
-    const response = ApiService.GET({
-      url: `/products?page=${page}`,
-    });
-    return response;
+    params.append("name", product);
   }
+
+  const queryString = params.toString();
+  const url = `/products${queryString ? `?${queryString}` : ""}`;
+
   const response = ApiService.GET({
-    url: `/products?page=${page}`,
+    url,
   });
+
   return response;
+
 }
