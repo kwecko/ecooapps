@@ -1,10 +1,12 @@
+import { useState } from "react";
+
 import {
   CreateOfferRequest,
   createOffer as createOfferAction,
-} from "@producer/app/_actions/catalogs/POST/create-offer";
+} from "@producer/app/_actions/offers/POST/create-offer";
+
 import { useCycleProvider } from "@shared/context/cycle";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { useState } from "react";
 
 interface UseCreateOfferProps extends Omit<CreateOfferRequest, "cycle_id"> {}
 

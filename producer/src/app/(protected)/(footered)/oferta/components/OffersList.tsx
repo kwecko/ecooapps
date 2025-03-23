@@ -70,7 +70,6 @@ export default function OffersList({
         });
 
         if (response.message) {
-          console.log("Erro 1");
           handleError(response.message as string);
         } else if (response.data) {
           const dataOffers: CatalogDTO = response.data;

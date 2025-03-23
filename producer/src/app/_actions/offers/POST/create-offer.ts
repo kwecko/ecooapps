@@ -20,7 +20,7 @@ export async function createOffer({
   expires_at,
 }: CreateOfferRequest) {
   const response = ApiService.POST({
-    url: "/catalogs",
+    url: "/offers",
     data: {
       product_id,
       cycle_id,

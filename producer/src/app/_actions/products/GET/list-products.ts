@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import ApiService from "@shared/service";
+import ApiService from '@shared/service';
 
 interface ListProductsRequest {
   page: number;
@@ -9,15 +9,20 @@ interface ListProductsRequest {
 }
 
 export async function listProducts({ page, product, archived }: ListProductsRequest) {
-  
-  let url = `/products?page=${page}`;
+  const params = new URLSearchParams();
+
+  params.append("page", page.toString());
 
   if (product) {
-    url += `&name=${product}`;
+    params.append("name", product);
   }
+
   if (archived !== undefined) {
-    url += `&archived=${archived}`;
+    params.append("archived", archived.toString());
   }
+
+  const queryString = params.toString();
+  const url = `/products${queryString ? `?${queryString}` : ""}`;
 
   const response = ApiService.GET({
     url,
