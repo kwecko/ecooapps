@@ -3,22 +3,17 @@ import CustomInput from "@shared/components/CustomInput";
 import { Control, UseFormRegister, FieldErrors } from "react-hook-form";
 import Image from "next/image";
 import { HiOutlinePencil } from "react-icons/hi";
-import { ChangeRegistrationSchema } from '@shared/schemas/change-registration';
+import { ChangePersonalRegistrationSchema } from '@shared/schemas/change-personal-registration';
 
 interface PersonalInfoFormProps {
-  register: UseFormRegister<ChangeRegistrationSchema>;
-  errors: FieldErrors<ChangeRegistrationSchema>;
-  control: Control<ChangeRegistrationSchema>;
+  register: UseFormRegister<ChangePersonalRegistrationSchema>;
+  errors: FieldErrors<ChangePersonalRegistrationSchema>;
+  control: Control<ChangePersonalRegistrationSchema>;
 }
 
 function PersonalInfoForm({ register, errors, control }: PersonalInfoFormProps) {
   return (
     <div className="w-full flex flex-col items-center justify-center gap-5">
-      {errors.photo && (
-        <span className="text-red-500 text-sm font-semibold">
-          {typeof errors.photo?.message === "string" && errors.photo.message}
-        </span>
-      )}
       <CustomInput
         register={{ ...register("first_name") }}
         placeholder="Primeiro nome"

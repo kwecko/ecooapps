@@ -27,14 +27,9 @@ export function Header() {
         ) : (
           <span className="flex gap-1 items-center text-slate-gray">
             Olá,{" "}
-            <Link href={"/perfil"} className="flex gap-1 items-center">
               <strong className="font-semibold underline underline-offset-2">
                 {first_name}!
               </strong>
-            </Link>
-            <Link href={"/alterar-cadastro"}>
-              <HiOutlinePencilAlt size={16} />
-            </Link>
           </span>
         )}
       </div>

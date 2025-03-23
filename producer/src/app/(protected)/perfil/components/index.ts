@@ -1,6 +1,6 @@
 import {
-  ChangeRegistrationForm,
-  useChangeRegistrationForm,
-} from "./ChangeRegistrationForm";
+  ChangePersonalRegistrationForm,
+  useChangePersonalRegistrationForm,
+} from "./ChangePersonalRegistrationForm";
 
-export { ChangeRegistrationForm, useChangeRegistrationForm };
+export { ChangePersonalRegistrationForm, useChangePersonalRegistrationForm };

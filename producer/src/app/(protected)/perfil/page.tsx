@@ -2,7 +2,7 @@
 
 import { ModelPage } from "@shared/components/ModelPage";
 
-import { ChangeRegistrationForm } from "./components";
+import { ChangePersonalRegistrationForm } from "./components";
 
 export default function ProfilePage() {
   return (
@@ -13,7 +13,7 @@ export default function ProfilePage() {
       subtitle="Após atualizar os seus dados, clique em salvar."
       subtitleClassName="px-9 leading-5.5"
     >
-      <ChangeRegistrationForm />
+      <ChangePersonalRegistrationForm />
     </ModelPage>
   );
 }

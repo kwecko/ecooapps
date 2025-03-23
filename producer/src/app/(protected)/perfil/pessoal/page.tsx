@@ -1,14 +1,18 @@
 "use client";
 
-import { ModelPage } from "@shared/components/ModelPage";
-import PersonalInfoForm from "./components/PersonalInfoForm";
-import Button from "@shared/components/Button";
 import Link from "next/link";
+
+import Button from "@shared/components/Button";
 import Modal from "@shared/components/Modal";
-import { useChangeRegistrationForm } from "../components";
+import { ModelPage } from "@shared/components/ModelPage";
+import Loader from "@shared/components/Loader";
+
+import PersonalInfoForm from "./components/PersonalInfoForm";
+import { useChangePersonalRegistrationForm } from "../components";
 
 export default function ProfilePage() {
   const {
+    isLoading,
     isModalOpen,
     setIsModalOpen,
     register,
@@ -17,7 +21,7 @@ export default function ProfilePage() {
     control,
     handleSubmit,
     handleSubmitForm,
-  } = useChangeRegistrationForm();
+  } = useChangePersonalRegistrationForm();
 
   return (
     <ModelPage
@@ -42,9 +46,14 @@ export default function ProfilePage() {
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"
             type="submit"
-            onClick={() => setIsModalOpen(true)}
+            onClick={(e) => {
+              console.log("Botão clicado");
+              const formIsValid = Object.keys(errors).length === 0;
+              console.log("Formulário válido:", formIsValid);
+              console.log("Erros:", errors);
+            }}
           >
-            Salvar
+            {isLoading ? <Loader loaderType="component" /> : "Salvar"}
           </Button>
           <Modal
             titleContentModal="Você tem certeza?"
