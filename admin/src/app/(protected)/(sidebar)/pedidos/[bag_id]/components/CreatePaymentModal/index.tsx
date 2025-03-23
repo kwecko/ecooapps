@@ -39,8 +39,6 @@ export default function CreatePaymentModal({
 
   const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH" } as CreatePaymentDTO);
 
-  console.log(payment);
-
   return (
     <ModalV2
       isOpen={isOpen}
