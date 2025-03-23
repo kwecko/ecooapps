@@ -60,6 +60,8 @@ export function useHandleError() {
 
       const words = errorCode.split(" ");
 
+      console.log("Words:", words);
+
       if (genericErrorsMapper.includes(words[0])) {
         if (words[0] === "Email") {
           toast.error(`Email ${words[1]} já cadastrado`);
@@ -85,9 +87,6 @@ export function useHandleError() {
           toast.error(`Produto já cadastrado`);
           return;
         }
-
-        toast.error(`${words[0]} não encontrado.`);
-        return;
       }
 
       if (genericErrorsMapper.includes(words[1])) {
@@ -104,6 +103,14 @@ export function useHandleError() {
         toast.error(`Não é possivel ${words[3]} produtos hoje.`);
         return;
       }
+
+      if (errorCode.includes("<!DOCTYPE html>")) {
+        console.error("Erro inesperado:", errorCode);
+        toast.error("Erro inesperado");
+        return;
+      }
+
+      toast.error(errorCode);
     },
     [setSessionExpired]
   );

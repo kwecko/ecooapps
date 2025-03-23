@@ -1,6 +1,11 @@
 export const perishableOptions = [
-  { value: "Sim", label: "Sim" },
-  { value: "Não", label: "Não" },
+  { value: true, label: "Sim" },
+  { value: false, label: "Não" },
+];
+
+export const archivedOptions = [
+  { value: true, label: "Sim" },
+  { value: false, label: "Não" },
 ];
 
 export const commercializationOptions = [
