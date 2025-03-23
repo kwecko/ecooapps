@@ -8,6 +8,7 @@ export interface ProductDTO {
   created_at: Date;
   updated_at: Date | null;
   perishable: boolean;
+  archived: boolean;
 }
 
 interface Category {

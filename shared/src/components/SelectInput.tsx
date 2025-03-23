@@ -3,7 +3,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 import { FiChevronDown } from "react-icons/fi";
 
 interface Option {
-  value: string;
+  value: string | boolean;
   label: string;
 }
 
@@ -122,7 +122,7 @@ export default function Select({
         <ul className="absolute mt-1 lg:top-full w-full bg-white border border-slate-gray lg:border-theme-primary rounded-lg shadow-lg max-h-48 overflow-auto z-10">
           {options.map((option) => (
             <li
-              key={option.value}
+              key={String(option.value)}
               onClick={() => handleSelect(option)}
               className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
                 selectedOption?.value === option.value ? "bg-gray-100" : ""
