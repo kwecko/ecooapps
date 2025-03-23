@@ -114,7 +114,7 @@ export const useChangeRegistrationForm = () => {
 
     const farmFormData = new FormData();
     farmFormData.append("name", data.name || "");
-    farmFormData.append("tally", data.tally || "");
+    farmFormData.append("tally", data.tally || ""); 
     farmFormData.append("description", data.description || "");
     
     if (data.photo) {
