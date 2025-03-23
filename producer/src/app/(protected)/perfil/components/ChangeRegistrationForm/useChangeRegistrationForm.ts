@@ -14,14 +14,12 @@ import {
 } from "@shared/schemas/change-registration";
 
 export const useChangeRegistrationForm = () => {
-  const [formData, setFormData] = useState<ChangeRegistrationSchema | null>(
-    null
-  );
-
-  const [photo, setPhoto] = useState<string | null>(null);
+  const [formData, setFormData] = useState<ChangeRegistrationSchema | null>(null);
+  const [photo, setPhoto] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const { handleError } = useHandleError();
+
   const {
     register,
     handleSubmit,
@@ -59,6 +57,7 @@ export const useChangeRegistrationForm = () => {
         }
 
         const data = { ...farmResponse.data, ...userResponse.data };
+
         if (data.photo && typeof data.photo === "string") {
           if (
             data.photo.startsWith(
@@ -69,9 +68,8 @@ export const useChangeRegistrationForm = () => {
           } else {
             setPhoto(data.photo);
           }
-        } else {
-          setPhoto(null);
         }
+
         if (data.description && typeof data.description === "string") {
           setCharCount(data.description.length);
         } else {
@@ -101,6 +99,7 @@ export const useChangeRegistrationForm = () => {
     }
 
     const data = { ...formData };
+
     Object.keys(data).forEach((key) => {
       if (!data[key as keyof ChangeRegistrationSchema]) {
         delete data[key as keyof ChangeRegistrationSchema];
@@ -110,20 +109,21 @@ export const useChangeRegistrationForm = () => {
     const userFormData = new FormData();
     userFormData.append("first_name", data.first_name || "");
     userFormData.append("last_name", data.last_name || "");
-    if (data.photo) {
-      userFormData.append("photo", data.photo);
-    }
     userFormData.append("email", data.email || "");
     userFormData.append("phone", data.phone || "");
 
-    const farmData = {
-      name: data.name,
-      description: data.description,
-    };
+    const farmFormData = new FormData();
+    farmFormData.append("name", data.name || "");
+    farmFormData.append("tally", data.tally || "");
+    farmFormData.append("description", data.description || "");
+    
+    if (data.photo) {
+      farmFormData.append("photo", data.photo);
+    }
 
     try {
       const [farmResponse, userResponse] = await Promise.all([
-        updateFarm(farmData),
+        updateFarm(farmFormData),
         updateUser(userFormData),
       ]);
 

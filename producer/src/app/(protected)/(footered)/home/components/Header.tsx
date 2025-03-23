@@ -4,7 +4,8 @@ import SkeletonLoader from "@shared/components/SkeletonLoader";
 import useFetchProfile from "@shared/hooks/users/useFetchProfile";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HiOutlineBell, HiOutlinePencilAlt } from "react-icons/hi";
+import { FiSettings } from "react-icons/fi";
+import { HiOutlinePencilAlt } from "react-icons/hi";
 
 export function Header() {
   const {
@@ -38,18 +39,9 @@ export function Header() {
         )}
       </div>
       <div className="flex gap-4.5">
-        <button disabled className="text-theme-primary">
-          <HiOutlineBell size={24} />
-        </button>
-        <button
-          onClick={logout}
-          title="Sair"
-          type="button"
-          aria-label="Sair"
-          className="pt-0.5 text-slate-gray"
-        >
-          Sair
-        </button>
+        <Link href={"/configuracoes"} className="text-theme-primary">
+          <FiSettings size={24}/>
+        </Link>
       </div>
     </header>
   );
