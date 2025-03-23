@@ -17,7 +17,7 @@ import {
 import Loader from "@shared/components/Loader";
 import { useState } from "react";
 
-interface EditPaymentModalProps {
+interface CreatePaymentModalProps {
   isOpen: boolean;
   bag: BagDTO;
   loading: boolean;
@@ -32,12 +32,14 @@ export default function CreatePaymentModal({
   loading,
   createNewPayment,
   closeModal,
-}: EditPaymentModalProps) {
+}: CreatePaymentModalProps) {
 
   const today = new Date();
   const todayString = today.toISOString().split("T")[0];
 
-  const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH", status: "PENDING" } as CreatePaymentDTO);
+  const [payment, setPayment] = useState<CreatePaymentDTO>({ bag_id: bag.id, method: "CASH" } as CreatePaymentDTO);
+
+  console.log(payment);
 
   return (
     <ModalV2
@@ -52,7 +54,7 @@ export default function CreatePaymentModal({
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium w-32">Valor:</p>
-              <p className="flex-1">{formatPrice(bag.price)}</p>
+              <p className="flex-1">{formatPrice(bag.total)}</p>
             </div>
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium w-32">Data:</p>

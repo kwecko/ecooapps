@@ -11,8 +11,8 @@ interface EmptyBoxProps {
 
 export default function EmptyBox({ type }: EmptyBoxProps) {
   const [boxText, setBoxText] = useState("");
-  const [width, setWidth] = useState("");
-  const [height, setHeight] = useState("");
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
 
   useEffect(() => {
     if (type === "search") {

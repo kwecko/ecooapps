@@ -103,8 +103,7 @@ export default function UpdateProductModal({
             label="Produto Perecível?"
             options={perishableOptions}
             defaultOption={perishableOptions[0]}
-            onChange={() => {}}
-            disabled
+            onChange={(value) => {setValue("perishable", value);}}
           />
 
           <SelectInput

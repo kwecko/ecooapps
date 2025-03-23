@@ -51,7 +51,7 @@ export default function EditPaymentModal({
             </div>
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium w-32">Valor:</p>
-              <p className="flex-1">{formatPrice(bag.price)}</p>
+              <p className="flex-1">{formatPrice(bag.total)}</p>
             </div>
             <div className="flex justify-between items-center">
               <p className="text-sm font-medium w-32">Data:</p>

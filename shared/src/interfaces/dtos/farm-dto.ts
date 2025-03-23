@@ -5,7 +5,7 @@ export interface FarmDTO {
   name: string;
   status: "PENDING" | "ACTIVE" | "INACTIVE";
   tally: string;
-  tax: number;
+  fee: number;
   description: string | null;
   admin_id: string;
   admin: UserDTO;

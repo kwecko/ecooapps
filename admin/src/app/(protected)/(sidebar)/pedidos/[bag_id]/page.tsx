@@ -44,7 +44,6 @@ const BagDetailsPage = () => {
 
   if (!bagDetails) return null;
 
-  const tax = bagDetails.price * (bagDetails.orders[0].offer.catalog.farm.tax) / 100;
   return (
     <>
       <div className="w-full h-[105%] overflow-auto flex flex-col gap-6">
@@ -110,20 +109,20 @@ const BagDetailsPage = () => {
                 <div className="flex flex-col gap-2">
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Preço:</p>
-                    <p className="flex-1">{formatPrice(bagDetails.price - tax)}</p>
+                    <p className="flex-1">{formatPrice(bagDetails.subtotal)}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Taxas:</p>
-                    <p className="flex-1">{formatPrice(tax)}</p>
+                    <p className="flex-1">{formatPrice(bagDetails.fee)}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Entrega:</p>
-                    <p className="flex-1">R$ --</p>
+                    <p className="flex-1">{formatPrice(bagDetails.shipping)}</p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Total:</p>
                     <p className="font-semibold flex-1">
-                      {formatPrice(bagDetails.price)}
+                      {formatPrice(bagDetails.total)}
                     </p>
                   </div>
                 </div>

@@ -41,7 +41,6 @@ export default function Ofertas() {
     try {
       const response = await fetchCatalog({
         catalog_id: params.id as string,
-        cycle_id: cycle.id as string,
         page: page,
       });
       if (response.message) {

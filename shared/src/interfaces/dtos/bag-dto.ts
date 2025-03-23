@@ -17,7 +17,10 @@ export interface BagDTO {
     | "DEFERRED";
   paid: boolean;
   open: boolean;
-  price: number;
+  total: number;
+  subtotal: number;
+  fee: number;
+  shipping: number;
   code: string;
   cycle_id: string;
   cycle: CycleDTO;
