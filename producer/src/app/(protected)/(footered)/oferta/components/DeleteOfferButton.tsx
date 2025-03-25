@@ -1,39 +1,54 @@
-import useUpdateCatalog from "@producer/hooks/catalogs/useUpdateCatalog";
-import Modal from "@shared/components/Modal";
-import { useHandleError } from "@shared/hooks/useHandleError";
 import { useState } from "react";
 import { FaRegTrashCan } from "react-icons/fa6";
+
+import Modal from "@shared/components/Modal";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import Loader from "@shared/components/Loader";
+
+import { deleteOffer } from "@producer/_actions/offers/DELETE/delete-offer";
+
+
 interface DeleteOfferButtonProps {
-  catalogId: string;
   offerId: string;
   productName: string;
   onDeleteCard: (offerId: string) => void;
 }
 
 export default function DeleteOfferButton({
-  catalogId,
   offerId,
   productName,
   onDeleteCard,
 }: DeleteOfferButtonProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const { handleError } = useHandleError();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const { deleteOffers } = useUpdateCatalog();
-
   const DeleteOffer = async () => {
-    const success = await deleteOffers({
-      catalog_id: catalogId,
-      offers: [{ id: offerId }],
-    });
+    setIsLoading(true);
+    try {
+      const response = await deleteOffer({
+        offer_id: offerId,
+      });
 
-    if (!success) return;
+      if (response.message) {
+        handleError(response.message as string);
+        return;
+      }
+
+    } catch (error) {
+      handleError(error as string);
+      setIsLoading(false);
+      return;
+    }
+
     onDeleteCard(offerId);
     setIsModalOpen(false);
+    setIsLoading(false);
   };
 
   return (
@@ -56,7 +71,7 @@ export default function DeleteOfferButton({
           aria-hidden="true"
           onClick={handleOpenModal}
         >
-          <FaRegTrashCan />
+          {isLoading ? <Loader loaderType="component" /> : <FaRegTrashCan />}
         </button>
       }
     />

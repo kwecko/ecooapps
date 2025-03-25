@@ -2,7 +2,7 @@
 
 import ApiService from "@shared/service";
 
-export interface UpdateCatalogRequest {
+export interface UpdateOfferRequest {
   offer_id: string;
   data: {
     amount?: number;
@@ -12,10 +12,10 @@ export interface UpdateCatalogRequest {
   };
 }
 
-export async function updateCatalog({
+export async function updateOffer({
   offer_id,
   data,
-}: UpdateCatalogRequest) {
+}: UpdateOfferRequest) {
   const response = await ApiService.PATCH({
     url: `/offers/${offer_id}`,
     data,

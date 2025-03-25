@@ -1,6 +1,6 @@
 import Image from "next/image"
 
-import { LuPencil } from "react-icons/lu";
+import { LuEye, LuEyeOff, LuPencil } from "react-icons/lu";
 import { FaRegTrashAlt } from "react-icons/fa";
 
 import { ModalKeys } from "..";
@@ -45,21 +45,37 @@ export function getProductTableColumns(
       key: "pricing",
       colSpan: 2,
       render: function renderPricing(row: ProductDTO) {
-        return row.pricing === "WEIGHT" ? "kilo" : "unidade";
+        return row.pricing === "WEIGHT" ? "Kilo" : "Unidade";
       },
     },
     {
       header: "Perecivel",
       key: "perishable",
       colSpan: 2,
-      render: function renderCategory() {
-        return "---"
+      render: function renderCategory(row: ProductDTO) {
+        return row.perishable ? "Sim" : "Não";
+      },
+    },
+    {
+      header: "",
+      key: "hide",
+      colSpan: 0.5,
+      render: function renderEdit(row: ProductDTO) {
+        return (
+            <button
+              type="button"
+              onClick={() => toggleModal("isArchivedProductModal", row)}
+              className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
+            >
+              {row.archived ? <LuEyeOff size={20} /> : <LuEye size={20} />}
+            </button>
+        );
       },
     },
     {
       header: "",
       key: "edit",
-      colSpan: 1,
+      colSpan: 0.5,
       render: function renderEdit(row: ProductDTO) {
         return (
           <button
@@ -72,21 +88,21 @@ export function getProductTableColumns(
         );
       },
     },
-    {
-      header: "",
-      key: "delete",
-      colSpan: 1,
-      render: function renderDelete(row: ProductDTO) {
-        return (
-          <button
-            type="button"
-            onClick={() => toggleModal("isOpenDeleteProductModal", row)}
-            className="flex justify-center items-center"
-          >
-            <FaRegTrashAlt className="hover:text-error transition-colors delay-150" size={20} />
-          </button>
-        );
-      },
-    },
+    // {
+    //   header: "",
+    //   key: "delete",
+    //   colSpan: 0.5,
+    //   render: function renderDelete(row: ProductDTO) {
+    //     return (
+    //       <button
+    //         type="button"
+    //         onClick={() => toggleModal("isOpenDeleteProductModal", row)}
+    //         className="flex justify-center items-center"
+    //       >
+    //         <FaRegTrashAlt className="hover:text-error transition-colors delay-150" size={20} />
+    //       </button>
+    //     );
+    //   },
+    // },
   ];
 }

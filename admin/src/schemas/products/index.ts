@@ -4,7 +4,8 @@ export const productSchema = z.object({
   name: z.string().min(1, "O nome do produto é obrigatório"),
   pricing: z.enum(["UNIT", "WEIGHT"]),
   category: z.string().min(1, "A categoria é obrigatória"),
-  perishable: z.enum(["true", "false"]),
+  perishable: z.boolean(),
+  archived: z.boolean(),
   image: z
     .custom<File>((file) => file instanceof File, {
       message: "A imagem é obrigatória",
@@ -23,7 +24,8 @@ export const updateProductSchema = z.object({
   name: z.string().optional(),
   pricing: z.enum(["UNIT", "WEIGHT"]).optional(),
   category: z.string().min(1, "A categoria é obrigatória").optional(),
-  perishable: z.enum(["true", "false"]).optional(),
+  perishable: z.boolean().optional(),
+  archived: z.boolean().optional(),
   image: z
     .custom<File>((file) => file instanceof File, {
       message: "A imagem é obrigatória",

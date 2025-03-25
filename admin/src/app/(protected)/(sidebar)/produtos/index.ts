@@ -11,23 +11,27 @@ import { ProductDTO } from "@shared/interfaces/dtos";
 export type ModalKeys =
   | "isOpenCreateProductModal"
   | "isOpenDeleteProductModal"
-  | "isOpenUpdateProductModal";
+  | "isOpenUpdateProductModal"
+  | "isArchivedProductModal";
 
 export default function useProductsPage() {
   // States
   const [page, setPage] = useState(1);
   const [name, setName] = useState("");
+  const [archived, setArchived] = useState<boolean | undefined>(undefined);
   const [isPending, startTransition] = useTransition();
   const [isModalOpen, setIsModalOpen] = useState<Record<ModalKeys, boolean>>({
     isOpenCreateProductModal: false,
     isOpenDeleteProductModal: false,
     isOpenUpdateProductModal: false,
+    isArchivedProductModal: false,
   });
   const [products, setProducts] = useState<ProductDTO[]>([]);
   const {
     isOpenCreateProductModal,
     isOpenDeleteProductModal,
     isOpenUpdateProductModal,
+    isArchivedProductModal,
   } = isModalOpen;
   const [selectedProduct, setSelectedProduct] = useState<ProductDTO | null>(
     null
@@ -40,13 +44,13 @@ export default function useProductsPage() {
 
   useEffect(() => {
     startTransition(() => {
-      getProducts({ page, product: debounceSearch });
+      getProducts({ page, product: debounceSearch, archived: archived });
     });
-  }, [debounceSearch, page]);
+  }, [debounceSearch, page, archived]);
 
   // Functions
-  function getProducts({ page, product }: { page: number; product: string }) {
-    listProducts({ page, product })
+  function getProducts({ page, product, archived }: { page: number; product: string, archived: boolean | undefined }) {
+    listProducts({ page, product, archived })
       .then((response) => {
         if (response.message) return handleError(response.message);
         setProducts(response.data);
@@ -71,7 +75,7 @@ export default function useProductsPage() {
 
   function reloadProducts() {
     setName("");
-    getProducts({ page: 1, product: "" });
+    getProducts({ page: 1, product: "", archived: undefined});
   }
 
   const toggleModal = (value: ModalKeys, product?: ProductDTO) => {
@@ -99,6 +103,8 @@ export default function useProductsPage() {
   return {
     name,
     setName,
+    archived,
+    setArchived,
     page,
     products,
     nextPage,
@@ -109,6 +115,7 @@ export default function useProductsPage() {
     isOpenCreateProductModal,
     isOpenDeleteProductModal,
     isOpenUpdateProductModal,
+    isArchivedProductModal,
     selectedProduct,
     reloadProducts,
   };
