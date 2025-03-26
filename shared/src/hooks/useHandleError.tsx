@@ -85,6 +85,10 @@ export function useHandleError() {
           toast.error(`Produto já cadastrado`);
           return;
         }
+
+        if (words[0] === "Catálogo" || words[0] === "Caixa") {
+          return;
+        }
       }
 
       if (genericErrorsMapper.includes(words[1])) {

@@ -29,5 +29,7 @@
     "Telefone",
     "CPF",
     "Número",
-    "Produto"
+    "Produto",
+    "Catálogo",
+    "Caixa",
   ]
