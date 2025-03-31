@@ -3,17 +3,17 @@ import CustomInput from "@shared/components/CustomInput";
 import Image from "next/image";
 import { Control, UseFormRegister, UseFormGetValues, FieldErrors, Controller } from "react-hook-form";
 import { HiOutlinePencil } from "react-icons/hi";
-import { ChangeRegistrationSchema } from '@shared/schemas/change-personal-registration';
+import { ChangeComercialRegistrationSchema } from '@shared/schemas/change-registration';
 
 interface CommercialInfoFormProps {
   photo: string;
   setPhoto: React.Dispatch<React.SetStateAction<string>>;
-  register: UseFormRegister<ChangeRegistrationSchema>;
-  errors: FieldErrors<ChangeRegistrationSchema>;
+  register: UseFormRegister<ChangeComercialRegistrationSchema>;
+  errors: FieldErrors<ChangeComercialRegistrationSchema>;
   charCount: number;
   setCharCount: React.Dispatch<React.SetStateAction<number>>;
-  getValues: UseFormGetValues<ChangeRegistrationSchema>;
-  control: Control<ChangeRegistrationSchema>;
+  getValues: UseFormGetValues<ChangeComercialRegistrationSchema>;
+  control: Control<ChangeComercialRegistrationSchema>;
 }
 
 function CommercialInfoForm({ photo, setPhoto, register, errors, charCount, setCharCount, getValues, control }: CommercialInfoFormProps) {
