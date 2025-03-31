@@ -5,7 +5,7 @@ import CommercialInfoForm from "./components/CommercialInfoForm";
 import Button from "@shared/components/Button";
 import Link from "next/link";
 import Modal from "@shared/components/Modal";
-import { useChangeRegistrationForm } from "../components";
+import { useChangeComercialRegistrationForm } from "../components/ChangeComercialRegistrationForm/useChangeComercialRegistrationForm";
 
 export default function ComercialPage() {
   const {
@@ -22,7 +22,7 @@ export default function ComercialPage() {
     confirmSubmission,
     handleSubmit,
     handleSubmitForm,
-  } = useChangeRegistrationForm();
+  } = useChangeComercialRegistrationForm();
 
   return (
     <ModelPage
@@ -47,7 +47,7 @@ export default function ComercialPage() {
         </div>
 
         <div className="w-full flex gap-2 bg-transparent pb-5">
-          <Link className="w-full h-full" href={"/"} as={"/"}>
+          <Link className="w-full h-full" href="/">
             <Button className="w-full h-11 rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 hover:bg-gray-100">
               Voltar
             </Button>
@@ -56,7 +56,12 @@ export default function ComercialPage() {
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"
             type="submit"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              console.log("Botão clicado");
+              const formIsValid = Object.keys(errors).length === 0;
+              console.log("Formulário válido:", formIsValid);
+              console.log("Erros:", errors);
+            }}
           >
             Salvar
           </Button>
