@@ -3,7 +3,7 @@ import CustomInput from "@shared/components/CustomInput";
 import Image from "next/image";
 import { Control, UseFormRegister, UseFormGetValues, FieldErrors, Controller } from "react-hook-form";
 import { HiOutlinePencil } from "react-icons/hi";
-import { ChangeComercialRegistrationSchema } from '@shared/schemas/change-registration';
+import { ChangeComercialRegistrationSchema } from '@shared/schemas/change-comercial-registration';
 
 interface CommercialInfoFormProps {
   photo: string;

@@ -11,13 +11,14 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import {
   ChangeComercialRegistrationSchema,
   changeComercialRegistrationSchema,
-} from "@shared/schemas/change-registration";
+} from "@shared/schemas/change-comercial-registration";
 
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
   const [photo, setPhoto] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
+  const [farmId, setFarmId] = useState<string | null>(null)
   const { handleError } = useHandleError();
 
   const {
@@ -42,17 +43,16 @@ export const useChangeComercialRegistrationForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [farmResponse, userResponse] = await Promise.all([
-          fetchUserFarm(),
-          fetchProfile(),
-        ]);
+        const farmResponse = await fetchUserFarm()
 
-        if (farmResponse.message || userResponse.message) {
-          handleError(farmResponse.message || userResponse.message);
+        if (farmResponse.message) {
+          handleError(farmResponse.message);
           return;
         }
 
-        const data = { ...farmResponse.data, ...userResponse.data };
+        const data = { ...farmResponse.data };
+        
+        setFarmId(data.id)
 
         if (data.photo && typeof data.photo === "string") {
           if (
@@ -71,7 +71,9 @@ export const useChangeComercialRegistrationForm = () => {
         } else {
           setCharCount(0);
         }
-
+        
+        // TODO: Verificar se tanto as images quanto a photo estão sendo salvas corretamente
+        // TODO: Mostrar essas imagens quando possuir alguma e ser possível alterar
         reset(data);
       } catch (error) {
         toast.error(error as string);
@@ -102,19 +104,24 @@ export const useChangeComercialRegistrationForm = () => {
       }
     });
 
+    const { images, ...otherData } = data;
+
     const farmFormData = new FormData();
-    farmFormData.append("name", data.name || "");
-    farmFormData.append("tally", data.tally || ""); 
-    farmFormData.append("description", data.description || "");
+    farmFormData.append("name", otherData.name || "");
+    farmFormData.append("tally", otherData.tally || ""); 
+    farmFormData.append("description", otherData.description || "");
     
-    if (data.photo) {
-      farmFormData.append("photo", data.photo);
+    if (otherData.photo) {
+      farmFormData.append("photo", otherData.photo);
     }
 
     try {
-      const [farmResponse] = await Promise.all([
-        updateFarm(farmFormData),
-      ]);
+      const farmResponse = await updateFarm(farmFormData);
+      // TODO: enviar as images da outra rota de atualizar as images
+      // TODO: conferir as images
+      // console.log(images)
+      // Criar outra função para bater na rota abaixo
+      // /farms/:farm_id/images
 
       if (farmResponse.message) {
         handleError(farmResponse.message);

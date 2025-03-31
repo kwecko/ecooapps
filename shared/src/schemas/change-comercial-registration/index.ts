@@ -23,6 +23,23 @@ export const changeComercialRegistrationSchema = z.object({
       message: "Número do talão inválido.",
     }),
   description: z.string().max(200).optional(),
+  // TODO: Verificar se isso está correto
+  images: z
+    .array(
+      z
+        .instanceof(File)
+        .refine((file: File) => file?.size <= 1 * 1024 * 1024, {
+          message: "O arquivo deve ter no máximo 1MB",
+        })
+        .refine(
+          (file: File) => file && ["image/jpeg", "image/png"].includes(file.type),
+          {
+            message: "Apenas imagens JPEG e PNG são permitidas",
+          }
+        )
+    )
+    .nullable()
+    .optional(),
 });
 
 export type ChangeComercialRegistrationSchema = z.infer<typeof changeComercialRegistrationSchema>;

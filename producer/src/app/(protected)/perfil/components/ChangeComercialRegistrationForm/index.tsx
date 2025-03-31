@@ -1,4 +1,4 @@
 import { ChangePersonalRegistrationForm } from "../ChangePersonalRegistrationForm";
-import { useChangePersonalRegistrationForm } from "./useChangePersonalRegistrationForm";
+import { useChangeComercialRegistrationForm } from "./useChangeComercialRegistrationForm";
 
-export { ChangePersonalRegistrationForm, useChangePersonalRegistrationForm }y;
+export { ChangePersonalRegistrationForm, useChangeComercialRegistrationForm };
