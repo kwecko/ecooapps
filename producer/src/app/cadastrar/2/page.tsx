@@ -54,13 +54,13 @@ export default function SecondStep() {
         phone: phone.replace(/[^\d]/g, '').slice(0, 11),
         password,
       });
-
+  
       const { first_name, last_name, email, role } = savedData;
-
+  
       const isValid = await trigger();
-
+  
       if (!isValid) return;
-
+  
       registerAction({
         first_name,
         last_name,
