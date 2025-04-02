@@ -36,8 +36,8 @@ export default function Config() {
                 <ConfigItem icon={FiUser} text="Informações pessoais" link="/perfil/pessoal" />
                 <ConfigItem icon={FiBriefcase} text="Informações do negócio" link="/perfil/comercial" />
                 <ConfigItem icon={FiFileText} text="Termos de uso" link="/" />
-                <ConfigItem icon={FiInfo} text="Sobre o e-COO" link="/" />
-                <ConfigItem icon={FiLogOut} text="Sair" link="/" />
+                <ConfigItem icon={FiInfo} text="Sobre o e-COO" link="/sobre" />
+                <ConfigItem icon={FiLogOut} text="Sair" link="/api/auth/logout" />
             </div>
         </ModelPage>
     );
