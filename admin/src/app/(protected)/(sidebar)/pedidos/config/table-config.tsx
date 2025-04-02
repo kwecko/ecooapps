@@ -25,7 +25,7 @@ export const getBagsTableColumns = ({
       key: "user",
       colSpan: 4,
       render: function renderUser(row: BagDTO) {
-        return row.user.first_name + " " + row.user.last_name;
+        return row.customer.first_name + " " + row.customer.last_name;
       },
     },
     {

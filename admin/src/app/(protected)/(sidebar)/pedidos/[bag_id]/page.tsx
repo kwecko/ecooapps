@@ -73,21 +73,21 @@ const BagDetailsPage = () => {
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Cliente:</p>
                     <p className="flex-1">
-                      {bagDetails.user.first_name +
+                      {bagDetails.customer.first_name +
                         " " +
-                        bagDetails.user.last_name}
+                        bagDetails.customer.last_name}
                     </p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Email:</p>
                     <p className="flex-1">
-                      {bagDetails.user.email}
+                      {bagDetails.customer.email}
                     </p>
                   </div>
                   <div className="flex justify-between items-center">
                     <p className="text-sm font-medium w-32">Cpf:</p>
                     <p className="flex-1">
-                      {bagDetails.user.cpf}
+                      {bagDetails.customer.cpf}
                     </p>
                   </div>
                   <div className="flex justify-between items-center">
