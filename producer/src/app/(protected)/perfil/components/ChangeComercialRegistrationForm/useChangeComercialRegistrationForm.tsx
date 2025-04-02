@@ -5,8 +5,6 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { updateFarm } from "@producer/_actions/farms/PATCH/update-farm";
 import { fetchUserFarm } from "@shared/_actions/farms/GET/fetch-user-farm";
-import { fetchProfile } from "@shared/_actions/users/GET/fetch-profile";
-import { updateUser } from "@shared/_actions/users/PATCH/update-user";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import {
   ChangeComercialRegistrationSchema,
@@ -18,7 +16,7 @@ export const useChangeComercialRegistrationForm = () => {
   const [photo, setPhoto] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
-  const [farmId, setFarmId] = useState<string | null>(null)
+  const [farmId, setFarmId] = useState<string | null>(null);
   const { handleError } = useHandleError();
 
   const {
@@ -43,7 +41,7 @@ export const useChangeComercialRegistrationForm = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const farmResponse = await fetchUserFarm()
+        const farmResponse = await fetchUserFarm();
 
         if (farmResponse.message) {
           handleError(farmResponse.message);
@@ -51,44 +49,55 @@ export const useChangeComercialRegistrationForm = () => {
         }
 
         const data = { ...farmResponse.data };
-        
-        setFarmId(data.id)
+        setFarmId(data.id);
 
         if (data.photo && typeof data.photo === "string") {
-          if (
-            data.photo.startsWith(
-              "file:///___/rest-api/src/test/storage/temp/users/"
-            )
-          ) {
-            setPhoto(`/api/image?file=${data.photo}`);
-          } else {
-            setPhoto(data.photo);
-          }
+          setPhoto(
+            data.photo.startsWith("file:///___/rest-api/src/test/storage/temp/users/")
+              ? `/api/image?file=${data.photo}`
+              : data.photo
+          );
         }
 
-        if (data.description && typeof data.description === "string") {
-          setCharCount(data.description.length);
-        } else {
-          setCharCount(0);
-        }
-        
-        // TODO: Verificar se tanto as images quanto a photo estão sendo salvas corretamente
-        // TODO: Mostrar essas imagens quando possuir alguma e ser possível alterar
+        setCharCount(data.description?.length || 0);
         reset(data);
       } catch (error) {
         toast.error(error as string);
       }
     };
     fetchData();
-  }, []);
+  }, [reset, handleError]);
 
   const handleSubmitForm = (data: ChangeComercialRegistrationSchema) => {
     setFormData(data);
     setIsModalOpen(true);
   };
 
+  const sendImages = async (farmId: string, images: File[]) => {
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    try {
+      const response = await fetch(`/farms/${farmId}/images`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao enviar imagens.");
+      }
+
+      console.log("Imagens enviadas com sucesso!");
+    } catch (error) {
+      console.error("Erro ao enviar imagens:", error);
+      toast.error("Erro ao enviar imagens.");
+    }
+  };
+
   const confirmSubmission = async () => {
-    if (!formData) return;
+    if (!formData || !farmId) return;
 
     const isValid = await trigger();
     if (!isValid) {
@@ -96,36 +105,25 @@ export const useChangeComercialRegistrationForm = () => {
       return;
     }
 
-    const data = { ...formData };
-
-    Object.keys(data).forEach((key) => {
-      if (!data[key as keyof ChangeComercialRegistrationSchema]) {
-        delete data[key as keyof ChangeComercialRegistrationSchema];
-      }
-    });
-
-    const { images, ...otherData } = data;
-
+    const { images, ...otherData } = formData;
     const farmFormData = new FormData();
     farmFormData.append("name", otherData.name || "");
-    farmFormData.append("tally", otherData.tally || ""); 
+    farmFormData.append("tally", otherData.tally || "");
     farmFormData.append("description", otherData.description || "");
-    
     if (otherData.photo) {
       farmFormData.append("photo", otherData.photo);
     }
 
     try {
-      const farmResponse = await updateFarm(farmFormData);
-      // TODO: enviar as images da outra rota de atualizar as images
-      // TODO: conferir as images
-      // console.log(images)
-      // Criar outra função para bater na rota abaixo
-      // /farms/:farm_id/images
+      const farmResponse = await updateFarm(farmId, farmFormData);
 
       if (farmResponse.message) {
         handleError(farmResponse.message);
         return;
+      }
+
+      if (images && images.length > 0) {
+        await sendImages(farmId, images);
       }
 
       toast.success("Cadastro atualizado com sucesso!");
