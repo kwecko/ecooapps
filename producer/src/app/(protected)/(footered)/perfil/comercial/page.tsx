@@ -47,11 +47,6 @@ export default function ComercialPage() {
         </div>
 
         <div className="w-full flex gap-2 bg-transparent pb-5">
-          <Link className="w-full h-full" href="/">
-            <Button className="w-full h-11 rounded-lg bg-white font-semibold text-slate-gray border-slate-gray border-2 hover:bg-gray-100">
-              Voltar
-            </Button>
-          </Link>
           <Button
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"

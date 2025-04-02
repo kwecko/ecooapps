@@ -1,3 +1,4 @@
+import Footer from "@shared/components/Footer";
 import { ModelPage } from "@shared/components/ModelPage";
 import Link from "next/link";
 import { 
@@ -35,7 +36,7 @@ export default function Config() {
                 <ConfigItem icon={FiBell} text="Notificações" link="/notificacoes" showBadge />
                 <ConfigItem icon={FiUser} text="Informações pessoais" link="/perfil/pessoal" />
                 <ConfigItem icon={FiBriefcase} text="Informações do negócio" link="/perfil/comercial" />
-                <ConfigItem icon={FiFileText} text="Termos de uso" link="/" />
+                <ConfigItem icon={FiFileText} text="Termos de uso" link="/termos" />
                 <ConfigItem icon={FiInfo} text="Sobre o e-COO" link="/sobre" />
                 <ConfigItem icon={FiLogOut} text="Sair" link="/api/auth/logout" />
             </div>
