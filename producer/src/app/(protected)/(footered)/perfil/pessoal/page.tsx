@@ -41,12 +41,6 @@ export default function ProfilePage() {
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"
             type="submit"
-            onClick={(e) => {
-              console.log("Botão clicado");
-              const formIsValid = Object.keys(errors).length === 0;
-              console.log("Formulário válido:", formIsValid);
-              console.log("Erros:", errors);
-            }}
           >
             {isLoading ? <Loader loaderType="component" /> : "Salvar"}
           </Button>

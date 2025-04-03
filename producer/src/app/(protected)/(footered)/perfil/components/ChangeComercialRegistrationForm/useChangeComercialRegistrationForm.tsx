@@ -115,8 +115,8 @@ export const useChangeComercialRegistrationForm = () => {
     }
 
     try {
-      const farmResponse = await updateFarm(farmFormData);
-
+      const farmResponse = await updateFarm(farmId, farmFormData);
+      
       if (farmResponse.message) {
         handleError(farmResponse.message);
         return;

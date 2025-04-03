@@ -51,12 +51,6 @@ export default function ComercialPage() {
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"
             type="submit"
-            onClick={() => {
-              console.log("Botão clicado");
-              const formIsValid = Object.keys(errors).length === 0;
-              console.log("Formulário válido:", formIsValid);
-              console.log("Erros:", errors);
-            }}
           >
             Salvar
           </Button>

@@ -2,9 +2,9 @@
 
 import ApiService from "@shared/service";
 
-export async function updateFarm(data: FormData) {
+export async function updateFarm(farmId: string, data: FormData) {
   const response = ApiService.PATCH({
-    url: "/farms/own",
+    url: `/farms/${farmId}`,
     data,
     headers: {
       "Content-Type": "multipart/form-data",

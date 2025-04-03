@@ -43,7 +43,6 @@ function PersonalInfoForm({ register, errors, control }: PersonalInfoFormProps) 
         type="text"
         mask="phone"
         errorMessage={errors.phone?.message}
-        
       />
     </div>
   );
