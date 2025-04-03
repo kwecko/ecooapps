@@ -80,7 +80,7 @@ export default function SendBagTable() {
           id: bag.id,
           data: [
             { detail: bag.id },
-            { detail: `${bag.user.first_name} ${bag.user.last_name}` },
+            { detail: `${bag.customer.first_name} ${bag.customer.last_name}` },
             {
               detail: getStatus({
                 type: "enviar",
@@ -126,7 +126,7 @@ export default function SendBagTable() {
                 },
                 {
                   header: "Cliente",
-                  key: "user.first_name",
+                  key: "customer.first_name",
                   colSpan: 6,
                 },
                 {

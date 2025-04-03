@@ -28,6 +28,8 @@ export default function BagMiniTable() {
     page,
   });
 
+  console.log(bag);
+
   const { handleBag, isLoading: isLoadingHandleBag } = useHandleBag();
 
   const handleStatusBag = (bag_id: string, status: BagStatus["build"]) => {
@@ -71,7 +73,7 @@ export default function BagMiniTable() {
           <HeaderDetail
             id={bag.id}
             status={convertStatus(bag.status)?.name}
-            name={`${bag.user.first_name} ${bag.user.last_name}`}
+            name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
             content={<GroupOrder orders={bag.orders} />}
           />
