@@ -102,7 +102,7 @@ export default function BagsTable() {
                 },
                 {
                   header: "Cliente",
-                  key: "user.first_name",
+                  key: "customer.first_name",
                   colSpan: 6,
                 },
                 {
