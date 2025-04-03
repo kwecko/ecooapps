@@ -96,6 +96,8 @@ export const useChangePersonalRegistrationForm = () => {
       }
 
       toast.success("Cadastro atualizado com sucesso!");
+      window.location.href = "/configuracoes";
+      
     } catch (error) {
       setIsLoading(false);
       handleError(error as string);

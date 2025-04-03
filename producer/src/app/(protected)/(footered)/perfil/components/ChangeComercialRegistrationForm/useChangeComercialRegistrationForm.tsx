@@ -127,6 +127,7 @@ export const useChangeComercialRegistrationForm = () => {
       }
 
       toast.success("Cadastro atualizado com sucesso!");
+      window.location.href = "/configuracoes";
     } catch (error) {
       handleError(error as string);
       toast.error("Erro ao atualizar o cadastro.");
