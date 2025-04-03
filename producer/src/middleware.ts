@@ -14,6 +14,10 @@ const PROTECTED_PAGES = [
   "/informacoes-ciclo",
   "/negocio",
   "/perfil",
+  "/sobre",
+  "/configuracoes",
+  "/notificacoes",
+  "/termos"
 ];
 
 export const config = {
