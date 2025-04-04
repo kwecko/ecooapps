@@ -46,7 +46,10 @@ export default function SecondStep() {
     starTransition(async () => {
       const savedData = getFromStorage("register-form-data");
 
-      if (!savedData) toast.error("Erro ao buscar os dados do localStorage");
+      if (!savedData) {
+        toast.error("Erro ao buscar os dados do localStorage");
+        return;
+      }
 
       setInStorage("register-form-data", {
         ...savedData,
@@ -61,12 +64,16 @@ export default function SecondStep() {
 
       if (!isValid) return;
 
+      // Remove caracteres não numéricos de CPF e celular
+      const numericCpf = cpf.replace(/\D/g, "");
+      const numericPhone = phone.replace(/\D/g, "");
+
       registerAction({
         first_name,
         last_name,
-        cpf,
+        cpf: numericCpf,
         email,
-        phone,
+        phone: numericPhone,
         password,
         role,
       })

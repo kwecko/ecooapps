@@ -10,7 +10,11 @@ import { useChangeComercialRegistrationForm } from "../components/ChangeComercia
 export default function ComercialPage() {
   const {
     photo,
+    imagesFile,
     setPhoto,
+    setImages,
+    sendImage,
+    removeImage,
     register,
     errors,
     charCount,
@@ -36,7 +40,11 @@ export default function ComercialPage() {
         <div className="gap-3.5 w-full overflow-y-auto flex flex-col items-center justify-between pb-16 pt-7.5">
           <CommercialInfoForm
             photo={photo}
+            images={imagesFile}
             setPhoto={setPhoto}
+            sendImage={sendImage}
+            removeImage={removeImage}
+            setImages={setImages}
             register={register}
             errors={errors}
             charCount={charCount}

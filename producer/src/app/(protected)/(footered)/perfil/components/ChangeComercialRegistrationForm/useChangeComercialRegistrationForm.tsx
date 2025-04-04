@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { deleteImage } from "@producer/_actions/farms/DELETE/delete-image";
+import { updateImage } from "@producer/_actions/farms/POST/update-image";
 import { updateFarm } from "@producer/_actions/farms/PATCH/update-farm";
 import { fetchUserFarm } from "@shared/_actions/farms/GET/fetch-user-farm";
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -13,6 +15,7 @@ import {
 
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
+  const [imagesFile, setImages] = useState< File[]>([]);
   const [photo, setPhoto] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
@@ -50,6 +53,10 @@ export const useChangeComercialRegistrationForm = () => {
 
         const data = { ...farmResponse.data };
         setFarmId(data.id);
+        
+        if (data.images && Array.isArray(data.images)) {
+          setImages(data.images);
+        }
 
         if (data.photo && typeof data.photo === "string") {
           setPhoto(
@@ -73,27 +80,42 @@ export const useChangeComercialRegistrationForm = () => {
     setIsModalOpen(true);
   };
 
-  const sendImages = async (farmId: string, images: File[]) => {
+  const sendImage = async (image: File) => {
     const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("images", image);
-    });
+    formData.append("image", image as Blob);
 
-    try {
-      const response = await fetch(`/farms/${farmId}/images`, {
-        method: "POST",
-        body: formData,
+    console.log(imagesFile);
+
+    if (!farmId) return;
+
+    updateImage({ farmId: farmId, data: formData })
+      .then((response) => {
+        if (response.message) return handleError(response.message);
+
+        setImages((prevImages) => [...prevImages, image]);
+        toast.success("Imagem enviada com sucesso!");
+      })
+      .catch(() => {
+        toast.error("Erro desconhecido.");
       });
+  };
 
-      if (!response.ok) {
-        throw new Error("Erro ao enviar imagens.");
-      }
+  const removeImage = async (image: string) => {
+    
+    const formData = new FormData();
+    formData.append("image", image);
 
-      console.log("Imagens enviadas com sucesso!");
-    } catch (error) {
-      console.error("Erro ao enviar imagens:", error);
-      toast.error("Erro ao enviar imagens.");
-    }
+    if (!farmId) return;
+
+    deleteImage({ farmId: farmId, image: image })
+      .then((response) => {
+        if (response.message) return handleError(response.message);
+
+        toast.success("Imagem removida com sucesso!");
+      })
+      .catch(() => {
+        toast.error("Erro desconhecido.");
+      });
   };
 
   const confirmSubmission = async () => {
@@ -122,12 +144,8 @@ export const useChangeComercialRegistrationForm = () => {
         return;
       }
 
-      if (images && images.length > 0) {
-        await sendImages(farmId, images);
-      }
-
       toast.success("Cadastro atualizado com sucesso!");
-      window.location.href = "/configuracoes";
+      // window.location.href = "/configuracoes";
     } catch (error) {
       handleError(error as string);
       toast.error("Erro ao atualizar o cadastro.");
@@ -139,8 +157,12 @@ export const useChangeComercialRegistrationForm = () => {
 
   return {
     photo,
+    imagesFile,
     setPhoto,
+    setImages,
     isModalOpen,
+    sendImage,
+    removeImage,
     setIsModalOpen,
     getValues,
     register,
