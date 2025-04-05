@@ -52,6 +52,7 @@ export default function FifthStep() {
         .then((response) => {
           if (response.message) {
             handleError(response.message);
+            return;
           }
 
           handleDeleteFromStorage();
@@ -106,8 +107,7 @@ export default function FifthStep() {
             border={true}
             className="h-12 flex justify-center items-center mt-0"
             onClick={() => {
-              deleteFromStorage("register-form-data");
-              deleteFromStorage("register-current-step");
+              handleDeleteFromStorage();
             }}
           >
             Tela inicial

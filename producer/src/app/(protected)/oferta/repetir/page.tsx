@@ -75,12 +75,21 @@ export default function Home() {
   };
 
   const submitOffer = async () => {
+    const formatDate = (date: Date | null): string | undefined => {
+      if (!date) return undefined;
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+    
     const success = await createOffer({
       product_id: offer.product.id,
       amount:
         offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       description: offer.description ?? undefined,
+      expires_at: formatDate(offer.expires_at),
     });
     if (!success) return;
     toast.success("Oferta cadastrada com sucesso");
