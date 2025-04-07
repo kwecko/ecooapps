@@ -31,7 +31,7 @@ export default function ListBagsTable() {
       render: (row: BagDTO) => {
         return (
           <div>
-            {`${row.user.first_name} ${row.user.last_name}`}
+            {`${row.customer.first_name} ${row.customer.last_name}`}
           </div>
         );
       }

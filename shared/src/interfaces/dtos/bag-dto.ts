@@ -26,8 +26,8 @@ export interface BagDTO {
   cycle: CycleDTO;
   address_id: string;
   address: AddressDTO;
-  user_id: string;
-  user: UserDTO;
+  customer_id: string;
+  customer: UserDTO;
   orders: OrderDTO[];
   payments: PaymentDTO[];
   created_at: string;

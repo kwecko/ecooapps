@@ -12,7 +12,7 @@ export async function handleFarmStatus({
   status
 }: HandleFarmsStatusRequest) {
   const response = ApiService.PATCH({
-    url: `/farms/${farm_id}/handle`,
+    url: `/farms/${farm_id}`,
     data: { status: status },
   });
 

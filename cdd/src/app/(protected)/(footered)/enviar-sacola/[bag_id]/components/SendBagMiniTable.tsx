@@ -95,7 +95,7 @@ export default function SendBagMiniTable() {
                 </div>
               ) : undefined
             }
-            name={`${bag.user.first_name} ${bag.user.last_name}`}
+            name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
             content={<GroupOrder orders={bag.orders} />}
           />

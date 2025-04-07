@@ -30,4 +30,6 @@
     "CPF",
     "Número",
     "Produto",
+    "Catálogo",
+    "Caixa",
   ]
