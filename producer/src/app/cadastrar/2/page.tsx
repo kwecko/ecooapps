@@ -45,8 +45,11 @@ export default function SecondStep() {
   const submit = ({ cpf, phone, password }: SecondStepRegisterSchema) => {
     starTransition(async () => {
       const savedData = getFromStorage('register-form-data');
-
-      if (!savedData) toast.error('Erro ao buscar os dados do localStorage');
+      
+      if (!savedData) {
+        toast.error("Erro ao buscar os dados do localStorage");
+        return;
+      }
 
       setInStorage('register-form-data', {
         ...savedData,

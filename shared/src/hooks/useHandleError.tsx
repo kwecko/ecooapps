@@ -106,6 +106,11 @@ export function useHandleError() {
         return;
       }
 
+      if (errorCode.includes("Large")) {
+        toast.error("Imagem muito grande.");
+        return;
+      }
+
       if (errorCode.includes("<!DOCTYPE html>")) {
         console.error("Erro inesperado:", errorCode);
         toast.error("Erro inesperado");
