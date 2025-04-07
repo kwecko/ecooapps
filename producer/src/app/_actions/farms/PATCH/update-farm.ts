@@ -2,17 +2,12 @@
 
 import ApiService from "@shared/service";
 
-export interface UpdateFarmRequest {
-  name: string;
-  description?: string;
-}
-
-export async function updateFarm({ name, description }: UpdateFarmRequest) {
+export async function updateFarm(farmId: string, data: FormData) {
   const response = ApiService.PATCH({
-    url: "/farms/own",
-    data: {
-      name,
-      description,
+    url: `/farms/${farmId}`,
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
     },
   });
 

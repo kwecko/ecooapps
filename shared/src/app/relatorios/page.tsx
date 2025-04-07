@@ -36,9 +36,9 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
 
       const formatDate = (date?: Date) =>
         date
-          ? `${date.getDate().toString().padStart(2, "0")}-${(date.getMonth() + 1)
+          ? `${date.getUTCDate().toString().padStart(2, "0")}-${(date.getUTCMonth() + 1)
               .toString()
-              .padStart(2, "0")}-${date.getFullYear()}`
+              .padStart(2, "0")}-${date.getUTCFullYear()}`
           : undefined;
   
       const formattedInitialDate = formatDate(startDate);

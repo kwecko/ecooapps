@@ -183,6 +183,68 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     },
   },
+  "/configuracoes": {
+    hasPreviousPage: true,
+    returnPath: "/",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Configurações",
+      content: (
+        <p>
+          Aqui você pode acessar as configurações da sua conta e do seu negócio.
+        </p>
+      ),
+      closeButtonText: "Ok, entendi",
+    },
+  },
+  "/perfil/pessoal": {
+    hasPreviousPage: true,
+    returnPath: "/configuracoes",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Perfil Pessoal",
+      content: (
+        <p>
+          Aqui você pode acessar e editar as informações do seu perfil pessoal.
+        </p>
+      ),
+      closeButtonText: "Ok, entendi",
+    },
+  },
+  "/perfil/comercial": {
+    hasPreviousPage: true,
+    returnPath: "/configuracoes",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Perfil Pessoal",
+      content: (
+        <p>
+          Aqui você pode acessar e editar as informações do seu perfil comercial.
+        </p>
+      ),
+      closeButtonText: "Ok, entendi",
+    },
+  },
+  "/sobre": {
+    hasPreviousPage: true,
+    returnPath: "/configuracoes",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Ajuda para a página Sobre",
+      content: "Aqui você pode encontrar informações sobre o projeto e-COO.",
+      closeButtonText: "Fechar",
+    },
+  },
+  "/termos": {
+    hasPreviousPage: true,
+    returnPath: "/configuracoes",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Ajuda para a página Termos",
+      content: "Aqui você pode encontrar informações sobre os termos de uso.",
+      closeButtonText: "Fechar",
+    },
+  }
 };
 
 const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
