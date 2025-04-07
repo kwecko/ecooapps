@@ -12,7 +12,6 @@ import {
   ChangeComercialRegistrationSchema,
   changeComercialRegistrationSchema,
 } from "@shared/schemas/change-comercial-registration";
-import { set } from "lodash";
 
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
