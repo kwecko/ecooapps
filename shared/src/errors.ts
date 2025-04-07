@@ -29,5 +29,5 @@
     "Telefone",
     "CPF",
     "Número",
-    "Produto"
+    "Produto",
   ]

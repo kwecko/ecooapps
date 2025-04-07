@@ -73,7 +73,7 @@ export const useChangeComercialRegistrationForm = () => {
       }
     };
     fetchData();
-  }, [reset, handleError]);
+  }, [reset, handleError, imagesFile, photo]);
 
   const handleSubmitForm = (data: ChangeComercialRegistrationSchema) => {
     setFormData(data);
@@ -84,15 +84,12 @@ export const useChangeComercialRegistrationForm = () => {
     const formData = new FormData();
     formData.append("image", image as Blob);
 
-    console.log(imagesFile);
-
     if (!farmId) return;
 
     updateImage({ farmId: farmId, data: formData })
       .then((response) => {
         if (response.message) return handleError(response.message);
 
-        setImages((prevImages) => [...prevImages, image]);
         toast.success("Imagem enviada com sucesso!");
       })
       .catch(() => {

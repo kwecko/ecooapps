@@ -118,14 +118,8 @@ function CommercialInfoForm({ photo, images, setPhoto, setImages, sendImage, rem
                 key={index}
                 className="w-20 h-20 cursor-pointer relative bg-white border border-theme-default rounded-lg flex items-center justify-center overflow-hidden"
                 onClick={() => {
-                  setImages((prevImages) => {
-                    const newImages = [...prevImages];
-                    newImages.splice(index, 1);
-                    return newImages;
-                  });
-                  // Checar isso
-                  const url = typeof images[index] === "string" ? images[index] : URL.createObjectURL(images[index]);
-                  removeImage(url);
+                  const encodedUrl = encodeURIComponent(encodeURIComponent(images[index].toString()));
+                  removeImage(encodedUrl);
                 }}
               >
                 <Image

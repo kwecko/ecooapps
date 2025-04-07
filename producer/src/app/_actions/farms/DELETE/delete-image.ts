@@ -8,7 +8,7 @@ interface DeleteImageRequest {
 }
 
 export async function deleteImage({ farmId, image }: DeleteImageRequest) {
-  const response = await ApiService.POST({
+  const response = await ApiService.DELETE({
     url: `/farms/${farmId}/images/${image}`,
   });
 
