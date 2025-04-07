@@ -13,8 +13,14 @@ export async function listBoxes({
   page,
   farm = "",
 }: ListBoxesRequest) {
+  let url = `/boxes?cycle_id=${cycle_id}&page=${page}`;
+
+  if (farm) {
+    url += `&farm=${farm}`;
+  }
+
   const response = ApiService.GET({
-    url: `/boxes?cycle_id=${cycle_id}&page=${page}&farm=${farm}`,
+    url,
   });
 
   return response;

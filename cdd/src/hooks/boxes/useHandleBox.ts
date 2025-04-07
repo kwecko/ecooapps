@@ -1,7 +1,7 @@
 import {
-  handleBox as handleBoxAction,
+  handleOrder as handleOrderAction,
   HandleBoxRequest,
-} from "@cdd/app/_actions/boxes/PATCH/handle-box";
+} from "@cdd/app/_actions/orders/PATCH/handle-order";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -22,7 +22,7 @@ export default function useHandleBox() {
   }: UseHandleBoxProps) => {
     setIsLoading(true);
 
-    await handleBoxAction({
+    await handleOrderAction({
       box_id: box_id,
       order_id: order_id,
       status: status,

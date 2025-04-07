@@ -9,7 +9,7 @@ export interface HandleBagRequest {
 
 export async function handleBag({ bag_id, status }: HandleBagRequest) {
   const response = ApiService.PATCH({
-    url: `/bags/${bag_id}/handle`,
+    url: `/bags/${bag_id}`,
     data: { status },
   });
 

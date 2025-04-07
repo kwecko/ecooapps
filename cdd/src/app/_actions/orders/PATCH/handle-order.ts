@@ -8,20 +8,15 @@ export interface HandleBoxRequest {
   status: "RECEIVED" | "CANCELLED";
 }
 
-export async function handleBox({
+export async function handleOrder({
   box_id,
   order_id,
   status,
 }: HandleBoxRequest) {
   const response = await ApiService.PATCH({
-    url: `/boxes/${box_id}/handle`,
+    url: `/orders/${order_id}`,
     data: {
-      orders: [
-        {
-          id: order_id,
-          status: status,
-        },
-      ],
+      status: status,
     },
   });
 
