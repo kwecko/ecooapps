@@ -12,6 +12,7 @@ import {
   ChangeComercialRegistrationSchema,
   changeComercialRegistrationSchema,
 } from "@shared/schemas/change-comercial-registration";
+import { set } from "lodash";
 
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
@@ -20,7 +21,9 @@ export const useChangeComercialRegistrationForm = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
   const [farmId, setFarmId] = useState<string | null>(null);
+  const [isImageUplodaded, setIsImageUploaded] = useState(false);
   const { handleError } = useHandleError();
+
 
   const {
     register,
@@ -53,6 +56,7 @@ export const useChangeComercialRegistrationForm = () => {
 
         const data = { ...farmResponse.data };
         setFarmId(data.id);
+        setIsImageUploaded(false);
         
         if (data.images && Array.isArray(data.images)) {
           setImages(data.images);
@@ -73,7 +77,7 @@ export const useChangeComercialRegistrationForm = () => {
       }
     };
     fetchData();
-  }, [reset, handleError, imagesFile, photo]);
+  }, [reset, handleError, isImageUplodaded]);
 
   const handleSubmitForm = (data: ChangeComercialRegistrationSchema) => {
     setFormData(data);
@@ -89,7 +93,7 @@ export const useChangeComercialRegistrationForm = () => {
     updateImage({ farmId: farmId, data: formData })
       .then((response) => {
         if (response.message) return handleError(response.message);
-
+        setIsImageUploaded(true);
         toast.success("Imagem enviada com sucesso!");
       })
       .catch(() => {
@@ -107,7 +111,7 @@ export const useChangeComercialRegistrationForm = () => {
     deleteImage({ farmId: farmId, image: image })
       .then((response) => {
         if (response.message) return handleError(response.message);
-
+        setIsImageUploaded(true);
         toast.success("Imagem removida com sucesso!");
       })
       .catch(() => {
@@ -142,7 +146,7 @@ export const useChangeComercialRegistrationForm = () => {
       }
 
       toast.success("Cadastro atualizado com sucesso!");
-      // window.location.href = "/configuracoes";
+      window.location.href = "/configuracoes";
     } catch (error) {
       handleError(error as string);
       toast.error("Erro ao atualizar o cadastro.");
