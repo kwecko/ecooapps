@@ -1,5 +1,6 @@
+"use client";
+
 import Button from "@shared/components/Button";
-import Footer from "@shared/components/Footer";
 import { ModelPage } from "@shared/components/ModelPage";
 import Link from "next/link";
 import { 
@@ -42,14 +43,14 @@ const ConfigItem = ({ icon: Icon, text, link, showBadge = false, disabled }: Con
             </Link>
         }
     </>
-    
+
 );
 
 export default function Config() {
     return (
         <ModelPage title="Configurações">
             <div className="w-full flex flex-col gap-3 mt-5">
-                <ConfigItem icon={FiBell} text="Notificações" link="/notificacoes" disabled={true} />
+                <ConfigItem icon={FiBell} text="Notificações" link="/notificacoes" disabled />
                 <ConfigItem icon={FiUser} text="Informações pessoais" link="/perfil/pessoal" />
                 <ConfigItem icon={FiBriefcase} text="Informações do negócio" link="/perfil/comercial" />
                 <ConfigItem icon={FiFileText} text="Termos de uso" link="/termos" />

@@ -1,3 +1,5 @@
+"use client";
+
 import { ModelPage } from "@shared/components/ModelPage";
 
 export default function AboutPage() {

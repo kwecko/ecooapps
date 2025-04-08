@@ -1,11 +1,10 @@
 "use client";
 
+import Button from "@shared/components/Button";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
 import useFetchProfile from "@shared/hooks/users/useFetchProfile";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FiSettings } from "react-icons/fi";
-import { HiOutlinePencilAlt } from "react-icons/hi";
 
 export function Header() {
   const {
@@ -15,8 +14,8 @@ export function Header() {
 
   const router = useRouter();
 
-  const logout = () => {
-    router.push("/api/auth/logout");
+  const handleClickButton = () => {
+    router.push("/configuracoes");
   };
 
   return (
@@ -34,9 +33,9 @@ export function Header() {
         )}
       </div>
       <div className="flex gap-4.5">
-        <Link href={"/configuracoes"} className="text-theme-primary">
+        <Button className="text-theme-primary" onClick={handleClickButton}>
           <FiSettings size={24}/>
-        </Link>
+        </Button>
       </div>
     </header>
   );

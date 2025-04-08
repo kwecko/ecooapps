@@ -3,7 +3,6 @@
 import { ModelPage } from "@shared/components/ModelPage";
 import CommercialInfoForm from "./components/CommercialInfoForm";
 import Button from "@shared/components/Button";
-import Link from "next/link";
 import Modal from "@shared/components/Modal";
 import { useChangeComercialRegistrationForm } from "../components/ChangeComercialRegistrationForm/useChangeComercialRegistrationForm";
 

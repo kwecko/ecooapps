@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import Button from "@shared/components/Button";
 import Modal from "@shared/components/Modal";
 import { ModelPage } from "@shared/components/ModelPage";

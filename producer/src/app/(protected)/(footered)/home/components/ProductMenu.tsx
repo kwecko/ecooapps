@@ -71,11 +71,9 @@ export function ProductMenu() {
         <Button
           onClick={handleClickOfferProductButton}
           className="w-full h-12 bg-theme-default rounded-md text-white"
-          // disabled={!isOfferingDay || isUnderConstruction("/oferta")}
           href="/"
         >
           {isOfferingDay ? "Ofertar produtos" : "Visualizar ofertas"}
-          {/* Fazer uma oferta */}
         </Button>
         <Link href={"/relatorios"}>
           <Button className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default">

@@ -16,7 +16,9 @@ const PROTECTED_PAGES = [
   "/perfil",
   "/sobre",
   "/configuracoes",
-  "/notificacoes",
+  "/perfil/pessoal",
+  "/perfil/comercial",
+  "/sobre",
   "/termos"
 ];
 
