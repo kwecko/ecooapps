@@ -132,10 +132,10 @@ export const useChangeComercialRegistrationForm = () => {
     farmFormData.append("name", otherData.name || "");
     farmFormData.append("tally", otherData.tally || "");
     farmFormData.append("description", otherData.description || "");
-    if (otherData.photo) {
+    if (otherData.photo && otherData.photo != photo) {
       farmFormData.append("photo", otherData.photo);
     }
-
+    
     try {
       const farmResponse = await updateFarm(farmId, farmFormData);
       

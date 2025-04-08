@@ -4,21 +4,21 @@ import { z } from "zod";
 const isFileDefined = typeof File !== "undefined";
 
 export const changeComercialRegistrationSchema = z.object({
-  photo: isFileDefined
-    ? z
+  photo: isFileDefined ? z
+    .union([
+      z
         .instanceof(File)
-        .refine((file: File) => file?.size <= 1 * 1024 * 1024, {
+        .refine((file: File) => file.size <= 1 * 1024 * 1024, {
           message: "O arquivo deve ter no máximo 1MB",
         })
-        .refine(
-          (file: File) => file && ["image/jpeg", "image/png"].includes(file.type),
-          {
-            message: "Apenas imagens JPEG e PNG são permitidas",
-          }
-        )
-        .nullable()
-        .optional()
-    : z.any().optional(),
+        .refine((file: File) => ["image/jpeg", "image/png"].includes(file.type), {
+          message: "Apenas imagens JPEG e PNG são permitidas",
+        }),
+      z.string(),
+      z.null(),
+      z.undefined(),
+    ])
+    .optional() : z.any().optional(),
   name: z.string().min(1, { message: "Nome obrigatório" }),
   tally: z
     .string()
