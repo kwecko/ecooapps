@@ -11,51 +11,47 @@ import pageSettings from "./page-settings";
 interface InputPriceProps {
   handleNextStep: () => void;
   price: number;
-  expires_at?: Date;
-  perishable: boolean;
-  setExpiresAt?: (expires_at: Date) => void; 
+  pricing: "UNIT" | "WEIGHT";
   setPrice: (price: number) => void;
 }
 
 export default function InputPrice({
   handleNextStep,
   price,
-  expires_at,
-  perishable,
-  setExpiresAt,
+  pricing,
   setPrice,
 }: InputPriceProps) {
   const { title, subtitle } = pageSettings.price;
+  const TAX_RATE = 0.2;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseFloat(e.target.value.replace(/[^0-9]/g, ""));
-
-    if (!isNaN(value)) {
-      const formattedValue = formatPrice(value);
-
-      setPrice(value / 100);
-    } else {
-      setPrice(0);
-    }
+  const processPrice = (inputValue: string): number => {
+    const numericValue = parseFloat(inputValue.replace(/[^0-9]/g, ""));
+    return !isNaN(numericValue) ? numericValue / 100 : 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPrice = processPrice(e.target.value);
+    setPrice(newPrice);
+  };
 
+  const validatePrice = (): boolean => {
     if (!price) {
       toast.error(
         "O preço não pode ser vazio. Por favor, insira um valor válido."
       );
-      return;
+      return false;
     }
-    if (perishable && !expires_at) {
-      toast.error("A data de validade não é válida. Por favor, insira uma data válida."
-      );
-      return;
-    }
-
-    handleNextStep();
+    return true;
   };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validatePrice()) {
+      handleNextStep();
+    }
+  };
+
+  const priceWithTax = addTaxToPrice(price, TAX_RATE);
 
   return (
     <ModelPage
@@ -75,44 +71,37 @@ export default function InputPrice({
         </Button>
       }
     >
-      <div className="w-full h-full flex flex-col items-stretch justify-start pt-5">
-        <Input
-          onChange={handleChange}
-          className="text-theme-primary text-sm"
-          type="text"
-          value={formatPrice(price)}
-          label="Preço"
-        />
-        <span className="text-xs text-gray-500 pt-1 pl-2">
-          Preço + taxa (20%): {formatPrice(addTaxToPrice(price, 0.2))}
-        </span>
-      </div>
-      {perishable && (
-        <div className="w-full h-full flex flex-col items-stretch justify-start pt-8">
-          <Input
-            onChange={(e) => {
-              if (setExpiresAt && e.target.valueAsDate) {
-                const date = e.target.valueAsDate;
-                date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-                
-                if (date < new Date()) {
-                  toast.error("A data não pode estar no passado. Por favor, insira uma data válida.");
-                  return;
-                }
-
-              setExpiresAt(date);
-              }
-            }}
-            className="text-theme-primary text-sm"
-            type="date"
-            value={expires_at}
-            label="Data de validade"
-          />
-          <span className="text-xs text-gray-500 pt-1 pl-2">
-            Data de validade para produtos perecíveis
-          </span>
+      <div className="w-full h-full flex flex-col gap-2 items-stretch justify-start pt-5">
+        <div className="flex flex-row gap-2 items-end w-full">
+          <div className="flex-grow">
+            <Input
+              onChange={handleChange}
+              className="text-theme-primary text-sm"
+              type="text"
+              value={formatPrice(price)}
+              label="Preço"
+            />
+          </div>
+          <div className="w-24">
+            <Input
+              placeholder="Unidade"
+              className="text-theme-primary w-full text-sm"
+              type="text"
+              value={pricing === "WEIGHT" ? "kg" : "unidade"}
+              label="Unidade"
+              disabled={true}
+            />
+          </div>
         </div>
-      )}
+        <Input
+          placeholder="R$ 0,00"
+          className="text-theme-primary w-full text-sm"
+          type="text"
+          value={formatPrice(priceWithTax)}
+          label="Preço de venda (inclusa taxa de 20%)"
+          disabled={true}
+        />
+      </div>
     </ModelPage>
   );
 }

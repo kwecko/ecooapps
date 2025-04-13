@@ -1,5 +1,4 @@
 import { OfferDTO } from "@shared/interfaces/dtos";
-import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 import {
   convertOfferAmount,
   convertUnitFull,
@@ -20,10 +19,6 @@ interface OfferCardProps
 
 const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
   ({ catalogId, offer, onDeleteCard, editable, repeatable, ...rest }, ref) => {
-    const imageLoader: ImageLoader = ({ src }) => {
-      return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
-    };
-
     return (
       <div
         {...rest}
@@ -36,9 +31,8 @@ const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
           }`}
         >
           <Image
-            loader={imageLoader}
             src={offer.product.image}
-            alt={offer.product.name}
+            alt={`${offer.product.name}.jpg`}
             width={60}
             height={60}
             className="rounded-2.5 w-24 aspect-1/1 h-15"
@@ -64,7 +58,7 @@ const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
             {new Intl.NumberFormat("pt-BR", {
               style: "currency",
               currency: "BRL",
-            }).format(removeTaxFromPrice(offer.price, 0.2))}{" "}
+            }).format(offer.price)}{" "}
             +20%
           </div>
         </div>
