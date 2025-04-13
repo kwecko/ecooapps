@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { HiMiniChevronUpDown } from "react-icons/hi2";
 
 interface Option {
-  value: string;
+  value: string | boolean;
   label: string;
 }
 
@@ -63,7 +63,7 @@ export default function Select({ options, label, onChange, defaultOption, disabl
       <ul className="absolute mt-1 w-full bg-white border border-slate-gray font-inter rounded-md text-theme-primary shadow-lg max-h-48 overflow-auto z-10">
         {options.map((option) => (
         <li
-          key={option.value}
+          key={typeof option.value === 'boolean' ? option.value.toString() : option.value}
           onClick={() => handleSelect(option)}
           className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${
           selectedOption?.value === option.value ? 'bg-gray-100' : ''

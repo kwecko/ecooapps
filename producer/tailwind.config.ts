@@ -133,6 +133,20 @@ const config: Config = {
       },
     },
   },
+  plugins: [
+    function ({ addUtilities }: { addUtilities: any }) {
+      const newUtilities = {
+        ".scrollbar-hide": {
+          "scrollbar-width": "none",
+          "-ms-overflow-style": "none",
+          "&::-webkit-scrollbar": {
+            display: "none",
+          },
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };
 
 export default config;

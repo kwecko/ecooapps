@@ -1,13 +1,11 @@
 import Image from "next/image"
 
 import { LuEye, LuEyeOff, LuPencil } from "react-icons/lu";
-import { FaRegTrashAlt } from "react-icons/fa";
 
 import { ModalKeys } from "..";
 import { ProductDTO } from "@shared/interfaces/dtos"
 
 export function getProductTableColumns(
-  imageLoader: (args: { src: string }) => string,
   toggleModal: (modalName: ModalKeys, product?: ProductDTO) => void
 ) {
   return [
@@ -18,7 +16,6 @@ export function getProductTableColumns(
       render: function renderImage(row: ProductDTO) {
         return row.image ? (
           <Image
-            loader={imageLoader}
             src={row.image}
             alt={row.name}
             width={50}
@@ -88,21 +85,5 @@ export function getProductTableColumns(
         );
       },
     },
-    // {
-    //   header: "",
-    //   key: "delete",
-    //   colSpan: 0.5,
-    //   render: function renderDelete(row: ProductDTO) {
-    //     return (
-    //       <button
-    //         type="button"
-    //         onClick={() => toggleModal("isOpenDeleteProductModal", row)}
-    //         className="flex justify-center items-center"
-    //       >
-    //         <FaRegTrashAlt className="hover:text-error transition-colors delay-150" size={20} />
-    //       </button>
-    //     );
-    //   },
-    // },
   ];
 }

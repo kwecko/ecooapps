@@ -101,13 +101,6 @@ export default function useProductsPage() {
     setSelectedProduct(null);
   };
 
-  function imageLoader({ src }: { src: string }) {
-    if (src.includes("https://res.cloudinary.com")) {
-      return src;
-    }
-    return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
-  }
-
   // Returns
   return {
     name,
@@ -119,7 +112,6 @@ export default function useProductsPage() {
     nextPage,
     prevPage,
     isPending,
-    imageLoader,
     toggleModal,
     isOpenCreateProductModal,
     isOpenDeleteProductModal,

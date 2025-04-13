@@ -1,15 +1,15 @@
 "use client";
 
 import Button from "@shared/components/Button";
-import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LuChevronLeft, LuX } from "react-icons/lu";
 import {
   InputAmount,
-  InputDescription,
+  InputExpirationDate,
   InputPrice,
+  InputDescription,
   ReviewOffer,
 } from "../components";
 
@@ -31,7 +31,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 4;
+  const maxStep = 5;
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,7 +41,7 @@ export default function Home() {
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
-        price: removeTaxFromPrice(offerData.price, 0.2),
+        price: offerData.price,
       });
       setCurrentStep(1);
       sessionStorage.removeItem("edit-offer-data");
@@ -77,12 +77,12 @@ export default function Home() {
   const submitOffer = async () => {
     const formatDate = (date: Date | null): string | undefined => {
       if (!date) return undefined;
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     };
-    
+
     const success = await createOffer({
       product_id: offer.product.id,
       amount:
@@ -122,17 +122,26 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === 2 && offer.product.perishable === false && (
+              <InputExpirationDate
+                handleNextStep={handleNextStep}
+                expires_at={offer.expires_at ?? undefined}
+                setExpiresAt={(expires_at: Date) =>
+                  setOffer({ ...offer, expires_at })
+                }
+              />
+            )}
+            {(currentStep === 2 && offer.product.perishable === true) ||
+            (currentStep === 3 && offer.product.perishable === false) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
-                expires_at={offer.expires_at ?? new Date()}
-                perishable={offer.product.perishable}
-                setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at })}
+                pricing={offer.product.pricing}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
-            />
-            )}
-            {currentStep === 3 && (
+              />
+            ) : null}
+            {(currentStep === 3 && offer.product.perishable === true) ||
+            (currentStep === 4 && offer.product.perishable === false) ? (
               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
@@ -140,8 +149,9 @@ export default function Home() {
                   setOffer({ ...offer, description: description })
                 }
               />
-            )}
-            {currentStep === 4 && (
+            ) : null}
+            {(currentStep === 4 && offer.product.perishable === true) ||
+            (currentStep === 5 && offer.product.perishable === false) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -152,7 +162,7 @@ export default function Home() {
                 expires_at={offer.product.perishable ? offer.expires_at : null}
                 submitAction={submitOffer}
               />
-            )}
+            ) : null}
           </div>
           <div className="h-footer w-full">
             <div
