@@ -3,7 +3,7 @@ export interface ProductDTO {
   name: string;
   image: string;
   pricing: "UNIT" | "WEIGHT";
-  category: Category;
+  category: CategoryDTO;
   category_id: string;
   created_at: Date;
   updated_at: Date | null;
@@ -11,7 +11,7 @@ export interface ProductDTO {
   archived: boolean;
 }
 
-interface Category {
+export interface CategoryDTO {
   id: string;
   name: string;
   created_at: string;

@@ -16,15 +16,13 @@ interface UseProductModalProps {
   reloadProducts: () => void;
 }
 
-export default function useProductModal({ 
-  closeModal, 
-  reloadProducts 
+export default function useProductModal({
+  closeModal,
+  reloadProducts,
 }: UseProductModalProps) {
-  // States
   const [isPending, startTransition] = useTransition();
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  // Consts
   const { handleError } = useHandleError();
 
   const {
@@ -41,14 +39,19 @@ export default function useProductModal({
       name: "",
       pricing: "UNIT",
       category: "",
-      // archived: false,
+      archived: false,
       perishable: true,
     },
   });
 
-  // Functions
-  const onSubmit = ({ name, pricing, category, image, perishable, archived }: ProductSchema) => {
-
+  const onSubmit = ({
+    name,
+    pricing,
+    category,
+    image,
+    perishable,
+    archived,
+  }: ProductSchema) => {
     startTransition(async () => {
       const isValid = await trigger();
 
@@ -59,14 +62,14 @@ export default function useProductModal({
       dataForm.append("name", name);
       dataForm.append("pricing", pricing);
       dataForm.append("category_id", category);
-      dataForm.append("image", image)
+      dataForm.append("image", image);
       dataForm.append("perishable", String(perishable));
       dataForm.append("archived", String(archived));
 
       registerProduct(dataForm)
         .then((response) => {
           if (response.message) return handleError(response.message);
-  
+
           toast.success("Produto cadastrado com sucesso!");
           closeModal();
           reset();
@@ -81,19 +84,18 @@ export default function useProductModal({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      setPreviewImage(URL.createObjectURL(selectedFile));
-  
-      setValue("image", selectedFile);
+      if (previewImage) {
+        URL.revokeObjectURL(previewImage);
+      }
 
+      setPreviewImage(URL.createObjectURL(selectedFile));
+      setValue("image", selectedFile);
       trigger("image");
     }
+
+    event.target.value = "";
   };
 
-  const handleRemoveFile = () => {
-    setPreviewImage(null);
-  };
-
-  // Returns
   return {
     register,
     setValue,
@@ -102,7 +104,6 @@ export default function useProductModal({
     isPending,
     previewImage,
     handleFileChange,
-    handleRemoveFile,
     onSubmit,
   };
 }

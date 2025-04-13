@@ -30,7 +30,6 @@ function ProductsPage() {
     prevPage,
     products,
     isPending,
-    imageLoader,
     toggleModal,
     isOpenCreateProductModal,
     isOpenDeleteProductModal,
@@ -100,7 +99,7 @@ function ProductsPage() {
         {!isPending && products.length > 0 && (
           <GenericTable
             data={products}
-            columns={getProductTableColumns(imageLoader, toggleModal)}
+            columns={getProductTableColumns(toggleModal)}
             gridColumns={16}
           />
         )}
@@ -115,7 +114,6 @@ function ProductsPage() {
           isOpen={isOpenCreateProductModal}
           closeModal={() => toggleModal("isOpenCreateProductModal")}
           product={selectedProduct}
-          imageLoader={imageLoader}
           reloadProducts={reloadProducts}
         />
       )}
@@ -126,7 +124,6 @@ function ProductsPage() {
           closeModal={() => toggleModal("isOpenUpdateProductModal")}
           product={selectedProduct}
           reloadProducts={reloadProducts}
-          imageLoader={imageLoader}
         />
       )}
 

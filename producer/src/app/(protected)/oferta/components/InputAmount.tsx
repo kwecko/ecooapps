@@ -1,12 +1,12 @@
-import Input from "@shared/components/Input";
+import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
+
 import Button from "@shared/components/Button";
+import Input from "@shared/components/Input";
 import { ModelPage } from "@shared/components/ModelPage";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
-import { isInteger } from "@shared/utils/validate-value";
 
 import pageSettings from "./page-settings";
-import { twMerge } from "tailwind-merge";
 
 interface InputAmountProps {
   handleNextStep: () => void;
@@ -16,14 +16,13 @@ interface InputAmountProps {
 }
 
 function validateValue(value: string) {
-  if (!(value === "" || parseInt(value) >= 0)) {
+  if (value === "" || parseInt(value) <= 0) {
     toast.error("A quantidade mínima permitida é 1.");
     return false;
   }
 
   return true;
 }
-
 
 export default function InputAmount({
   handleNextStep,
@@ -36,28 +35,28 @@ export default function InputAmount({
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    
+
     if (!validateValue(value)) {
       return;
     }
 
-    setAmount(parseInt(value));
+    setAmount(parseInt(value) || 0);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateValue(amount.toString())) {
-      return;
-    }
-
-    if (!amount) {
+    if (amount <= 0) {
       toast.error("A quantidade mínima permitida é 1.");
       return;
     }
 
     handleNextStep();
   };
+
+  const unitLabel = convertUnitToLabel(pricing);
+  const placeholder =
+    pricing === "UNIT" ? "Digite a quantidade..." : "Peso em quilogramas...";
 
   return (
     <ModelPage
@@ -82,19 +81,33 @@ export default function InputAmount({
           pricing === "WEIGHT" ? "pt-8.5" : ""
         )}
       >
-        <Input
-          placeholder="Peso em quilogramas..."
-          onChange={handleChange}
-          className="text-theme-primary w-full text-sm"
-          type="number"
-          value={amount.toString()}
-          minLength={1}
-          step={1}
-          label={convertUnitToLabel(pricing)}
-          inputMode="numeric"
-          pattern="[0-9]*"
-          required={true}
-        />
+        <div className="flex flex-row gap-2 items-end w-full">
+          <div className="flex-grow">
+            <Input
+              placeholder={placeholder}
+              onChange={handleChange}
+              className="text-theme-primary w-full text-sm"
+              type="number"
+              value={amount || ""}
+              minLength={1}
+              step={1}
+              label={unitLabel}
+              inputMode="numeric"
+              pattern="[0-9]*"
+              required={true}
+            />
+          </div>
+          <div className="w-24">
+            <Input
+              placeholder="Unidade"
+              className="text-theme-primary w-full text-sm"
+              type="text"
+              value={pricing === "WEIGHT" ? "kg" : "unidade"}
+              label="Unidade"
+              disabled={true}
+            />
+          </div>
+        </div>
       </div>
     </ModelPage>
   );
