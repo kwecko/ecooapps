@@ -19,6 +19,8 @@ export async function listProducts({
 
   params.append("page", page.toString());
 
+  params.append("archived", "false");
+
   if (product) {
     params.append("name", product);
   }
