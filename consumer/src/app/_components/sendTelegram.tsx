@@ -32,7 +32,7 @@ export default function sendTelegram() {
     let total = 0;
 
     cart.forEach((productCart) => {
-      const price = productCart.offer.product.pricing === "UNIT" ? productCart.offer.price : productCart.offer.price * 0.5;
+      const price = productCart.offer.product.pricing === "UNIT" ? productCart.offer.total : productCart.offer.total * 0.5;
       total = total + price * productCart.amount;
     });
 
@@ -51,7 +51,7 @@ export default function sendTelegram() {
         id: productCart.offer.id,
         name: productCart.offer.product.name,
         description: productCart.offer.description,
-        price: productCart.offer.product.pricing === "UNIT" ? productCart.offer.price : productCart.offer.price * 0.5,
+        price: productCart.offer.product.pricing === "UNIT" ? productCart.offer.total : productCart.offer.total * 0.5,
         amount: productCart.offer.amount,
         quantity: productCart.amount,
         pricing: productCart.offer.product.pricing,

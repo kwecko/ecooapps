@@ -13,12 +13,8 @@ export async function fetchCategory({
 	cycle_id,
   page = 1
 }: FetchCategoryRequest) {
-
-	const url = `/categories/${category_id}?page=${page}?cycle_id=${cycle_id}`;
-	console.log('url', url);
   const response = ApiService.GET({
     url: `/categories/${category_id}?page=${page}&cycle_id=${cycle_id}`,
   });
-	console.log('response', response);
   return response;
 }

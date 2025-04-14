@@ -88,7 +88,7 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
 
       <ProductCard.Footer>
         <ProductCard.CostAmount
-          price={offer.price}
+          price={offer.total}
           pricing={offer.product.pricing}
           amount={count}
         />
