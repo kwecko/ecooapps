@@ -77,9 +77,11 @@ export default function Home() {
   const submitOffer = async () => {
     const formatDate = (date: Date | null): string | undefined => {
       if (!date) return undefined;
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = date.getFullYear();
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) return undefined;
+      const day = String(parsedDate.getDate()).padStart(2, "0");
+      const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+      const year = parsedDate.getFullYear();
       return `${day}-${month}-${year}`;
     };
 

@@ -59,7 +59,7 @@ const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
               style: "currency",
               currency: "BRL",
             }).format(offer.price)}{" "}
-            +20%
+            + 20%
           </div>
         </div>
         <div className="flex flex-row h-full justify-end shrink-0 grow-0 basis-16 gap-2.5 align-start grayscale-0">
