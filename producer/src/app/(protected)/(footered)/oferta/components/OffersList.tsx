@@ -40,6 +40,7 @@ export default function OffersList({
   const observer = useRef<IntersectionObserver | null>(null);
   const router = useRouter();
   const offerType = isOfferingDay ? "current" : null;
+  const offerTypeRepeat = isOfferingDay ? "last" : null;
   const { handleError } = useHandleError();
 
   const LocalStorage = useLocalStorage();
@@ -137,7 +138,7 @@ export default function OffersList({
                   offer={offer}
                   onDeleteCard={type === offerType ? onDeleteCard : undefined}
                   editable={type === offerType}
-                  repeatable={type === "last"}
+                  repeatable={type === offerTypeRepeat}
                   catalogId={catalogId}
                 />
               ))}
