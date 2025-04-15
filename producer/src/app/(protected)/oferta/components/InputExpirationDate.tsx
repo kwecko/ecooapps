@@ -55,7 +55,7 @@ export default function InputExpirationDate({
   };
 
   const formattedDate = expires_at
-    ? expires_at.toISOString().split("T")[0]
+    ? new Date(expires_at).toISOString().split("T")[0]
     : "";
 
   return (
