@@ -28,7 +28,6 @@ interface CreateProductModalProps {
   isOpen: boolean;
   closeModal: () => void;
   product: ProductDTO | null;
-  imageLoader: (args: { src: string }) => string;
   reloadProducts: () => void;
 }
 
@@ -36,8 +35,7 @@ export default function CreateProductModal({
   isOpen,
   closeModal,
   product,
-  imageLoader,
-  reloadProducts
+  reloadProducts,
 }: CreateProductModalProps) {
   const {
     register,
@@ -47,11 +45,12 @@ export default function CreateProductModal({
     isPending,
     previewImage,
     handleFileChange,
-    handleRemoveFile,
     onSubmit,
   } = useProductModal({ closeModal, reloadProducts });
 
-  const [categoryOptions, setCategoryOptions] = useState<{ value: string; label: string }[]>([]);
+  const [categoryOptions, setCategoryOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
   const { handleError } = useHandleError();
 
   useEffect(() => {
@@ -64,10 +63,12 @@ export default function CreateProductModal({
           return;
         }
 
-        const options = response.data.map(({ id, name }: { id: string; name: string }) => ({
-          value: id,
-          label: name,
-        }));
+        const options = response.data.map(
+          ({ id, name }: { id: string; name: string }) => ({
+            value: id,
+            label: name,
+          })
+        );
 
         setCategoryOptions(options);
       } catch (error) {
@@ -86,10 +87,7 @@ export default function CreateProductModal({
       title="Cadastrar produto"
       iconClose={true}
     >
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col gap-5"
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
         <Input
           label="Qual o nome do produto?"
           placeholder="Morango Orgânico"
@@ -101,10 +99,14 @@ export default function CreateProductModal({
         <SelectInput
           label="Selecione a categoria do produto"
           options={categoryOptions}
-          defaultOption={categoryOptions.find(
-            (option) => option.value === product?.category.id
-          ) ?? categoryOptions[0]}
-          onChange={(value) => {setValue("category", value);}}
+          defaultOption={
+            categoryOptions.find(
+              (option) => option.value === product?.category.id
+            ) ?? categoryOptions[0]
+          }
+          onChange={(value) => {
+            setValue("category", value);
+          }}
         />
         {errors.category && (
           <p className="text-red-500 text-sm">{errors.category.message}</p>
@@ -113,27 +115,33 @@ export default function CreateProductModal({
           <SelectInput
             label="Produto perecível?"
             options={perishableOptions}
-            defaultOption={perishableOptions.find(
-              (option) => option.value === product?.perishable
-            ) ?? perishableOptions[0]}
+            defaultOption={
+              perishableOptions.find(
+                (option) => option.value === product?.perishable
+              ) ?? perishableOptions[0]
+            }
             onChange={(value) => setValue("perishable", value)}
           />
-          
+
           <SelectInput
             label="Oculto?"
             options={perishableOptions}
-            defaultOption={archivedOptions.find(
-              (option) => option.value === product?.perishable
-            ) ?? archivedOptions[0]}
+            defaultOption={
+              archivedOptions.find(
+                (option) => option.value === product?.perishable
+              ) ?? archivedOptions[0]
+            }
             onChange={(value) => setValue("archived", value)}
           />
 
           <SelectInput
             label="Comercialização"
             options={commercializationOptions}
-            defaultOption={commercializationOptions.find(
-              (option) => option.value === product?.pricing
-            ) ?? commercializationOptions[0]}
+            defaultOption={
+              commercializationOptions.find(
+                (option) => option.value === product?.pricing
+              ) ?? commercializationOptions[0]
+            }
             onChange={(value) => setValue("pricing", value)}
           />
           {errors.pricing && (
@@ -141,7 +149,7 @@ export default function CreateProductModal({
           )}
         </div>
 
-        <div className="pb-5">
+        <div>
           <label
             htmlFor="file-upload"
             className="text-sm text-gray-600 mb-2 inline-flex items-center cursor-pointer"
@@ -160,28 +168,27 @@ export default function CreateProductModal({
             accept="image/png, image/jpeg"
           />
           {errors.image?.message && (
-            <p className="text-red-500 text-sm mt-1">{String(errors.image.message)}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {String(errors.image.message)}
+            </p>
           )}
         </div>
 
-        {(previewImage) && (
+        {previewImage && (
           <div className="relative w-18 h-18">
             <Image
               src={previewImage}
               alt="Pré-visualização"
-              loader={imageLoader}
               width={72}
               height={72}
               className="w-full h-full object-contain rounded-md border"
             />
             <button
               type="button"
-              onClick={() => {
-                handleRemoveFile();
-              }}
-              className="absolute top-0 right-0 bg-error text-white rounded-full w-5 h-5 flex items-center justify-center"
+              onClick={() => document.getElementById("file-upload")?.click()}
+              className="absolute -top-3 -right-3 bg-theme-primary text-white rounded-full w-6 h-6 flex items-center justify-center ml-auto"
             >
-              <FiX size={12} />
+              <FiPaperclip size={12} />
             </button>
           </div>
         )}

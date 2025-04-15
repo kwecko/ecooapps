@@ -1,9 +1,5 @@
 import Image, { ImageLoader } from "next/image";
 
-const imageLoader: ImageLoader = ({ src }) => {
-  return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
-};
-
 export default function FarmPhotos(images: string[]) {
   return (
     <>

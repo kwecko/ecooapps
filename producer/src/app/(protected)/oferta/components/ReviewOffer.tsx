@@ -43,11 +43,11 @@ export default function ReviewOffer(props: ReviewOfferProps) {
       header: "Preço de venda (+20%):",
       content: `${formatPrice(addTaxToPrice(props.price, 0.2))}`,
     },
-    ...(props.expires_at
+    ...(props.expires_at && !isNaN(new Date(props.expires_at).getTime())
       ? [
           {
-            header: "Validade:",
-            content: `${props.expires_at.toLocaleDateString()}`,
+            header: "Validade",
+            content: new Date(props.expires_at).toLocaleDateString(),
           },
         ]
       : []),

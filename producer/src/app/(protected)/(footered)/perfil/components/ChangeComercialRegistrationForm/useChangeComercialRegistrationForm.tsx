@@ -12,7 +12,6 @@ import {
   ChangeComercialRegistrationSchema,
   changeComercialRegistrationSchema,
 } from "@shared/schemas/change-comercial-registration";
-import { set } from "lodash";
 
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
@@ -128,12 +127,12 @@ export const useChangeComercialRegistrationForm = () => {
       return;
     }
 
-    const { images, ...otherData } = formData;
+    const { ...otherData } = formData;
     const farmFormData = new FormData();
     farmFormData.append("name", otherData.name || "");
     farmFormData.append("tally", otherData.tally || "");
     farmFormData.append("description", otherData.description || "");
-    if (otherData.photo) {
+    if (otherData.photo && otherData.photo != photo) {
       farmFormData.append("photo", otherData.photo);
     }
 

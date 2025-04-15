@@ -9,8 +9,9 @@ import { LuChevronLeft, LuX } from "react-icons/lu";
 import { toast } from "sonner";
 import {
   InputAmount,
-  InputDescription,
+  InputExpirationDate,
   InputPrice,
+  InputDescription,
   RenderProducts,
   ReviewOffer,
 } from "../components";
@@ -25,7 +26,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 5;
+  const maxStep = 6;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -50,8 +51,8 @@ export default function Home() {
   const submitOffer = async () => {
     const formatDate = (date: Date | null): string | undefined => {
       if (!date) return undefined;
-      const day = String(date.getDate()).padStart(2, '0');
-      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
       const year = date.getFullYear();
       return `${day}-${month}-${year}`;
     };
@@ -59,7 +60,7 @@ export default function Home() {
     const success = await createOffer({
       product_id: offer.product.id,
       amount:
-      offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
+        offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       description: offer.description ?? undefined,
       expires_at: formatDate(offer.expires_at),
@@ -97,17 +98,26 @@ export default function Home() {
             setAmount={(amount) => setOffer({ ...offer, amount: amount })}
           />
         )}
-        {currentStep === 3 && (
+        {currentStep === 3 && offer.product.perishable === false && (
+          <InputExpirationDate
+            handleNextStep={handleNextStep}
+            expires_at={offer.expires_at ?? undefined}
+            setExpiresAt={(expires_at: Date) =>
+              setOffer({ ...offer, expires_at })
+            }
+          />
+        )}
+        {(currentStep === 3 && offer.product.perishable === true) ||
+        (currentStep === 4 && offer.product.perishable === false) ? (
           <InputPrice
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
-            expires_at={offer.expires_at ?? undefined}
-            perishable={offer.product.perishable}
-            setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at })}
+            pricing={offer.product.pricing}
             setPrice={(price) => setOffer({ ...offer, price: price })}
           />
-        )}
-        {currentStep === 4 && (
+        ) : null}
+        {(currentStep === 4 && offer.product.perishable === true) ||
+        (currentStep === 5 && offer.product.perishable === false) ? (
           <InputDescription
             handleNextStep={handleNextStep}
             description={offer.description ?? ""}
@@ -115,8 +125,14 @@ export default function Home() {
               setOffer({ ...offer, description: description })
             }
           />
-        )}
-        {currentStep === 5 && (
+        ) : null}
+        {(() => {
+          console.log("Current Step:", currentStep);
+          console.log("Perishable:", offer.product?.perishable);
+          return null;
+        })()}
+        {(currentStep === 5 && offer.product.perishable === true) ||
+        (currentStep === 6 && offer.product.perishable === false) ? (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -124,10 +140,10 @@ export default function Home() {
             price={offer.price ?? 0}
             description={offer.description ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
-            expires_at={offer.product.perishable ? offer.expires_at : null}
+            expires_at={offer.product.perishable ? null : offer.expires_at}
             submitAction={submitOffer}
           />
-        )}
+        ) : null}
       </div>
       <div className="h-footer w-full">
         <div

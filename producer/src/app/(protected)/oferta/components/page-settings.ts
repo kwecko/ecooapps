@@ -16,14 +16,20 @@ const pageSettings: { [key: string]: PageSettings } = {
     subtitle:
       "Qual o peso do produto que gostaria de colocar à venda no nosso centro de distribuição?",
   },
+  expirationDate: {
+    title: "Qual validade do produto?",
+    subtitle:
+      "Qual a expectativa de validade em que produto mantém boas condições de comercialização?",
+  },
   price: {
     title: "Qual o preço do produto?",
-    subtitle: "Qual o preço que o produto será vendido?",
+    subtitle:
+      "Escolha o preço do seu produto. A taxa do e-COO será adicionada automaticamente.",
   },
   description: {
-    title: "Faltou alguma coisa?",
+    title: "Descrição do produto",
     subtitle:
-      "Se existir alguma característica que você deseja informar ao consumidor, descreva aqui ou deixe em branco",
+      "Se existir alguma característica que você deseja informar ao consumidor, descreva aqui ou deixe em branco.",
   },
   review: {
     title: "Revise as informações",

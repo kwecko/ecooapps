@@ -186,7 +186,7 @@ const BagDetailsPage = () => {
             <div className="rounded-lg bg-white lg:text-theme-primary h-72">
               {isPending && <TableSkeleton />}
 
-              {!isPending && bagDetails.payments.length === 0 && (
+              {!isPending && !bagDetails.payment  && (
                 <div className="flex-grow flex flex-col h-full pt-6">
                   <EmptyBox type="payment" />
                   <div className="flex justify-center items-center h-full pr-18 pl-18">
@@ -200,24 +200,14 @@ const BagDetailsPage = () => {
                 </div>
               )}
 
-              {!isPending && bagDetails.payments.length > 0 && (
+              {!isPending && bagDetails.payment && (
                 <GenericTable
-                  data={bagDetails.payments}
+                  data={[bagDetails.payment]}
                   columns={getBagDetailsTableColumns({
                     selectBagPayment,
                   })}
                   gridColumns={1}
                 />
-              )}
-
-              {!isPending && bagDetails.payments.length > 0 && (
-                <div className="flex justify-center items-center mt-4">
-                  <PagingButton
-                    value={paymentsPage}
-                    nextPage={nextPaymentsPage}
-                    backPage={prevPaymentsPage}
-                  />
-                </div>
               )}
             </div>
           </div>

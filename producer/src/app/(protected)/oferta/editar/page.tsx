@@ -6,7 +6,6 @@ import { LuChevronLeft, LuX } from "react-icons/lu";
 import { toast } from "sonner";
 
 import { updateOffer } from "@producer/_actions/offers/PATCH/update-offer";
-import { removeTaxFromPrice } from "@shared/utils/convert-tax";
 import { convertOfferAmount } from "@shared/utils/convert-unit";
 import { useHandleError } from "@shared/hooks/useHandleError";
 
@@ -15,8 +14,9 @@ import Loader from "@shared/components/Loader";
 import { OfferDTO } from "@shared/interfaces/dtos";
 import {
   InputAmount,
-  InputDescription,
+  InputExpirationDate,
   InputPrice,
+  InputDescription,
   ReviewOffer,
 } from "../components";
 
@@ -29,7 +29,7 @@ export default function Home() {
   const { handleError } = useHandleError();
 
   const minStep: number = 1;
-  const maxStep: number = 4;
+  const maxStep: number = 5;
 
   useEffect(() => {
     setIsLoading(true);
@@ -39,7 +39,7 @@ export default function Home() {
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
-        price: removeTaxFromPrice(offerData.price, 0.2),
+        price: offerData.price,
       });
       setCurrentStep(1);
       sessionStorage.removeItem("edit-offer-data");
@@ -72,18 +72,26 @@ export default function Home() {
     router.push("/oferta");
   };
 
+  const formatDate = (date: Date | null): string | undefined => {
+    if (!date) return undefined;
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime())) return undefined;
+    return parsedDate.toISOString();
+  };
+
   const onUpdateOffer = async () => {
     try {
-      const response =await updateOffer({
+      const response = await updateOffer({
         offer_id: offer.id,
         data: {
           amount:
-              offer.product.pricing === "UNIT"
-                ? offer.amount
-                : offer.amount * 1000,
-            price: offer.price,
-            description: offer.description ?? undefined,
-          },
+            offer.product.pricing === "UNIT"
+              ? offer.amount
+              : offer.amount * 1000,
+          price: offer.price,
+          description: offer.description ?? undefined,
+          expires_at: formatDate(offer.expires_at)
+        },
       });
       if (response.message) {
         handleError(response.message as string);
@@ -93,7 +101,7 @@ export default function Home() {
       handleError(error as string);
       return;
     }
-    
+
     toast.success("Oferta atualizada com sucesso!");
     router.push("/oferta");
   };
@@ -124,17 +132,26 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === 2 && offer.product.perishable === false && (
+              <InputExpirationDate
+                handleNextStep={handleNextStep}
+                expires_at={offer.expires_at ?? undefined}
+                setExpiresAt={(expires_at: Date) =>
+                  setOffer({ ...offer, expires_at })
+                }
+              />
+            )}
+            {(currentStep === 2 && offer.product.perishable === true) ||
+            (currentStep === 3 && offer.product.perishable === false) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
-                expires_at={offer.expires_at ?? new Date()}
-                perishable={offer.product.perishable}
-                setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at })}
+                pricing={offer.product.pricing}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
-            />
-            )}
-            {currentStep === 3 && (
+              />
+            ) : null}
+            {(currentStep === 3 && offer.product.perishable === true) ||
+            (currentStep === 4 && offer.product.perishable === false) ? (
               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
@@ -142,8 +159,9 @@ export default function Home() {
                   setOffer({ ...offer, description: description })
                 }
               />
-            )}
-            {currentStep === 4 && (
+            ) : null}
+            {(currentStep === 4 && offer.product.perishable === true) ||
+            (currentStep === 5 && offer.product.perishable === false) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -151,10 +169,10 @@ export default function Home() {
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? offer.expires_at : null}
+                expires_at={offer.product.perishable ? null : offer.expires_at}
                 submitAction={onUpdateOffer}
               />
-            )}
+            ) : null}
           </div>
           <div className="h-footer w-full">
             <div

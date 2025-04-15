@@ -43,13 +43,22 @@ export default function useProductsPage() {
   const { handleError } = useHandleError();
 
   useEffect(() => {
+    setPage(1);
+  }, [debounceSearch]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [archived]);
+  
+
+  useEffect(() => {
     startTransition(() => {
       getProducts({ page, product: debounceSearch, archived: archived });
     });
   }, [debounceSearch, page, archived]);
 
   // Functions
-  function getProducts({ page, product, archived }: { page: number; product: string, archived: boolean | undefined }) {
+  function getProducts({ page, product, archived }: { page: number; product: string; archived: boolean | undefined }) {
     listProducts({ page, product, archived })
       .then((response) => {
         if (response.message) return handleError(response.message);
@@ -92,13 +101,6 @@ export default function useProductsPage() {
     setSelectedProduct(null);
   };
 
-  function imageLoader({ src }: { src: string }) {
-    if (src.includes("https://res.cloudinary.com")) {
-      return src;
-    }
-    return `https://res.cloudinary.com/dwm7zdljf/image/upload/v1706539060/products/256x256_${src}`;
-  }
-
   // Returns
   return {
     name,
@@ -110,7 +112,6 @@ export default function useProductsPage() {
     nextPage,
     prevPage,
     isPending,
-    imageLoader,
     toggleModal,
     isOpenCreateProductModal,
     isOpenDeleteProductModal,
