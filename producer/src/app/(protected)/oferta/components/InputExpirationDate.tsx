@@ -5,6 +5,7 @@ import Input from "@shared/components/Input";
 import { toast } from "sonner";
 import { ModelPage } from "@shared/components/ModelPage";
 import pageSettings from "./page-settings";
+import { format } from "path";
 
 interface InputExpirationDateProps {
   handleNextStep: () => void;
@@ -55,7 +56,7 @@ export default function InputExpirationDate({
   };
 
   const formattedDate = expires_at
-    ? expires_at.toISOString().split("T")[0]
+    ? new Date(expires_at).toISOString().split("T")[0]
     : "";
 
   return (

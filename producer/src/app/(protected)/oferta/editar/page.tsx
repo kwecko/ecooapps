@@ -72,6 +72,13 @@ export default function Home() {
     router.push("/oferta");
   };
 
+  const formatDate = (date: Date | null): string | undefined => {
+    if (!date) return undefined;
+    const parsedDate = new Date(date);
+    if (isNaN(parsedDate.getTime())) return undefined;
+    return parsedDate.toISOString();
+  };
+
   const onUpdateOffer = async () => {
     try {
       const response = await updateOffer({
@@ -83,6 +90,7 @@ export default function Home() {
               : offer.amount * 1000,
           price: offer.price,
           description: offer.description ?? undefined,
+          expires_at: formatDate(offer.expires_at)
         },
       });
       if (response.message) {
@@ -161,7 +169,7 @@ export default function Home() {
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? offer.expires_at : null}
+                expires_at={offer.product.perishable ? null : offer.expires_at}
                 submitAction={onUpdateOffer}
               />
             ) : null}
