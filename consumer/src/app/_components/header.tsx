@@ -26,7 +26,7 @@ export default function Header() {
     produtor: { title: data_title, back: "/produtores" },
     ofertas: { title: data_title, back: "/produtores" },
     'ofertas-categoria': { title: data_title, back: "/categorias" },
-    carrinho: { title: "Carrinho", back: "/produtores" },
+    carrinho: { title: "Carrinho", back: "/inicio" },
   };
 
   const title = mapPath[path]?.title;
