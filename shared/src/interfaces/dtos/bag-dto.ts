@@ -29,7 +29,8 @@ export interface BagDTO {
   customer_id: string;
   customer: UserDTO;
   orders: OrderDTO[];
-  payments: PaymentDTO[];
+  payment: PaymentDTO;
+  payment_id: string | null;
   created_at: string;
   updated_at: string | null;
 }

@@ -55,7 +55,7 @@ const useBagDetailsPage = () => {
   };
 
   const nextPaymentsPage = () => {
-    if (bagDetails && bagDetails.payments.length < 20) {
+    if (bagDetails && bagDetails.payment) {
       return;
     }
     setPaymentsPage((prev) => prev + 1);
@@ -140,17 +140,16 @@ const useBagDetailsPage = () => {
         setBagDetails((prev) =>
           prev
             ? {
-                ...prev,
-                payments: prev.payments.map((payment) =>
-                  payment.id === selectedPayment.id
-                    ? {
-                        ...payment,
-                        status: selectedPayment.status,
-                        method: selectedPayment.method,
-                        flag: selectedPayment.flag,
-                      }
-                    : payment
-                ),
+          ...prev,
+          payment:
+            prev.payment?.id === selectedPayment.id
+              ? {
+            ...prev.payment,
+            status: selectedPayment.status,
+            method: selectedPayment.method,
+            flag: selectedPayment.flag,
+                }
+              : prev.payment,
               }
             : prev
         );

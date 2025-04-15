@@ -7,11 +7,8 @@ export interface ListCategoriesRequest {
 }
 
 export async function listCategories({ page }: ListCategoriesRequest) {
-  const params = new URLSearchParams();
 
-  params.append("page", page.toString());
-
-  const url = `/categories/?${params.toString()}`;
+  const url = `/categories?page=${page}`;
 
   const response = ApiService.GET({
     url,
