@@ -98,7 +98,7 @@ export default function Home() {
             setAmount={(amount) => setOffer({ ...offer, amount: amount })}
           />
         )}
-        {currentStep === 3 && offer.product.perishable === true && (
+        {currentStep === 3 && offer.product.perishable === false && (
           <InputExpirationDate
             handleNextStep={handleNextStep}
             expires_at={offer.expires_at ?? undefined}
@@ -107,8 +107,8 @@ export default function Home() {
             }
           />
         )}
-        {(currentStep === 3 && offer.product.perishable === false) ||
-        (currentStep === 4 && offer.product.perishable === true) ? (
+        {(currentStep === 3 && offer.product.perishable === true) ||
+        (currentStep === 4 && offer.product.perishable === false) ? (
           <InputPrice
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
@@ -116,8 +116,8 @@ export default function Home() {
             setPrice={(price) => setOffer({ ...offer, price: price })}
           />
         ) : null}
-        {(currentStep === 4 && offer.product.perishable === false) ||
-        (currentStep === 5 && offer.product.perishable === true) ? (
+        {(currentStep === 4 && offer.product.perishable === true) ||
+        (currentStep === 5 && offer.product.perishable === false) ? (
           <InputDescription
             handleNextStep={handleNextStep}
             description={offer.description ?? ""}
@@ -131,8 +131,8 @@ export default function Home() {
           console.log("Perishable:", offer.product?.perishable);
           return null;
         })()}
-        {(currentStep === 5 && offer.product.perishable === false) ||
-        (currentStep === 6 && offer.product.perishable === true) ? (
+        {(currentStep === 5 && offer.product.perishable === true) ||
+        (currentStep === 6 && offer.product.perishable === false) ? (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -140,7 +140,7 @@ export default function Home() {
             price={offer.price ?? 0}
             description={offer.description ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
-            expires_at={offer.product.perishable ? offer.expires_at : null}
+            expires_at={offer.product.perishable ? null : offer.expires_at}
             submitAction={submitOffer}
           />
         ) : null}
