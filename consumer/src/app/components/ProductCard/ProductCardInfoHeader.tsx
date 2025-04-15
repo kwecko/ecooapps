@@ -9,7 +9,7 @@ export default function ProductCardInfoHeader({
   ...rest
 }: ProductCardInfoHeaderProps) {
   return (
-    <div className="w-full flex flex-row justify-between items-end gap-2.5" {...rest}>
+    <div className="w-full flex flex-col" {...rest}>
       {children}
     </div>
   );

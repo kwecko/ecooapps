@@ -67,20 +67,24 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
         <ProductCard.Image product={offer.product} />
         <ProductCard.Info>
           <ProductCard.InfoHeader>
-            <p
-              className="text-left text-base leading-5 font-bold
-            text-theme-home-bg truncate"
-            >
-              {offer.product.name}
-            </p>
-            {exclude && (
-              <button onClick={() => removeOrder(offer.id)}>
-                <span className="text-battleship-gray">
-                  {" "}
-                  <FaRegTrashCan className="h-inherit text-xl" />{" "}
-                </span>
-              </button>
-            )}
+						<div className="flex flex-row items-center justify-between w-full">
+							<p className="text-left text-base leading-5 font-bold text-theme-home-bg truncate">
+								{offer.product.name}
+							</p>
+							{exclude && (
+								<button onClick={() => removeOrder(offer.id)}>
+									<span className="text-battleship-gray">
+										{" "}
+										<FaRegTrashCan className="h-inherit text-xl" />{" "}
+									</span>
+								</button>
+							)}
+						</div>
+						<div>
+							<p className="font-poppins text-xs font-semibold text-theme-primary">
+								{farm.name}
+							</p>
+						</div>
           </ProductCard.InfoHeader>
           <ProductCard.Description description={offer.description || ""} />
         </ProductCard.Info>
@@ -88,7 +92,7 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
 
       <ProductCard.Footer>
         <ProductCard.CostAmount
-          price={offer.price}
+          price={offer.total}
           pricing={offer.product.pricing}
           amount={count}
         />

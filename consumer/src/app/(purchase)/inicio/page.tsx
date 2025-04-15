@@ -13,7 +13,8 @@ export default function Inicio() {
     <div className="flex flex-col w-full h-screen">
       <div className="h-screen scroll-smooth">
 
-        <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5 opacity-50">
+				<Link href={"/categorias"}>
+        <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">
           <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
             <Image
             className="rounded-xl"
@@ -32,6 +33,7 @@ export default function Inicio() {
             <SlArrowRight className="text-slate-gray" />         
           </div>
         </div>
+				</Link>
 
         <Link href={"/produtores"}>
         <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">

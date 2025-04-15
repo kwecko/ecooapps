@@ -30,10 +30,10 @@ export default function FinalizarCompras() {
 
     cart.forEach((productCart) => {
       if (productCart.offer.product.pricing === "UNIT") {
-        total = total + productCart.offer.price * productCart.amount;
+        total = total + productCart.offer.total * productCart.amount;
       } else if (productCart.offer.product.pricing === "WEIGHT") {
         total =
-          total + (productCart.offer.price * productCart.amount * 500) / 1000;
+          total + (productCart.offer.total * productCart.amount * 500) / 1000;
       }
     });
 
