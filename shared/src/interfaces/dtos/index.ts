@@ -10,7 +10,6 @@ import { PaymentDTO } from "./payment-dto";
 import { ProductDTO } from "./product-dto";
 import { CategoryDTO } from "./product-dto";
 import { UserDTO } from "./user-dto";
-
 export {
   type AddressDTO,
   type BagDTO,
@@ -23,5 +22,5 @@ export {
   type PaymentDTO,
   type ProductDTO,
   type CategoryDTO,
-  type UserDTO,
+  type UserDTO
 };

@@ -22,9 +22,11 @@ export default function Header() {
   const mapPath: any = {
     inicio: { title: "Pesquisa de Produtos", back: null },
     produtores: { title: "Produtores", back: "/inicio" },
+    categorias: { title: "Categorias", back: "/inicio" },
     produtor: { title: data_title, back: "/produtores" },
     ofertas: { title: data_title, back: "/produtores" },
-    carrinho: { title: "Carrinho", back: "/produtores" },
+    'ofertas-categoria': { title: data_title, back: "/categorias" },
+    carrinho: { title: "Carrinho", back: "/inicio" },
   };
 
   const title = mapPath[path]?.title;

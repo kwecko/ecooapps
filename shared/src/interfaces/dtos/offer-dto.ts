@@ -4,6 +4,8 @@ export interface OfferDTO {
   id: string;
   amount: number;
   price: number;
+	fee: number;
+	total: number;
   description: string | null;
   catalog_id: string;
   catalog: CatalogDTO;
