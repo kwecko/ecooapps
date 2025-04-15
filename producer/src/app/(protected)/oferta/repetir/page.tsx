@@ -77,9 +77,11 @@ export default function Home() {
   const submitOffer = async () => {
     const formatDate = (date: Date | null): string | undefined => {
       if (!date) return undefined;
-      const day = String(date.getDate()).padStart(2, "0");
-      const month = String(date.getMonth() + 1).padStart(2, "0");
-      const year = date.getFullYear();
+      const parsedDate = new Date(date);
+      if (isNaN(parsedDate.getTime())) return undefined;
+      const day = String(parsedDate.getDate()).padStart(2, "0");
+      const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+      const year = parsedDate.getFullYear();
       return `${day}-${month}-${year}`;
     };
 
@@ -122,7 +124,7 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {currentStep === 2 && offer.product.perishable === false && (
+            {currentStep === 2 && offer.product.perishable === true && (
               <InputExpirationDate
                 handleNextStep={handleNextStep}
                 expires_at={offer.expires_at ?? undefined}
@@ -131,8 +133,8 @@ export default function Home() {
                 }
               />
             )}
-            {(currentStep === 2 && offer.product.perishable === true) ||
-            (currentStep === 3 && offer.product.perishable === false) ? (
+            {(currentStep === 2 && offer.product.perishable === false) ||
+            (currentStep === 3 && offer.product.perishable === true) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
@@ -140,8 +142,8 @@ export default function Home() {
                 setPrice={(price) => setOffer({ ...offer, price: price })}
               />
             ) : null}
-            {(currentStep === 3 && offer.product.perishable === true) ||
-            (currentStep === 4 && offer.product.perishable === false) ? (
+            {(currentStep === 3 && offer.product.perishable === false) ||
+            (currentStep === 4 && offer.product.perishable === true) ? (
               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
@@ -150,8 +152,8 @@ export default function Home() {
                 }
               />
             ) : null}
-            {(currentStep === 4 && offer.product.perishable === true) ||
-            (currentStep === 5 && offer.product.perishable === false) ? (
+            {(currentStep === 4 && offer.product.perishable === false) ||
+            (currentStep === 5 && offer.product.perishable === true) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -159,7 +161,7 @@ export default function Home() {
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? offer.expires_at : null}
+                expires_at={offer.product.perishable ? null : offer.expires_at}
                 submitAction={submitOffer}
               />
             ) : null}
