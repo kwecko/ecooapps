@@ -161,7 +161,7 @@ export default function Home() {
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? offer.expires_at : null}
+                expires_at={offer.product.perishable ? null : offer.expires_at}
                 submitAction={onUpdateOffer}
               />
             ) : null}
