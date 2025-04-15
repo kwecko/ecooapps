@@ -124,7 +124,7 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {currentStep === 2 && offer.product.perishable === false && (
+            {currentStep === 2 && offer.product.perishable === true && (
               <InputExpirationDate
                 handleNextStep={handleNextStep}
                 expires_at={offer.expires_at ?? undefined}
@@ -133,8 +133,8 @@ export default function Home() {
                 }
               />
             )}
-            {(currentStep === 2 && offer.product.perishable === true) ||
-            (currentStep === 3 && offer.product.perishable === false) ? (
+            {(currentStep === 2 && offer.product.perishable === false) ||
+            (currentStep === 3 && offer.product.perishable === true) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
@@ -142,8 +142,8 @@ export default function Home() {
                 setPrice={(price) => setOffer({ ...offer, price: price })}
               />
             ) : null}
-            {(currentStep === 3 && offer.product.perishable === true) ||
-            (currentStep === 4 && offer.product.perishable === false) ? (
+            {(currentStep === 3 && offer.product.perishable === false) ||
+            (currentStep === 4 && offer.product.perishable === true) ? (
               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
@@ -152,8 +152,8 @@ export default function Home() {
                 }
               />
             ) : null}
-            {(currentStep === 4 && offer.product.perishable === true) ||
-            (currentStep === 5 && offer.product.perishable === false) ? (
+            {(currentStep === 4 && offer.product.perishable === false) ||
+            (currentStep === 5 && offer.product.perishable === true) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
