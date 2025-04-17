@@ -21,9 +21,6 @@ interface ReviewOfferProps {
 export default function ReviewOffer(props: ReviewOfferProps) {
   const { title, subtitle } = pageSettings.review;
 
-  console.log(props.expires_at);
-  console.log(props.price);
-
   const rows = [
     {
       header: "Produto:",
