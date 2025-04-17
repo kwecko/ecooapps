@@ -72,7 +72,7 @@ export default function Home() {
     router.push("/oferta");
   };
 
-  const formatDate = (date: Date | null): string | undefined => {
+  const formatDate = (date: Date | undefined): string | undefined => {
     if (!date) return undefined;
     const parsedDate = new Date(date);
     if (isNaN(parsedDate.getTime())) return undefined;
@@ -137,7 +137,7 @@ export default function Home() {
                 handleNextStep={handleNextStep}
                 expires_at={offer.expires_at ?? undefined}
                 setExpiresAt={(expires_at: Date) =>
-                  setOffer({ ...offer, expires_at })
+                  setOffer({ ...offer, expires_at: expires_at })
                 }
               />
             )}
@@ -169,7 +169,7 @@ export default function Home() {
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? null : offer.expires_at}
+                expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 submitAction={onUpdateOffer}
               />
             ) : null}

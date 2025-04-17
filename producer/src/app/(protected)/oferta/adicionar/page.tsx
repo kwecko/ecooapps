@@ -49,7 +49,7 @@ export default function Home() {
   };
 
   const submitOffer = async () => {
-    const formatDate = (date: Date | null): string | undefined => {
+    const formatDate = (date: Date | undefined): string | undefined => {
       if (!date) return undefined;
       const day = String(date.getDate()).padStart(2, "0");
       const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -101,9 +101,9 @@ export default function Home() {
         {currentStep === 3 && offer.product.perishable === false && (
           <InputExpirationDate
             handleNextStep={handleNextStep}
-            expires_at={offer.expires_at ?? undefined}
-            setExpiresAt={(expires_at: Date) =>
-              setOffer({ ...offer, expires_at })
+            expires_at={offer.expires_at}
+            setExpiresAt={(expires_at) =>
+              setOffer({ ...offer, expires_at: expires_at })
             }
           />
         )}
@@ -126,11 +126,6 @@ export default function Home() {
             }
           />
         ) : null}
-        {(() => {
-          console.log("Current Step:", currentStep);
-          console.log("Perishable:", offer.product?.perishable);
-          return null;
-        })()}
         {(currentStep === 5 && offer.product.perishable === true) ||
         (currentStep === 6 && offer.product.perishable === false) ? (
           <ReviewOffer
@@ -140,7 +135,7 @@ export default function Home() {
             price={offer.price ?? 0}
             description={offer.description ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
-            expires_at={offer.product.perishable ? null : offer.expires_at}
+            expires_at={offer.product.perishable ? undefined : offer.expires_at}
             submitAction={submitOffer}
           />
         ) : null}
