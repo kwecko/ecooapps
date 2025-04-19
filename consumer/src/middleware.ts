@@ -8,14 +8,14 @@ const PAGES_IN_CONSTRUCTION =
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  const access_token = request.cookies.get("token")?.value;
+  const access_token = request.cookies.get("consumer_token")?.value;
 
   const pathnameStartsWith = (startsWith: string[]) =>
     startsWith.some((item) => {
       if (pathname.startsWith(item)) return true;
     });
 
-  if (pathnameStartsWith(PROTECTED_PAGES) && !access_token)
+  if (pathname === "/" || pathnameStartsWith(PROTECTED_PAGES) && !access_token)
     return NextResponse.redirect(
       new URL(process.env.UNAUTHENTICATED_REDIRECT_URL as string, request.url)
     );

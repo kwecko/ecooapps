@@ -15,8 +15,15 @@ export function useLocalStorage() {
     return JSON.parse(result);
   }
 
+  const deleteFromStorage = (key: string) => {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem(key);
+    }
+  }
+
   return {
     setInStorage,
-    getFromStorage
+    getFromStorage,
+    deleteFromStorage
   }
 }

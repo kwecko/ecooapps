@@ -1,41 +1,47 @@
 "use client";
 
-import React, { Fragment, useEffect, useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
-import { LuChevronsUpDown } from "react-icons/lu";
-import { FaCheck } from "react-icons/fa6";
-import { getCyclesAction } from "../_actions/cycles";
-import { toast } from "sonner";
+import useListCycles from "@shared/hooks/cycles/useListCycles";
+import { CycleDTO } from "@shared/interfaces/dtos";
 import { useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+import { FaCheck } from "react-icons/fa6";
+import { LuChevronsUpDown } from "react-icons/lu";
+import { toast } from "sonner";
+import { useCycleProvider } from "../context/cycle/index";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import Button from "./Button";
-import { useCycleProvider } from "../context";
-
-export interface CycleData {
-  id: string;
-  alias: string;
-  offer: number[];
-  order: number[];
-  deliver: number[];
-  created_at: Date;
-  updated_at: Date | null
-}
 
 export default function SelectCycle() {
-  const [cycles, setCycles] = useState<CycleData[] | undefined>();
+  const { data: cycles, isLoading, listCycles } = useListCycles();
+
   const { cycle, setCycle } = useCycleProvider();
 
+  const checkCycleInStorage = () => {
+    const cycleFromStorage = getFromStorage("selected-cycle");
+
+    if (cycleFromStorage) {
+      handleCycleChange(cycleFromStorage);
+    }
+  };
+
+  useEffect(() => {
+    listCycles();
+    checkCycleInStorage();
+  }, []);
+
   const router = useRouter();
+  const { getFromStorage, setInStorage } = useLocalStorage();
 
-  const handleCycleChange = (newCycle: CycleData) => {
+  const handleCycleChange = (newCycle: CycleDTO) => {
     setCycle(newCycle);
-
-    localStorage.setItem("selected-cycle", JSON.stringify(newCycle));
+    setInStorage("selected-cycle", newCycle);
   };
 
   const handleClickButton = () => {
-    const cycleDataString = localStorage.getItem("selected-cycle") as string;
+    const cycleFromStorage = getFromStorage("selected-cycle");
 
-    if (!cycleDataString) {
+    if (!cycleFromStorage && !cycle) {
       toast.warning("Selecione um ciclo para ver mais informações sobre ele!");
       return;
     }
@@ -43,93 +49,82 @@ export default function SelectCycle() {
     router.push("/informacoes-ciclo");
   };
 
-  useEffect(() => {
-    (async () => {
-      const getCycles = await getCyclesAction({});
-
-      if (getCycles) {
-        setCycles(getCycles);
-      }
-
-      const savedCycle = localStorage.getItem("selected-cycle");
-      if (savedCycle) {
-        const cycleData: CycleData = JSON.parse(savedCycle);
-        setCycle(cycleData);
-      }
-    })();
-  }, []);
-
   return (
-    <div>
-      <span className="text-sm text-slate-gray">
+    <div className="w-full flex flex-col gap-2">
+      <span className="font-inter text-sm leading-4.75 text-slate-gray pl-3.5 tracking-tight-2">
         Para começar, selecione o{" "}
         <Button
-          className="underline font-bold"
+          className="underline underline-offset-[3px]
+           font-bold"
           type="button"
           onClick={handleClickButton}
         >
           Ciclo
         </Button>
       </span>
-      <Listbox value={cycle} onChange={handleCycleChange}>
+      <Listbox value={cycle} onChange={handleCycleChange} by="id">
         {({ open }) => (
-          <>
-            <div className="relative mt-1">
-              <Listbox.Button
-                className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${open ? "ring-2 ring-slate-gray" : ""
-                  }`}
+          <div className="w-full relative">
+            <Listbox.Button
+              className={`relative w-full py-3 cursor-default rounded-2xl bg-white pl-3 pr-10 text-left ${
+                open
+                  ? "flex flex-row justify-between items-center rounded-b-none bg-neutral-50 ring-2 ring-slate-gray ring-opacity-50"
+                  : ""
+              }`}
+            >
+              <span className="block truncate text-slate-gray px-3">
+                {cycle === null ? "Selecione um ciclo" : `Ciclo ${cycle.alias}`}
+              </span>
+              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5">
+                <LuChevronsUpDown
+                  className="h-5 w-5 text-slate-gray"
+                  aria-hidden="true"
+                />
+              </span>
+            </Listbox.Button>
+            <Transition
+              leave="transition ease-in duration-50"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <Listbox.Options
+                className="absolute w-full overflow-auto
+               bg-white py-0 text-base shadow-lg rounded-b-2xl ring-2 ring-slate-300 z-10 max-h-60 sm:text-sm"
               >
-                <span className="block truncate text-slate-gray">
-                  {cycle === undefined
-                    ? "Selecione um ciclo"
-                    : `Ciclo ${cycle.alias}`}
-                </span>
-                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                  <LuChevronsUpDown
-                    className="h-5 w-5 text-slate-gray"
-                    aria-hidden="true"
-                  />
-                </span>
-              </Listbox.Button>
-              <Transition
-                as={Fragment}
-                leave="transition ease-in duration-100"
-                leaveFrom="opacity-100"
-                leaveTo="opacity-0"
-              >
-                <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                  {cycles?.map((cycle) => (
-                    <Listbox.Option
-                      key={cycle.id}
-                      className={({ selected }) =>
-                        `relative cursor-default select-none py-2 pl-10 pr-4 ${selected
+                {cycles?.map((cycle) => (
+                  <Listbox.Option
+                    key={cycle.id}
+                    className={({ selected }) =>
+                      `relative cursor-default select-none py-2.5 pl-10 pr-4 ${
+                        selected
                           ? "text-slate-gray bg-theme-background"
                           : "bg-white"
-                        }`
-                      }
-                      value={cycle}
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span className={`block truncate text-slate-gray}`}>
-                            {`Ciclo ${cycle.alias}`}
+                      }`
+                    }
+                    value={cycle}
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span
+                          className={`block truncate text-slate-gray pl-3.5`}
+                        >
+                          {`Ciclo ${cycle.alias}`}
+                        </span>
+                        {selected && (
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-5 bg-theme-background">
+                            <FaCheck
+                              className="h-4 w-4 text-slate-gray"
+                              aria-hidden="true"
+                            />
                           </span>
-                          {selected && (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 bg-theme-background">
-                              <FaCheck
-                                className="h-4 w-4 text-slate-gray"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          )}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  ))}
-                </Listbox.Options>
-              </Transition>
-            </div>
-          </>
+                        )}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
+              </Listbox.Options>
+            </Transition>
+          </div>
         )}
       </Listbox>
     </div>

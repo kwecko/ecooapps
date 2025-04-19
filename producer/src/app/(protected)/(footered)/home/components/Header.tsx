@@ -1,65 +1,41 @@
 "use client";
 
-import { getUser } from "@shared/_actions/account/get-user"
-import { useHandleError } from "@shared/hooks/useHandleError";
+import Button from "@shared/components/Button";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { HiOutlineBell } from "react-icons/hi";
-import { toast } from "sonner";
-
-const handleLogout = () => {};
+import useFetchProfile from "@shared/hooks/users/useFetchProfile";
+import { useRouter } from "next/navigation";
+import { FiSettings } from "react-icons/fi";
 
 export function Header() {
-  const [name, setName] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const {
+    data: { first_name },
+    isLoading,
+  } = useFetchProfile();
 
-  const { handleError } = useHandleError()
+  const router = useRouter();
 
-  useEffect(() => {
-    (async () => {
-      await getUser()
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message;
-
-            handleError(messageError)
-          } else if (response.data) {
-            const { first_name, last_name } = response.data;
-            setName(`${first_name} ${last_name}`);
-            setIsLoading(false)
-          }
-        })
-        .catch((error) => {
-          toast.error(error)
-        })
-    })()
-  }, [])
+  const handleClickButton = () => {
+    router.push("/configuracoes");
+  };
 
   return (
-    <header className="flex items-center mb-4 ">
-      <span className="flex items-center gap-2 text-lg text-slate-gray">
+    <header className="w-full flex items-start justify-between px-2.5 text-lg leading-5.5 pb-2.5 top-0 z-10 bg-theme-background">
+      <div className="flex-shrink">
         {isLoading ? (
-          <>
-            Olá, <SkeletonLoader />
-          </>
+          <SkeletonLoader />
         ) : (
-          <>
-            Olá , <strong className="font-semibold">{name}</strong>
-          </>
+          <span className="flex gap-1 items-center text-slate-gray">
+            Olá,{" "}
+              <strong className="font-semibold underline underline-offset-2">
+                {first_name}!
+              </strong>
+          </span>
         )}
-      </span>
-      <div className="flex ml-auto">
-        <button className="mr-4 text-xl md:text-2xl">
-          <HiOutlineBell />
-        </button>
-        <Link
-          onClick={handleLogout}
-          href={"/api/auth/logout"}
-          className="text-theme-primary md:text-lg"
-        >
-          Sair
-        </Link>
+      </div>
+      <div className="flex gap-4.5">
+        <Button className="text-theme-primary" onClick={handleClickButton}>
+          <FiSettings size={24}/>
+        </Button>
       </div>
     </header>
   );

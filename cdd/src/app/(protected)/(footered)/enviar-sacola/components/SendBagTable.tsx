@@ -1,150 +1,152 @@
 "use client";
 
-import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { FaBoxOpen } from "react-icons/fa6";
-import { useRouter } from "next/navigation";
-import { listBags } from "@cdd/app/_actions/bag/list-bags";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { Bag } from "@shared/interfaces/bag"
-import Button from "@shared/components/Button";
-import Loader from "@shared/components/Loader";
-import SearchInput from "@shared/components/SearchInput";
+import { BagStatus } from "@shared/types/bag-status";
+
+import useListCurrentBags from "@cdd/hooks/bags/useListCurrentBags";
+import EmptyBox from "@shared/components/EmptyBox";
+import GenericTable from "@shared/components/GenericTable";
+import StatusFilterButtons from "@shared/components/StatusFilterButton";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
+import TableSearchInput from "@shared/components/TableSearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage"
+import { useGetStatus } from "@shared/hooks/useGetStatus";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { BagDTO } from "@shared/interfaces/dtos";
 
-interface BagsProps {
-  page: number;
-}
+type FilterStatus = {
+  name: string;
+  key: string[];
+};
 
-export default function SendBagTable({ page }: BagsProps) {
+const statuses: FilterStatus[] = [
+  { name: "todas", key: ["SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
+  { name: "separadas", key: ["SEPARATED"] },
+  { name: "enviadas", key: ["DISPATCHED"] },
+  { name: "entregues", key: ["RECEIVED"] },
+  { name: "retornadas", key: ["DEFERRED"] },
+];
+
+export default function SendBagTable() {
   const router = useRouter();
 
-  const [bags, setBags] = useState<Bag[]>([]);
-  const [name, setName] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const { getStatus } = useGetStatus();
 
-  const debounceSearch = useDebounce(name)
-  const { handleError } = useHandleError()
-  const { getFromStorage } = useLocalStorage()
+  const searchParams = useSearchParams();
+  const selectedStatus = searchParams.get("status") ?? "todas";
+  const pathname = usePathname();
 
-  useEffect(() => {
-    (() => {
-      setIsLoading(true);
-      const cycle = getFromStorage("selected-cycle");
+  const { page, query } = usePageQueryParams();
+  const debounceSearch = useDebounce(query, 300);
 
-      if (!cycle) {
-        toast.error("Selecione um ciclo para ver os pedidos!");
-        return;
-      }
+  const setSelectedStatus = (status: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("status", status);
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
-      const { id } = cycle
+  const { data: bags, isLoading } = useListCurrentBags({
+    page,
+    statuses: statuses.find((status) => status.name === selectedStatus)
+      ?.key as BagStatus["send"][],
+    user: debounceSearch,
+  });
 
-      listBags({
-        cycle_id: id,
-        page,
-        status: "SEPARATED",
-        name: debounceSearch
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+  const handleStatusFilterClick = (status: FilterStatus) => {
+    if (status.name === selectedStatus) {
+      setSelectedStatus("todas");
+      return;
+    }
 
-            handleError(messageError)
-          } else if (response.data) {
+    const statusName = status.name;
 
-            setBags(response.data);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-
-      listBags({
-        cycle_id: id,
-        page,
-        status: "DISPATCHED",
-        name: debounceSearch
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
-
-            handleError(messageError)
-          } else if (response.data) {
-            setBags(prevBags => [...prevBags, ...response.data]);
-            setIsLoading(false);
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })();
-  }, [page, debounceSearch]);
+    setSelectedStatus(statusName);
+  };
 
   const handleClick = (id: string) => {
     router.push(`/enviar-sacola/${id}`);
   };
 
+  const headers = [
+    { label: "Código", style: "w-[30%]" },
+    { label: "Cliente", style: "w-1/2" },
+    { label: "Status", style: "w-1/5 text-center" },
+  ];
+
+  const info =
+    bags.length > 0
+      ? bags.map((bag) => ({
+          id: bag.id,
+          data: [
+            { detail: bag.id },
+            { detail: `${bag.customer.first_name} ${bag.customer.last_name}` },
+            {
+              detail: getStatus({
+                type: "enviar",
+                status: bag.status as BagStatus["send"],
+              }),
+            },
+          ],
+        }))
+      : [];
+
   return (
-    <div className="w-full h-full flex flex-col">
-      <div>
-        <div className="w-full flex gap-2 items-center mt-4 mb-4">
-          <SearchInput onChange={setName} />
-        </div>
-      </div>
-      {isLoading ? (
-        <Loader
-          className="mt-3"
-          appId="CDD"
-          loaderType="component"
+    <div className="flex flex-col gap-2.5 w-full items-center justify-between h-full">
+      <div className="w-full flex flex-col gap-2.5 justify-start items-center">
+        <TableSearchInput
+          placeholder={"Filtrar por cliente..."}
+          icon="search"
+          className="lg:self-end w-full"
         />
-      ) : !isLoading && bags.length === 0 ? (
-        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
-          <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center">Nenhuma sacola < br /> encontrada!</span>
-        </div>
-      ) : (
-        <table className="bg-white text-theme-primary text-left leading-7 w-full table-fixed rounded-lg mb-4 overflow-y-hidden">
-          <thead className="w-full">
-            <tr className="text-[rgb(84,95,113)]">
-              <th className="truncate w-1/5 text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Código
-              </th>
-              <th className="truncate w-1/2 text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Cliente
-              </th>
-              <th className="truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {bags.map((bag) => (
-              <tr onClick={() => handleClick(bag.id)} key={bag.id} className="text-center cursor-pointer">
-                <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  {/* {getNextSaturdayDate()} */}
-                  {bag.id}
-                </td>
-                <td className="border-b-[1px] truncate text-[#545F71] px-2 py-3">
-                  {`${bag.user.first_name} ${bag.user.last_name}`}
-                </td>
-                {bag.status === "SEPARATED" ? (
-                  <td className="border-b-[1px] truncate text-white font-semibold px-2 py-2">
-                    <Button className="w-full bg-walnut-brown px-3 py-2 rounded-3xl">Enviar</Button>
-                  </td>
-                ) : (
-                  <td className="w-full border-b-[1px] truncate text-theme-primary font-semibold px-2 py-2">
-                    <Button className="w-full bg-theme-background px-3 py-2 rounded-3xl">Enviada</Button>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <StatusFilterButtons
+          statuses={statuses}
+          selectedStatus={selectedStatus}
+          handleStatusFilterClick={(status: FilterStatus) =>
+            handleStatusFilterClick(status)
+          }
+        />
+      </div>
+      {!isLoading && (
+        <>
+          {bags?.length === 0 && (
+            <>
+              {debounceSearch && <EmptyBox type="search" />}
+              {!debounceSearch && <EmptyBox type="box" />}
+            </>
+          )}
+          {bags?.length > 0 && (
+            <GenericTable
+              gridColumns={12}
+              columns={[
+                {
+                  header: "Código",
+                  key: "id",
+                  colSpan: 4,
+                },
+                {
+                  header: "Cliente",
+                  key: "customer.first_name",
+                  colSpan: 6,
+                },
+                {
+                  header: "Status",
+                  key: "status",
+                  colSpan: 2,
+                  className: "items-center justify-center w-full",
+                  render: (row: BagDTO) =>
+                    getStatus({
+                      type: "montar",
+                      status: row.status as BagStatus["build"],
+                    }),
+                },
+              ]}
+              data={bags}
+              onRowClick={(row) => handleClick(row.id)}
+            />
+          )}
+          <TablePaginationControl className="justify-self-end" />
+        </>
       )}
     </div>
   );

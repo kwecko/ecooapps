@@ -1,15 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { HiOutlineInformationCircle } from "react-icons/hi";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { isUnderConstruction } from "@shared/next/library/is-under-construction";
-import Button from "@shared/components/Button";
-import Card from "@shared/components/Card"
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { useCycleProvider } from "@shared/context";
+
+import Button from "@shared/components/Button";
+import Card from "@shared/components/Card";
+import CustomModal from "@shared/components/CustomModal";
+import { useCycleProvider } from "@shared/context/cycle";
+import { HiOutlineInformationCircle } from "react-icons/hi";
 
 export function ProductMenu() {
   const router = useRouter()
@@ -19,7 +20,7 @@ export function ProductMenu() {
   const [isOfferingDay, setIsOfferingDay] = useState<boolean>(false);
 
   useEffect(() => {
-    if (cycle !== undefined) {
+    if (cycle !== null) {
       const diaAtual = new Date().getDay() + 1;
       const { offer } = cycle
 
@@ -30,19 +31,17 @@ export function ProductMenu() {
         return;
       }
 
-      setIsOfferingDay(false)
+      setIsOfferingDay(false);
     }
   }, [cycle]);
 
   const handleClickOfferProductButton = () => {
-    const cycle_idString = localStorage.getItem("selected-cycle") as string
-
-    if (!cycle_idString) {
-      toast.warning("Selecione um ciclo para começar uma oferta!")
-      return
+    if (!cycle) {
+      toast.warning("Selecione um ciclo para começar uma oferta!");
+      return;
     }
 
-    const { id } = JSON.parse(cycle_idString)
+    const { id } = cycle;
 
     localStorage.setItem("offer-products-data",
       JSON.stringify({
@@ -54,34 +53,32 @@ export function ProductMenu() {
   }
 
   return (
-    <Card className="mt-5 gap-4">
-      <div className="flex justify-between items-start mt-[23px]">
-        <span className="text-default text-[16px] mb-[13px]">
+    <Card className="w-full p-5 text-theme-default gap-3.5">
+      <div className="flex justify-between items-start gap-2">
+        <span className="pt-0.5 pl-1 font-normal text-base leading-5.5 tracking-tight-2">
           Ofereça os seus produtos clicando no botão abaixo
         </span>
-        <button>
-          <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
-        </button>
+        <CustomModal
+          titleContentModal="Oferta de Produtos"
+          contentModal="Gerencie aqui os produtos que deseja disponibilizar para venda no ciclo de comercialização."
+          bgConfirmModal="#2F4A4D"
+          titleConfirmModal="Ok"
+          buttonOpenModal={
+            <HiOutlineInformationCircle className="text-2xl text-theme-primary" />
+          }
+        />
       </div>
-      <div className="">
+      <div className="w-full flex flex-col gap-3 font-semibold text-base leading-5.5">
         <Button
           onClick={handleClickOfferProductButton}
-          className="w-full bg-theme-default rounded-md h-12 mb-[12px] text-white font-semibold"
-          disabled={
-            !isOfferingDay || isUnderConstruction("/produtos/vender")
-          }
+          className="w-full h-12 bg-theme-default rounded-md text-white"
           href="/"
         >
-          Colocar a venda
+          {isOfferingDay ? "Ofertar produtos" : "Visualizar ofertas"}
         </Button>
-        <Link href={"/produtos/meus"}>
-          <Button
-            className="w-full bg-transparent rounded-md h-12 mb-[20px] text-[#3E5155] border-2 border-[#3E5155] font-semibold"
-            //disabled={isUnderConstruction("/produtos/meus")}
-            disabled={true}
-            href={"/produtos/meus"}
-          >
-            Ofertas vigentes
+        <Link href={"/relatorios"}>
+          <Button className="w-full bg-transparent h-12 rounded-md border-[2px] border-theme-default">
+            Gerar relatórios
           </Button>
         </Link>
       </div>

@@ -1,43 +1,9 @@
-import Footer from "@shared/components/Footer";
+"use client";
 
-const HAS_PREVIOUS_PAGE = {
-  "/": false,
-  "/login": true,
-  "/produtos/vender": true,
-  "/em-construcao": true,
-};
+import Layout from "@producer/app/(footered)/layout";
 
-const HAS_HELP_BUTTON = {
-  "/": true,
-  "/login": false,
-  "/produtos/vender": true,
-  "/em-construcao": false,
-};
+const LayoutWithFooter = ({ children }: { children: React.ReactNode }) => (
+  <Layout>{children}</Layout>
+);
 
-const RETURN_URLS = {
-  "/login": "/",
-  "/produtos/vender": "/",
-  "/em-construcao": "/",
-};
-
-export default function LayoutWithFooter({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="flex flex-col justify-between w-full bg-theme-background">
-      <div className="h-[var(--min-page-height)] overflow-y-auto">
-        {children}
-      </div>
-      <div className="h-[var(--footer-height)]">
-        <Footer
-          hasPreviousPagePaths={HAS_PREVIOUS_PAGE}
-          hasHelpButtonPaths={HAS_HELP_BUTTON}
-          bgColor={"#2F4A4D"}
-          returnUrls={RETURN_URLS}
-        />
-      </div>
-    </div>
-  );
-}
+export default LayoutWithFooter;

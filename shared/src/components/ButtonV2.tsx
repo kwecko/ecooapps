@@ -1,35 +1,36 @@
 import { isUnderConstruction } from "@shared/library/is-under-construction";
 
-import { twMerge } from 'tailwind-merge';
+import { twMerge } from "tailwind-merge";
 
 import React, { ButtonHTMLAttributes } from "react";
 
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   href?: string;
-  variant: 'default' | 'light' | 'transparent';
+  variant: "default" | "light" | "transparent";
   border?: boolean;
   notification?: string;
+  className?: string;
 }
 
-interface IClasses {
+interface StyleClasses {
   default: string;
   variant: {
     default: string;
     light: string;
     transparent: string;
-  }
+  };
   border: string;
 }
 
-const styles: IClasses = {
-  default: 'w-full px-3 py-4 font-semibold rounded-lg text-base relative',
+const styles: StyleClasses = {
+  default: "w-full p-3 font-semibold rounded-lg text-base relative",
   variant: {
-    default: 'text-white bg-theme-default mt-6',
-    light: 'text-theme-default bg-white',
-    transparent: 'text-theme-default'
+    default: "text-white bg-theme-default",
+    light: "text-theme-default bg-white",
+    transparent: "text-theme-default",
   },
-  border: 'border-theme-default border-2'
-}
+  border: "border-theme-default border-2",
+};
 
 export default function ButtonV2({
   href,
@@ -47,24 +48,28 @@ export default function ButtonV2({
     styles.default,
     styles.variant[variant],
     border && styles.border,
-    isDisabled ? 'opacity-50 cursor-not-allowed' : '',
-    className,
+    isDisabled ? "opacity-50 cursor-not-allowed" : "",
+    className
   );
 
   return (
     <button
-      disabled={isDisabled}
-      className={buttonClasses}
       {...rest}
+      disabled={isDisabled}
+      className={twMerge(
+        "lg:text-base lg:font-inter lg:tracking-tight-2 lg:leading-5.5 lg:font-semibold",
+        buttonClasses,
+        className
+      )}
     >
       {children}
-      {
-        notification && (
-          <span className="absolute top-0 right-0 mt-[-10px] mr-[-10px] flex h-5 w-5">
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-[#FF7070] text-white text-xs font-bold items-center justify-center">{notification}</span>
+      {notification && (
+        <span className="absolute top-0 right-0 mt-10-negative mr-10-negative flex h-5 w-5">
+          <span className="relative inline-flex rounded-full h-5 w-5 bg-error text-white text-xs font-bold items-center justify-center">
+            {notification}
           </span>
-        )
-      }
+        </span>
+      )}
     </button>
   );
 }

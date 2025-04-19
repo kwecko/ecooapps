@@ -1,15 +1,18 @@
 "use client";
 
-import { useCycleProvider } from "@shared/context";
-import Button from "@shared/components/Button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiOutlineInformationCircle } from "react-icons/hi";
 import { toast } from "sonner";
 
+import Button from "@shared/components/Button";
+import Loader from "@shared/components/Loader";
+import { useCycleProvider } from "@shared/context/cycle";
+
 export default function CycloInformation() {
   const { cycle } = useCycleProvider();
   const [message, setMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleClickButton = () => {
@@ -22,10 +25,12 @@ export default function CycloInformation() {
   };
 
   useEffect(() => {
-    if (cycle !== undefined) {
+    setIsLoading(true);
+    if (cycle !== null) {
       const diaAtual = new Date().getDay() + 1;
 
       const { offer, order, deliver } = cycle;
+      setIsLoading(false);
 
       if (Array.isArray(offer) && offer.includes(diaAtual)) {
         setMessage(" fazer a sua oferta");
@@ -35,26 +40,30 @@ export default function CycloInformation() {
         setMessage(" entregar ao CDD");
       }
     }
+    setIsLoading(false);
   }, [cycle]);
 
   return (
-    <div className="mt-5 w-full h-fit py-5 rounded-2xl bg-white p-4">
-      <div className="flex justify-between items-center">
-        {cycle ? (
-          <p className="text-default text-[16px]">
+    <>
+      {isLoading && !cycle && (
+        <div className="flex justify-center">
+          <Loader loaderType="component" />
+        </div>
+      )}
+      {!isLoading && cycle && (
+        <div className="w-full rounded-2xl bg-white text-theme-default p-5 tracking-tight-2 text-base leading-5.5 flex flex-row justify-between items-start gap-2">
+          <p className="pl-1">
             É hora de:{" "}
-            <span className="text-[#00735E] font-bold">{message}</span>
+            <span className="text-theme-highlight font-extrabold tracking-normal">
+              {message}
+            </span>
           </p>
-        ) : (
-          <p className="text-theme-primary text-[16px]">
-            Selecione um ciclo para ver a etapa atual.
-          </p>
-        )}
 
-        <Button onClick={handleClickButton} type="button">
-          <HiOutlineInformationCircle className="text-[24px] text-slate-blue" />
-        </Button>
-      </div>
-    </div>
+          <Button onClick={handleClickButton} type="button">
+            <HiOutlineInformationCircle className="text-[24px] text-theme-primary" />
+          </Button>
+        </div>
+      )}
+    </>
   );
 }

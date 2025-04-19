@@ -1,124 +1,83 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
-import { AiFillEye } from "react-icons/ai";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 
-import Input from "@shared/next/components/Input";
-import { login } from "../../../_actions/account/login";
-import Loader from "../../../components/Loader";
-import { useHandleError } from "../../../hooks/useHandleError";
-import { toast } from "sonner";
-import { AppID } from "../../../library/types/app-id";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-const schema = yup.object({
-  email: yup
-    .string()
-    .required("Informe o e-mail")
-    .email("Informe um email válido!"),
-  password: yup.string().required("Informe a senha"),
-});
+import ButtonV2 from "@shared/components/ButtonV2";
+import CustomInput from "@shared/components/CustomInput";
+import Loader from "@shared/components/Loader";
+import { AppID } from "@shared/library/types/app-id";
+import { loginSchema } from "@shared/schemas/login";
+import { LoginSchema } from "@shared/types/login";
+
+import useAuthenticate from "@shared/hooks/auth/useAuthenticate";
+import { useRouter } from "next/navigation";
+import React from "react";
 
 export default function FormLogin({ appID }: { appID: AppID }) {
-  const resolver = yupResolver(schema);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isPending, starTransition] = useTransition();
+
   const router = useRouter();
-  const { handleError } = useHandleError();
+  const { authenticate } = useAuthenticate();
 
   const {
     register,
-    formState: { errors },
     handleSubmit,
-    setValue,
+    formState: { errors },
     trigger,
-  } = useForm({
-    resolver,
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    mode: "onChange",
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
-  const onSubmit = async ({ email, password }: any) => {
-    setIsLoading(true)
+  const onSubmit = async ({ email, password }: LoginSchema) => {
+    starTransition(async () => {
+      const isValid = await trigger();
 
-    await login({
-      email,
-      password,
-      appID
-    })
-      .then((response) => {
-        if (response.message) {
-          const messageError = response.message as string;
-          handleError(messageError);
-          setIsLoading(false);
-        } else {
-          toast.success("Login efetuado com sucesso!");
-          setIsLoading(false);
-          router.push("/");
-        }
-      })
-      .catch(() => {
-        toast.error("Erro ao efetuar login");
-        setIsLoading(false);
+      if (!isValid) return;
+
+      const success = await authenticate({
+        email,
+        password,
+        appID,
       });
+
+      if (!success) return;
+      router.push("/");
+    });
   };
 
-  useEffect(() => {
-    const handleInput = (event: Event) => {
-      const target = event.target as HTMLInputElement;
-      const { name, value } = target;
-
-      if (name === "email" || name === "password") {
-        setValue(name as "email" | "password", value);
-        trigger(name as "email" | "password");
-      }
-    };
-
-    const emailInput = document.querySelector("input[name='email']");
-    const passwordInput = document.querySelector("input[name='password']");
-
-    if (emailInput && passwordInput) {
-      emailInput.addEventListener("input", handleInput);
-      passwordInput.addEventListener("input", handleInput);
-    }
-
-    return () => {
-      if (emailInput && passwordInput) {
-        emailInput.removeEventListener("input", handleInput);
-        passwordInput.removeEventListener("input", handleInput);
-      }
-    };
-  }, [setValue, trigger]);
-
-
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-3 flex flex-col">
-        <Input
-          type="text"
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+      <div className="flex flex-col gap-2.5 pb-0.5">
+        <CustomInput
+          register={register("email")}
           label="Email"
-          register={{ ...register("email") }}
-          error={errors.email?.message}
+          placeholder="Insira o seu email"
+          type="text"
+          errorMessage={errors.email?.message}
         />
-        <Input
+        <CustomInput
+          register={register("password")}
           label="Senha"
+          placeholder="Insira a sua senha"
           type="password"
-          icon={<AiFillEye />}
-          register={{ ...register("password") }}
-          error={errors.password?.message}
+          errorMessage={errors.password?.message}
         />
       </div>
-      <button
-        disabled={isLoading}
+      <ButtonV2
         type="submit"
-        className="w-full flex justify-center items-center px-3 py-4 font-semibold rounded-lg text-base text-white p-2 bg-slate-gray mt-6"
-        style={{ minHeight: "50px" }}
+        variant="default"
+        className="h-12 flex justify-center items-center mt-0"
       >
-        {isLoading ? <Loader
-          appId="PRODUCER"
-          loaderType="login"
-        /> : <>Entrar</>}
-      </button>
+        {isPending ? <Loader loaderType="login" /> : "Entrar"}
+      </ButtonV2>
     </form>
   );
 }

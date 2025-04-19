@@ -1,21 +1,23 @@
-import { maskCAF } from "./mask-caf";
+import { getNextSaturdayDate } from "./get-next-saturday-date";
+import { getWeekDays } from "./get-week-days";
 import { maskCPF } from "./mask-cpf";
+import { maskDate } from "./mask-date";
 import { maskCellphone } from "./mask-phone";
+import { maskTally } from "./mask-tally";
 import { parseCookies } from "./parse-cookies";
 import { validateCellphone } from "./validate-cellphone";
 import { validateCPF } from "./validate-cpf";
-import { getWeekDays } from "./get-week-days"
-import { maskDate } from "./mask-date";
-import { getNextSaturdayDate } from "./get-next-saturday-date";
+import { validateTally } from "./validate-tally";
 
 export {
-  maskCAF,
-  maskCPF,
-  maskCellphone,
-  validateCPF,
-  validateCellphone,
-  parseCookies,
+  getNextSaturdayDate,
   getWeekDays,
+  maskCellphone,
+  maskCPF,
   maskDate,
-  getNextSaturdayDate
+  maskTally,
+  parseCookies,
+  validateCellphone,
+  validateCPF,
+  validateTally,
 };

@@ -1,152 +1,85 @@
-'use client'
+"use client";
 
-import { toast } from "sonner";
-import { useEffect, useState } from "react";
-import { notFound, useParams, useRouter } from "next/navigation";
-import { fetchBag } from "@cdd/app/_actions/bag/fetch-bag";
-import { handleBag } from "@cdd/app/_actions/bag/handle-bag";
+import { notFound, useParams } from "next/navigation";
 
+import useFetchBag from "@cdd/hooks/bags/useFetchBag";
+import useHandleBag from "@cdd/hooks/bags/useHandleBag";
+import GroupOrder from "@shared/components/GroupOrder";
+import HeaderDetail from "@shared/components/HeaderDetail";
 import Modal from "@shared/components/Modal";
-import { BagOrder } from "@shared/interfaces/bag-order";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
 import TableSkeleton from "@shared/components/TableSkeleton";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
-import { convertUnit } from "@shared/utils/convert-unit";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { BagStatus } from "@shared/types/bag-status";
+import convertStatus from "@shared/utils/convert-status";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
 export default function BagMiniTable() {
-  const router = useRouter()
   const { bag_id } = useParams();
 
-  const [bagOrder, setBagOrder] = useState<BagOrder>();
-  const [isLoading, setIsLoading] = useState(true);
-
-  const { handleError } = useHandleError()
-
   if (!bag_id) {
-    notFound()
+    notFound();
   }
 
-  useEffect(() => {
-    (() => {
-      setIsLoading(true)
-      fetchBag({
-        bag_id: bag_id as string
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+  const { page } = usePageQueryParams();
 
-            handleError(messageError)
-          } else if (response.data) {
-            setBagOrder(response.data)
-            setIsLoading(false)
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    })()
-  }, [bag_id]);
+  const { data: bag, isLoading: isLoadingFetchBag } = useFetchBag({
+    bag_id: bag_id.toString(),
+    page,
+  });
 
-  const handleStatusBag = (bag_id: string, status: "PENDING" | "SEPARATED") => {
-    if (status === 'PENDING') {
-      handleBag({
-        bag_id,
-        status: "SEPARATED"
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+  console.log(bag);
 
-            handleError(messageError)
-          } else {
-            sessionStorage.setItem(
-              "data-sucess",
-              JSON.stringify({
-                title: "A sacola está pronta!",
-                description: "A sacola do cliente está pronta.",
-                button: {
-                  secundary: "/",
-                  primary: "/montar-sacola",
-                },
-              })
-            );
+  const { handleBag, isLoading: isLoadingHandleBag } = useHandleBag();
 
-            router.push("/success");
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
-    } else if (status === "SEPARATED") {
-      handleBag({
-        bag_id,
-        status: "PENDING"
-      })
-        .then((response) => {
-          if (response.message) {
-            const messageError = response.message as string
+  const handleStatusBag = (bag_id: string, status: BagStatus["build"]) => {
+    const statusConfig = {
+      PENDING: {
+        nextStatus: "SEPARATED",
+        successMessage: "Sacola preparada com sucesso!",
+      },
+      SEPARATED: {
+        nextStatus: "PENDING",
+        successMessage: "A sacola foi alterada com sucesso!",
+      },
+    };
 
-            handleError(messageError)
-          } else {
-            sessionStorage.setItem(
-              "data-sucess",
-              JSON.stringify({
-                title: "A sacola foi alterada!",
-                description: "A sacola do cliente está pendente para ser montada",
-                button: {
-                  secundary: "/",
-                  primary: "/montar-sacola",
-                },
-              })
-            );
+    const config = statusConfig[status];
 
-            router.push("/success");
-            return;
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.")
-        })
+    if (!config) {
+      return;
     }
-  }
+
+    handleBag({
+      bag_id,
+      status: config.nextStatus as BagStatus["build"],
+      successMessage: config.successMessage,
+      successRedirect: "/montar-sacola",
+    });
+  };
+
+  const isLoading = isLoadingFetchBag || isLoadingHandleBag;
 
   return (
-    <>
-      {isLoading ? (
-        <TableSkeleton />
-      ) : (
-        <div className="w-full h-full flex flex-col justify-between">
-          <div className="max-w-sm mx-auto bg-white rounded-lg">
-            <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
-              <span className="w-1/5">Pedido:</span>
-              <span className="w-4/5">{bagOrder?.id}</span>
-            </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
-              <span className="w-1/5">Status:</span>
-              <span className="w-4/5">{bagOrder?.status === "PENDING" ? "Pendente" : "Pronta"}</span>
-            </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
-              <span className="w-1/5">Cliente:</span>
-              <span className="w-4/5">{`${bagOrder?.user.first_name} ${bagOrder?.user.last_name}`}</span>
-            </div>
-            <div className="flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3">
-              <span className="w-1/5">Prazo:</span>
-              <span className="w-4/5">{getNextSaturdayDate()}</span>
-            </div>
-            <div className="text-theme-primary p-3">Conteúdo:</div>
-            <div className="pl-3 pb-3 text-theme-primary">
-              {bagOrder?.orders.map(order => (
-                <div key={order.id}>
-                  {`${order.amount}${convertUnit(order.offer.product.pricing)} - ${order.offer.product.name}`}
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="w-full h-[10%] flex justify-center items-end">
-            {bagOrder?.status === "PENDING" ? (
+    <div className="w-full h-full flex flex-col justify-between items-center gap-3">
+      {isLoading && <TableSkeleton />}
+      {!isLoading && !bag && (
+        <span className="text-center text-red-500">
+          Erro ao carregar os dados da sacola
+        </span>
+      )}
+      {!isLoading && bag && (
+        <>
+          <HeaderDetail
+            id={bag.id}
+            status={convertStatus(bag.status)?.name}
+            name={`${bag.customer.first_name} ${bag.customer.last_name}`}
+            time={getNextSaturdayDate()}
+            content={<GroupOrder orders={bag.orders} />}
+          />
+          <TablePaginationControl />
+          <div className="w-full h-[15%] flex justify-center items-end">
+            {bag?.status === "PENDING" ? (
               <Modal
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao marcar a sacola como pronta, o cliente será notificado."
@@ -157,7 +90,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "PENDING")
+                  handleStatusBag(bag_id as string, "PENDING");
                 }}
               />
             ) : (
@@ -171,13 +104,13 @@ export default function BagMiniTable() {
                 bgConfirmModal="#FF7070"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "SEPARATED")
+                  handleStatusBag(bag_id as string, "SEPARATED");
                 }}
               />
             )}
           </div>
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }

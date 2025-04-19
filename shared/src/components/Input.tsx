@@ -5,10 +5,12 @@ import {
   Merge,
   UseFormRegisterReturn,
 } from "react-hook-form";
+import { twMerge } from "tailwind-merge";
+
 
 interface InputProps {
   error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
-  icon?: ReactNode;
+  icon?: any;
   label?: string;
   register?: UseFormRegisterReturn;
   type?: "email" | "password" | "text" | "number" | "date";
@@ -16,8 +18,17 @@ interface InputProps {
   onChange?: (
     event: ChangeEvent<HTMLInputElement>
   ) => void | string | undefined;
-  value?: string;
+  onFocus?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  value?: string | number | Date;
+  defaultValue?: string;
   maxLength?: number;
+  minLength?: number;
+  step?: number;
+  pattern?: string;
+  required?: boolean;
+  autoComplete?: string;
+  labelClassName?: string;
+  disabled?: boolean
 }
 
 export default function Input({
@@ -28,8 +39,18 @@ export default function Input({
   type,
   className,
   onChange,
+  onFocus,
+  defaultValue,
   value,
   maxLength,
+  minLength,
+  step,
+  pattern,
+  required,
+  autoComplete,
+  labelClassName,
+  disabled,
+  ...rest
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,29 +62,38 @@ export default function Input({
   };
 
   return (
-    <div className="relative flex flex-col text-slate-gray">
-      <label className="text-sm inter-font font-normal text-theme-primary">
-        {label}
+    <div className="relative w-full flex flex-col text-theme-home-bg">
+      <label className={twMerge("text-sm leading-4.75 font-inter font-normal pb-1.75 flex flex-row items-center justify-start gap-2 tracking-tight-2", labelClassName)} htmlFor={label}>
+        {label} {typeof error === "string" && (
+          <div className="text-red-500 text-xs leading-3 tracking-tight-2">{error}</div>
+        )}
       </label>
-      <div className="relative">
+      <div className="relative w-full">
         <input
           {...register}
-          className={`z-0 w-full mt-2 p-3 border border-theme-primary rounded-lg inter-font font-normal ${className}`}
+          className={`z-0 w-full h-12 px-3 border border-theme-primary rounded-lg font-inter font-normal box-border ${className}`}
           type={inputType}
           onChange={onChange}
-          value={value}
+          onFocus={onFocus}
+          defaultValue={defaultValue}
+          value={value instanceof Date ? value.toISOString().split('T')[0] : value}
           maxLength={maxLength}
+          minLength={minLength}
+          autoComplete={autoComplete}
+          step={step}
+          pattern={pattern}
+          required={required}
+          disabled={disabled}
         />
-        <div
-          onClick={handleIconClick}
-          className="cursor-pointer absolute text-xl top-[5px] right-0 pr-3 flex items-center h-full z-50"
-        >
-          {icon}
-        </div>
+        {icon ? (
+          <div
+            onClick={handleIconClick}
+            className="cursor-pointer absolute text-xl my-auto top-0 bottom-0 right-0 pr-3 flex items-center h-full z-50"
+          >
+            {icon}
+          </div>
+        ) : (null)}
       </div>
-      {typeof error === "string" && (
-        <div className="text-red-500 text-sm mt-1">{error}</div>
-      )}
     </div>
   );
 }

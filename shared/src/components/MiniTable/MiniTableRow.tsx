@@ -11,7 +11,7 @@ export default function MiniTableRow({ children, ...rest }: MiniTableRowProps) {
     <tr
       {...rest}
       className={twMerge(
-        "px-2 py-2.5 min-h-[2.75rem] bg-white font-inter",
+        "px-2 py-2.5 text-primary text-base font-normal leading-5.5 tracking-tight-2 bg-white font-inter",
         rest.className
       )}
     >

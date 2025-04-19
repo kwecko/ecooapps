@@ -1,37 +1,49 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 
 interface ModalProps {
-  titleOpenModal?: string
-  titleContentModal?: string
-  contentModal?: string
-  titleConfirmModal?: string
-  titleCloseModal?: string
-  bgOpenModal?: string
-  bgConfirmModal?: string
-  bgCloseModal?: string
-  modalAction?: () => void
+  titleOpenModal?: string;
+  titleContentModal?: string;
+  contentModal?: string;
+  titleConfirmModal?: string;
+  titleCloseModal?: string;
+  bgOpenModal?: string;
+  bgConfirmModal?: string;
+  bgCloseModal?: string;
+  buttonOpenModal?: React.ReactNode;
+  isOpen?: boolean;
+  setIsOpen?: (value: boolean) => void;
+  modalAction?: () => void;
+  modalActionButton?: React.ReactNode;
 }
 
-export default function Modal({ 
-  titleOpenModal, 
-  titleContentModal, 
-  contentModal, 
+export default function Modal({
+  titleOpenModal,
+  titleContentModal,
+  contentModal,
   titleConfirmModal,
   titleCloseModal,
-  bgOpenModal, 
-  bgConfirmModal, 
+  bgOpenModal,
+  bgConfirmModal,
   bgCloseModal,
-  modalAction 
+  buttonOpenModal,
+  isOpen: externalIsOpen,
+  setIsOpen: externalSetIsOpen,
+  modalAction,
+  modalActionButton,
 }: ModalProps) {
-  let [isOpen, setIsOpen] = useState(false)
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen =
+    externalSetIsOpen !== undefined ? externalSetIsOpen : setInternalIsOpen;
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   function openModal() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
 
   const handleActionModal = () => {
@@ -41,17 +53,19 @@ export default function Modal({
 
   return (
     <>
-      <div className="w-full flex">
-        <button
-        style={{ backgroundColor: bgOpenModal }}
-          type="button"
-          onClick={openModal}
-          className={`rounded-md px-3 py-4 font-medium text-white w-full`}
-        >
-          {titleOpenModal}
-        </button>
-      </div>
-
+      {!titleOpenModal && buttonOpenModal}
+      {titleOpenModal && (
+        <div className="w-full flex">
+          <button
+            style={{ backgroundColor: bgOpenModal }}
+            type="button"
+            onClick={openModal}
+            className={`rounded-md px-3 py-4 font-medium text-white w-full`}
+          >
+            {titleOpenModal}
+          </button>
+        </div>
+      )}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -99,14 +113,17 @@ export default function Modal({
                     >
                       {titleCloseModal}
                     </button>
-                    <button
-                      style={{ backgroundColor: bgConfirmModal }}
-                      type="button"
-                      className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium`}
-                      onClick={handleActionModal}
-                    >
-                      {titleConfirmModal}
-                    </button>
+                    {!modalAction && modalActionButton}
+                    {modalAction && (
+                      <button
+                        style={{ backgroundColor: bgConfirmModal }}
+                        type="button"
+                        className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-3 py-4 font-medium focusable-button`}
+                        onClick={handleActionModal}
+                      >
+                        {titleConfirmModal}
+                      </button>
+                    )}
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
@@ -115,5 +132,5 @@ export default function Modal({
         </Dialog>
       </Transition>
     </>
-  )
+  );
 }

@@ -1,40 +1,85 @@
 "use client";
-import React, { ReactNode, createContext, useContext, useState } from "react";
+import { FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
+import { ReactNode, createContext, useContext, useState } from "react";
 
-export interface ProductCart {
-  id: string;
-  name: string;
-  price: number;
-  pricing: "UNIT" | "WEIGHT";
-  image: string;
+interface OrderSchema {
+  offer: OfferDTO;
+  farm: FarmDTO;
   amount: number;
-  description: string;
-  quantity: number;
-  offerId: string;
-  expandDescription?: boolean;
 }
 
 interface CartContextProps {
-  cart: ProductCart[];
-  setCart: (cart: ProductCart[] | []) => void
+  cart: OrderSchema[];
+  setCart: (cart: OrderSchema[]) => void;
+  addOrder: (order: OrderSchema) => void;
+  removeOrder: (offer_id: string) => void;
+  findOrderByOfferId: (offer_id: string) => OrderSchema | undefined;
+  updateOrderAmount: (offer_id: string, amount: number) => void;
 }
 
 const CartContext = createContext<CartContextProps>({
   cart: [],
   setCart: () => {},
+  addOrder: () => {},
+  removeOrder: () => {},
+  findOrderByOfferId: () => undefined,
+  updateOrderAmount: () => {},
 });
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState([] as ProductCart[] | []);
+  const [cart, setCart] = useState<OrderSchema[]>([]);
+
+  const addOrder = (order: OrderSchema) => {
+    setCart((prevCart) => {
+      const existingOrder = prevCart.find(
+        (item) => item.offer.id === order.offer.id
+      );
+      if (existingOrder) {
+        return prevCart.map((item) =>
+          item.offer.id === order.offer.id
+            ? { ...item, amount: item.amount + order.amount }
+            : item
+        );
+      } else {
+        return [...prevCart, order];
+      }
+    });
+  };
+
+  const removeOrder = (offer_id: string) => {
+    setCart((prevCart) =>
+      prevCart.filter((order) => order.offer.id !== offer_id)
+    );
+  };
+
+  const findOrderByOfferId = (offer_id: string): OrderSchema | undefined => {
+    return cart.find((order) => order.offer.id === offer_id);
+  };
+
+  const updateOrderAmount = (offer_id: string, amount: number) => {
+    setCart((prevCart) =>
+      prevCart.map((order) =>
+        order.offer.id === offer_id ? { ...order, amount } : order
+      )
+    );
+  };
 
   return (
-    <CartContext.Provider value={{ cart, setCart }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        setCart,
+        addOrder,
+        removeOrder,
+        findOrderByOfferId,
+        updateOrderAmount,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
 }
 
 export function useCartProvider() {
-  const context = useContext(CartContext);
-  return context;
+  return useContext(CartContext);
 }

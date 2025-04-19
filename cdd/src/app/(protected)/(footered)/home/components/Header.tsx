@@ -1,62 +1,51 @@
 "use client";
 
-import { getUser } from "@shared/_actions/account/get-user"
-import { useHandleError } from "@shared/hooks/useHandleError";
 import SkeletonLoader from "@shared/components/SkeletonLoader";
-import Link from "next/link";
-import { useEffect, useState } from "react";
+
+import { useRouter } from "next/navigation";
 import { HiOutlineBell } from "react-icons/hi";
-import { toast } from "sonner";
+
+import useFetchProfile from "@shared/hooks/users/useFetchProfile";
 
 export function Header() {
-  const [name, setName] = useState('');
-  const [isLoading, setIsLoading] = useState(true)
+  const {
+    data: { first_name },
+    isLoading,
+  } = useFetchProfile();
 
-  const { handleError } = useHandleError()
+  const router = useRouter();
 
-  useEffect(() => {
-    (() => {
-      getUser()
-      .then((response) => {
-        if (response.message) {
-          const messageError = response.message;
-
-          handleError(messageError)
-        } else if (response.data) {
-          const { first_name, last_name } = response.data;
-          setName(`${first_name} ${last_name}`);
-          setIsLoading(false)
-        }
-      })
-      .catch((error) => {
-        toast.error(error)
-      })
-    })()
-  }, [])
+  const logout = () => {
+    router.push("/api/auth/logout");
+  };
 
   return (
-    <header className="flex items-center mb-4">
-      <span className="flex items-center gap-2 text-lg text-slate-gray">
+    <header className="w-full flex items-start justify-between px-3 text-lg leading-5.5 top-0 z-10 bg-theme-background pb-5.5">
+      <div className="flex-shrink">
         {isLoading ? (
-          <>
-            Olá, <SkeletonLoader />
-          </>
+          <SkeletonLoader />
         ) : (
-          <>
-            Olá , <strong className="font-semibold">{name}</strong>
-          </>
+          <span className="flex gap-1 items-center text-slate-gray">
+            Olá,{" "}
+            <strong className="font-semibold underline underline-offset-2">
+              {first_name}!
+            </strong>
+          </span>
         )}
-      </span>
-      <div className="flex ml-auto">
-        <button className="mr-4 text-xl md:text-2xl">
-          <HiOutlineBell />
+      </div>
+      <div className="flex gap-4.5">
+        <button disabled className="text-theme-primary">
+          <HiOutlineBell size={24} />
         </button>
-        <Link
-          href={"/api/auth/logout"}
-          className="text-theme-primary md:text-lg"
+        <button
+          onClick={logout}
+          title="Sair"
+          type="button"
+          aria-label="Sair"
+          className="pt-0.5 text-slate-gray"
         >
           Sair
-        </Link>
+        </button>
       </div>
     </header>
   );

@@ -1,110 +1,109 @@
 "use client";
-
-import { Catalog, Farm, fetchCatalogs } from "@consumer/app/_actions/fetch-catalogs";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { useInView } from 'react-intersection-observer';
-import { Cycle, fetchCycles } from "../../_actions/fetch-cycles";
+import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
 import RedirectCart from "@consumer/app/_components/redirectCart";
-export default function Produtores() {
+import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { CatalogDTO, CycleDTO } from "@shared/interfaces/dtos";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import ProducerCard from "./components/ProducerCard";
 
-  const [cycles, setcycle] = useState([] as Cycle[]);
-  const [cycleId, setCycleId] = useState('' as string);
+export default function Produtores() {
+  const [cycles, setCycles] = useState([] as CycleDTO[]);
+  const [cycleId, setCycleId] = useState("" as string);
   const [producers, setProducers] = useState([] as any[]);
   const [page, setPage] = useState(1 as number);
   const [isLoading, setIsLoading] = useState(true);
-  const { ref, inView } = useInView()
-
+  const { ref, inView } = useInView();
+  const { handleError } = useHandleError();
 
   useEffect(() => {
     (async () => {
-      setcycle(await fetchCycles());
+      try {
+        setIsLoading(true);
+        const response = await listCycles();
+        if (response.message) {
+          handleError(response.message as string);
+        } else if (response.data) {
+          const cycles: CycleDTO[] = response.data;
+          setCycles(cycles);
+        }
+      } catch {
+        handleError("Erro desconhecido.");
+      } 
     })();
   }, []);
-  
+
   const searchProducers = async () => {
+    const typeCycle = process.env.NEXT_PUBLIC_ENV
+      ? process.env.NEXT_PUBLIC_ENV === "dev" ||
+        process.env.NEXT_PUBLIC_ENV === "homolog"
+        ? "livre"
+        : "semanal"
+      : "livre";
 
-    const typeCycle = process.env.NEXT_PUBLIC_ENV == "dev" || process.env.NEXT_PUBLIC_ENV == "homolog" ? "livre" : "semanal";
-    
-    const cycleId = cycles.find(
-      (cycle) => cycle.alias.toLocaleLowerCase() == typeCycle
-    )?.id;
-
-    setCycleId(cycleId as string);
-
-    const catalogs: Catalog[] = await fetchCatalogs(cycleId, page);
-
-    let newProducers = catalogs.map((catalog) => {
-      return { id: catalog.id, name: catalog.farm.name, caf: catalog.farm.caf };
-    });
-
-    if(newProducers.length == 0){
-      setIsLoading(false)
-      return
+    const cycle = cycles.find(
+      (cycle) => cycle.alias.toLowerCase() == typeCycle
+    );
+    if (!cycle) {
+      setIsLoading(false);
+      return;
     }
 
-    setProducers((producers) => [...producers, ...newProducers])
-    setPage((page) => page + 1)
+    setCycleId(cycle.id as string);
+    localStorage.setItem("selected-cycle", JSON.stringify(cycle));
 
-  }
+    try {
+      const response = await searchCatalogs({
+        cycle_id: cycle.id as string,
+        page: page,
+      });
+      if (response.message) {
+        handleError(response.message as string);
+      } else if (response.data) {
+        const catalogs: CatalogDTO[] = response.data;
+        let newProducers = catalogs.map((catalog) => {
+          return catalog;
+        });
+
+        if (newProducers.length == 0) {
+          setIsLoading(false);
+          return;
+        }
+
+        setProducers((producers) => [...producers, ...newProducers]);
+        setPage((page) => page + 1);
+      }
+    } catch {
+      handleError("Erro desconhecido.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (inView) {
       searchProducers();
     }
-  }, [inView, cycles])
-
+  }, [inView, cycles]);
 
   return (
-    <>
-      <div className="flex flex-col h-full">
-        <div className="overflow-y-auto">
+    <div className="flex flex-col h-full">
+      <div className="overflow-y-auto">
         {producers && producers.length !== 0
           ? producers.map((producer) => {
               return (
-                <>
-                  <Link href={`/ofertas/${producer?.id}/${producer?.name}/${cycleId}`}>
-                    <div className="min-w-[350px] h-[100px] bg-[rgb(246,246,246)] flex rounded-2xl m-[10px]">
-                      <div className="flex w-20 h-20 ml-[10px] mt-[10px] mb-[10px] mr-[20px] bg-[#00735E] rounded-[11px]">
-                       <Image
-                          src={ producer.caf != "123456789" ? "/produtor.jpg" : "/produtor2.jpeg"}
-                          className="w-full h-full object-cover rounded-[10px]"
-                          width={80}
-                          height={80}
-                          alt={`produtor.jpg`}
-                          />
-                      </div>
-                      <div className="grow flex flex-col items-center justify-center min-h-20 mt-2 mb-2">
-                        <span className="w-full text-left font-poppins text-base text-[#2F4A4D]">
-                          {producer.name}
-                        </span>
-                      </div>
-                      <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
-                        <Image
-                          src="/arrow.png"
-                          alt="arrow"
-                          width={10}
-                          height={7}
-                        />
-                      </div>
-                    </div>
-                  </Link>
-                </>
+                <ProducerCard key={producer.id} {...producer}/>
               );
             })
           : null}
         <div>
-          { isLoading && cycles.length > 0 ?
-            <div ref={ref}>
-            </div>: null
-          }
+          {isLoading && cycles.length > 0 ? <div ref={ref}></div> : null}
         </div>
       </div>
-      <div className="min-h-[70px]">
-        <RedirectCart/>
+      <div className="min-h-17">
+        <RedirectCart />
       </div>
-      </div>
-    </>
+    </div>
   );
 }

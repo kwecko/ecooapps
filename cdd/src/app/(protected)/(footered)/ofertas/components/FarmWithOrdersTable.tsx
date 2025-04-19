@@ -1,184 +1,147 @@
 "use client";
 
-import { FaCheck, FaBoxOpen } from "react-icons/fa6";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { twMerge } from "tailwind-merge";
-import { toast } from "sonner";
-import Table from "./table";
-import StatusFilterButtons from "./StatusFilterButton";
-import { getBoxesWithOrders } from "@cdd/app/_actions/box/get-boxes-with-orders";
 
+import StatusFilterButtons from "@shared/components/StatusFilterButton";
+
+import EmptyBox from "@shared/components/EmptyBox";
 import Loader from "@shared/components/Loader";
-import { Boxes } from "@shared/interfaces/farm";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import SearchInput from "@shared/components/SearchInput";
 import { useDebounce } from "@shared/hooks/useDebounce";
-import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date"
+import { useGetStatus } from "@shared/hooks/useGetStatus";
+import { BagStatus } from "@shared/types/bag-status";
+import { getNextSaturdayDate } from "@shared/utils/get-next-saturday-date";
 
-interface FarmsProps {
-  page: number;
-}
+import useListBoxes from "@cdd/hooks/boxes/useListBoxes";
+import GenericTable from "@shared/components/GenericTable";
+import TablePaginationControl from "@shared/components/TablePaginationControl";
+import TableSearchInput from "@shared/components/TableSearchInput";
+import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { BoxDTO } from "@shared/interfaces/dtos";
 
-export interface IStatus {
+type FilterStatus = {
   name: string;
-  key: string;
-}
-
-const classes = {
-  header:
-    "truncate w-[30%] text-[#979797] font-inter border-b border-theme-background p-2 text-xs font-semibold text-center",
-  body: "border-b-[1px] truncate text-[#545F71] px-2 py-3",
+  key: string[];
 };
 
-export function FarmWithOrdersTable({ page }: FarmsProps) {
+const statuses: FilterStatus[] = [
+  { name: "todas", key: ["PENDING", "VERIFIED", "CANCELLED"] },
+  { name: "pendentes", key: ["PENDING"] },
+  { name: "verificadas", key: ["VERIFIED"] },
+  { name: "canceladas", key: ["CANCELLED"] },
+];
+
+export function FarmWithOrdersTable() {
   const router = useRouter();
 
-  const statuses: IStatus[] = [
-    {
-      name: "Todas",
-      key: "ALL",
-    },
-    {
-      name: "Pendentes",
-      key: "PENDING",
-    },
-    {
-      name: "Verificados",
-      key: "VERIFIED",
-    },
-    {
-      name: "Cancelados",
-      key: "CANCELLED",
-    },
-  ];
+  const { getStatus } = useGetStatus();
 
-  const [selectedStatus, setSelectedStatus] = useState("ALL");
-  const [isLoading, setIsLoading] = useState(false);
-  const [farms, setFarms] = useState<Boxes[]>([]);
-  const [farmsFiltered, setFarmFiltered] = useState<Boxes[]>([]);
-  const [name, setName] = useState("");
+  const searchParams = useSearchParams();
+  const selectedStatus = searchParams.get("status") ?? "todas";
+  const pathname = usePathname();
 
-  const { handleError } = useHandleError();
-  const { getFromStorage } = useLocalStorage();
-  const debounceSearch = useDebounce(name, 1000);
+  const { page, query } = usePageQueryParams();
+  const debounceSearch = useDebounce(query, 300);
 
-  const handleStatusFilterClick = (status: IStatus) => {
-    if (selectedStatus === status.key || status.key === "ALL") {
-      setSelectedStatus("ALL");
-      setFarmFiltered(farms);
+  const setSelectedStatus = (status: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("status", status);
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  const { data: boxes, isLoading } = useListBoxes({
+    page,
+    farm: debounceSearch,
+  });
+
+  const [filteredBoxes, setFilteredBoxes] = useState<BoxDTO[]>([] as BoxDTO[]);
+
+  useEffect(() => {
+    setFilteredBoxes(boxes);
+  }, [boxes]);
+
+  const handleStatusFilterClick = (status: FilterStatus) => {
+    if (status.name === selectedStatus) {
+      setSelectedStatus("todas");
       return;
     }
 
-    setFarmFiltered(() => farms.filter((item) => item.status === status.key));
-    setSelectedStatus(status.key);
+    const statusKey = status.key as BagStatus["offer"][];
+    const statusName = status.name;
+    setFilteredBoxes(() =>
+      boxes.filter((box) => statusKey.includes(box.status))
+    );
+
+    setSelectedStatus(statusName);
   };
-
-  useEffect(() => {
-    (() => {
-      setIsLoading(true);
-      const cycle = getFromStorage("selected-cycle");
-
-      if (!cycle) {
-        toast.error("Selecione um ciclo para ver os pedidos!");
-        return;
-      }
-
-      const { id } = cycle
-
-      getBoxesWithOrders({
-        cycle_id: id,
-        page,
-        name: debounceSearch,
-      })
-        .then((response: any) => {
-          if (response.message) {
-            const messageError = response.message as string;
-            handleError(messageError);
-          } else if (response.data) {
-            setFarms(response.data);
-            setFarmFiltered(response.data);
-          }
-        })
-        .catch(() => {
-          toast.error("Erro desconhecido.");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
-    })();
-  }, [page, debounceSearch]);
 
   const handleClick = (id: string) => {
     router.push(`/ofertas/${id}`);
   };
 
-  const getStatus = (status: "PENDING" | "CANCELLED" | "VERIFIED") => {
-    const colorStatus = {
-      PENDING: "bg-battleship-gray",
-      CANCELLED: "bg-error",
-      VERIFIED: "bg-rain-forest",
-    };
-
-    return (
-      <div
-        className={twMerge(
-          "flex justify-center items-center m-auto bg-rain-forest w-4 h-4 p-1 rounded-full",
-          `${colorStatus[status]}`
-        )}
-      >
-        {status === "VERIFIED" && <FaCheck color="white" />}
-      </div>
-    );
-  };
-
-  const headers = [
-    { label: "Prazo", style: "w-[30%]" },
-    { label: "Produtor", style: "w-1/2" },
-    { label: "Status", style: "w-1/5 text-center" },
-  ];
-
-  const info =
-    farmsFiltered.length > 0
-      ? farmsFiltered.map((farm) => ({
-          id: farm.id,
-          data: [
-            { detail: getNextSaturdayDate() }, // Prazo
-            { detail: farm.catalog.farm.name }, // Produtor
-            { detail: getStatus(farm.status) }, // Status
-          ],
-        }))
-      : [];
-
   return (
-    <div className="w-full h-full flex flex-col">
-      <div>
-        <div className="w-full flex gap-2 items-center mt-4 mb-4">
-          <SearchInput onChange={setName} />
-        </div>
+    <div className="flex flex-col overflow-y-auto gap-2.5 w-full items-center justify-between h-full">
+      <div className="w-full flex flex-col gap-2.5 justify-start items-center">
+        <TableSearchInput
+          placeholder={"Filtrar por produtor..."}
+          icon="search"
+          className="lg:self-end w-full"
+        />
         <StatusFilterButtons
           statuses={statuses}
           selectedStatus={selectedStatus}
-          handleStatusFilterClick={(status) => handleStatusFilterClick(status)}
+          handleStatusFilterClick={(status: FilterStatus) =>
+            handleStatusFilterClick(status)
+          }
         />
       </div>
 
       {isLoading && (
         <div className="flex justify-center mt-3">
-          <Loader className="mt-3" appId="CDD" loaderType="component" />
+          <Loader className="mt-3" loaderType="component" />
         </div>
       )}
-
-      {!isLoading && farmsFiltered.length === 0 && (
-        <div className="flex flex-col justify-center gap-1 items-center mt-3 text-slate-gray">
-          <FaBoxOpen className="text-walnut-brown" size={64} />
-          <span className="text-center">Nenhum pedido < br/> encontrado!</span>
-        </div>
-      )}
-
-      {!isLoading && farmsFiltered.length > 0 && (
-        <Table headers={headers} info={info} onRowClick={handleClick} />
+      {!isLoading && (
+        <>
+          {filteredBoxes?.length === 0 && (
+            <>
+              {debounceSearch && <EmptyBox type="search" />}
+              {!debounceSearch && <EmptyBox type="box" />}
+            </>
+          )}
+          {filteredBoxes?.length > 0 && (
+            <GenericTable
+              gridColumns={12}
+              columns={[
+                {
+                  header: "Prazo",
+                  key: "deadline",
+                  colSpan: 4,
+                  render: () => {
+                    return (
+                      <span className="h-11.5">{getNextSaturdayDate()}</span>
+                    );
+                  },
+                },
+                { header: "Produtor", key: "catalog.farm.name", colSpan: 6 },
+                {
+                  header: "Status",
+                  key: "status",
+                  colSpan: 2,
+                  className: "items-center justify-center w-full",
+                  render: (row: BoxDTO) =>
+                    getStatus({
+                      type: "oferta",
+                      status: row.status as BagStatus["offer"],
+                    }),
+                },
+              ]}
+              data={filteredBoxes}
+              onRowClick={(row) => handleClick(row.id)}
+            />
+          )}
+          <TablePaginationControl className="shrink-0" />
+        </>
       )}
     </div>
   );
