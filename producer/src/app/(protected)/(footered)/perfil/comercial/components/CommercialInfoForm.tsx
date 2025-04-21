@@ -8,9 +8,9 @@ import { set } from 'lodash';
 
 interface CommercialInfoFormProps {
   photo: string;
-  images: File[],
+  images: string[],
   setPhoto: React.Dispatch<React.SetStateAction<string>>;
-  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  setImages: React.Dispatch<React.SetStateAction<string[]>>;
   sendImage: (image: File) => Promise<void>;
   removeImage: (image: string) => Promise<void>;
   register: UseFormRegister<ChangeComercialRegistrationSchema>;
@@ -126,7 +126,7 @@ function CommercialInfoForm({ photo, images, setPhoto, setImages, sendImage, rem
                   id={`photo-${index}`}
                   key={index}
                   priority
-                  src={typeof images[index] === "string" ? images[index] : URL.createObjectURL(images[index]).toString()}
+                  src={typeof images[index] === "string" ? images[index] : URL.createObjectURL(images[index])}
                   alt="User"
                   width={80}
                   height={80}
