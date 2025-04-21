@@ -8,9 +8,9 @@ import { set } from 'lodash';
 
 interface CommercialInfoFormProps {
   photo: string;
-  images: File[],
+  images: string[],
   setPhoto: React.Dispatch<React.SetStateAction<string>>;
-  setImages: React.Dispatch<React.SetStateAction<File[]>>;
+  setImages: React.Dispatch<React.SetStateAction<string[]>>;
   sendImage: (image: File) => Promise<void>;
   removeImage: (image: string) => Promise<void>;
   register: UseFormRegister<ChangeComercialRegistrationSchema>;
