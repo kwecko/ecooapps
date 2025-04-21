@@ -126,7 +126,7 @@ function CommercialInfoForm({ photo, images, setPhoto, setImages, sendImage, rem
                   id={`photo-${index}`}
                   key={index}
                   priority
-                  src={typeof images[index] === "string" ? images[index] : URL.createObjectURL(images[index])}
+                  src={typeof images[index] === "string" ? images[index] : URL.createObjectURL(images[index]).toString()}
                   alt="User"
                   width={80}
                   height={80}
