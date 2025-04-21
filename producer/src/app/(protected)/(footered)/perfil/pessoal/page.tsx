@@ -8,7 +8,7 @@ import { ModelPage } from "@shared/components/ModelPage";
 import Loader from "@shared/components/Loader";
 
 import PersonalInfoForm from "./components/PersonalInfoForm";
-import { useChangePersonalRegistrationForm } from "../components";
+import { useChangePersonalRegistrationForm } from "../components/ChangePersonalRegistrationForm/useChangePersonalRegistrationForm";
 
 export default function ProfilePage() {
   const {
