@@ -15,7 +15,7 @@ import {
 
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
-  const [imagesFile, setImages] = useState<string[]>([]);
+  const [imagesFile, setImages] = useState<string[] | File[]>([]);
   const [photo, setPhoto] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
