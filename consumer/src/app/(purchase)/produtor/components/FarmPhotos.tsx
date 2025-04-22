@@ -9,8 +9,10 @@ export default function FarmPhotos(images: string[] | null) {
 						<div className="w-full">
 							<Image
 								src={image}
-								width={100}
-								height={100}
+								width={0}
+								height={0}
+								sizes="100vw"
+								className="w-full h-auto"
 								alt={`${image}.jpg`}
 							/>
 						</div>
