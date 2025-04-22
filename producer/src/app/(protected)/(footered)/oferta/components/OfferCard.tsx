@@ -1,9 +1,9 @@
 import { OfferDTO } from "@shared/interfaces/dtos";
 import {
-  convertOfferAmount,
-  convertUnitFull,
+	convertOfferAmount,
+	convertUnitFull,
 } from "@shared/utils/convert-unit";
-import Image, { ImageLoader } from "next/image";
+import Image from "next/image";
 import React from "react";
 import DeleteOfferButton from "./DeleteOfferButton";
 import EditOfferButton from "./EditOfferButton";
