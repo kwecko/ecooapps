@@ -1,11 +1,8 @@
 import { CategoryDTO } from "@shared/interfaces/dtos";
-import Image, { ImageLoader } from "next/image";
+import Image from "next/image";
 import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
-const imageLoader: ImageLoader = ({ src }) => {
-  return `${src}`;
-};
 export default function CategoryCard(category: CategoryDTO) {
   return (
     <Link
@@ -21,7 +18,6 @@ export default function CategoryCard(category: CategoryDTO) {
 					<Image
 						className="rounded-xl w-20 h-20"
 						src={category.image ?? "category.jpg"}
-						loader={imageLoader}
 						width={80}
 						height={80}
 						alt={category.image ?? "category.jpg"}
