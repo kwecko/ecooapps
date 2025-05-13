@@ -27,12 +27,13 @@
     "chartjs-plugin-datalabels": "^2.2.0",
     "dayjs": "^1.11.12",
     "framer-motion": "^11.2.10",
+    "nodemon": "^3.1.0",
     "puppeteer": "^18.0.5",
-    "react": "^18.2.0",
+    "react": "18.2.0",
     "react-aria": "^3.27.0",
     "react-aria-components": "^1.0.0-alpha.6",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "18.2.0",
     "react-hook-form": "^7.46.1",
     "react-icons": "^4.10.1",
     "react-modal": "^3.16.1",
@@ -43,12 +44,11 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "@types/node": "20.4.10",
     "@types/react-modal": "^3.16.3",
+    "@types/node": "20.4.10",
     "autoprefixer": "10.4.15",
     "husky": "^9.0.11",
-    "next": "^13.4.13",
-    "nodemon": "^3.1.10",
+    "next": "13.4.13",
     "postcss": "8.4.27",
     "tsx": "^4.7.1"
   }
