@@ -1,16 +1,20 @@
 import {
   listBoxes as listBoxesAction,
   ListBoxesRequest,
-} from "@cdd/app/_actions/boxes/GET/list-boxes";
-import { useHandleError } from "@shared/hooks/useHandleError";
-import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { BoxDTO } from "@shared/interfaces/dtos";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+} from '@cdd/app/_actions/boxes/GET/list-boxes';
+import { useHandleError } from '@shared/hooks/useHandleError';
+import { useLocalStorage } from '@shared/hooks/useLocalStorage';
+import { BoxDTO } from '@shared/interfaces/dtos';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-interface UseListBoxesProps extends Omit<ListBoxesRequest, "cycle_id"> {}
+interface UseListBoxesProps {
+  page: number;
+  farm?: string;
+  since?: string;
+}
 
-export default function useListBoxes({ page, farm }: UseListBoxesProps) {
+export default function useListBoxes({ page, farm, since }: UseListBoxesProps) {
   const [data, setData] = useState<BoxDTO[]>([] as BoxDTO[]);
   const [isLoading, setIsLoading] = useState(false);
   const { handleError } = useHandleError();
@@ -18,10 +22,10 @@ export default function useListBoxes({ page, farm }: UseListBoxesProps) {
 
   const listBoxes = async () => {
     setIsLoading(true);
-    const cycle = getFromStorage("selected-cycle");
+    const cycle = getFromStorage('selected-cycle');
 
     if (!cycle) {
-      toast.error("Selecione um ciclo para ver os pedidos!");
+      toast.error('Selecione um ciclo para ver os pedidos!');
       return;
     }
 
@@ -31,6 +35,7 @@ export default function useListBoxes({ page, farm }: UseListBoxesProps) {
       page: page,
       farm: farm,
       cycle_id: id,
+      since: since,
     }).then((response) => {
       if (response.message) {
         handleError(response.message);
