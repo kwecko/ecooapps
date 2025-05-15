@@ -68,7 +68,7 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
         <ProductCard.Info>
           <ProductCard.InfoHeader>
 						<div className="flex flex-row items-center justify-between w-full">
-							<p className="text-left text-base leading-5 font-bold text-theme-home-bg truncate">
+							<p className="text-left text-base leading-5 font-bold text-theme-home-bg">
 								{offer.product.name}
 							</p>
 							{exclude && (
