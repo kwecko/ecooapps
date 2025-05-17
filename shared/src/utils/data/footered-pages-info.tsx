@@ -118,6 +118,23 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       redirectPath: "",
     },
   },
+  "/alterar-senha": {
+    hasPreviousPage: true,
+    returnPath: "/",
+    hasHelpButton: true,
+    helpInfo: {
+      title: "Alterar senha",
+      content: (
+        <p>
+          A tela de "Alterar senha" é um recurso essencial para atualizar a
+          senha da sua conta. Ao acessar essa tela, você insere a nova senha e
+          clica no botão "Alterar senha".
+        </p>
+      ),
+      closeButtonText: "Entendi",
+      redirectPath: "",
+    },
+  },
   "/sucesso": {
     hasPreviousPage: true,
     returnPath: "/",
@@ -219,7 +236,8 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       title: "Perfil Pessoal",
       content: (
         <p>
-          Aqui você pode acessar e editar as informações do seu perfil comercial.
+          Aqui você pode acessar e editar as informações do seu perfil
+          comercial.
         </p>
       ),
       closeButtonText: "Ok, entendi",
@@ -244,7 +262,7 @@ const producerFooteredPagesInfo: Record<string, FooteredPageInfo> = {
       content: "Aqui você pode encontrar informações sobre os termos de uso.",
       closeButtonText: "Fechar",
     },
-  }
+  },
 };
 
 const cddFooteredPagesInfo: Record<string, FooteredPageInfo> = {
