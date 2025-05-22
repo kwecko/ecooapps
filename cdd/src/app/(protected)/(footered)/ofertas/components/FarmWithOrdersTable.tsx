@@ -53,7 +53,7 @@ export function FarmWithOrdersTable() {
 
   const { getFromStorage } = useLocalStorage();
   const selectedCycle = getFromStorage('selected-cycle');
-  const startDate = first(selectedCycle.offer);
+  const startDate = first(selectedCycle.order);
 
   const formattedDDMMYYYY = startDate
     .toLocaleDateString('pt-BR', {
