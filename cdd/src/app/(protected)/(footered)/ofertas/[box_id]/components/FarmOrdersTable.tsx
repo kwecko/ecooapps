@@ -93,14 +93,11 @@ export default function FarmOrdersTable() {
     ],
   }));
 
-  const status =
-    farmOrders.verified === farmOrders.orders.length ? "VERIFIED" : "PENDING";
-
   return (
     <div className="w-full h-full flex flex-col justify-between gap-2 items-center">
       <HeaderDetail
         id={farmOrders?.id.split("-", 1).toString().toUpperCase()}
-        status={convertStatus(status).name}
+        status={convertStatus(farmOrders.status).name}
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
       />
