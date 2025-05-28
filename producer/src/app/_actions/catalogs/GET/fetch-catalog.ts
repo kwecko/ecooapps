@@ -1,29 +1,25 @@
 "use server";
 
-import ApiService from "@shared/service";
+import { fetchCurrentCatalog } from "./fetch-current-catalog";
+import { fetchLastCatalog } from "./fetch-last-catalog";
 
 interface FetchCatalogRequest {
-  farm_id?: string;
+  cycle_id: string;
+  type: "last" | "current";
+  before: string;
   page: number;
-  available?: boolean;
 }
 
 export async function fetchCatalog({
-  farm_id,
+  cycle_id,
+  type,
+  before,
   page,
-  available = true,
 }: FetchCatalogRequest) {
+  const types: Record<string, Function> = {
+    last: fetchLastCatalog,
+    current: fetchCurrentCatalog,
+  };
 
-  const params = new URLSearchParams();
-
-  params.append("page", page.toString());
-  params.append("available", available.toString());
-
-  if (farm_id) params.append("farm_id", farm_id);
-
-  const response = ApiService.GET({
-    url: `/catalogs?${params.toString()}`,
-  });
-
-  return response;
+  return types[type]({ cycle_id, page, before });
 }

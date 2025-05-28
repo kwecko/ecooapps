@@ -1,8 +1,8 @@
 "use client";
 
 import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
-import { fetchCatalogById } from "@producer/_actions/catalogs/GET/fetch-catalog-by-id";
 import Loader from "@shared/components/Loader";
+import { first } from '@shared/utils/first';
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogDTO, OfferDTO } from "@shared/interfaces/dtos";
@@ -43,7 +43,6 @@ export default function OffersList({
   const offerType = isOfferingDay ? "current" : null;
   const offerTypeRepeat = isOfferingDay ? "last" : null;
   const { handleError } = useHandleError();
-
   const LocalStorage = useLocalStorage();
 
   const cycle = useMemo(
@@ -61,11 +60,21 @@ export default function OffersList({
 
     const fetchListOffers = async () => {
       setIsLoading(true);
+      const firstDay = first(cycle.order);
+      const formattedDDMMYYYY = firstDay
+        .toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        })
+        .replace(/\//g, '-');
 
       try {
 
-        const response = await fetchCatalogById({
+        const response = await fetchCatalog({
           cycle_id: cycle.id,
+          type,
+          before: formattedDDMMYYYY,
           page,
         });
 
@@ -87,7 +96,7 @@ export default function OffersList({
       }
     };
     fetchListOffers();
-  }, [cycle, handleError, page, type]);
+  }, [cycle, handleError, type]);
 
   const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {
