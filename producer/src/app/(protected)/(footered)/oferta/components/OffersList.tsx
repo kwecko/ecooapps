@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
+import { fetchCatalogById } from "@producer/_actions/catalogs/GET/fetch-catalog-by-id";
 import Loader from "@shared/components/Loader";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
@@ -17,6 +18,7 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import OfferCard from "./OfferCard";
 import OfferListHeading from "./OfferListHeading";
+import { fetchUserFarm } from "@shared/_actions/farms/GET/fetch-user-farm";
 
 interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -62,11 +64,16 @@ export default function OffersList({
       setIsLoading(true);
 
       try {
-        const { id } = cycle;
 
-        const response = await fetchCatalog({
-          cycle_id: id as string,
-          type,
+        const { data: farm } = await fetchUserFarm();
+      
+        const { data: catalog } = await fetchCatalog({ 
+          farm_id: farm.id,
+          page: 1,
+        });
+
+        const response = await fetchCatalogById({
+          catalog_id: catalog[0].id as string,
           page,
         });
 
