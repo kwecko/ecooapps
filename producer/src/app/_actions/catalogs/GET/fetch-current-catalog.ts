@@ -12,7 +12,7 @@ export async function fetchCurrentCatalog({
   page = 1,
 }: FetchCurrentCatalogRequest) {
   const response = ApiService.GET({
-    url: `/catalogs/current?page=${page}&cycle_id=${cycle_id}`,
+    url: `/cycles/${cycle_id}/catalog?page=${page}&available=true`,
   });
   return response;
 }
