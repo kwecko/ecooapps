@@ -3,12 +3,14 @@
 import ApiService from "@shared/service";
 
 interface FetchCatalogByIdRequest {
-  catalog_id: string;
+  cycle_id: string;
+  before?: string;
   page: number;
 }
 
 export async function fetchCatalogById({
-  catalog_id,
+  cycle_id,
+  before,
   page,
 }: FetchCatalogByIdRequest) {
 
@@ -16,8 +18,10 @@ export async function fetchCatalogById({
 
   params.append("page", page.toString());
 
+  if (before) params.append("before", before);
+
   const response = ApiService.GET({
-    url: `/catalogs/${catalog_id}?${params.toString()}`,
+    url: `/cycles/${cycle_id}/catalog?${params.toString()}`,
   });
 
   return response;

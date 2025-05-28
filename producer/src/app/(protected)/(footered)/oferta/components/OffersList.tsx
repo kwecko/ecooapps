@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import { twMerge } from "tailwind-merge";
 import OfferCard from "./OfferCard";
 import OfferListHeading from "./OfferListHeading";
-import { fetchUserFarm } from "@shared/_actions/farms/GET/fetch-user-farm";
 
 interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -65,15 +64,8 @@ export default function OffersList({
 
       try {
 
-        const { data: farm } = await fetchUserFarm();
-      
-        const { data: catalog } = await fetchCatalog({ 
-          farm_id: farm.id,
-          page: 1,
-        });
-
         const response = await fetchCatalogById({
-          catalog_id: catalog[0].id as string,
+          cycle_id: cycle.id,
           page,
         });
 
