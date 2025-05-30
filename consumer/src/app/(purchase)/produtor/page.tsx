@@ -72,7 +72,7 @@ export default function Produtor() {
         </Link>
       </div>
 
-      <div className="p-5 text-left text-xs font-inter">
+      <div className="p-5 text-justify text-xs font-inter">
         {catalog.farm.description}
       </div>
 
