@@ -5,6 +5,7 @@ import { Control, UseFormRegister, UseFormGetValues, FieldErrors, Controller } f
 import { HiOutlineMinusCircle, HiOutlinePencil, HiOutlinePlusCircle } from "react-icons/hi";
 import { ChangeComercialRegistrationSchema } from '@shared/schemas/change-comercial-registration';
 import { set } from 'lodash';
+import ProfilePhotoEditor from './ProfilePhotoEditor';
 
 interface CommercialInfoFormProps {
   photo: string;
@@ -24,55 +25,12 @@ interface CommercialInfoFormProps {
 function CommercialInfoForm({ photo, images, setPhoto, setImages, sendImage, removeImage, register, errors, charCount, setCharCount, getValues, control }: CommercialInfoFormProps) {
   return (
     <div className="w-full flex flex-col items-center justify-center gap-5">
-      <div className="w-32.5 h-32.5 relative">
-        <Image
-          priority
-          src={photo || "/producer.jpeg"}
-          alt="Foto do produtor"
-          width={130}
-          height={130}
-          onError={(e) => {
-            e.currentTarget.src = "/producer.jpeg";
-          }}
-          className="rounded-full border border-theme-default object-cover aspect-square"
-        />
-        <div className="absolute w-7.5 h-7.5 bottom-0 right-0 bg-theme-primary bg-opacity-50 rounded-full cursor-pointer">
-          <label
-            htmlFor="photo-input"
-            className="cursor-pointer w-full h-full relative flex items-center justify-center"
-          >
-            <HiOutlinePencil className="text-white h-full w-full absolute top-0 left-0 p-1.25 cursor-pointer" />
-            <Controller
-              name="photo"
-              control={control}
-              render={({ field: { ref, name, onBlur, onChange } }) => (
-                <input
-                  id="photo-input"
-                  className="w-full h-full opacity-0 absolute"
-                  type="file"
-                  accept="image/png, image/jpeg"
-                  ref={ref}
-                  name={name}
-                  onBlur={onBlur}
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = URL.createObjectURL(file);
-                      setPhoto(url);
-                      onChange(file);
-                    }
-                  }}
-                />
-              )}
-            />
-          </label>
-        </div>
-      </div>
-      {errors.photo && (
-        <span className="text-red-500 text-sm font-semibold">
-          {typeof errors.photo?.message === "string" && errors.photo.message}
-        </span>
-      )}
+      <ProfilePhotoEditor
+        photo={photo}
+        setPhoto={setPhoto}
+        control={control}
+        errors={errors}
+      />
       <CustomInput
         register={{ ...register("name") }}
         placeholder="Nome comercial"
