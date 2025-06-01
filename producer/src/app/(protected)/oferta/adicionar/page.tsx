@@ -26,7 +26,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 6;
+  const maxStep = 5;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -98,7 +98,7 @@ export default function Home() {
             setAmount={(amount) => setOffer({ ...offer, amount: amount })}
           />
         )}
-        {currentStep === 3 && offer.product.perishable === false && (
+        {/* {currentStep === 3 && offer.product.perishable === false && (
           <InputExpirationDate
             handleNextStep={handleNextStep}
             expires_at={offer.expires_at}
@@ -106,18 +106,16 @@ export default function Home() {
               setOffer({ ...offer, expires_at: expires_at })
             }
           />
-        )}
-        {(currentStep === 3 && offer.product.perishable === true) ||
-        (currentStep === 4 && offer.product.perishable === false) ? (
+        )} */}
+        {currentStep === 3 && (
           <InputPrice
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
             pricing={offer.product.pricing}
             setPrice={(price) => setOffer({ ...offer, price: price })}
           />
-        ) : null}
-        {(currentStep === 4 && offer.product.perishable === true) ||
-        (currentStep === 5 && offer.product.perishable === false) ? (
+        )}
+        {currentStep === 4 && (
           <InputDescription
             handleNextStep={handleNextStep}
             description={offer.description ?? ""}
@@ -125,9 +123,8 @@ export default function Home() {
               setOffer({ ...offer, description: description })
             }
           />
-        ) : null}
-        {(currentStep === 5 && offer.product.perishable === true) ||
-        (currentStep === 6 && offer.product.perishable === false) ? (
+        )}
+        {currentStep === 5 && (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -138,7 +135,7 @@ export default function Home() {
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
             submitAction={submitOffer}
           />
-        ) : null}
+        )}
       </div>
       <div className="h-footer w-full">
         <div
