@@ -57,15 +57,22 @@ export default function Home() {
       return `${day}-${month}-${year}`;
     };
 
-    const success = await createOffer({
+    console.log(offer);
+
+    const offerPayload: any = {
       product_id: offer.product.id,
       amount:
-        offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
+      offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       description: offer.description ?? undefined,
-      comment: offer.comment ?? undefined,
       expires_at: formatDate(offer.expires_at),
-    });
+    };
+
+    if (offer.comment) {
+      offerPayload.comment = offer.comment;
+    }
+
+    const success = await createOffer(offerPayload);
     if (!success) return;
     toast.success("Oferta cadastrada com sucesso");
     router.push("/oferta");

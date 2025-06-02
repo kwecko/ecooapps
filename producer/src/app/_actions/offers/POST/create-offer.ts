@@ -8,7 +8,7 @@ export interface CreateOfferRequest {
   amount: number;
   price: number;
   description?: string;
-  comment?: string;
+  comment?: string | undefined;
   expires_at?: string;
 }
 
