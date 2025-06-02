@@ -81,19 +81,25 @@ export default function Home() {
 
   const onUpdateOffer = async () => {
     try {
+      const data: any = {
+        amount:
+          offer.product.pricing === "UNIT"
+        ? offer.amount
+        : offer.amount * 1000,
+        price: offer.price,
+        description: offer.description ?? undefined,
+        expires_at: formatDate(offer.expires_at),
+      };
+
+      if (offer.comment) {
+        data.comment = offer.comment;
+      }
+
       const response = await updateOffer({
         offer_id: offer.id,
-        data: {
-          amount:
-            offer.product.pricing === "UNIT"
-              ? offer.amount
-              : offer.amount * 1000,
-          price: offer.price,
-          description: offer.description ?? undefined,
-          comment: offer.comment ?? undefined,
-          expires_at: formatDate(offer.expires_at)
-        },
+        data,
       });
+      console.log(offer)
       if (response.message) {
         handleError(response.message as string);
         return;
