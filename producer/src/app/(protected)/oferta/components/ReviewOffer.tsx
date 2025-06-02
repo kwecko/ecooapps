@@ -16,6 +16,7 @@ interface ReviewOfferProps {
   expires_at: Date | undefined;
   submitAction: () => void;
   description?: string;
+  comment?: string;
 }
 
 export default function ReviewOffer(props: ReviewOfferProps) {
@@ -54,6 +55,10 @@ export default function ReviewOffer(props: ReviewOfferProps) {
     {
       header: "Descrição:",
       content: props.description || "Sem descrição",
+    },
+    {
+      header: "Comentário:",
+      content: props.comment || "Sem comentário",
     },
   ];
 
