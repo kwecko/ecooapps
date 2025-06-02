@@ -21,7 +21,8 @@ export default function InputDescription({
 }: InputDescriptionProps) {
   const { title, subtitle } = pageSettings.description;
 
-  const charCount = description.length;
+  const charCountDescription = description.length;
+  const charCountComment = comment.length;
 
   const handleChangeDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setDescription(e.target.value);
@@ -76,7 +77,7 @@ export default function InputDescription({
           placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
 Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/200`}
+        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountDescription}/200`}
         </p>
       </div>
 
@@ -91,7 +92,7 @@ Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Prod
           className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-36"
           placeholder="Deixe aqui algum comentário para o time interno da e-COO. Ex.: Produto fornecido pelo produtor Fulano."
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/200`}
+        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountComment}/200`}
         </p>
       </div>
     </ModelPage>
