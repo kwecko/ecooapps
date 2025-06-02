@@ -90,6 +90,7 @@ export default function Home() {
               : offer.amount * 1000,
           price: offer.price,
           description: offer.description ?? undefined,
+          comment: offer.comment ?? undefined,
           expires_at: formatDate(offer.expires_at)
         },
       });
@@ -156,6 +157,10 @@ export default function Home() {
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
+                comment={offer.comment ?? ""}
+                setComment={(comment) =>
+                  setOffer({ ...offer, comment: comment })
+                }
               />
             )}
             {currentStep === 4 && (
@@ -165,6 +170,7 @@ export default function Home() {
                 amount={offer.amount ?? 0}
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
+                comment={offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 submitAction={onUpdateOffer}

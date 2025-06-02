@@ -6,13 +6,15 @@ import { fetchLastCatalog } from "./fetch-last-catalog";
 interface FetchCatalogRequest {
   cycle_id: string;
   type: "last" | "current";
-  before: string;
+  since?: string;
+  before?: string;
   page: number;
 }
 
 export async function fetchCatalog({
   cycle_id,
   type,
+  since,
   before,
   page,
 }: FetchCatalogRequest) {
@@ -21,5 +23,5 @@ export async function fetchCatalog({
     current: fetchCurrentCatalog,
   };
 
-  return types[type]({ cycle_id, page, before });
+  return types[type]({ cycle_id, page, before, since });
 }
