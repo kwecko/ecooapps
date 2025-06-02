@@ -42,6 +42,7 @@ export default function Ofertas() {
       const response = await fetchCatalog({
         catalog_id: params.id as string,
         page: page,
+				available: true,
       });
       if (response.message) {
         handleError(response.message as string);
