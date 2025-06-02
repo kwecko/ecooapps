@@ -60,8 +60,13 @@ export default function OffersList({
 
     const fetchListOffers = async () => {
       setIsLoading(true);
-      const firstDay = first(cycle.order);
-      const formattedDDMMYYYY = firstDay
+
+      const today = new Date();
+      const sunday = new Date(today);
+      sunday.setDate(today.getDate() - today.getDay());
+      sunday.setHours(0, 0, 0, 0);
+      
+      const formattedDDMMYYYY = sunday
         .toLocaleDateString('pt-BR', {
           day: '2-digit',
           month: '2-digit',
@@ -74,6 +79,7 @@ export default function OffersList({
         const response = await fetchCatalog({
           cycle_id: cycle.id,
           type,
+          since: formattedDDMMYYYY,
           before: formattedDDMMYYYY,
           page,
         });
