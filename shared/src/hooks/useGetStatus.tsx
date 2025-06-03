@@ -9,15 +9,15 @@ type GetStatusType = "oferta" | "montar" | "enviar" | "farm";
 
 export type OfertaStatus = Array<"PENDING" | "CANCELLED" | "VERIFIED">;
 type FarmStatus = "ACTIVE" | "INACTIVE" | "PENDING";
-export type MontarStatus = Array<"PENDING" | "SEPARATED">;
+export type MontarStatus = Array<"VERIFIED" | "MOUNTED">;
 export type EnviarStatus = Array<
-  "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
+  "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
 >;
 
 export type StatusMap = {
   oferta: "PENDING" | "CANCELLED" | "VERIFIED";
-  montar: "PENDING" | "SEPARATED";
-  enviar: "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
+  montar: "VERIFIED" | "MOUNTED";
+  enviar: "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
   farm: FarmStatus;
 };
 
@@ -54,17 +54,17 @@ export function useGetStatus() {
       },
     },
     montar: {
-      PENDING: {
+      VERIFIED: {
         content: <HiDotsHorizontal size={10} color="white" />,
         color: "bg-walnut-brown",
       },
-      SEPARATED: {
+      MOUNTED: {
         content: <FaCheck className="p-1" color="white" />,
         color: "bg-rain-forest",
       },
     },
     enviar: {
-      SEPARATED: {
+      MOUNTED: {
         content: <FaExclamation size={10} color="white" />,
         color: "bg-battleship-gray",
       },
