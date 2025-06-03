@@ -4,7 +4,7 @@ import ApiService from "@shared/service";
 
 export interface HandleBagRequest {
   bag_id: string;
-  status: "PENDING" | "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
+  status: "PENDING" | "VERIFIED" | "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
 }
 
 export async function handleBag({ bag_id, status }: HandleBagRequest) {

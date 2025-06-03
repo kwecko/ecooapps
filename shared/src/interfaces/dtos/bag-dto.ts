@@ -10,9 +10,10 @@ export interface BagDTO {
   id: string;
   status:
     | "PENDING"
+    | "VERIFIED"
+    | "MOUNTED"
     | "CANCELLED"
     | "RECEIVED"
-    | "SEPARATED"
     | "DISPATCHED"
     | "DEFERRED";
   paid: boolean;

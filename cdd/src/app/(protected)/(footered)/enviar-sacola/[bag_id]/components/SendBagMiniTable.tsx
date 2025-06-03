@@ -72,12 +72,12 @@ export default function SendBagMiniTable() {
           <HeaderDetail
             id={bag.id}
             status={
-              currentStatus === "SEPARATED"
+              currentStatus === "MOUNTED"
                 ? convertStatus(bag.status)?.name
                 : undefined
             }
             selectStatus={
-              currentStatus !== "SEPARATED" ? (
+              currentStatus !== "MOUNTED" ? (
                 <div className="w-[110px]">
                   <SelectInput
                     placeholder="Selecione o status"
@@ -101,7 +101,7 @@ export default function SendBagMiniTable() {
           />
           <TablePaginationControl />
           <div className="w-full h-[15%] flex justify-center items-end">
-            {bag.status === "SEPARATED" ? (
+            {bag.status === "MOUNTED" ? (
               <Modal
                 titleOpenModal="Marcar como enviada"
                 titleContentModal="Você tem certeza?"

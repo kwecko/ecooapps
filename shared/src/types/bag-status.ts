@@ -1,11 +1,11 @@
 export type BagStatus = {
   offer: "PENDING" | "CANCELLED" | "VERIFIED";
-  build: "PENDING" | "SEPARATED";
-  send: "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
+  build: "VERIFIED" | "MOUNTED";
+  send: "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
 };
 
 export type SendStatus = Array<
-  "SEPARATED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
+  "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
 >;
-export type BuildStatus = Array<"PENDING" | "SEPARATED">;
+export type BuildStatus = Array<"VERIFIED" | "MOUNTED">;
 export type OfferStatus = Array<"PENDING" | "CANCELLED" | "VERIFIED">;
