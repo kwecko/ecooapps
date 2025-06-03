@@ -21,8 +21,8 @@ type FilterStatus = {
 };
 
 const statuses: FilterStatus[] = [
-  { name: "todas", key: ["SEPARATED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
-  { name: "separadas", key: ["SEPARATED"] },
+  { name: "todas", key: ["MOUNTED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
+  { name: "separadas", key: ["MOUNTED"] },
   { name: "enviadas", key: ["DISPATCHED"] },
   { name: "entregues", key: ["RECEIVED"] },
   { name: "retornadas", key: ["DEFERRED"] },
@@ -136,8 +136,8 @@ export default function SendBagTable() {
                   className: "items-center justify-center w-full",
                   render: (row: BagDTO) =>
                     getStatus({
-                      type: "montar",
-                      status: row.status as BagStatus["build"],
+                      type: "enviar",
+                      status: row.status as BagStatus["send"],
                     }),
                 },
               ]}
