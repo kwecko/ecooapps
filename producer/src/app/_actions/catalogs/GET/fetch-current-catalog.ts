@@ -17,7 +17,6 @@ export async function fetchCurrentCatalog({
   const params = new URLSearchParams();
 
   params.append("page", page.toString());
-  params.append("available", "true");
   if (since) params.append("since", since);
 
   const response = ApiService.GET({
