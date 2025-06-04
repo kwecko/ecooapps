@@ -22,9 +22,9 @@ type FilterStatus = {
 };
 
 const statuses: FilterStatus[] = [
-  { name: "todas", key: ["PENDING", "SEPARATED"] },
-  { name: "pendentes", key: ["PENDING"] },
-  { name: "separadas", key: ["SEPARATED"] },
+  { name: "todas", key: ["VERIFIED", "MOUNTED"] },
+  { name: "pendentes", key: ["VERIFIED"] },
+  { name: "separadas", key: ["MOUNTED"] },
 ];
 
 export default function BagsTable() {

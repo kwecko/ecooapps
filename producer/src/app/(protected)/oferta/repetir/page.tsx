@@ -31,7 +31,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 5;
+  const maxStep = 4;
 
   useEffect(() => {
     setIsLoading(true);
@@ -91,6 +91,7 @@ export default function Home() {
         offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       description: offer.description ?? undefined,
+      comment: offer.comment ?? undefined,
       expires_at: formatDate(offer.expires_at),
     });
     if (!success) return;
@@ -124,46 +125,48 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {currentStep === 2 && offer.product.perishable === false && (
+            {/* {currentStep === 2 && offer.product.perishable === false && (
               <InputExpirationDate
                 handleNextStep={handleNextStep}
                 expires_at={offer.expires_at}
                 setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at: expires_at })
                 }
               />
-            )}
-            {(currentStep === 2 && offer.product.perishable === true) ||
-            (currentStep === 3 && offer.product.perishable === false) ? (
+            )} */}
+            {currentStep === 2 && (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
                 pricing={offer.product.pricing}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
               />
-            ) : null}
-            {(currentStep === 3 && offer.product.perishable === true) ||
-            (currentStep === 4 && offer.product.perishable === false) ? (
+            )}
+            {currentStep === 3 && (
               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
+                comment={offer.comment ?? ""}
+                setComment={(comment) =>
+                  setOffer({ ...offer, comment: comment })
+                }
               />
-            ) : null}
-            {(currentStep === 4 && offer.product.perishable === true) ||
-            (currentStep === 5 && offer.product.perishable === false) ? (
+            )}
+            {currentStep === 4 && (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
                 amount={offer.amount ?? 0}
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
+                comment= {offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 submitAction={submitOffer}
               />
-            ) : null}
+            )}
           </div>
           <div className="h-footer w-full">
             <div

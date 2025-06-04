@@ -32,12 +32,12 @@ export default function BagMiniTable() {
 
   const handleStatusBag = (bag_id: string, status: BagStatus["build"]) => {
     const statusConfig = {
-      PENDING: {
-        nextStatus: "SEPARATED",
+      VERIFIED: {
+        nextStatus: "MOUNTED",
         successMessage: "Sacola preparada com sucesso!",
       },
-      SEPARATED: {
-        nextStatus: "PENDING",
+      MOUNTED: {
+        nextStatus: "VERIFIED",
         successMessage: "A sacola foi alterada com sucesso!",
       },
     };
@@ -77,7 +77,7 @@ export default function BagMiniTable() {
           />
           <TablePaginationControl />
           <div className="w-full h-[15%] flex justify-center items-end">
-            {bag?.status === "PENDING" ? (
+            {bag?.status === "VERIFIED" ? (
               <Modal
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao marcar a sacola como pronta, o cliente será notificado."
@@ -88,7 +88,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "PENDING");
+                  handleStatusBag(bag_id as string, "VERIFIED");
                 }}
               />
             ) : (
@@ -102,7 +102,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#FF7070"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "SEPARATED");
+                  handleStatusBag(bag_id as string, "MOUNTED");
                 }}
               />
             )}

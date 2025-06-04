@@ -7,6 +7,7 @@ export interface OfferDTO {
 	fee: number;
 	total: number;
   description: string | null;
+  comment: string | null;
   catalog_id: string;
   catalog: CatalogDTO;
   product_id: string;

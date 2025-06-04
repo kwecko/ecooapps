@@ -29,7 +29,7 @@ const pageSettings: { [key: string]: PageSettings } = {
   description: {
     title: "Descrição do produto",
     subtitle:
-      "Se existir alguma característica que você deseja informar ao consumidor, descreva aqui ou deixe em branco.",
+      "Insira informações adicionais ao seu produto ou deixe em branco.",
   },
   review: {
     title: "Revise as informações",
