@@ -4,20 +4,20 @@ import ApiService from "@shared/service";
 
 interface FetchLastCatalogRequest {
   cycle_id: string;
-  before?: string;
+  since?: string;
   page: number;
 }
 
 export async function fetchLastCatalog({
   cycle_id,
-  before,
+  since,
   page = 1,
 }: FetchLastCatalogRequest) {
 
   const params = new URLSearchParams();
   params.append("page", page.toString());
-  if (before) params.append("before", before);
-
+  params.append("available", "false");
+  if (since) params.append("since", since);
   const response = ApiService.GET({
     url: `/cycles/${cycle_id}/catalog?${params.toString()}`,
   });
