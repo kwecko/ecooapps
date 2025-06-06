@@ -4,8 +4,13 @@ import Link from "next/link";
 import { SlArrowRight } from "react-icons/sl";
 
 export default function ProducerCard(catalog: CatalogDTO) {
+
+	const setCatalogLocalStorage = () => {
+		localStorage.setItem(catalog.id, JSON.stringify(catalog));
+	};
+
   return (
-    <Link href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalog: catalog, title: catalog.farm.name }))}`}>
+    <Link onClick={setCatalogLocalStorage} href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalogId: catalog.id, title: catalog.farm.name }))}`}>
       <div className="flex items-center justify-between h-25 bg-theme-background rounded-2xl m-2.5">
 				<Image
 					className="rounded-xl w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5"
