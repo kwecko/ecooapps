@@ -43,7 +43,7 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
   
       const formattedInitialDate = formatDate(startDate);
       const formattedFinalDate = formatDate(endDate);
-          
+
       generateReport(name, id, formattedInitialDate, formattedFinalDate);
     });
   };

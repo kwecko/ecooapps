@@ -23,11 +23,11 @@ export function useReportGenerator() {
     ReportActions,
     (id: string, since?: string, before?: string) => Promise<any>
   > = {
-    "list-bags": (id: string) =>
-      printDeliveriesReport({ cycle_id: id, type: "pdf" }),
-    "list-bags-withdrawn": (id: string) =>
-      printDeliveriesReport({ cycle_id: id, withdraw: true, type: "pdf" }),
-    "cash-flow-cdd": (id: string) => printOffersReport({ cycle_id: id }),
+    "list-bags": (id: string, since?: string, before?: string) =>
+      printDeliveriesReport({ cycle_id: id, type: "pdf", since: since, before: before }),
+    "list-bags-withdrawn": (id: string, since?: string, before?: string) =>
+      printDeliveriesReport({ cycle_id: id, withdraw: true, type: "pdf", since: since, before: before }),
+    "cash-flow-cdd": (id: string, since?: string, before?: string) => printOffersReport({ cycle_id: id, since: since, before: before }),
     "list-offers": () => {
       return Promise.resolve();
     },
