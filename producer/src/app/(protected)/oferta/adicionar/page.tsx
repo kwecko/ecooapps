@@ -65,9 +65,12 @@ export default function Home() {
       amount:
       offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
-      description: offer.description ?? undefined,
       expires_at: formatDate(expiresAt),
     };
+
+    if (offer.description) {
+      offerPayload.description = offer.description;
+    }
 
     if (offer.comment) {
       offerPayload.comment = offer.comment;
