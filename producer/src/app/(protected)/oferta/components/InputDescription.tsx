@@ -35,7 +35,7 @@ export default function InputDescription({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (description.length > 100) {
+    if (description.length > 200) {
       toast.error("A descrição deve ter no máximo 200 caracteres.");
       return;
     }
@@ -70,14 +70,14 @@ export default function InputDescription({
           Descrição para o Consumidor
         </label>
         <textarea
-          maxLength={100}
+          maxLength={200}
           value={description}
           onChange={handleChangeDescription}
           className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-44"
           placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
 Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountDescription}/100`}
+        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountDescription}/200`}
         </p>
       </div>
 
