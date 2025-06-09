@@ -81,6 +81,16 @@ export default function Home() {
 
   const onUpdateOffer = async () => {
     try {
+      const formatDateToDDMMYYYY = (date: Date | undefined): string | undefined => {
+        if (!date) return undefined;
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) return undefined;
+        const day = String(parsedDate.getDate()).padStart(2, "0");
+        const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+        const year = parsedDate.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
+
       const data: any = {
         amount:
           offer.product.pricing === "UNIT"
@@ -88,7 +98,7 @@ export default function Home() {
         : offer.amount * 1000,
         price: offer.price,
         description: offer.description ?? undefined,
-        expires_at: formatDate(offer.expires_at),
+        expires_at: formatDateToDDMMYYYY(offer.expires_at),
       };
 
       if (offer.comment) {
@@ -99,7 +109,6 @@ export default function Home() {
         offer_id: offer.id,
         data,
       });
-      console.log(offer)
       if (response.message) {
         handleError(response.message as string);
         return;
