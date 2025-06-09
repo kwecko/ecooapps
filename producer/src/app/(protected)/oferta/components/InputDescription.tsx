@@ -73,7 +73,7 @@ export default function InputDescription({
           maxLength={100}
           value={description}
           onChange={handleChangeDescription}
-          className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-28"
+          className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-44"
           placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
 Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
         />
