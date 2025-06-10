@@ -25,15 +25,7 @@ export default function OfertasCategoria() {
 
 	const LocalStorage = useLocalStorage();
 
-	const cycle = useMemo(
-		() => LocalStorage.getFromStorage("selected-cycle"),
-		[]
-	);
-
-	// const cycleId = useMemo(
-	// 	() => LocalStorage.getFromStorage("cycle-id"),
-	// 	[]
-	// );
+	const cycle = useMemo(() => LocalStorage.getFromStorage("selected-cycle"),[]);
 
 	const searchOffers = async () => {
 		setIsLoading(true);
@@ -43,7 +35,8 @@ export default function OfertasCategoria() {
 			const response = await fetchCategory({
 				category_id: params.id as string,
 				cycle_id: cycle.id as string,
-				page: page
+				page: page,
+				available: true
 			});
 
 			if (response.message) {

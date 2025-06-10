@@ -6,15 +6,17 @@ interface FetchCategoryRequest {
   category_id: string;
 	cycle_id: string;
   page: number;
+	available: boolean;
 }
 
 export async function fetchCategory({
   category_id,
 	cycle_id,
-  page = 1
+  page,
+	available
 }: FetchCategoryRequest) {
   const response = ApiService.GET({
-    url: `/categories/${category_id}?page=${page}&cycle_id=${cycle_id}`,
+    url: `/categories/${category_id}?page=${page}&cycle_id=${cycle_id}&available=${available}`,
   });
   return response;
 }
