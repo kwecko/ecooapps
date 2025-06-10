@@ -26,7 +26,7 @@ export const changeComercialRegistrationSchema = z.object({
     .refine((value: string) => validateTally(value), {
       message: "Número do talão inválido.",
     }),
-  description: z.string().max(200).optional(),
+  description: z.string().max(500).optional(),
 });
 
 export type ChangeComercialRegistrationSchema = z.infer<typeof changeComercialRegistrationSchema>;
