@@ -85,6 +85,9 @@ export default function Home() {
       return `${day}-${month}-${year}`;
     };
 
+    const today = new Date();
+    const expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+
     const success = await createOffer({
       product_id: offer.product.id,
       amount:
@@ -92,7 +95,7 @@ export default function Home() {
       price: offer.price,
       description: offer.description ?? undefined,
       comment: offer.comment ?? undefined,
-      expires_at: formatDate(offer.expires_at),
+      expires_at: formatDate(expiresAt),
     });
     if (!success) return;
     toast.success("Oferta cadastrada com sucesso");
