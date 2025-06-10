@@ -6,7 +6,7 @@ import { CatalogDTO } from "@shared/interfaces/dtos";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiOutlinePhotograph, HiOutlineShoppingBag } from "react-icons/hi";
 import FarmPhotos from "./components/FarmPhotos";
 
@@ -16,10 +16,21 @@ export default function Produtor() {
 
   const [showPhotos, setShowPhotos] = useState(false);
 
-  const catalog: CatalogDTO = data
-    ? JSON.parse(decodeURIComponent(data as string)).catalog
+  const catalogId: string = data
+    ? JSON.parse(decodeURIComponent(data as string)).catalogId
     : null;
-
+	
+	const catalog: CatalogDTO = catalogId
+		? JSON.parse(localStorage.getItem(catalogId) as string): null
+	
+	useEffect(() => {
+			return () => {
+				if (catalogId) {
+					localStorage.removeItem(catalogId);
+				}
+			};
+		}, [catalogId]);
+		
   return (
     <div className="flex flex-col h-full">
       <div className="bg-slate-gray h-36"></div>
