@@ -60,8 +60,10 @@ export default function OffersList({
 
     const fetchListOffers = async () => {
       setIsLoading(true);
-      const firstDay = first(cycle.order);
-      const formattedDDMMYYYY = firstDay
+
+      const lastTypeSinceReference = first(cycle.offer);
+      lastTypeSinceReference.setDate(lastTypeSinceReference.getDate() - 7);
+      const formattedDDMMYYYY = lastTypeSinceReference
         .toLocaleDateString('pt-BR', {
           day: '2-digit',
           month: '2-digit',
@@ -74,7 +76,7 @@ export default function OffersList({
         const response = await fetchCatalog({
           cycle_id: cycle.id,
           type,
-          before: formattedDDMMYYYY,
+          since: formattedDDMMYYYY,
           page,
         });
 

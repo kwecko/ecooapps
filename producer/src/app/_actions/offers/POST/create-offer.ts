@@ -8,6 +8,7 @@ export interface CreateOfferRequest {
   amount: number;
   price: number;
   description?: string;
+  comment?: string | undefined;
   expires_at?: string;
 }
 
@@ -17,6 +18,7 @@ export async function createOffer({
   amount,
   price,
   description,
+  comment,
   expires_at,
 }: CreateOfferRequest) {
   const response = ApiService.POST({
@@ -27,6 +29,7 @@ export async function createOffer({
       amount,
       price,
       description,
+      comment,
       expires_at,
     },
   });

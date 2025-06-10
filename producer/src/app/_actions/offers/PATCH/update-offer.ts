@@ -8,6 +8,7 @@ export interface UpdateOfferRequest {
     amount?: number;
     price?: number;
     description?: string;
+    comment?: string;
     expires_at?: string;
   };
 }

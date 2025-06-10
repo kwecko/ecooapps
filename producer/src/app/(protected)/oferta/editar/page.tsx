@@ -81,17 +81,33 @@ export default function Home() {
 
   const onUpdateOffer = async () => {
     try {
+      const formatDateToDDMMYYYY = (date: Date | undefined): string | undefined => {
+        if (!date) return undefined;
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) return undefined;
+        const day = String(parsedDate.getDate()).padStart(2, "0");
+        const month = String(parsedDate.getMonth() + 1).padStart(2, "0");
+        const year = parsedDate.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
+
+      const data: any = {
+        amount:
+          offer.product.pricing === "UNIT"
+        ? offer.amount
+        : offer.amount * 1000,
+        price: offer.price,
+        description: offer.description ?? undefined,
+        expires_at: formatDateToDDMMYYYY(offer.expires_at),
+      };
+
+      if (offer.comment) {
+        data.comment = offer.comment;
+      }
+
       const response = await updateOffer({
         offer_id: offer.id,
-        data: {
-          amount:
-            offer.product.pricing === "UNIT"
-              ? offer.amount
-              : offer.amount * 1000,
-          price: offer.price,
-          description: offer.description ?? undefined,
-          expires_at: formatDate(offer.expires_at)
-        },
+        data,
       });
       if (response.message) {
         handleError(response.message as string);
@@ -156,6 +172,10 @@ export default function Home() {
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
+                comment={offer.comment ?? ""}
+                setComment={(comment) =>
+                  setOffer({ ...offer, comment: comment })
+                }
               />
             )}
             {currentStep === 4 && (
@@ -165,6 +185,7 @@ export default function Home() {
                 amount={offer.amount ?? 0}
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
+                comment={offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 submitAction={onUpdateOffer}

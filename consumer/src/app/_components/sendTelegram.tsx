@@ -19,7 +19,7 @@ export default function sendTelegram() {
 
   useEffect(() => {
     tg.MainButton.setParams({
-      text: "Fazer Pedido",
+      text: "Continuar Compra",
       color: "#00735E",
     });
   }, [tg]);
