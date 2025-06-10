@@ -91,14 +91,13 @@ export default function OffersList({
           setHasMore(dataOffers.offers.length > 0);
         }
       } catch {
-        console.log("Erro 2");
         handleError("Erro desconhecido.");
       } finally {
         setIsLoading(false);
       }
     };
     fetchListOffers();
-  }, [cycle, handleError, type]);
+  }, [cycle, handleError, type, page]);
 
   const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {
