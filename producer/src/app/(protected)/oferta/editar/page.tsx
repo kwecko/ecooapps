@@ -91,6 +91,12 @@ export default function Home() {
         return `${day}-${month}-${year}`;
       };
 
+      const today = new Date();
+      let expiresAt: Date | undefined = undefined;
+      if (!offer.product.perishable) {
+        expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+      }
+
       const data: any = {
         amount:
           offer.product.pricing === "UNIT"
@@ -98,7 +104,7 @@ export default function Home() {
         : offer.amount * 1000,
         price: offer.price,
         description: offer.description ?? undefined,
-        expires_at: formatDateToDDMMYYYY(offer.expires_at),
+        expires_at: formatDateToDDMMYYYY(expiresAt),
       };
 
       if (offer.comment) {

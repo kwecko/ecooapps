@@ -58,7 +58,10 @@ export default function Home() {
     };
 
     const today = new Date();
-    const expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+    let expiresAt: Date | undefined = undefined;
+    if (!offer.product.perishable) {
+      expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+    }
 
     const offerPayload: any = {
       product_id: offer.product.id,
