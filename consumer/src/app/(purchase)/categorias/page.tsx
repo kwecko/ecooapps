@@ -59,6 +59,7 @@ export default function Categorias() {
       const response = await searchCategories({
         cycle_id: cycle.id as string,
         page: page,
+				available: true
       });
       if (response.message) {
         handleError(response.message as string);

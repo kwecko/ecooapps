@@ -57,16 +57,20 @@ export default function Home() {
       return `${day}-${month}-${year}`;
     };
 
-    console.log(offer);
+    const today = new Date();
+    const expiresAt = new Date(today.setMonth(today.getMonth() + 6));
 
     const offerPayload: any = {
       product_id: offer.product.id,
       amount:
       offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
-      description: offer.description ?? undefined,
-      expires_at: formatDate(offer.expires_at),
+      expires_at: formatDate(expiresAt),
     };
+
+    if (offer.description) {
+      offerPayload.description = offer.description;
+    }
 
     if (offer.comment) {
       offerPayload.comment = offer.comment;
@@ -106,15 +110,6 @@ export default function Home() {
             setAmount={(amount) => setOffer({ ...offer, amount: amount })}
           />
         )}
-        {/* {currentStep === 3 && offer.product.perishable === false && (
-          <InputExpirationDate
-            handleNextStep={handleNextStep}
-            expires_at={offer.expires_at}
-            setExpiresAt={(expires_at) =>
-              setOffer({ ...offer, expires_at: expires_at })
-            }
-          />
-        )} */}
         {currentStep === 3 && (
           <InputPrice
             handleNextStep={handleNextStep}

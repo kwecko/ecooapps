@@ -40,7 +40,7 @@ export default function InputDescription({
       return;
     }
 
-    if (comment.length > 200) {
+    if (comment.length > 100) {
       toast.error("O comentário deve ter no máximo 200 caracteres.");
       return;
     }
@@ -65,7 +65,7 @@ export default function InputDescription({
         </Button>
       }
     >
-      <div className="w-full h-full relative flex flex-col text-slate-gray pt-5">
+      <div className="w-full relative flex flex-col text-slate-gray pt-5">
         <label className="text-sm inter-font font-normal text-theme-primary pb-2">
           Descrição para o Consumidor
         </label>
@@ -73,7 +73,7 @@ export default function InputDescription({
           maxLength={200}
           value={description}
           onChange={handleChangeDescription}
-          className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-56"
+          className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-44"
           placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
 Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
         />
@@ -82,19 +82,20 @@ Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Prod
       </div>
 
       <div className="w-full h-full relative flex flex-col text-slate-gray">
-        <label className="text-sm inter-font font-normal text-theme-primary pb-2">
+        <label className="text-sm inter-font font-normal text-theme-primary">
           Comentário para o time interno e-COO
         </label>
         <textarea
-          maxLength={200}
+          maxLength={100}
           value={comment}
           onChange={handleChangeComment}
-          className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-36"
+          className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-28"
           placeholder="Deixe aqui algum comentário para o time interno da e-COO. Ex.: Produto fornecido pelo produtor Fulano."
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountComment}/200`}
+        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountComment}/100`}
         </p>
       </div>
+      
     </ModelPage>
   );
 }
