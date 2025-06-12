@@ -31,6 +31,11 @@ const pageSettings: { [key: string]: PageSettings } = {
     subtitle:
       "Insira informações adicionais ao seu produto ou deixe em branco.",
   },
+  comment: {
+    title: "Comentário do produto",
+    subtitle:
+      "Insira informações adicionais que serão vistas apenas pelo time do e-COO.",
+  },
   review: {
     title: "Revise as informações",
     subtitle:

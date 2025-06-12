@@ -11,6 +11,7 @@ import {
   InputPrice,
   InputDescription,
   ReviewOffer,
+  InputComment,
 } from "../components";
 
 import { toast } from "sonner";
@@ -31,7 +32,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 4;
+  const maxStep = 5;
 
   useEffect(() => {
     setIsLoading(true);
@@ -128,14 +129,6 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {/* {currentStep === 2 && offer.product.perishable === false && (
-              <InputExpirationDate
-                handleNextStep={handleNextStep}
-                expires_at={offer.expires_at}
-                setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at: expires_at })
-                }
-              />
-            )} */}
             {currentStep === 2 && (
               <InputPrice
                 handleNextStep={handleNextStep}
@@ -151,13 +144,18 @@ export default function Home() {
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
+              />
+            )}
+            {currentStep === 4 && (
+              <InputComment
+                handleNextStep={handleNextStep}
                 comment={offer.comment ?? ""}
                 setComment={(comment) =>
                   setOffer({ ...offer, comment: comment })
                 }
               />
             )}
-            {currentStep === 4 && (
+            {currentStep === 5 && (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
