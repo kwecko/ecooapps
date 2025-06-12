@@ -9,9 +9,9 @@ import { LuChevronLeft, LuX } from "react-icons/lu";
 import { toast } from "sonner";
 import {
   InputAmount,
-  InputExpirationDate,
   InputPrice,
   InputDescription,
+  InputComment,
   RenderProducts,
   ReviewOffer,
 } from "../components";
@@ -26,7 +26,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 5;
+  const maxStep = 6;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -128,13 +128,18 @@ export default function Home() {
             setDescription={(description) =>
               setOffer({ ...offer, description: description })
             }
+          />
+        )}
+        {currentStep === 5 && (
+          <InputComment
+            handleNextStep={handleNextStep}
             comment={offer.comment ?? ""}
             setComment={(comment) =>
               setOffer({ ...offer, comment: comment })
             }
           />
         )}
-        {currentStep === 5 && (
+        {currentStep === 6 && (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}

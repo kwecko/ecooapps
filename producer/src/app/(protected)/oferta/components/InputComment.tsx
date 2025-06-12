@@ -4,30 +4,30 @@ import { ModelPage } from "@shared/components/ModelPage";
 
 import pageSettings from "./page-settings";
 
-interface InputDescriptionProps {
+interface InputCommentProps {
   handleNextStep: () => void;
-  description: string;
-  setDescription: (description: string) => void;
+  comment: string;
+  setComment: (comment: string) => void;
 }
 
-export default function InputDescription({
+export default function InputComment({
   handleNextStep,
-  description,
-  setDescription,
-}: InputDescriptionProps) {
-  const { title, subtitle } = pageSettings.description;
+  comment,
+  setComment,
+}: InputCommentProps) {
+  const { title, subtitle } = pageSettings.comment;
 
-  const charCount = description.length;
+  const charCount = comment.length;
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setDescription(e.target.value);
+    setComment(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (description.length > 200) {
-      toast.error("A descrição deve ter no máximo 200 caracteres.");
+    if (comment.length > 200) {
+      toast.error("O comentário deve ter no máximo 200 caracteres.");
       return;
     }
 
@@ -53,15 +53,14 @@ export default function InputDescription({
     >
       <div className="w-full h-full relative flex flex-col text-slate-gray pt-5">
         <label className="text-sm inter-font font-normal text-theme-primary pb-2">
-          Descrição para o Consumidor
+          Comentário para o time interno e-COO
         </label>
         <textarea
           maxLength={200}
-          value={description}
+          value={comment}
           onChange={handleChange}
           className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-48"
-          placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
-Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
+          placeholder="Deixe aqui algum comentário para o time interno da e-COO. Ex.: Produto fornecido pelo produtor Fulano."
         />
         <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/200`}
         </p>
