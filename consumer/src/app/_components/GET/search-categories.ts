@@ -5,14 +5,16 @@ import ApiService from "@shared/service";
 interface SearchCategoriesRequest {
 	cycle_id: string;
 	page: number;
+	available: boolean;
 }
 
 export async function searchCategories({
 	cycle_id,
-	page
+	page,
+	available
 }: SearchCategoriesRequest) {
 	const response = ApiService.GET({
-		url: `/categories?page=${page}&cycle_id=${cycle_id}`,
+		url: `/categories?page=${page}&cycle_id=${cycle_id}&available=${available}`,
 	});
 	return response;
 }

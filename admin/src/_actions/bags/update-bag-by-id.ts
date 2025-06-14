@@ -7,7 +7,7 @@ interface UpdateBagByIdRequest {
   data: {
     status?:
       | "PENDING"
-      | "SEPARATED"
+      | "MOUNTED"
       | "DISPATCHED"
       | "RECEIVED"
       | "CANCELLED"

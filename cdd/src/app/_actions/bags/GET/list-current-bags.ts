@@ -4,7 +4,8 @@ import ApiService from "@shared/service";
 
 type BagStatus =
   | "PENDING"
-  | "SEPARATED"
+  | "VERIFIED"
+  | "MOUNTED"
   | "DISPATCHED"
   | "RECEIVED"
   | "DEFERRED"

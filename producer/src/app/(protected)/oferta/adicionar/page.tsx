@@ -57,14 +57,26 @@ export default function Home() {
       return `${day}-${month}-${year}`;
     };
 
-    const success = await createOffer({
+    const today = new Date();
+    const expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+
+    const offerPayload: any = {
       product_id: offer.product.id,
       amount:
-        offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
+      offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
-      description: offer.description ?? undefined,
-      expires_at: formatDate(offer.expires_at),
-    });
+      expires_at: formatDate(expiresAt),
+    };
+
+    if (offer.description) {
+      offerPayload.description = offer.description;
+    }
+
+    if (offer.comment) {
+      offerPayload.comment = offer.comment;
+    }
+
+    const success = await createOffer(offerPayload);
     if (!success) return;
     toast.success("Oferta cadastrada com sucesso");
     router.push("/oferta");
@@ -98,15 +110,6 @@ export default function Home() {
             setAmount={(amount) => setOffer({ ...offer, amount: amount })}
           />
         )}
-        {/* {currentStep === 3 && offer.product.perishable === false && (
-          <InputExpirationDate
-            handleNextStep={handleNextStep}
-            expires_at={offer.expires_at}
-            setExpiresAt={(expires_at) =>
-              setOffer({ ...offer, expires_at: expires_at })
-            }
-          />
-        )} */}
         {currentStep === 3 && (
           <InputPrice
             handleNextStep={handleNextStep}
@@ -122,6 +125,10 @@ export default function Home() {
             setDescription={(description) =>
               setOffer({ ...offer, description: description })
             }
+            comment={offer.comment ?? ""}
+            setComment={(comment) =>
+              setOffer({ ...offer, comment: comment })
+            }
           />
         )}
         {currentStep === 5 && (
@@ -131,6 +138,7 @@ export default function Home() {
             amount={offer.amount ?? 0}
             price={offer.price ?? 0}
             description={offer.description ?? ""}
+            comment={offer.comment ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
             submitAction={submitOffer}

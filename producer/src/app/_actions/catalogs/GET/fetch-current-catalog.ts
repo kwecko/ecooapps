@@ -11,8 +11,14 @@ export async function fetchCurrentCatalog({
   cycle_id,
   page = 1,
 }: FetchCurrentCatalogRequest) {
+
+  const params = new URLSearchParams();
+
+  params.append("page", page.toString());
+  params.append("available", "true");
+
   const response = ApiService.GET({
-    url: `/cycles/${cycle_id}/catalog?page=${page}&available=true`,
+    url: `/cycles/${cycle_id}/catalog?${params.toString()}`,
   });
   return response;
 }

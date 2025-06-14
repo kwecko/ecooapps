@@ -57,6 +57,7 @@ export default function Produtores() {
       const response = await searchCatalogs({
         cycle_id: cycle.id as string,
         page: page,
+				available: true
       });
       if (response.message) {
         handleError(response.message as string);
