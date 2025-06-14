@@ -100,6 +100,9 @@ export default function FirstStep() {
           placeholder="Insira o seu email"
           type="text"
           errorMessage={errors.email?.message}
+          onChange={(e) => {
+            e.target.value = e.target.value.toLowerCase();
+          }}
         />
       </div>
       <div className="w-full flex gap-3 mb-3">
