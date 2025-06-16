@@ -18,6 +18,7 @@ import {
   InputPrice,
   InputDescription,
   ReviewOffer,
+  InputComment,
 } from "../components";
 
 export default function Home() {
@@ -29,7 +30,7 @@ export default function Home() {
   const { handleError } = useHandleError();
 
   const minStep: number = 1;
-  const maxStep: number = 4;
+  const maxStep: number = 5;
 
   useEffect(() => {
     setIsLoading(true);
@@ -91,6 +92,12 @@ export default function Home() {
         return `${day}-${month}-${year}`;
       };
 
+      const today = new Date();
+      let expiresAt: Date | undefined = undefined;
+      if (!offer.product.perishable) {
+        expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+      }
+
       const data: any = {
         amount:
           offer.product.pricing === "UNIT"
@@ -98,7 +105,7 @@ export default function Home() {
         : offer.amount * 1000,
         price: offer.price,
         description: offer.description ?? undefined,
-        expires_at: formatDateToDDMMYYYY(offer.expires_at),
+        expires_at: formatDateToDDMMYYYY(expiresAt),
       };
 
       if (offer.comment) {
@@ -148,15 +155,6 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {/* {currentStep === 2 && offer.product.perishable === false && (
-              <InputExpirationDate
-                handleNextStep={handleNextStep}
-                expires_at={offer.expires_at ?? undefined}
-                setExpiresAt={(expires_at: Date) =>
-                  setOffer({ ...offer, expires_at: expires_at })
-                }
-              />
-            )} */}
             {currentStep === 2 && (
               <InputPrice
                 handleNextStep={handleNextStep}
@@ -172,13 +170,18 @@ export default function Home() {
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
+              />
+            )}
+            {currentStep === 4 && (
+              <InputComment
+                handleNextStep={handleNextStep}
                 comment={offer.comment ?? ""}
                 setComment={(comment) =>
                   setOffer({ ...offer, comment: comment })
                 }
               />
             )}
-            {currentStep === 4 && (
+            {currentStep === 5 && (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
