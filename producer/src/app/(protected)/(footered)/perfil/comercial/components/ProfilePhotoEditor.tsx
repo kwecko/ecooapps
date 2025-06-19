@@ -38,50 +38,52 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
     })
   }
 
-  const getCroppedImgBlob = async (): Promise<Blob | null> => {
-    if (!originalImage || !croppedArea) return null
+  const getCroppedImgBase64 = async (): Promise<string | null> => {
+  if (!originalImage || !croppedArea) return null;
 
-    try {
-      const image = await createImage(originalImage)
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
+  try {
+    const image = await createImage(originalImage);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-      canvas.width = 256
-      canvas.height = 256
+    canvas.width = 256;
+    canvas.height = 256;
 
-      if (ctx) {
-        ctx.drawImage(image, croppedArea.x, croppedArea.y, croppedArea.width, croppedArea.height, 0, 0, 256, 256)
-      }
-
-      return new Promise((resolve) => {
-        canvas.toBlob(
-          (blob) => {
-            resolve(blob)
-          },
-          "image/jpeg",
-          0.9,
-        )
-      })
-    } catch (error) {
-      console.error("Erro ao processar imagem:", error)
-      return null
+    if (ctx) {
+      ctx.drawImage(
+        image,
+        croppedArea.x,
+        croppedArea.y,
+        croppedArea.width,
+        croppedArea.height,
+        0,
+        0,
+        256,
+        256
+      );
     }
+
+    return canvas.toDataURL("image/jpeg", 0.9);
+  } catch (error) {
+    console.error("Erro ao gerar base64:", error);
+    return null;
   }
+};
 
-  const handleSave = async (onChangeForm: (file: File) => void) => {
-    try {
-      const croppedBlob = await getCroppedImgBlob()
-      if (croppedBlob) {
-        const croppedFile = new File([croppedBlob], "profile_photo.jpeg", { type: "image/jpeg" });
-        setPhoto(URL.createObjectURL(croppedFile)); 
-        setFileToSubmit(croppedFile); 
-        onChangeForm(croppedFile); 
-      }
-      setShowEditor(false);
-    } catch (error) {
-      console.error("Erro ao salvar imagem:", error);
+
+const handleSave = async (onChangeForm: (base64: string) => void) => {
+  try {
+    const croppedBase64 = await getCroppedImgBase64();
+    if (croppedBase64) {
+      setPhoto(croppedBase64); 
+      onChangeForm(croppedBase64); 
     }
-  };
+    setShowEditor(false);
+  } catch (error) {
+    console.error("Erro ao salvar imagem:", error);
+  }
+};
+
 
   const handleCancel = () => {
     setShowEditor(false)
