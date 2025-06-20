@@ -19,6 +19,7 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
   const [croppedArea, setCroppedArea] = useState<Area | null>(null)
   const [showEditor, setShowEditor] = useState(false)
   const [originalImage, setOriginalImage] = useState<string | null>(null)
+  const [fileToSubmit, setFileToSubmit] = useState<File | null>(null); // Novo estado para o arquivo cropado
 
   const onCropComplete = (_: Area, croppedAreaPixels: Area) => {
     setCroppedArea(croppedAreaPixels)
@@ -37,64 +38,66 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
     })
   }
 
-  const getCroppedImg = async (): Promise<string> => {
-    if (!originalImage || !croppedArea) return photo
+  const getCroppedImgBase64 = async (): Promise<string | null> => {
+  if (!originalImage || !croppedArea) return null;
 
-    try {
-      const image = await createImage(originalImage)
-      const canvas = document.createElement("canvas")
-      const ctx = canvas.getContext("2d")
+  try {
+    const image = await createImage(originalImage);
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
 
-      canvas.width = 256
-      canvas.height = 256
+    canvas.width = 256;
+    canvas.height = 256;
 
-      if (ctx) {
-        ctx.drawImage(image, croppedArea.x, croppedArea.y, croppedArea.width, croppedArea.height, 0, 0, 256, 256)
-      }
-
-      return new Promise((resolve, reject) => {
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              reject(new Error("Falha ao criar imagem"))
-              return
-            }
-            const url = URL.createObjectURL(blob)
-            resolve(url)
-          },
-          "image/jpeg",
-          0.9,
-        )
-      })
-    } catch (error) {
-      console.error("Erro ao processar imagem:", error)
-      return photo
+    if (ctx) {
+      ctx.drawImage(
+        image,
+        croppedArea.x,
+        croppedArea.y,
+        croppedArea.width,
+        croppedArea.height,
+        0,
+        0,
+        256,
+        256
+      );
     }
-  }
 
-  const handleSave = async () => {
-    try {
-      const croppedImage = await getCroppedImg()
-      setPhoto(croppedImage)
-      setShowEditor(false)
-    } catch (error) {
-      console.error("Erro ao salvar imagem:", error)
-    }
+    return canvas.toDataURL("image/jpeg", 0.9);
+  } catch (error) {
+    console.error("Erro ao gerar base64:", error);
+    return null;
   }
+};
+
+
+const handleSave = async (onChangeForm: (base64: string) => void) => {
+  try {
+    const croppedBase64 = await getCroppedImgBase64();
+    if (croppedBase64) {
+      setPhoto(croppedBase64); 
+      onChangeForm(croppedBase64); 
+    }
+    setShowEditor(false);
+  } catch (error) {
+    console.error("Erro ao salvar imagem:", error);
+  }
+};
+
 
   const handleCancel = () => {
     setShowEditor(false)
     setOriginalImage(null)
     setCrop({ x: 0, y: 0 })
+    setFileToSubmit(null);
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, onChange: (file: File) => void) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
     const file = e.target.files?.[0]
     if (file) {
       const url = URL.createObjectURL(file)
       setOriginalImage(url)
       setShowEditor(true)
-      onChange(file)
     }
   }
 
@@ -128,7 +131,7 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
                   type="file"
                   accept="image/png, image/jpeg"
                   className="hidden"
-                  onChange={(e) => handleFileChange(e, onChange)}
+                  onChange={(e) => handleFileChange(e)} 
                 />
               )}
             />
@@ -171,13 +174,19 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
               >
                 Cancelar
               </button>
-              <button
-                type="button"
-                onClick={handleSave}
-                className="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-opacity-90 transition-colors"
-              >
-                Salvar
-              </button>
+              <Controller
+                name="photo"
+                control={control}
+                render={({ field: { onChange } }) => (
+                  <button
+                    type="button"
+                    onClick={() => handleSave(onChange)}
+                    className="px-4 py-2 bg-theme-primary text-white rounded-md hover:bg-opacity-90 transition-colors"
+                  >
+                    Salvar
+                  </button>
+                )}
+              />
             </div>
           </div>
         </div>
@@ -192,4 +201,4 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
   )
 }
 
-export default ProfilePhotoEditor
+export default ProfilePhotoEditor;
