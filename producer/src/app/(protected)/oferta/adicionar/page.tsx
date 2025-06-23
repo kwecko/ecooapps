@@ -12,6 +12,7 @@ import {
   InputPrice,
   InputDescription,
   InputComment,
+  InputRecurrence,
   RenderProducts,
   ReviewOffer,
 } from "../components";
@@ -26,7 +27,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 6;
+  const maxStep = 7;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -71,6 +72,10 @@ export default function Home() {
       expires_at: formatDate(expiresAt),
     };
 
+    if (offer.closes_at === true) {
+      offerPayload.closes_at = null;
+    }
+
     if (offer.description) {
       offerPayload.description = offer.description;
     }
@@ -110,7 +115,8 @@ export default function Home() {
             handleNextStep={handleNextStep}
             pricing={offer.product.pricing ?? "UNIT"}
             amount={offer.amount ?? 0}
-            setAmount={(amount) => setOffer({ ...offer, amount: amount })}
+            setAmount={(amount) => 
+              setOffer({ ...offer, amount: amount })}
           />
         )}
         {currentStep === 3 && (
@@ -118,7 +124,8 @@ export default function Home() {
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
             pricing={offer.product.pricing}
-            setPrice={(price) => setOffer({ ...offer, price: price })}
+            setPrice={(price) => 
+              setOffer({ ...offer, price: price })}
           />
         )}
         {currentStep === 4 && (
@@ -140,6 +147,14 @@ export default function Home() {
           />
         )}
         {currentStep === 6 && (
+          <InputRecurrence
+            handleNextStep={handleNextStep}
+            setRecurrence={(closes_at) =>
+              setOffer({ ...offer, closes_at: closes_at })
+            }
+          />
+        )}
+        {currentStep === 7 && (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -149,6 +164,7 @@ export default function Home() {
             comment={offer.comment ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
+            closes_at={offer.closes_at ?? false}
             submitAction={submitOffer}
           />
         )}

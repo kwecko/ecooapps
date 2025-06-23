@@ -36,6 +36,11 @@ const pageSettings: { [key: string]: PageSettings } = {
     subtitle:
       "Insira informações adicionais que serão vistas apenas pelo time do e-COO.",
   },
+  recurrence: {
+    title: "Oferta recorrente?",
+    subtitle:
+    "Ative caso queira repetir a sua oferta automaticcamente nos próximos ciclos."
+  },
   review: {
     title: "Revise as informações",
     subtitle:

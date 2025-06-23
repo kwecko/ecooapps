@@ -15,4 +15,5 @@ export interface OfferDTO {
   created_at: Date;
   updated_at: Date | null;
   expires_at: Date | undefined;
+  closes_at: boolean | null;
 }

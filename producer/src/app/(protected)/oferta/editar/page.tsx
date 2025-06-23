@@ -19,6 +19,7 @@ import {
   InputDescription,
   ReviewOffer,
   InputComment,
+  InputRecurrence,
 } from "../components";
 
 export default function Home() {
@@ -30,7 +31,7 @@ export default function Home() {
   const { handleError } = useHandleError();
 
   const minStep: number = 1;
-  const maxStep: number = 5;
+  const maxStep: number = 6;
 
   useEffect(() => {
     setIsLoading(true);
@@ -108,6 +109,10 @@ export default function Home() {
         expires_at: formatDateToDDMMYYYY(expiresAt),
       };
 
+      if (offer.closes_at === true) {
+        data.closes_at = null;
+      }
+
       if (offer.comment) {
         data.comment = offer.comment;
       }
@@ -182,6 +187,15 @@ export default function Home() {
               />
             )}
             {currentStep === 5 && (
+              <InputRecurrence
+                handleNextStep={handleNextStep}
+                isRecurrent={offer.closes_at ?? false}
+                setRecurrence={(closes_at) =>
+                  setOffer({ ...offer, closes_at: closes_at })
+                }
+              />
+            )}
+            {currentStep === 6 && (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -191,6 +205,7 @@ export default function Home() {
                 comment={offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
+                closes_at={offer.closes_at ?? false}
                 submitAction={onUpdateOffer}
               />
             )}

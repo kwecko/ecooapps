@@ -17,6 +17,7 @@ interface ReviewOfferProps {
   submitAction: () => void;
   description?: string;
   comment?: string;
+  closes_at: boolean;
 }
 
 export default function ReviewOffer(props: ReviewOfferProps) {
@@ -52,6 +53,10 @@ export default function ReviewOffer(props: ReviewOfferProps) {
       header: "Comentário:",
       content: props.comment || "Sem comentário",
     },
+    {
+      header: "Recorrente?",
+      content: props.closes_at ? "Sim" : "Não",
+    }
   ];
 
   return (
