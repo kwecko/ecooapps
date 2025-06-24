@@ -16,7 +16,6 @@ export default function OfertasCategoria() {
 	const params = data ? JSON.parse(decodeURIComponent(data as string)) : null;
 
 	const [offers, setOffers] = useState([] as OfferDTO[]);
-	// const [farm, setFarm] = useState({} as FarmDTO);
 	const [page, setPage] = useState(1 as number);
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
@@ -65,10 +64,10 @@ export default function OfertasCategoria() {
 	};
 
 	useEffect(() => {
-		if (inView || (inView && !isLoading)) {
+		if (inView && (inView && !isLoading) && hasMore ) {
 			searchOffers();
 		}
-	}, [inView, isLoading]);
+	}, [inView, isLoading, hasMore]);
 
 	return (
 		<div className="flex flex-col h-full">

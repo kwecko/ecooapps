@@ -68,7 +68,7 @@ export default function Produtor() {
           isOpen={showPhotos}
         />
         <Link
-          href={`/ofertas?data=${encodeURIComponent(
+          href={`/ofertas-catalogo?data=${encodeURIComponent(
             JSON.stringify({
               id: catalog.id,
               cycle_id: catalog.cycle_id,

@@ -18,7 +18,7 @@ export default function Inicio() {
           <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
             <Image
             className="rounded-xl"
-            src={"/256x256_categorias.jpg"}
+            src={"/categorias.jpg"}
             width={80}
             height={80}
             alt={`categorias.jpg`}
@@ -40,7 +40,7 @@ export default function Inicio() {
           <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
           <Image
             className="rounded-xl"
-            src={"/256x256_produtores.jpg"}
+            src={"/produtores.jpg"}
             width={80}
             height={80}
             alt={`produtores.jpg`}
@@ -57,6 +57,32 @@ export default function Inicio() {
         </div>
         </Link>
 
+      <Link 
+				href={`/ofertas?data=${encodeURIComponent(
+        	JSON.stringify({
+          	title: 'Todas os produtos',
+        	})
+      	)}`}>
+        <div className="min-w-87.5 h-25 bg-theme-background flex rounded-2xl m-2.5">
+          <div className="flex w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5 bg-theme-highlight rounded-xl">
+          <Image
+            className="rounded-xl"
+            src={"/todos_produtos.jpg"}
+            width={80}
+            height={80}
+            alt={`produtores.jpg`}
+            />
+          </div>
+          <div className="grow flex flex-col items-center justify-center min-h-20 mt-2 mb-2">
+            <span className="w-full text-left text-base">
+              Todos os Produtos
+            </span>
+          </div>
+          <div className="flex min-w-24 min-h-20 items-center justify-center m-2">
+            <SlArrowRight className="text-slate-gray" />
+          </div>
+        </div>
+        </Link>
       </div>
     </div>
     <RedirectCart/>
