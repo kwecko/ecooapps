@@ -121,13 +121,15 @@ export default function SendBagTable() {
               columns={[
                 {
                   header: "Código",
-                  key: "id",
+                  key: "code",
                   colSpan: 4,
                 },
                 {
                   header: "Cliente",
-                  key: "customer.first_name",
+                  key: "customerName",
                   colSpan: 6,
+                  render: (row: BagDTO) =>
+                    `${row.customer.first_name} ${row.customer.last_name}`,
                 },
                 {
                   header: "Status",
