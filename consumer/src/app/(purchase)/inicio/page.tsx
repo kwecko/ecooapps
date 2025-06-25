@@ -3,11 +3,42 @@
 import Image from "next/image";
 import Link from "next/link";
 import RedirectCart from "../../_components/redirectCart";
-import React from "react";
+import React, { useEffect } from "react";
 import { SlArrowRight } from "react-icons/sl";
+import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import { CycleDTO } from "@shared/interfaces/dtos";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 
 
 export default function Inicio() {
+	
+	const LocalStorage = useLocalStorage();
+	const { handleError } = useHandleError();
+
+	useEffect(() => {
+    (async () => {
+      try {
+        const response = await listCycles();
+        if (response.message) {
+          handleError(response.message as string);
+        } else if (response.data) {
+          const cycles: CycleDTO[] = response.data;
+							
+					const aliasCycle = (process.env.NEXT_PUBLIC_ENV && process.env.NEXT_PUBLIC_ENV === "dev") ? "livre" : "semanal";
+					const selectedCycle = cycles.find((cycle) =>  cycle.alias.toLowerCase() === aliasCycle);
+
+					if(!selectedCycle) 
+			 			return handleError("Ciclo não encontrado.");
+
+					LocalStorage.setInStorage("cycle_id", selectedCycle.id as string);
+        }
+      } catch {
+        handleError("Erro desconhecido.");
+      } 
+    })();
+  }, []);
+
   return (
     <>
     <div className="flex flex-col w-full h-screen">

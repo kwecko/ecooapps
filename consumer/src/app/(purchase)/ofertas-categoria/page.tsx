@@ -23,8 +23,7 @@ export default function OfertasCategoria() {
 	const { handleError } = useHandleError();
 
 	const LocalStorage = useLocalStorage();
-
-	const cycle = useMemo(() => LocalStorage.getFromStorage("selected-cycle"),[]);
+	const cycleId = useMemo(() => LocalStorage.getFromStorage("cycle_id"),[]);
 
 	const searchOffers = async () => {
 		setIsLoading(true);
@@ -33,7 +32,7 @@ export default function OfertasCategoria() {
 
 			const response = await fetchCategory({
 				category_id: params.id as string,
-				cycle_id: cycle.id as string,
+				cycle_id: cycleId,
 				page: page,
 				available: true
 			});

@@ -24,7 +24,7 @@ export default function Ofertas() {
 
 	const LocalStorage = useLocalStorage();
 
-	const cycle = useMemo(() => LocalStorage.getFromStorage("selected-cycle"),[]);
+	const cycleId = useMemo(() => LocalStorage.getFromStorage("cycle_id"),[]);
 
 	const searchOffers = async () => {
 		setIsLoading(true);
@@ -32,7 +32,7 @@ export default function Ofertas() {
 		try {			
 			const response = await fetchOffers({
 				page: page,
-				cycle_id: cycle.id,
+				cycle_id: cycleId,
 				available: true,
 				category_id: params?.category_id
 			});
