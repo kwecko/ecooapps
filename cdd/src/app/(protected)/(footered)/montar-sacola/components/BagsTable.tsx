@@ -97,7 +97,7 @@ export default function BagsTable() {
               columns={[
                 {
                   header: "Código",
-                  key: "id",
+                  key: "code",
                   colSpan: 4,
                 },
                 {
