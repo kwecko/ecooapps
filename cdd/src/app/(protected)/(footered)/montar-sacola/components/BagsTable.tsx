@@ -102,8 +102,10 @@ export default function BagsTable() {
                 },
                 {
                   header: "Cliente",
-                  key: "customer.first_name",
+                  key: "customer.name",
                   colSpan: 6,
+                  render: (row: BagDTO) =>
+                    `${row.customer.first_name} ${row.customer.last_name}`,
                 },
                 {
                   header: "Status",
