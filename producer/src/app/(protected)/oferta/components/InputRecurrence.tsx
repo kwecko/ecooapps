@@ -1,6 +1,6 @@
 import { twMerge } from "tailwind-merge";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Button from "@shared/components/Button";
 import SelectInput from "@shared/components/SelectInput";
@@ -10,8 +10,8 @@ import pageSettings from "./page-settings";
 
 interface InputAmountProps {
   handleNextStep: () => void;
-  isRecurrent?: boolean | null;
-  setRecurrence: (amount: boolean) => void;
+  isRecurrent?: string | null;
+  setRecurrence: (recurring: string) => void;
 }
 
 function validateValue(value: string) {
@@ -30,11 +30,11 @@ export default function InputRecurrence({
   setRecurrence,
 }: InputAmountProps) {
   const { title, subtitle } = pageSettings.recurrence;
-  const [recurrenceValue, setRecurrenceValue] = useState<boolean>(false);
+  const [recurrenceValue, setRecurrenceValue] = useState<string>("false");
 
   const optionsChange  = [
-    { value: false, label: "Não" },
-    { value: true, label: "Sim" }
+    { value: "false", label: "Não" },
+    { value: "true", label: "Sim" }
   ]
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -77,7 +77,7 @@ export default function InputRecurrence({
               defaultOption={optionsChange.find((option) => 
                 option.value === recurrenceValue)}
               onChange={(value) => {
-                setRecurrenceValue(value as boolean);
+                setRecurrenceValue(value);
               }}
               label={'Oferta recorrente?'}
               options={optionsChange}

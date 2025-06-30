@@ -17,7 +17,7 @@ interface ReviewOfferProps {
   submitAction: () => void;
   description?: string;
   comment?: string;
-  closes_at: boolean;
+  recurring: string;
 }
 
 export default function ReviewOffer(props: ReviewOfferProps) {
@@ -55,7 +55,7 @@ export default function ReviewOffer(props: ReviewOfferProps) {
     },
     {
       header: "Recorrente?",
-      content: props.closes_at ? "Sim" : "Não",
+      content: props.recurring === "true" ? "Sim" : "Não",
     }
   ];
 

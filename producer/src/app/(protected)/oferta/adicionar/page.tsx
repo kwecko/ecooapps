@@ -70,11 +70,8 @@ export default function Home() {
       offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       expires_at: formatDate(expiresAt),
+      recurring: offer.recurring ?? "false"
     };
-
-    if (offer.closes_at === true) {
-      offerPayload.closes_at = null;
-    }
 
     if (offer.description) {
       offerPayload.description = offer.description;
@@ -149,8 +146,8 @@ export default function Home() {
         {currentStep === 6 && (
           <InputRecurrence
             handleNextStep={handleNextStep}
-            setRecurrence={(closes_at) =>
-              setOffer({ ...offer, closes_at: closes_at })
+            setRecurrence={(recurring) =>
+              setOffer({ ...offer, recurring: String(recurring) })
             }
           />
         )}
@@ -164,7 +161,7 @@ export default function Home() {
             comment={offer.comment ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
-            closes_at={offer.closes_at ?? false}
+            recurring={offer.recurring ?? ""}
             submitAction={submitOffer}
           />
         )}
