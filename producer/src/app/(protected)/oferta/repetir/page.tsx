@@ -12,6 +12,7 @@ import {
   InputDescription,
   ReviewOffer,
   InputComment,
+  InputRecurrence,
 } from "../components";
 
 import { toast } from "sonner";
@@ -96,6 +97,7 @@ export default function Home() {
       price: offer.price,
       description: offer.description ?? undefined,
       comment: offer.comment ?? undefined,
+      recurring: offer.recurring ?? "false",
       expires_at: formatDate(expiresAt),
     });
     if (!success) return;
@@ -165,6 +167,7 @@ export default function Home() {
                 comment= {offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
+                recurring={offer.recurring ?? false}
                 submitAction={submitOffer}
               />
             )}
