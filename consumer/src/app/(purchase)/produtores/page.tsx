@@ -4,58 +4,27 @@ import RedirectCart from "@consumer/app/_components/redirectCart";
 import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { CatalogDTO, CycleDTO } from "@shared/interfaces/dtos";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import ProducerCard from "./components/ProducerCard";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 
 export default function Produtores() {
-  const [cycles, setCycles] = useState([] as CycleDTO[]);
-  const [cycleId, setCycleId] = useState("" as string);
   const [producers, setProducers] = useState([] as any[]);
   const [page, setPage] = useState(1 as number);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
   const { ref, inView } = useInView();
   const { handleError } = useHandleError();
+	const LocalStorage = useLocalStorage();
+	const cycleId = useMemo(() => LocalStorage.getFromStorage("cycle_id"),[]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-        const response = await listCycles();
-        if (response.message) {
-          handleError(response.message as string);
-        } else if (response.data) {
-          const cycles: CycleDTO[] = response.data;
-          setCycles(cycles);
-        }
-      } catch {
-        handleError("Erro desconhecido.");
-      } 
-    })();
-  }, []);
 
   const searchProducers = async () => {
-    const typeCycle = process.env.NEXT_PUBLIC_ENV
-      ? process.env.NEXT_PUBLIC_ENV === "dev" ||
-        process.env.NEXT_PUBLIC_ENV === "homolog"
-        ? "livre"
-        : "semanal"
-      : "livre";
-
-    const cycle = cycles.find(
-      (cycle) => cycle.alias.toLowerCase() == typeCycle
-    );
-    if (!cycle) {
-      setIsLoading(false);
-      return;
-    }
-
-    setCycleId(cycle.id as string);
-    localStorage.setItem("selected-cycle", JSON.stringify(cycle));
-
+		setIsLoading(true);
     try {
       const response = await searchCatalogs({
-        cycle_id: cycle.id as string,
+        cycle_id: cycleId,
         page: page,
 				available: true
       });
@@ -67,9 +36,8 @@ export default function Produtores() {
           return catalog;
         });
 
-        if (newProducers.length == 0) {
-          setIsLoading(false);
-          return;
+        if (newProducers.length == 0 || newProducers.length < 20) {
+          setHasMore(false);
         }
 
         setProducers((producers) => [...producers, ...newProducers]);
@@ -82,25 +50,32 @@ export default function Produtores() {
     }
   };
 
-  useEffect(() => {
-    if (inView) {
-      searchProducers();
-    }
-  }, [inView, cycles]);
+	useEffect(() => {
+		if (inView && (inView && !isLoading) && hasMore ) {
+			searchProducers();
+		}
+	}, [inView]);
 
   return (
     <div className="flex flex-col h-full">
       <div className="overflow-y-auto">
-        {producers && producers.length !== 0
-          ? producers.map((producer) => {
-              return (
-                <ProducerCard key={producer.id} {...producer}/>
-              );
-            })
-          : null}
-        <div>
-          {isLoading && cycles.length > 0 ? <div ref={ref}></div> : null}
-        </div>
+        {
+					producers && producers.length !== 0 ? 
+						producers.map((producer) => {
+								return (
+									<ProducerCard key={producer.id} {...producer}/>
+								);
+							})
+					:
+						(
+						<div className="w-full text-center p-2">
+							<p>Não há produtores com ofertas</p>
+						</div>
+						)
+				}
+				<div className="w-full text-center p-2">
+					{hasMore && <div ref={ref}>Carregando...</div>}
+				</div>
       </div>
       <div className="min-h-17">
         <RedirectCart />
