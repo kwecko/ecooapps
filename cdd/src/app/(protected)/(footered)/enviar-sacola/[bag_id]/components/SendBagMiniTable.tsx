@@ -112,7 +112,7 @@ export default function SendBagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag.code, "DISPATCHED");
+                  handleStatusBag(bag.id, "DISPATCHED");
                 }}
               />
             ) : bag.status && isStatusChanged && bagStatus !== bag.status ? (
