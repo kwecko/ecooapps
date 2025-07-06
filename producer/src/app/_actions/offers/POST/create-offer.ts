@@ -10,6 +10,7 @@ export interface CreateOfferRequest {
   description?: string;
   comment?: string | undefined;
   expires_at?: string;
+  recurring: string;
 }
 
 export async function createOffer({
@@ -20,6 +21,7 @@ export async function createOffer({
   description,
   comment,
   expires_at,
+  recurring
 }: CreateOfferRequest) {
   const response = ApiService.POST({
     url: "/offers",
@@ -31,6 +33,7 @@ export async function createOffer({
       description,
       comment,
       expires_at,
+      recurring
     },
   });
   return response;

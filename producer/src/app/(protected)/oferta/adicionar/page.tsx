@@ -12,6 +12,7 @@ import {
   InputPrice,
   InputDescription,
   InputComment,
+  InputRecurrence,
   RenderProducts,
   ReviewOffer,
 } from "../components";
@@ -26,7 +27,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 6;
+  const maxStep = 7;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -69,6 +70,7 @@ export default function Home() {
       offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       expires_at: formatDate(expiresAt),
+      recurring: offer.recurring ?? "false"
     };
 
     if (offer.description) {
@@ -110,7 +112,8 @@ export default function Home() {
             handleNextStep={handleNextStep}
             pricing={offer.product.pricing ?? "UNIT"}
             amount={offer.amount ?? 0}
-            setAmount={(amount) => setOffer({ ...offer, amount: amount })}
+            setAmount={(amount) => 
+              setOffer({ ...offer, amount: amount })}
           />
         )}
         {currentStep === 3 && (
@@ -118,7 +121,8 @@ export default function Home() {
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
             pricing={offer.product.pricing}
-            setPrice={(price) => setOffer({ ...offer, price: price })}
+            setPrice={(price) => 
+              setOffer({ ...offer, price: price })}
           />
         )}
         {currentStep === 4 && (
@@ -140,6 +144,14 @@ export default function Home() {
           />
         )}
         {currentStep === 6 && (
+          <InputRecurrence
+            handleNextStep={handleNextStep}
+            setRecurrence={(recurring) =>
+              setOffer({ ...offer, recurring: String(recurring) })
+            }
+          />
+        )}
+        {currentStep === 7 && (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -149,6 +161,7 @@ export default function Home() {
             comment={offer.comment ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
+            recurring={offer.recurring ?? ""}
             submitAction={submitOffer}
           />
         )}
