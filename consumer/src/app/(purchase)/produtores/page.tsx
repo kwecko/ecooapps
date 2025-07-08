@@ -59,8 +59,7 @@ export default function Produtores() {
   return (
     <div className="flex flex-col h-full">
       <div className="overflow-y-auto">
-        {
-					producers && producers.length !== 0 ? 
+        {  hasMore || (producers && producers.length !== 0) ? 
 						producers.map((producer) => {
 								return (
 									<ProducerCard key={producer.id} {...producer}/>

@@ -70,7 +70,7 @@ export default function Ofertas() {
 	return (
 		<div className="flex flex-col h-full">
 			<div className="px-3 w-full overflow-y-scroll flex flex-col items-center gap-3.5 h-full pt-3.5">
-				{offers && offers.length !== 0 ? (
+				{hasMore || (offers && offers.length !== 0) ? (
 					offers.map((offer, index) => {
 						return (
 							<OrderCard
