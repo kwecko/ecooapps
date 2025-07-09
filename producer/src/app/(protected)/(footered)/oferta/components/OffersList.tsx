@@ -24,6 +24,7 @@ interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "last" | "current";
   notFoundMessage: string;
   isOfferingDay: boolean;
+  filterDuplicatesWithCurrent?: boolean; 
 }
 
 export default function OffersList({
@@ -31,6 +32,7 @@ export default function OffersList({
   type,
   isOfferingDay,
   notFoundMessage,
+  filterDuplicatesWithCurrent = false,
   ...rest
 }: OffersListProps) {
   const [offers, setOffers] = useState<OfferDTO[]>([] as OfferDTO[]);
@@ -85,9 +87,26 @@ export default function OffersList({
         } else if (response.data) {
           const dataOffers: CatalogDTO = response.data;
 
+          if (filterDuplicatesWithCurrent && type === "last") {
+            
+            const currentResponse = await fetchCatalog({
+              cycle_id: cycle.id,
+              type: "current",
+              since: formattedDDMMYYYY,
+              page: 1,
+            });
+            
+            const currentProductIds = (currentResponse.data?.offers || []).map(
+              (o: any) => o.product?.id 
+            );
+            dataOffers.offers = dataOffers.offers.filter(
+              (offer: any) => !currentProductIds.includes(offer.product?.id)
+            );
+          }
+          
+
           setCatalogId(dataOffers.id);
           setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
-
           setHasMore(dataOffers.offers.length > 0);
         }
       } catch {
