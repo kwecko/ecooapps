@@ -69,7 +69,7 @@ export default function BagMiniTable() {
       {!isLoading && bag && (
         <>
           <HeaderDetail
-            id={bag.id}
+            id={bag.code}
             status={convertStatus(bag.status)?.name}
             name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
