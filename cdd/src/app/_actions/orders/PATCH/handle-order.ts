@@ -5,7 +5,7 @@ import ApiService from "@shared/service";
 export interface HandleBoxRequest {
   box_id: string;
   order_id: string;
-  status: "RECEIVED" | "CANCELLED";
+  status: "RECEIVED" | "REJECTED";
 }
 
 export async function handleOrder({

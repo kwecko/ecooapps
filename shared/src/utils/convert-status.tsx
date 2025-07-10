@@ -21,6 +21,7 @@ export const convertStatus = (status: string) => {
   const colorStatus: Record<string, string> = {
     PENDING: "bg-battleship-gray",
     CANCELLED: "bg-error",
+    REJECTED: "bg-error",
     VERIFIED: "bg-rain-forest",
   };
 
@@ -30,6 +31,7 @@ export const convertStatus = (status: string) => {
     DISPATCHED: "text-rain-forest",
     RECEIVED: "text-rain-forest",
     CANCELLED: "text-error",
+    REJECTED: "text-error",
     DEFERRED: "text-rain-forest",
     VERIFIED: "text-rain-forest",
     ACTIVE: "text-rain-forest",
@@ -50,6 +52,7 @@ export const convertStatus = (status: string) => {
       >
         {status === 'VERIFIED' || status === "RECEIVED" && (<FaCheck color="white" />)}
         {status === "CANCELLED" && (<IoCloseSharp color="white" />)}
+        {status === "REJECTED" && (<IoCloseSharp color="white" />)}
         {status === "PENDING" && (<FaExclamation size={10} color="white" />)}
       </div>
     );

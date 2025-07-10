@@ -143,7 +143,7 @@ export default function Home() {
             }
           />
         )}
-        {currentStep === 6 && (
+        {currentStep === 6 && offer.product.perishable === false && (
           <InputRecurrence
             handleNextStep={handleNextStep}
             setRecurrence={(recurring) =>
@@ -151,7 +151,7 @@ export default function Home() {
             }
           />
         )}
-        {currentStep === 7 && (
+        {currentStep === 6 && offer.product.perishable === true && (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -161,7 +161,23 @@ export default function Home() {
             comment={offer.comment ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
-            recurring={offer.recurring ?? ""}
+            recurring={offer.recurring ?? "false"}
+            closes_at={offer.closes_at}
+            submitAction={submitOffer}
+          />
+        )}
+        {currentStep === 7 && offer.product.perishable === false && (
+          <ReviewOffer
+            productId={offer.product.id ?? ""}
+            productName={offer.product.name ?? ""}
+            amount={offer.amount ?? 0}
+            price={offer.price ?? 0}
+            description={offer.description ?? ""}
+            comment={offer.comment ?? ""}
+            pricing={offer.product.pricing ?? "UNIT"}
+            expires_at={offer.product.perishable ? undefined : offer.expires_at}
+            recurring={offer.recurring ?? "false"}
+            closes_at={offer.closes_at}
             submitAction={submitOffer}
           />
         )}
