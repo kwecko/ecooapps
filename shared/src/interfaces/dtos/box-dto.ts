@@ -2,7 +2,7 @@ import { CatalogDTO, OrderDTO } from "@shared/interfaces/dtos";
 
 export interface BoxDTO {
   id: string;
-  status: "PENDING" | "CANCELLED" | "VERIFIED";
+  status: "PENDING" | "CANCELLED" | "VERIFIED" | "REJECTED";
   verified: number;
   catalog_id: string;
   catalog: CatalogDTO;
