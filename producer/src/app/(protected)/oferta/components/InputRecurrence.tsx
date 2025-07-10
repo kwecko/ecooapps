@@ -100,7 +100,7 @@ export default function InputRecurrence({
               Ao ativar a oferta recorrente, esta se repetirá automaticamente em todos os ciclos seguintes, mantendo as mesmas informações de quantidade, preço e descrição da oferta original.
             </div>
             <div>
-              Para cancelar a sua oferta recorrente, exluca ela da sua lista de ofertas.
+              Para cancelar a sua oferta recorrente, exclua ela da sua lista de ofertas.
             </div>
           </div>
         }
