@@ -1,6 +1,6 @@
 "use client";
 import { fetchOffers } from "@consumer/app/_components/GET/fetch-offers";
-import RedirectCart from "@consumer/app/_components/redirectCart";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";

@@ -1,6 +1,6 @@
 "use client";
 import { searchCategories } from "@consumer/app/_components/GET/search-categories";
-import RedirectCart from "@consumer/app/_components/redirectCart";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CategoryDTO } from "@shared/interfaces/dtos";
