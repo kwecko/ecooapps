@@ -6,7 +6,7 @@ interface InfoModalProps {
   contentModal: string | JSX.Element;
   icon: React.ReactNode | string;
   titleCloseModal: string;
-  buttonOpenModal: React.ReactNode;
+  buttonOpenModal?: React.ReactNode;
   buttonRequest?: React.ReactNode;
   isOpen: boolean;
   window_size?: string;

@@ -3,7 +3,7 @@
 import { useTelegram } from "@consumer/context/telegram";
 import { convertPricingToQuantityInGrams } from "@shared/utils/convert-unit";
 import { useEffect, useState } from "react";
-import { useCartProvider } from "../../context/cart";
+import { useCartProvider } from "../../../context/cart";
 
 export default function sendTelegram() {
   const { cart } = useCartProvider();

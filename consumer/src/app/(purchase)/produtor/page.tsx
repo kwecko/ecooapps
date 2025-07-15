@@ -1,6 +1,6 @@
 "use client";
 
-import RedirectCart from "@consumer/app/_components/redirectCart";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import ModalV2 from "@shared/components/ModalV2";
 import { CatalogDTO } from "@shared/interfaces/dtos";
 import Image from "next/image";

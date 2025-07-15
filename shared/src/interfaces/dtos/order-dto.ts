@@ -2,7 +2,7 @@ import { OfferDTO } from "@shared/interfaces/dtos";
 
 export interface OrderDTO {
   id: string;
-  status: "PENDING" | "CANCELLED" | "RECEIVED";
+  status: "PENDING" | "CANCELLED" | "RECEIVED" | "REJECTED";
   amount: number;
   bag_id: string;
   box_id: string;

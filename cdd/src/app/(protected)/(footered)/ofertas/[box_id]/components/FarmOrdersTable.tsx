@@ -56,7 +56,7 @@ export default function FarmOrdersTable() {
     await handleBox({
       box_id: box_id as string,
       order_id: order_id as string,
-      status: "CANCELLED",
+      status: "REJECTED",
       successMessage: "Oferta rejeitada com sucesso!",
     });
 
