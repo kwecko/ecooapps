@@ -1,6 +1,6 @@
 "use client";
 import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
-import RedirectCart from "@consumer/app/_components/redirectCart";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { CatalogDTO, CycleDTO } from "@shared/interfaces/dtos";
@@ -59,8 +59,7 @@ export default function Produtores() {
   return (
     <div className="flex flex-col h-full">
       <div className="overflow-y-auto">
-        {
-					producers && producers.length !== 0 ? 
+        {  hasMore || (producers && producers.length !== 0) ? 
 						producers.map((producer) => {
 								return (
 									<ProducerCard key={producer.id} {...producer}/>
