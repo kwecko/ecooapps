@@ -38,6 +38,7 @@ export default function Home() {
     const storedOfferData = sessionStorage.getItem("edit-offer-data");
     if (storedOfferData) {
       const offerData: OfferDTO = JSON.parse(storedOfferData);
+      console.log("offerData", offerData);
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
@@ -192,7 +193,7 @@ export default function Home() {
                 comment={offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
-                recurring={offer.recurring ?? false}
+                closes_at={offer.closes_at}
                 submitAction={onUpdateOffer}
               />
             )}
