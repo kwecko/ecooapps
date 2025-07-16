@@ -88,7 +88,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "VERIFIED");
+                  handleStatusBag(bag.id, "VERIFIED");
                 }}
               />
             ) : (
@@ -102,7 +102,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#FF7070"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "MOUNTED");
+                  handleStatusBag(bag.id, "MOUNTED");
                 }}
               />
             )}
