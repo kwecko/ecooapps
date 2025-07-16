@@ -7,15 +7,19 @@ interface HeaderDetailProps {
   status?: string;
   selectStatus?: ReactNode;
   time: string;
+  isShipping?: boolean;
+  totalAmount?: number;
   content?: ReactNode;
 }
 
 function HeaderDetail({
   id,
   name,
-  time,
   status,
   selectStatus,
+  time,
+  isShipping,
+  totalAmount,
   content,
 }: HeaderDetailProps) {
   const rows = [
@@ -35,6 +39,14 @@ function HeaderDetail({
     {
       title: "Prazo:",
       value: time,
+    },
+    {
+      title: "Modalidade:",
+      value: isShipping ? "Delivery" : "Retirada",
+    },
+    {
+      title: "Valor total:",
+      value: totalAmount ? `R$ ${totalAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "R$ 0,00",
     },
     {
       title: "Conteúdo:",
