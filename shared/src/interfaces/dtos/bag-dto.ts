@@ -13,6 +13,7 @@ export interface BagDTO {
     | "VERIFIED"
     | "MOUNTED"
     | "CANCELLED"
+    | "REJECTED"
     | "RECEIVED"
     | "DISPATCHED"
     | "DEFERRED";

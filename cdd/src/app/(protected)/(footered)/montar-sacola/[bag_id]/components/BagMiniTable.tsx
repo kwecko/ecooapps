@@ -73,6 +73,8 @@ export default function BagMiniTable() {
             status={convertStatus(bag.status)?.name}
             name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
+            isShipping={!!bag.address_id}
+            totalAmount={bag.total}
             content={<GroupOrder orders={bag.orders} />}
           />
           <TablePaginationControl />
