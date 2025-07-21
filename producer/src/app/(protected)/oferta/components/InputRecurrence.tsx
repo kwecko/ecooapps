@@ -40,6 +40,12 @@ export default function InputRecurrence({
     { value: "true", label: "Sim" }
   ]
 
+  useEffect(() => {
+    if (isRecurrent) {
+      setRecurrenceValue(isRecurrent);
+    }
+  }, [isRecurrent]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
