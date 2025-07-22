@@ -33,7 +33,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 5;
+  const maxStep = 6;
 
   useEffect(() => {
     setIsLoading(true);
@@ -157,7 +157,30 @@ export default function Home() {
                 }
               />
             )}
-            {currentStep === 5 && (
+            {currentStep === 5 && offer.product.perishable === false && (
+              <InputRecurrence
+                handleNextStep={handleNextStep}
+                setRecurrence={(recurring) =>
+                  setOffer({ ...offer, recurring: String(recurring) })
+                }
+              />
+            )}
+            {currentStep === 5 && offer.product.perishable === true && (
+              <ReviewOffer
+                productId={offer.product.id ?? ""}
+                productName={offer.product.name ?? ""}
+                amount={offer.amount ?? 0}
+                price={offer.price ?? 0}
+                description={offer.description ?? ""}
+                comment={offer.comment ?? ""}
+                pricing={offer.product.pricing ?? "UNIT"}
+                expires_at={offer.product.perishable ? undefined : offer.expires_at}
+                recurring={offer.recurring ?? "false"}
+                closes_at={offer.closes_at}
+                submitAction={submitOffer}
+              />
+            )}
+            {currentStep === 6 && offer.product.perishable === false && (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -167,6 +190,7 @@ export default function Home() {
                 comment= {offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
+                recurring={offer.recurring ?? "false"}
                 closes_at={offer.closes_at}
                 submitAction={submitOffer}
               />
