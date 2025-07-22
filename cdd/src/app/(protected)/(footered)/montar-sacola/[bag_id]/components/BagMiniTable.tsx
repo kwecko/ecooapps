@@ -69,10 +69,12 @@ export default function BagMiniTable() {
       {!isLoading && bag && (
         <>
           <HeaderDetail
-            id={bag.id}
+            id={bag.code}
             status={convertStatus(bag.status)?.name}
             name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
+            isShipping={!!bag.address_id}
+            totalAmount={bag.total}
             content={<GroupOrder orders={bag.orders} />}
           />
           <TablePaginationControl />
@@ -88,7 +90,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "VERIFIED");
+                  handleStatusBag(bag.id, "VERIFIED");
                 }}
               />
             ) : (
@@ -102,7 +104,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#FF7070"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "MOUNTED");
+                  handleStatusBag(bag.id, "MOUNTED");
                 }}
               />
             )}

@@ -16,4 +16,5 @@ export interface OfferDTO {
   updated_at: Date | null;
   expires_at: Date | undefined;
   recurring: string;
+  closes_at: Date;
 }

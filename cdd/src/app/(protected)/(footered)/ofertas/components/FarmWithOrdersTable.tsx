@@ -27,9 +27,10 @@ type FilterStatus = {
 };
 
 const statuses: FilterStatus[] = [
-  { name: 'todas', key: ['PENDING', 'VERIFIED', 'CANCELLED'] },
+  { name: 'todas', key: ['PENDING', 'VERIFIED', 'REJECTED', 'CANCELLED'] },
   { name: 'pendentes', key: ['PENDING'] },
   { name: 'verificadas', key: ['VERIFIED'] },
+  { name: 'rejeitadas', key: ['REJECTED'] },
   { name: 'canceladas', key: ['CANCELLED'] },
 ];
 

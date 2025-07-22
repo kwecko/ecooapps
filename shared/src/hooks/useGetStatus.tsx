@@ -15,7 +15,7 @@ export type EnviarStatus = Array<
 >;
 
 export type StatusMap = {
-  oferta: "PENDING" | "CANCELLED" | "VERIFIED";
+  oferta: "PENDING" | "CANCELLED" | "VERIFIED" | "REJECTED";
   montar: "VERIFIED" | "MOUNTED";
   enviar: "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
   farm: FarmStatus;
@@ -45,6 +45,10 @@ export function useGetStatus() {
         color: "bg-walnut-brown",
       },
       CANCELLED: {
+        content: <IoCloseSharp className="p-0.5" color="white" />,
+        color: "bg-error",
+      },
+      REJECTED: {
         content: <IoCloseSharp className="p-0.5" color="white" />,
         color: "bg-error",
       },

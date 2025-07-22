@@ -1,6 +1,6 @@
 "use client";
 
-import SendTelegram from "@consumer/app/_components/sendTelegram";
+import SendTelegram from "@consumer/app/_components/telegram/send-telegram";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { formatPrice } from "@shared/utils/format-price";
 import { useRouter } from "next/navigation";

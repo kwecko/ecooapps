@@ -34,6 +34,7 @@ export default function Home() {
       titleGap="gap-0.5"
       subtitle={subtitle}
     >
+      
       <div className="w-full h-full overflow-y-hidden flex flex-col pt-2">
         <AddProductButton disabled={!isOfferingDay}/>
         <OffersList
@@ -49,7 +50,9 @@ export default function Home() {
           className="h-2/5"
           notFoundMessage="Não há ofertas anteriores."
           isOfferingDay={isOfferingDay}
+          filterDuplicatesWithCurrent={true}
         />
+        
       </div>
     </ModelPage>
   );
