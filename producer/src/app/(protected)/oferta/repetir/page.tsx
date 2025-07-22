@@ -191,7 +191,6 @@ export default function Home() {
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 recurring={offer.recurring ?? "false"}
-
                 closes_at={offer.closes_at}
                 submitAction={submitOffer}
               />
