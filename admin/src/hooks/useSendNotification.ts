@@ -16,14 +16,8 @@ export default function useSendNotification() {
     setIsLoading(true);
     let success: boolean = false;
     await sendNotificationAction(data)
-      .then((response) => {
-        if (response.message) {
-          const messageError = response.message as string;
-          handleError(messageError);
-          success = false;
-        } else {
-          success = true;
-        }
+      .then(() => {
+        success = true;
       })
       .catch(() => {
         handleError("Erro ao enviar a notificação.");
