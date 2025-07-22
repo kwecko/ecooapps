@@ -1,6 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { AiOutlineClose } from 'react-icons/ai'
+import Loader from './Loader'
+
 
 interface ModalProps {
   titleOpenModal?: string
@@ -18,6 +20,7 @@ interface ModalProps {
   setIsOpen?: (value: boolean) => void
   rejectAction?: () => void
   approveAction?: () => void
+  approveActionLoading?: boolean
 }
 
 export default function CustomModal({
@@ -36,6 +39,7 @@ export default function CustomModal({
   setIsOpen: externalSetIsOpen,
   rejectAction,
   approveAction,
+  approveActionLoading,
 }: ModalProps) {
 
   const [internalIsOpen, setInternalIsOpen] = useState(false);
@@ -144,7 +148,7 @@ export default function CustomModal({
                       className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
                       onClick={handleApproveActionModal}
                     >
-                      {titleConfirmModal}
+                      {approveActionLoading ? <Loader loaderType='component' /> : titleConfirmModal}
                     </button>
                     ) : null}
                     {!rejectAction && !approveAction && (
