@@ -1,16 +1,16 @@
 "use client";
 
+import { useState, useTransition } from "react";
 import { toast } from "sonner";
-import { useTransition, useState } from "react";
 
-import Loader from "@shared/components/Loader";
 import ButtonV2 from "@shared/components/ButtonV2";
 import DateInput from "@shared/components/DateInput";
+import InfoIconModal from "@shared/components/InfoIconModal";
+import Loader from "@shared/components/Loader";
 import { ModelPage } from "@shared/components/ModelPage";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useReportGenerator } from "@shared/hooks/useReportGenerator";
 import { ReportActions, ReportButtonData } from "@shared/types/report";
-import { HiOutlineInformationCircle } from "react-icons/hi";
 
 export default function Home({ reportData }: { reportData: ReportButtonData }) {
   const [isPending, startTransition] = useTransition();
@@ -36,11 +36,13 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
 
       const formatDate = (date?: Date) =>
         date
-          ? `${date.getUTCDate().toString().padStart(2, "0")}-${(date.getUTCMonth() + 1)
+          ? `${date.getUTCDate().toString().padStart(2, "0")}-${(
+              date.getUTCMonth() + 1
+            )
               .toString()
               .padStart(2, "0")}-${date.getUTCFullYear()}`
           : undefined;
-  
+
       const formattedInitialDate = formatDate(startDate);
       const formattedFinalDate = formatDate(endDate);
 
@@ -58,16 +60,16 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
     >
       <div className="w-full h-full flex flex-col">
         <div className="flex flex-col mb-3 mt-8 gap-6">
-        <DateInput
-          label="Data inicial"
-          value={startDate}
-          onChange={handleChangeInitialDate}
-        />
-        <DateInput
-          label="Data final"
-          value={endDate}
-          onChange={handleChangeFinalDate}
-        />
+          <DateInput
+            label="Data inicial"
+            value={startDate}
+            onChange={handleChangeInitialDate}
+          />
+          <DateInput
+            label="Data final"
+            value={endDate}
+            onChange={handleChangeFinalDate}
+          />
         </div>
 
         <div className="w-full h-full flex flex-col justify-between mb-2 mt-8">
@@ -85,9 +87,12 @@ export default function Home({ reportData }: { reportData: ReportButtonData }) {
                 >
                   {data.name}
                 </ButtonV2>
-                <div className="w-[10%] h-full flex justify-center items-center">
-                  <HiOutlineInformationCircle size={24} className="text-theme-primary" />
-                </div>
+                {data.information && (
+                  <InfoIconModal
+                    title={data.information.title}
+                    content={data.information.content}
+                  />
+                )}
               </div>
             ))}
           </div>
