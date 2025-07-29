@@ -7,6 +7,7 @@ import { ModelPage } from "@shared/components/ModelPage";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
 
 import pageSettings from "./page-settings";
+import { useEffect, useState } from "react";
 
 interface InputAmountProps {
   handleNextStep: () => void;
@@ -33,26 +34,33 @@ export default function InputAmount({
   const { title, subtitle } =
     pricing === "UNIT" ? pageSettings.unitAmount : pageSettings.weightAmount;
 
+  const [inputValue, setInputValue] = useState<string>("")
+  useEffect(() => {
+  setInputValue(amount.toString());
+}, [amount])
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const value = e.target.value;
+  setInputValue(value);
 
-    if (!validateValue(value)) {
-      return;
-    }
-
-    setAmount(parseInt(value) || 0);
-  };
+  const parsed = parseInt(value, 10);
+  if (!isNaN(parsed) && parsed > 0) {
+    setAmount(parsed);
+  }
+}
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (amount <= 0) {
-      toast.error("A quantidade mínima permitida é 1.");
-      return;
-    }
+  const parsed = parseInt(inputValue, 10);
+  if (isNaN(parsed) || parsed <= 0) {
+    toast.error("A quantidade mínima permitida é 1.");
+    return;
+  }
 
-    handleNextStep();
-  };
+  handleNextStep();
+}
+
 
   const unitLabel = convertUnitToLabel(pricing);
   const placeholder =
@@ -88,7 +96,7 @@ export default function InputAmount({
               onChange={handleChange}
               className="text-theme-primary w-full text-sm"
               type="number"
-              value={amount || ""}
+              value={inputValue}
               minLength={1}
               step={1}
               label={unitLabel}
@@ -96,6 +104,7 @@ export default function InputAmount({
               pattern="[0-9]*"
               required={true}
             />
+
           </div>
           <div className="w-24">
             <Input
