@@ -19,6 +19,7 @@ export default function Cdd() {
               isSelectedCycle={content.isSelectedCycle}
               title={content.title}
               link={content.link}
+              information={content.information}
               disabled={content.disabled}
             />
           );

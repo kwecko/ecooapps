@@ -2,24 +2,19 @@
 
 import { useCycleProvider } from "@shared/context/cycle";
 import { useRouter } from "next/navigation";
-import { HiOutlineInformationCircle } from "react-icons/hi";
 import { toast } from "sonner";
 
-interface CardComponentProps {
-  title: string;
-  link: string;
-  linkIcon?: string;
-  isSelectedCycle?: boolean;
-  hasNotification?: boolean;
-  disabled?: boolean;
-}
+import { ContentLink } from "@cdd/app/(protected)/(footered)/home/data";
+import InfoIconModal from "@shared/components/InfoIconModal";
+
+interface CardComponentProps extends ContentLink {}
 
 export default function CardComponent({
   title,
   link,
-  linkIcon,
   isSelectedCycle,
   hasNotification,
+  information,
   disabled = false,
 }: CardComponentProps) {
   const router = useRouter();
@@ -54,16 +49,14 @@ export default function CardComponent({
           )}
         </button>
       </div>
-      <div className="h-full flex justify-center items-center">
-        <button
-          disabled={disabled}
-          className={`rounded-full p-2 ${
-            disabled ? "text-gray-400" : "text-[#7B7B7B]"
-          }`}
-        >
-          <HiOutlineInformationCircle size={24} />
-        </button>
-      </div>
+      {information && (
+        <div className="h-full flex justify-center items-center">
+          <InfoIconModal
+            title={information.title}
+            content={information.content}
+          />
+        </div>
+      )}
     </div>
   );
 }
