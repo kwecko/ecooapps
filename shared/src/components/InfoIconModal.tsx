@@ -11,8 +11,9 @@ export default function InfoIconModal({ title, content }: InfoIconModalProps) {
     <CustomModal
       titleContentModal={title}
       contentModal={content}
-      bgConfirmModal="#2F4A4D"
-      titleConfirmModal="Ok"
+      bgConfirmModal="#00735E"
+      titleConfirmModal="Ok, entendi"
+      colorConfirmModal="#FFFFFF"
       buttonOpenModal={
         <HiOutlineInformationCircle className="text-2xl text-theme-primary" />
       }
