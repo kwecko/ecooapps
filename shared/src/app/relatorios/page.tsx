@@ -10,9 +10,9 @@ import Loader from "@shared/components/Loader";
 import { ModelPage } from "@shared/components/ModelPage";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { useReportGenerator } from "@shared/hooks/useReportGenerator";
-import { ReportActions, ReportButtonData } from "@shared/types/report";
+import { ReportActions, ReportButton } from "@shared/types/report";
 
-export default function Home({ reportData }: { reportData: ReportButtonData }) {
+export default function Home({ reportData }: { reportData: ReportButton[] }) {
   const [isPending, startTransition] = useTransition();
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
