@@ -17,9 +17,9 @@ export const contentLinksHomePage: ContentLink[] = [
     isSelectedCycle: true,
     hasNotification: false,
     information: {
-      title: "Receber Ofertas",
+      title: "Receber ofertas",
       content:
-        "Verifique os itens recebidos dos produtores, aprovando ou rejeitando ofertas.",
+        "Veja a lista de entregas de mercadorias de cada produtor. Verifique a qualidade, quantidade e validade dos produtos, um a um, para aprovar ou rejeitar uma oferta.",
     },
   },
   {
@@ -29,9 +29,9 @@ export const contentLinksHomePage: ContentLink[] = [
     isSelectedCycle: true,
     hasNotification: false,
     information: {
-      title: "Montar Sacola",
+      title: "Montar sacola",
       content:
-        "Veja quais sacolas foram montadas e registre as sacolas que já foram montadas.",
+        "Confira a lista de sacolas pendentes. Separe os produtos de cada sacola, conferindo itens e quantidades com muita atenção. Quando a sacola estiver pronta para despacho, marque-a como “pronta”.",
     },
   },
   {
@@ -41,9 +41,9 @@ export const contentLinksHomePage: ContentLink[] = [
     isSelectedCycle: true,
     hasNotification: false,
     information: {
-      title: "Enviar Sacola",
+      title: "Destinar sacola",
       content:
-        "Veja as sacolas disponíveis para serem enviadas e registre as sacolas já enviadas.",
+        "Exibe a lista de sacolas prontas para serem destinadas. Quando uma sacola sair para a entrega, ou ser retirada presencialmente, clique, respectivamente, em “Enviar” ou “Retirar”. Esta operação irá notificar a mudança de status do pedido do cliente.",
     },
   },
   {
@@ -53,8 +53,9 @@ export const contentLinksHomePage: ContentLink[] = [
     isSelectedCycle: true,
     hasNotification: false,
     information: {
-      title: "Gerar Relatórios",
-      content: "Baixe relatórios relativos às atividades do CDD.",
+      title: "Gerar relatórios",
+      content:
+        "Primeiro escolha o período que deseja emitir o relatório, logo após escolha uma das opções disponíveis de relatório para fazer o download (arquivo .pdf)",
     },
   },
 ];

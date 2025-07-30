@@ -8,8 +8,9 @@ export const reportButtonData: ReportButtonProps[] = [
     onClick: "list-bags",
     disabled: false,
     information: {
-      title: "Lista de Entregas",
-      content: "Baixe o relatório de lista de entregas.",
+      title: "Lista de entregas",
+      content:
+        "Este relatório exibe os endereços de entrega das sacolas, agrupados por bairros, para auxiliar o serviço dos entregadores.",
     },
   },
   {
@@ -17,8 +18,9 @@ export const reportButtonData: ReportButtonProps[] = [
     onClick: "list-bags-withdrawn",
     disabled: false,
     information: {
-      title: "Retirada de Sacolas",
-      content: "Baixe o relatório de retirada de sacolas.",
+      title: "Retirada de sacolas",
+      content:
+        "Este relatório exibe a listagem das sacolas dos clientes que optaram pela retirada presencial em uma unidade e-COO.",
     },
   },
   {
@@ -26,8 +28,9 @@ export const reportButtonData: ReportButtonProps[] = [
     onClick: "fetch-inbound",
     disabled: false,
     information: {
-      title: "Recebimento de Ofertas",
-      content: "Baixe o relatório de recebimento de ofertas.",
+      title: "Recebimento de ofertas",
+      content:
+        "Este relatório exibe todas as ofertas com status pendente para serem verificadas pelo agente da unidade e-COO.",
     },
   },
 ];
