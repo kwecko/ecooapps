@@ -4,7 +4,7 @@ interface ReportButtonProps extends ReportButton {}
 
 export const reportButtonData: ReportButtonProps[] = [
   {
-    name: "Lista de Entregas",
+    name: "Lista de Entregas (delivery)",
     onClick: "list-bags",
     disabled: false,
     information: {
@@ -14,7 +14,7 @@ export const reportButtonData: ReportButtonProps[] = [
     },
   },
   {
-    name: "Retirada de Sacolas",
+    name: "Lista de Retiradas (CDD)",
     onClick: "list-bags-withdrawn",
     disabled: false,
     information: {
