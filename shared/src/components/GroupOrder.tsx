@@ -60,7 +60,7 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
 
       {Object.entries(rejected).length > 0 && (
         <div className="mt-2">
-          <h4 className="text-red-600 font-semibold mb-1"> Não Entregues:</h4>
+          <h4 className="text-red-600 font-semibold mb-1"> Itens não Entregues:</h4>
           {Object.entries(rejected).map(([key, descriptionOrder]) => (
             <div
               key={key}
