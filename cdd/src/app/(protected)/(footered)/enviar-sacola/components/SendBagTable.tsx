@@ -22,10 +22,13 @@ type FilterStatus = {
 };
 
 const statuses: FilterStatus[] = [
-  { name: "todas", key: ["MOUNTED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
-  { name: "separadas", key: ["MOUNTED"] },
+  {
+    name: "todas",
+    key: ["MOUNTED", "DISPATCHED", "RECEIVED", "DEFERRED", "FETCH", "FETCHED"],
+  },
+  { name: "separadas", key: ["MOUNTED", "FETCH"] },
   { name: "enviadas", key: ["DISPATCHED"] },
-  { name: "entregues", key: ["RECEIVED"] },
+  { name: "entregues", key: ["RECEIVED", "FETCHED"] },
   { name: "retornadas", key: ["DEFERRED"] },
 ];
 
@@ -60,7 +63,7 @@ export default function SendBagTable() {
   const { data: bags, isLoading } = useListBags({
     page,
     statuses: statuses.find((status) => status.name === selectedStatus)
-      ?.key as BagStatus["send"][],
+      ?.key as (BagStatus["send"] | "FETCH" | "FETCHED")[],
     user: debounceSearch,
   });
 
@@ -135,7 +138,7 @@ export default function SendBagTable() {
 
                     return getStatus({
                       type: "enviar",
-                      status: status as BagStatus["send"],
+                      status: status as any,
                     });
                   },
                 },

@@ -11,7 +11,7 @@ export type BagStatus = {
 };
 
 export type SendStatus = Array<
-  "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
+  "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED" | "FETCH" | "FETCHED"
 >;
 export type BuildStatus = Array<"VERIFIED" | "MOUNTED">;
 export type OfferStatus = Array<
