@@ -8,6 +8,7 @@ import TableSkeleton from "@shared/components/TableSkeleton";
 
 import { BagStatus } from "@shared/types/bag-status";
 
+import { HandleBagRequest } from "@cdd/app/_actions/bags/PATCH/handle-bag";
 import useFetchBag from "@cdd/hooks/bags/useFetchBag";
 import useHandleBag from "@cdd/hooks/bags/useHandleBag";
 import GroupOrder from "@shared/components/GroupOrder";
@@ -49,7 +50,7 @@ export default function SendBagMiniTable() {
   const handleStatusBag = (bag_id: string, status: BagStatus["send"]) => {
     handleBag({
       bag_id,
-      status,
+      status: status as HandleBagRequest["status"],
       successMessage: `A sacola foi ${bagStatusOptions
         .find((option) => option.value === status)
         ?.label.toLowerCase()} com sucesso!`,

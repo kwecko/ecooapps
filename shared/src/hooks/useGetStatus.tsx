@@ -1,6 +1,5 @@
 import { twMerge } from "tailwind-merge";
 
-import React from "react";
 import { FaCheck, FaExclamation } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { IoCloseSharp } from "react-icons/io5";
@@ -11,21 +10,47 @@ export type OfertaStatus = Array<"PENDING" | "CANCELLED" | "VERIFIED">;
 type FarmStatus = "ACTIVE" | "INACTIVE" | "PENDING";
 export type MontarStatus = Array<"VERIFIED" | "MOUNTED">;
 export type EnviarStatus = Array<
-  "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED"
+  "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED" | "FETCH" | "FETCHED"
 >;
 
 export type StatusMap = {
   oferta: "PENDING" | "CANCELLED" | "VERIFIED" | "REJECTED";
   montar: "VERIFIED" | "MOUNTED";
-  enviar: "MOUNTED" | "DISPATCHED" | "RECEIVED" | "DEFERRED";
+  enviar:
+    | "MOUNTED"
+    | "DISPATCHED"
+    | "RECEIVED"
+    | "DEFERRED"
+    | "FETCH"
+    | "FETCHED";
   farm: FarmStatus;
 };
 
 type StatusContent = {
-  oferta: { content: JSX.Element; color: string };
-  montar: { content: JSX.Element; color: string };
-  enviar: { content: JSX.Element; color: string };
-  farm: { content: JSX.Element; color: string };
+  oferta: {
+    content?: JSX.Element;
+    color?: string;
+    text?: string;
+    textColor?: string;
+  };
+  montar: {
+    content?: JSX.Element;
+    color?: string;
+    text?: string;
+    textColor?: string;
+  };
+  enviar: {
+    content?: JSX.Element;
+    color?: string;
+    text?: string;
+    textColor?: string;
+  };
+  farm: {
+    content?: JSX.Element;
+    color?: string;
+    text?: string;
+    textColor?: string;
+  };
 };
 
 type StatusInfo = {
@@ -37,70 +62,92 @@ interface UseGetStatusProps<T extends GetStatusType> {
   status: StatusMap[T];
 }
 
-export function useGetStatus() {
-  const getStatusInfo: StatusInfo = {
-    oferta: {
-      PENDING: {
-        content: <HiDotsHorizontal className="p-0.5" color="white" />,
-        color: "bg-walnut-brown",
-      },
-      CANCELLED: {
-        content: <IoCloseSharp className="p-0.5" color="white" />,
-        color: "bg-error",
-      },
-      REJECTED: {
-        content: <IoCloseSharp className="p-0.5" color="white" />,
-        color: "bg-error",
-      },
-      VERIFIED: {
-        content: <FaCheck className="p-1" color="white" />,
-        color: "bg-rain-forest",
-      },
+const getStatusInfo: StatusInfo = {
+  oferta: {
+    PENDING: {
+      content: <HiDotsHorizontal className="p-0.5" color="white" />,
+      color: "bg-walnut-brown",
     },
-    montar: {
-      VERIFIED: {
-        content: <HiDotsHorizontal size={10} color="white" />,
-        color: "bg-walnut-brown",
-      },
-      MOUNTED: {
-        content: <FaCheck className="p-1" color="white" />,
-        color: "bg-rain-forest",
-      },
+    CANCELLED: {
+      content: <IoCloseSharp className="p-0.5" color="white" />,
+      color: "bg-error",
     },
-    enviar: {
-      MOUNTED: {
-        content: <FaExclamation size={10} color="white" />,
-        color: "bg-battleship-gray",
-      },
-      DISPATCHED: {
-        content: <HiDotsHorizontal color="white" />,
-        color: "bg-walnut-brown",
-      },
-      RECEIVED: {
-        content: <FaCheck className="p-1" color="white" />,
-        color: "bg-rain-forest",
-      },
-      DEFERRED: {
-        content: <IoCloseSharp className="p-0.5" color="white" />,
-        color: "bg-error",
-      },
+    REJECTED: {
+      content: <IoCloseSharp className="p-0.5" color="white" />,
+      color: "bg-error",
     },
-    farm: {
-      ACTIVE: {
-        content: <FaCheck className="p-1" color="white" />,
-        color: "bg-rain-forest",
-      },
-      INACTIVE: {
-        content: <IoCloseSharp className="p-0.5" color="white" />,
-        color: "bg-error",
-      },
-      PENDING: {
-        content: <HiDotsHorizontal className="p-0.5" color="white" />,
-        color: "bg-walnut-brown",
-      },
+    VERIFIED: {
+      content: <FaCheck className="p-1" color="white" />,
+      color: "bg-rain-forest",
     },
-  };
+  },
+  montar: {
+    VERIFIED: {
+      content: <HiDotsHorizontal size={10} color="white" />,
+      color: "bg-[#4F4743]",
+      text: "Montar",
+      textColor: "text-[#FFFFFF]",
+    },
+    MOUNTED: {
+      content: <FaCheck className="p-1" color="white" />,
+      color: "bg-[#EEF1F4]",
+      text: "Pronta",
+      textColor: "text-[#545F71]",
+    },
+  },
+  enviar: {
+    MOUNTED: {
+      content: <FaExclamation size={10} color="white" />,
+      color: "bg-[#00735E]",
+      text: "Enviar",
+      textColor: "text-[#FFFFFF]",
+    },
+    DISPATCHED: {
+      content: <HiDotsHorizontal color="white" />,
+      color: "bg-[#EEF1F4]",
+      text: "Enviada",
+      textColor: "text-[#545F71]",
+    },
+    RECEIVED: {
+      content: <FaCheck className="p-1" color="white" />,
+      color: "bg-[#EEF1F4]",
+      text: "Recebida",
+      textColor: "text-[#545F71]",
+    },
+    DEFERRED: {
+      content: <IoCloseSharp className="p-0.5" color="white" />,
+      color: "bg-error",
+      text: "Retornada",
+      textColor: "text-white",
+    },
+    FETCH: {
+      color: "bg-[#4F4743]",
+      text: "Retirar",
+      textColor: "text-[#FFFFFF]",
+    },
+    FETCHED: {
+      color: "bg-[#EEF1F4]",
+      text: "Retirada",
+      textColor: "text-[#545F71]",
+    },
+  },
+  farm: {
+    ACTIVE: {
+      content: <FaCheck className="p-1" color="white" />,
+      color: "bg-rain-forest",
+    },
+    INACTIVE: {
+      content: <IoCloseSharp className="p-0.5" color="white" />,
+      color: "bg-error",
+    },
+    PENDING: {
+      content: <HiDotsHorizontal className="p-0.5" color="white" />,
+      color: "bg-walnut-brown",
+    },
+  },
+};
 
+export function useGetStatus() {
   const getStatus = <T extends GetStatusType>({
     type,
     status,
@@ -115,6 +162,31 @@ export function useGetStatus() {
         )}
       >
         {statusInfo?.content}
+      </div>
+    );
+  };
+
+  return {
+    getStatus,
+  };
+}
+
+export function useGetStatusText() {
+  const getStatus = <T extends GetStatusType>({
+    type,
+    status,
+  }: UseGetStatusProps<T>) => {
+    const statusInfo = getStatusInfo[type][status];
+
+    return (
+      <div
+        className={twMerge(
+          "flex justify-center items-center bg-rain-forest py-2 px-4 rounded-full font-inter font-semibold text-sm leading-4.75 tracking-tight-2",
+          statusInfo?.color,
+          statusInfo?.textColor
+        )}
+      >
+        <span className="w-full">{statusInfo?.text}</span>
       </div>
     );
   };
