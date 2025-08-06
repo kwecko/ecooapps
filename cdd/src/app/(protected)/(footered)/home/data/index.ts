@@ -35,7 +35,7 @@ export const contentLinksHomePage: ContentLink[] = [
     },
   },
   {
-    title: "Enviar sacola",
+    title: "Destinar sacola",
     link: "/enviar-sacola",
     disabled: false,
     isSelectedCycle: true,

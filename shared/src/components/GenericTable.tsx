@@ -1,5 +1,5 @@
 import { Table } from "@shared/components/NewTable";
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
 
 export interface ColumnProps<T> {
@@ -50,7 +50,7 @@ const GenericTable = <T,>({
               key={
                 typeof column.key === "string" ? column.key : `header-${index}`
               }
-              className={twMerge("truncate", column.className)}
+              className={twMerge("truncate text-center", column.className)}
               style={{
                 gridColumn: `span ${Math.min(
                   column.colSpan || 1,

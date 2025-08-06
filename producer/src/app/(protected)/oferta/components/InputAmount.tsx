@@ -16,15 +16,6 @@ interface InputAmountProps {
   setAmount: (amount: number) => void;
 }
 
-function validateValue(value: string) {
-  if (value === "" || parseInt(value) <= 0) {
-    toast.error("A quantidade mínima permitida é 1.");
-    return false;
-  }
-
-  return true;
-}
-
 export default function InputAmount({
   handleNextStep,
   amount,
@@ -34,33 +25,43 @@ export default function InputAmount({
   const { title, subtitle } =
     pricing === "UNIT" ? pageSettings.unitAmount : pageSettings.weightAmount;
 
-  const [inputValue, setInputValue] = useState<string>("")
+  const [inputValue, setInputValue] = useState<string>("");
+
   useEffect(() => {
-  setInputValue(amount.toString());
-}, [amount])
+    setInputValue(amount.toString());
+  }, [amount]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const value = e.target.value;
-  setInputValue(value);
+    const value = e.target.value;
+    setInputValue(value);
 
-  const parsed = parseInt(value, 10);
-  if (!isNaN(parsed) && parsed > 0) {
-    setAmount(parsed);
-  }
-}
+    const cleaned = value.replace(/\s+/g, "");
+    const parsed = parseInt(cleaned, 10);
+
+    if (!isNaN(parsed) && parsed > 0) {
+      setAmount(parsed);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === " ") {
+      e.preventDefault(); // impede digitação de espaço
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const parsed = parseInt(inputValue, 10);
-  if (isNaN(parsed) || parsed <= 0) {
-    toast.error("A quantidade mínima permitida é 1.");
-    return;
-  }
+    const cleaned = inputValue.replace(/\s+/g, "");
+    const parsed = parseInt(cleaned, 10);
 
-  handleNextStep();
-}
+    if (isNaN(parsed) || parsed <= 0) {
+      toast.error("A quantidade mínima permitida é 1.");
+      return;
+    }
 
+    handleNextStep();
+  };
 
   const unitLabel = convertUnitToLabel(pricing);
   const placeholder =
@@ -94,6 +95,7 @@ export default function InputAmount({
             <Input
               placeholder={placeholder}
               onChange={handleChange}
+              onKeyDown={handleKeyDown}
               className="text-theme-primary w-full text-sm"
               type="number"
               value={inputValue}
@@ -104,7 +106,6 @@ export default function InputAmount({
               pattern="[0-9]*"
               required={true}
             />
-
           </div>
           <div className="w-24">
             <Input

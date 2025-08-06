@@ -7,9 +7,9 @@ import { ModelPage } from "@shared/components/ModelPage";
 export default function Home() {
   return (
     <ModelPage
-      title="Enviar sacolas"
+      title="Destinar sacolas"
       titleGap="gap-2"
-      subtitle="Envie as sacolas abaixo"
+      subtitle="Destine as sacolas abaixo"
       overflowAuto={true}
     >
       <SendBagTable />
