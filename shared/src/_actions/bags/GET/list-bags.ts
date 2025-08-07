@@ -21,7 +21,7 @@ export async function listBags({
 
   params.append("page", page.toString());
 
-  if (statuses) {
+  if (statuses && statuses.length > 0) {
     params.append("statuses", statuses.join(","));
   }
 

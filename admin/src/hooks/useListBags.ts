@@ -1,4 +1,4 @@
-import { listBags } from "@admin/_actions/bags/list-bags";
+import { listBags } from "@shared/_actions/bags/GET/list-bags";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { BagDTO } from "@shared/interfaces/dtos";
 import { useEffect, useState } from "react";
@@ -17,6 +17,8 @@ export default function useListBags({ page }: UseListBagsProps) {
       setIsLoading(true);
       listBags({
         page: page,
+        statuses: [],
+        user: "",
       }).then((response) => {
         if (response.message) {
           handleError(response.message);
