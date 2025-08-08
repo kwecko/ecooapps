@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { formatDateToDDMMYYYY } from "@shared/utils/date-handlers";
+import { listBags } from "@shared/_actions/bags/GET/list-bags";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { BagDTO } from "@shared/interfaces/dtos";
-import { listBags } from "@admin/_actions/bags/list-bags";
+import { formatDateToDDMMYYYY } from "@shared/utils/date-handlers";
 
 const useBagsPage = () => {
   const [isPending, startTransition] = useTransition();
@@ -40,7 +40,7 @@ const useBagsPage = () => {
     const date_from = formatDateToDDMMYYYY(initialDate);
     const date_to = formatDateToDDMMYYYY(finalDate);
 
-    listBags({ page, date_from, date_to })
+    listBags({ page, date_from, date_to, statuses: [], user: "" })
       .then((response) => {
         if (response.message) return handleError(response.message);
         setBags(response.data);
