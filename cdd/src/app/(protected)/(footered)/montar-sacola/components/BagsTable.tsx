@@ -71,7 +71,7 @@ export default function BagsTable() {
   };
 
   const handleClick = (id: string) => {
-    router.push(`/enviar-sacola/${id}`);
+    router.push(`/montar-sacola/${id}`);
   };
 
   return (
