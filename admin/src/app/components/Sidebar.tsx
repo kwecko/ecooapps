@@ -8,7 +8,7 @@ import {
   HiOutlineCollection,
   HiOutlineDocumentReport,
   HiOutlineLogin,
-  HiOutlineUserAdd,
+  HiOutlineUser,
 } from "react-icons/hi";
 
 import { useRouter } from "next/navigation";
@@ -30,7 +30,10 @@ export default function Sidebar() {
         <Navlink href="/pedidos" icon={<HiOutlineCalculator />}>
           Pedidos
         </Navlink>
-        <Navlink href="/produtores" icon={<HiOutlineUserAdd />}>
+        <Navlink href="/consumidores" icon={<HiOutlineUser />}>
+          Consumidores
+        </Navlink>
+        <Navlink href="/produtores" icon={<HiOutlineUser />}>
           Produtores
         </Navlink>
         <Navlink href="/produtos" icon={<HiOutlineCollection />}>
