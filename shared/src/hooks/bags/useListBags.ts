@@ -22,7 +22,7 @@ export default function useListBags({
     setIsLoading(true);
     listBags({
       page: page,
-      statuses: statuses,
+      statuses: statuses.filter((status) => status !== "FETCH" && status !== "FETCHED"),
       user: user,
     }).then((response) => {
       if (response.message) {
