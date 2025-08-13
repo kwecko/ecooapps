@@ -7,21 +7,13 @@ import { ModelPage } from "@shared/components/ModelPage";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
 
 import pageSettings from "./page-settings";
+import { useEffect, useState } from "react";
 
 interface InputAmountProps {
   handleNextStep: () => void;
   amount: number;
   pricing: "UNIT" | "WEIGHT";
   setAmount: (amount: number) => void;
-}
-
-function validateValue(value: string) {
-  if (value === "" || parseInt(value) <= 0) {
-    toast.error("A quantidade mínima permitida é 1.");
-    return false;
-  }
-
-  return true;
 }
 
 export default function InputAmount({
@@ -33,20 +25,37 @@ export default function InputAmount({
   const { title, subtitle } =
     pricing === "UNIT" ? pageSettings.unitAmount : pageSettings.weightAmount;
 
+  const [inputValue, setInputValue] = useState<string>("");
+
+  useEffect(() => {
+    setInputValue(amount.toString());
+  }, [amount]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    setInputValue(value);
 
-    if (!validateValue(value)) {
-      return;
+    const cleaned = value.replace(/\s+/g, "");
+    const parsed = parseInt(cleaned, 10);
+
+    if (!isNaN(parsed) && parsed > 0) {
+      setAmount(parsed);
     }
+  };
 
-    setAmount(parseInt(value) || 0);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === " ") {
+      e.preventDefault(); // impede digitação de espaço
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (amount <= 0) {
+    const cleaned = inputValue.replace(/\s+/g, "");
+    const parsed = parseInt(cleaned, 10);
+
+    if (isNaN(parsed) || parsed <= 0) {
       toast.error("A quantidade mínima permitida é 1.");
       return;
     }
@@ -86,9 +95,10 @@ export default function InputAmount({
             <Input
               placeholder={placeholder}
               onChange={handleChange}
+              onKeyDown={handleKeyDown}
               className="text-theme-primary w-full text-sm"
               type="number"
-              value={amount || ""}
+              value={inputValue}
               minLength={1}
               step={1}
               label={unitLabel}

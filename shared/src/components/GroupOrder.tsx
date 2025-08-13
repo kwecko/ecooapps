@@ -12,37 +12,38 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
     return <span>Não há mais ofertas...</span>;
   }
 
-  const description: {
+  const accepted: {
+    [key: string]: { amount: number; unit: string; farmName: string };
+  } = {};
+
+  const rejected: {
     [key: string]: { amount: number; unit: string; farmName: string };
   } = {};
 
   orders.forEach((order) => {
     const unit = convertUnit(order.offer.product.pricing);
     const productKey = `${order.offer.product.name}-${order.offer.catalog.farm.name}-${unit}`;
+    const amount = convertOfferAmount(order.amount, order.offer.product.pricing);
 
-    if (description[productKey]) {
-      description[productKey].amount = parseFloat(
-      (
-        description[productKey].amount +
-        convertOfferAmount(order.amount, order.offer.product.pricing)
-      ).toFixed(1)
+    const isRejected = order.status !== "RECEIVED";
+    const target = isRejected ? rejected : accepted;
+
+    if (target[productKey]) {
+      target[productKey].amount = parseFloat(
+        (target[productKey].amount + amount).toFixed(1)
       );
     } else {
-      description[productKey] = {
-      amount: parseFloat(
-        convertOfferAmount(order.amount, order.offer.product.pricing).toFixed(
-        1
-        )
-      ),
-      unit: unit,
-      farmName: order.offer.catalog.farm.name,
+      target[productKey] = {
+        amount: parseFloat(amount.toFixed(1)),
+        unit: unit,
+        farmName: order.offer.catalog.farm.name,
       };
     }
   });
 
   return (
     <div className="overflow-y-auto">
-      {Object.entries(description).map(([key, descriptionOrder]) => (
+      {Object.entries(accepted).map(([key, descriptionOrder]) => (
         <div
           key={key}
           className="flex flex-col font-normal text-base leading-5.5 tracking-tight-2 font-inter"
@@ -50,10 +51,32 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
           {`${descriptionOrder.amount} ${descriptionOrder.unit} - ${
             key.split("-")[0]
           } `}
-          <span className="text-sm leading-5.5 font-semibold text-theme-primary font-poppins">{`(${descriptionOrder.farmName})`}</span>
+          <span className="text-sm leading-5.5 font-semibold text-theme-primary font-poppins">
+            ({descriptionOrder.farmName})
+          </span>
           <br />
         </div>
       ))}
+
+      {Object.entries(rejected).length > 0 && (
+        <div className="mt-2">
+          <h4 className="text-red-600 font-semibold mb-1"> Itens não entregues:</h4>
+          {Object.entries(rejected).map(([key, descriptionOrder]) => (
+            <div
+              key={key}
+              className="flex flex-col font-normal text-base leading-5.5 tracking-tight-2 font-inter text-red-500"
+            >
+              {`${descriptionOrder.amount} ${descriptionOrder.unit} - ${
+                key.split("-")[0]
+              } `}
+              <span className="text-sm leading-5.5 font-semibold text-red-500 font-poppins">
+                ({descriptionOrder.farmName})
+              </span>
+              <br />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

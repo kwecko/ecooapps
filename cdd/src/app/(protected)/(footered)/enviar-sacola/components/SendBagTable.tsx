@@ -1,18 +1,19 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+// Não precisa mais de useState
 
 import { BagStatus } from "@shared/types/bag-status";
 
-import useListCurrentBags from "@cdd/hooks/bags/useListCurrentBags";
 import EmptyBox from "@shared/components/EmptyBox";
 import GenericTable from "@shared/components/GenericTable";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import TablePaginationControl from "@shared/components/TablePaginationControl";
-import TableSearchInput from "@shared/components/TableSearchInput";
+import { default as useListBags } from "@shared/hooks/bags/useListBags";
 import { useDebounce } from "@shared/hooks/useDebounce";
-import { useGetStatus } from "@shared/hooks/useGetStatus";
-import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { useGetStatusText } from "@shared/hooks/useGetStatus";
+// import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagDTO } from "@shared/interfaces/dtos";
 
 type FilterStatus = {
@@ -21,84 +22,71 @@ type FilterStatus = {
 };
 
 const statuses: FilterStatus[] = [
-  { name: "todas", key: ["MOUNTED", "DISPATCHED", "RECEIVED", "DEFERRED"] },
-  { name: "separadas", key: ["MOUNTED"] },
+  {
+    name: "todas",
+    key: ["MOUNTED", "DISPATCHED", "RECEIVED", "DEFERRED", "FETCH", "FETCHED"],
+  },
+  { name: "separadas", key: ["MOUNTED", "FETCH"] },
   { name: "enviadas", key: ["DISPATCHED"] },
-  { name: "entregues", key: ["RECEIVED"] },
+  { name: "entregues", key: ["RECEIVED", "FETCHED"] },
   { name: "retornadas", key: ["DEFERRED"] },
 ];
 
 export default function SendBagTable() {
   const router = useRouter();
 
-  const { getStatus } = useGetStatus();
+  const { getStatus } = useGetStatusText();
 
   const searchParams = useSearchParams();
-  const selectedStatus = searchParams.get("status") ?? "todas";
   const pathname = usePathname();
 
-  const { page, query } = usePageQueryParams();
-  const debounceSearch = useDebounce(query, 300);
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    searchParams.get("status") ?? "todas"
+  );
 
-  const setSelectedStatus = (status: string) => {
+  useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("status", status);
-    router.push(`${pathname}?${params.toString()}`);
+    params.set("status", selectedStatus);
+
+    if (selectedStatus === "todas") params.delete("status");
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [selectedStatus]);
+
+  const page = Number(searchParams.get("p") ?? 1);
+  const search = searchParams.get("q") ?? "";
+  const debounceSearch = useDebounce(search, 300);
+
+  const updateStatus = (status: string) => {
+    setSelectedStatus(status);
   };
 
-  const { data: bags, isLoading } = useListCurrentBags({
+  const { data: bags, isLoading } = useListBags({
     page,
     statuses: statuses.find((status) => status.name === selectedStatus)
-      ?.key as BagStatus["send"][],
+      ?.key as (BagStatus["send"] | "FETCH" | "FETCHED")[],
     user: debounceSearch,
   });
 
   const handleStatusFilterClick = (status: FilterStatus) => {
     if (status.name === selectedStatus) {
-      setSelectedStatus("todas");
+      updateStatus("todas");
       return;
     }
-
-    const statusName = status.name;
-
-    setSelectedStatus(statusName);
+    updateStatus(status.name);
   };
 
   const handleClick = (id: string) => {
     router.push(`/enviar-sacola/${id}`);
   };
 
-  const headers = [
-    { label: "Código", style: "w-[30%]" },
-    { label: "Cliente", style: "w-1/2" },
-    { label: "Status", style: "w-1/5 text-center" },
-  ];
-
-  const info =
-    bags.length > 0
-      ? bags.map((bag) => ({
-          id: bag.id,
-          data: [
-            { detail: bag.id },
-            { detail: `${bag.customer.first_name} ${bag.customer.last_name}` },
-            {
-              detail: getStatus({
-                type: "enviar",
-                status: bag.status as BagStatus["send"],
-              }),
-            },
-          ],
-        }))
-      : [];
-
   return (
     <div className="flex flex-col gap-2.5 w-full items-center justify-between h-full">
       <div className="w-full flex flex-col gap-2.5 justify-start items-center">
-        <TableSearchInput
+        {/* <TableSearchInput
           placeholder={"Filtrar por cliente..."}
           icon="search"
           className="lg:self-end w-full"
-        />
+        /> */}
         <StatusFilterButtons
           statuses={statuses}
           selectedStatus={selectedStatus}
@@ -127,20 +115,32 @@ export default function SendBagTable() {
                 {
                   header: "Cliente",
                   key: "customerName",
-                  colSpan: 6,
+                  colSpan: 4,
                   render: (row: BagDTO) =>
                     `${row.customer.first_name} ${row.customer.last_name}`,
                 },
                 {
                   header: "Status",
                   key: "status",
-                  colSpan: 2,
+                  colSpan: 4,
                   className: "items-center justify-center w-full",
-                  render: (row: BagDTO) =>
-                    getStatus({
+                  render: (row: BagDTO) => {
+                    let status = row.status;
+
+                    if (status === "MOUNTED" && row.shipping > 0)
+                      status = "FETCH";
+
+                    if (
+                      (status === "DISPATCHED" || status === "RECEIVED") &&
+                      row.shipping > 0
+                    )
+                      status = "FETCHED";
+
+                    return getStatus({
                       type: "enviar",
-                      status: row.status as BagStatus["send"],
-                    }),
+                      status: status as any,
+                    });
+                  },
                 },
               ]}
               data={bags}
