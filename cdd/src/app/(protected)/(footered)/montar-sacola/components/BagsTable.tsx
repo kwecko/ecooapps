@@ -9,9 +9,9 @@ import EmptyBox from "@shared/components/EmptyBox";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import { useDebounce } from "@shared/hooks/useDebounce";
 
+import { default as useListCurrentBags } from "@cdd/hooks/bags/useListCurrentBags";
 import GenericTable from "@shared/components/GenericTable";
 import TablePaginationControl from "@shared/components/TablePaginationControl";
-import { default as useListBags } from "@shared/hooks/bags/useListBags";
 import { useGetStatusText } from "@shared/hooks/useGetStatus";
 // import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagDTO } from "@shared/interfaces/dtos";
@@ -55,11 +55,11 @@ export default function BagsTable() {
     setSelectedStatus(status);
   };
 
-  const { data: bags, isLoading } = useListBags({
+  const { data: bags, isLoading } = useListCurrentBags({
     page,
+    user: debounceSearch,
     statuses: statuses.find((status) => status.name === selectedStatus)
       ?.key as BagStatus["build"][],
-    user: debounceSearch,
   });
 
   const handleStatusFilterClick = (status: FilterStatus) => {
