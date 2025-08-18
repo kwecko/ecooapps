@@ -4,17 +4,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 // Não precisa mais de useState
 
-import { BagStatus } from "@shared/types/bag-status";
-
+import { default as useListCurrentBags } from "@cdd/hooks/bags/useListCurrentBags";
 import EmptyBox from "@shared/components/EmptyBox";
 import GenericTable from "@shared/components/GenericTable";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import TablePaginationControl from "@shared/components/TablePaginationControl";
-import { default as useListBags } from "@shared/hooks/bags/useListBags";
 import { useDebounce } from "@shared/hooks/useDebounce";
 import { useGetStatusText } from "@shared/hooks/useGetStatus";
 // import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagDTO } from "@shared/interfaces/dtos";
+import { BagStatus } from "@shared/types/bag-status";
 
 type FilterStatus = {
   name: string;
@@ -60,11 +59,12 @@ export default function SendBagTable() {
     setSelectedStatus(status);
   };
 
-  const { data: bags, isLoading } = useListBags({
+  const { data: bags, isLoading } = useListCurrentBags({
     page,
-    statuses: statuses.find((status) => status.name === selectedStatus)
-      ?.key as (BagStatus["send"] | "FETCH" | "FETCHED")[],
     user: debounceSearch,
+    statuses: (statuses.find(
+      (status) => status.name === selectedStatus
+    )?.key ?? []) as BagStatus["send"][],
   });
 
   const handleStatusFilterClick = (status: FilterStatus) => {
