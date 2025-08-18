@@ -9,12 +9,14 @@ type BagStatus =
   | "DISPATCHED"
   | "RECEIVED"
   | "DEFERRED"
-  | "CANCELLED";
+  | "CANCELLED"
+  | "FETCH"
+  | "FETCHED";
 
 export interface ListCurrentBagsRequest {
   page: number;
   cycle_id: string;
-  statuses: BagStatus[];
+  statuses?: BagStatus[];
   user?: string;
 }
 
@@ -24,12 +26,15 @@ export async function listCurrentBags({
   statuses,
   user,
 }: ListCurrentBagsRequest) {
-  const statusParams = statuses
-    .map((singleStatus) => `${singleStatus}`)
-    .join(",");
-  const url = `/bags/current?page=${page}&cycle_id=${cycle_id}&statuses=${statusParams}${
-    user ? `&user=${user}` : ""
-  }`;
+  const params = new URLSearchParams();
+
+  params.append("page", page.toString());
+  params.append("cycle_id", cycle_id);
+
+  user && params.append("user", user);
+  statuses && params.append("statuses", statuses.filter((status) => status !== "FETCH" && status !== "FETCHED").join(","));
+
+  const url = `/bags/current?${params.toString()}`;
 
   const response = ApiService.GET({
     url,
