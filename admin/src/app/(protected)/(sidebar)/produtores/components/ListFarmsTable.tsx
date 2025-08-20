@@ -70,17 +70,22 @@ export default function ListFarmsTable() {
           />
         );
       },
-    },
-    { header: 'Nome', key: 'admin.first_name', colSpan: 4 },
-    { header: 'Fazenda', key: 'name', colSpan: 4 },
-    { header: 'Talão', key: 'tally', colSpan: 2 },
-    { header: 'Celular', key: 'admin.phone', colSpan: 3 },
-    {
-      header: 'Status',
-      key: 'status',
-      colSpan: 2,
-      className: 'min-w-[120px] flex justify-end',
-      render: (row: FarmDTO) => {
+        },
+        { 
+          header: 'Nome', 
+          key: 'admin.name', 
+          colSpan: 4,
+          render: (row: FarmDTO) => `${row.admin?.first_name ?? ''} ${row.admin?.last_name ?? ''}`.trim(),
+        },
+        { header: 'Fazenda', key: 'name', colSpan: 4 },
+        { header: 'Talão', key: 'tally', colSpan: 2 },
+        { header: 'Celular', key: 'admin.phone', colSpan: 3 },
+        {
+          header: 'Status',
+          key: 'status',
+          colSpan: 2,
+          className: 'min-w-[120px] flex justify-end',
+          render: (row: FarmDTO) => {
         return <FarmStatusChip row={row} />;
       },
     },
