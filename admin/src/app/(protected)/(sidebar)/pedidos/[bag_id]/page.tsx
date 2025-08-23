@@ -87,6 +87,10 @@ const BagDetailsPage = () => {
                     <p className='flex-1'>{bagDetails.customer.cpf}</p>
                   </div>
                   <div className='flex justify-between items-center'>
+                    <p className='text-sm font-medium w-32'>Telefone:</p>
+                    <p className='flex-1'>{bagDetails.customer.phone}</p>
+                  </div>
+                  <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Data:</p>
                     <p className='flex-1'>
                       {formatDateToDateAndTime(bagDetails.created_at)}
