@@ -132,7 +132,7 @@ export const useChangeComercialRegistrationForm = () => {
     farmFormData.append("name", otherData.name || "");
     farmFormData.append("tally", otherData.tally || "");
     farmFormData.append("description", otherData.description || "");
-    if (otherData.photo && otherData.photo != photo) {
+    if (otherData.photo) {
       farmFormData.append("photo", otherData.photo);
     }
 
@@ -145,7 +145,7 @@ export const useChangeComercialRegistrationForm = () => {
       }
 
       toast.success("Cadastro atualizado com sucesso!");
-      window.location.href = "/configuracoes";
+      // window.location.href = "/configuracoes";
     } catch (error) {
       handleError(error as string);
       toast.error("Erro ao atualizar o cadastro.");
