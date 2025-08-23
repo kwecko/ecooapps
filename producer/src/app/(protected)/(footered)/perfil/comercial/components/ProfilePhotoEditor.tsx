@@ -19,7 +19,6 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
   const [croppedArea, setCroppedArea] = useState<Area | null>(null)
   const [showEditor, setShowEditor] = useState(false)
   const [originalImage, setOriginalImage] = useState<string | null>(null)
-  const [fileToSubmit, setFileToSubmit] = useState<File | null>(null); // Novo estado para o arquivo cropado
 
   const onCropComplete = (_: Area, croppedAreaPixels: Area) => {
     setCroppedArea(croppedAreaPixels)
@@ -71,12 +70,22 @@ function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEd
 };
 
 
-const handleSave = async (onChangeForm: (base64: string) => void) => {
+const handleSave = async (onChangeForm: (file: File) => void) => {
   try {
     const croppedBase64 = await getCroppedImgBase64();
     if (croppedBase64) {
+      const base64Data = croppedBase64.split(',')[1]; // Remove o prefixo data:image/jpeg;base64,
+      const byteCharacters = atob(base64Data);
+      const byteNumbers = new Array(byteCharacters.length);
+      
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      
+      const byteArray = new Uint8Array(byteNumbers);
+      const file = new File([byteArray], 'profile-photo.jpg', { type: 'image/jpeg' });
       setPhoto(croppedBase64); 
-      onChangeForm(croppedBase64); 
+      onChangeForm(file); 
     }
     setShowEditor(false);
   } catch (error) {
@@ -89,7 +98,6 @@ const handleSave = async (onChangeForm: (base64: string) => void) => {
     setShowEditor(false)
     setOriginalImage(null)
     setCrop({ x: 0, y: 0 })
-    setFileToSubmit(null);
   }
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => { 
