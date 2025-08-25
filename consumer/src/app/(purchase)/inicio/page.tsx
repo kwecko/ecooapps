@@ -14,7 +14,7 @@ import { SlArrowRight } from "react-icons/sl";
 import { useSearchParams } from "next/navigation";
 import RedirectCart from "../../_components/telegram/redirect-cart";
 import ModalBlock from "./components/modal-block";
-import { fetchConversationIsActive } from "@consumer/app/_actions/bot-telegram/fetch-conversation-is-active";
+import { fetchConversationIsActive } from "@consumer/app/_actions/api-chat-telegram/fetch-conversation-is-active";
 
 
 export default function Inicio() {
