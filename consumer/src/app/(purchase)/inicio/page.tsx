@@ -52,7 +52,6 @@ export default function Inicio() {
 					try {
 						const conversationResponse = await fetchConversationIsActive({ chatId: chatIdFromUrl });
 						
-						console.log("conversationResponse", conversationResponse);
 						if (!conversationResponse.isActive) {
 							setShowExpiredModal(true);
 							// Fechar o mini app após 5 segundos
@@ -106,8 +105,6 @@ export default function Inicio() {
 	return (
 		<>
 			<div className="flex flex-col w-full h-screen">
-				<h1 className="text-2xl font-bold mb-4">Chat id: {chatId}</h1>
-				<h2 className="text-xl font-bold mb-4">Conversa Ativa: {showExpiredModal}</h2>
 				<div className="h-screen scroll-smooth">
 
 					<Link href={"/categorias"}>
