@@ -11,8 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { SlArrowRight } from "react-icons/sl";
+import { useSearchParams } from "next/navigation";
 import RedirectCart from "../../_components/telegram/redirect-cart";
 import ModalBlock from "./components/modal-block";
+import { fetchConversationIsActive } from "@consumer/app/_actions/api-chat-telegram/fetch-conversation-is-active";
 
 
 export default function Inicio() {
@@ -20,9 +22,12 @@ export default function Inicio() {
 	const LocalStorage = useLocalStorage();
 	const { handleError } = useHandleError();
 	const [showBlock, setShowBlock] = useState(false);
+	const [chatId, setChatId] = useState<string | undefined>(undefined);
+	const [showExpiredModal, setShowExpiredModal] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [daysWeekOrder, setDaysWeekOrder] = useState([] as string[]);
 	const tg = useTelegram();
+	const searchParams = useSearchParams();
 	
 
 	const mapDaysWeek: Record<number, string> = {
@@ -38,6 +43,29 @@ export default function Inicio() {
 	useEffect(() => {
 		(async () => {
 			try {
+				// Obter chatId dos parâmetros da URL
+				const chatIdFromUrl = searchParams.get('chatId');
+				
+				if (chatIdFromUrl) {
+					setChatId(chatIdFromUrl);
+					
+					try {
+						const conversationResponse = await fetchConversationIsActive({ chatId: chatIdFromUrl });
+						
+						if (!conversationResponse.isActive) {
+							setShowExpiredModal(true);
+							// Fechar o mini app após 5 segundos
+							setTimeout(() => {
+								tg.sendData(JSON.stringify([]));
+							}, 5000);
+							return;
+						}
+					} catch (error) {
+						console.error("Erro ao verificar conversa:", error);
+						// Se houver erro na verificação, continua normalmente
+					}
+				}
+
 				const response = await listCycles();
 				if (response.message) {
 					handleError(response.message as string);
@@ -65,7 +93,7 @@ export default function Inicio() {
 				setLoading(false)
 			}
 		})();
-	}, []);
+	}, [searchParams]);
 
 	const onCloseModal = async () => { 
 			await tg.sendData(JSON.stringify([]));
@@ -161,7 +189,22 @@ export default function Inicio() {
           isOpen={showBlock}
         />
 
-			{ !showBlock ? <RedirectCart /> : <CloseMiniApp /> }
+			<ModalV2
+					title="Conversa Expirada"
+          children={
+						<div className="p-4 text-center">
+							<p className="text-sm text-gray-700">
+								A conversa foi expirada por motivos de segurança. O mini app será fechado e a conversa será reiniciada!
+							</p>
+						</div>
+					}
+					iconClose={false}
+					className="m-1.5"
+          closeModal={() => {}}
+          isOpen={showExpiredModal}
+        />
+
+			{ !showBlock && !showExpiredModal ? <RedirectCart /> : <CloseMiniApp /> }
 
 		</>
 	);

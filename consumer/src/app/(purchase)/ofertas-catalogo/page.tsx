@@ -1,7 +1,7 @@
 "use client";
 import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import OrderCard from "@consumer/app/components/OrderCard";
-import { fetchCatalog } from "@consumer/app/_components/GET/fetch-catalog";
+import { fetchCatalog } from "@consumer/app/_actions/api/GET/fetch-catalog";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogDTO, FarmDTO, OfferDTO } from "@shared/interfaces/dtos";

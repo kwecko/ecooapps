@@ -1,5 +1,5 @@
 "use client";
-import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
+import { searchCatalogs } from "@consumer/app/_actions/api/GET/search-catalogs";
 import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -26,7 +26,8 @@ export default function Produtores() {
       const response = await searchCatalogs({
         cycle_id: cycleId,
         page: page,
-				available: true
+				available: true,
+				remaining: true
       });
       if (response.message) {
         handleError(response.message as string);
