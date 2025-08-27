@@ -58,7 +58,7 @@ const BagDetailsPage = () => {
                 <div className='flex flex-col gap-2'>
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Pedido:</p>
-                    <p className='flex-1'>{bagDetails.id}</p>
+                    <p className='flex-1'>{bagDetails.code}</p>
                   </div>
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Status:</p>
@@ -85,6 +85,10 @@ const BagDetailsPage = () => {
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Cpf:</p>
                     <p className='flex-1'>{bagDetails.customer.cpf}</p>
+                  </div>
+                  <div className='flex justify-between items-center'>
+                    <p className='text-sm font-medium w-32'>Telefone:</p>
+                    <p className='flex-1'>{bagDetails.customer.phone}</p>
                   </div>
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Data:</p>
@@ -164,18 +168,13 @@ const BagDetailsPage = () => {
                         <h3 className='font-semibold mb-2'>{farm.name}</h3>
                         <div className='flex flex-col gap-2'>
                           {farm.items.map((item, index) => (
-                            <div
-                              key={index}
-                              className='flex items-center justify-between'
-                            >
-                              <div className='flex items-center gap-2'>
-                                <span className='text-sm whitespace-nowrap'>
-                                  {item.offer.product.pricing === 'UNIT'
-                                    ? `${item.amount}un`
-                                    : `${item.amount}g`}{' '}
-                                  - {item.offer.product.name}
-                                </span>
-                              </div>
+                            <div key={index} className='flex items-start'>
+                              <span className='flex-1 text-sm leading-tight mr-2'>
+                                {item.offer.product.pricing === 'UNIT'
+                                  ? `${item.amount}un`
+                                  : `${item.amount}g`}{' '}
+                                - {item.offer.product.name}
+                              </span>
                               <div
                                 title={
                                   item.status === 'RECEIVED'
