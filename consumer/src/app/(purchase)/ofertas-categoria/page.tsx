@@ -1,5 +1,5 @@
 "use client";
-import { fetchCategory } from "@consumer/app/_components/GET/fetch-categories";
+import { fetchCategory } from "@consumer/app/_actions/api/GET/fetch-categories";
 import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { useHandleError } from "@shared/hooks/useHandleError";
