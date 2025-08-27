@@ -1,5 +1,5 @@
 "use client";
-import { searchCatalogs } from "@consumer/app/_components/GET/search-catalogs";
+import { searchCatalogs } from "@consumer/app/_actions/api/GET/search-catalogs";
 import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
 import { useHandleError } from "@shared/hooks/useHandleError";
