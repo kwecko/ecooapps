@@ -77,8 +77,10 @@ export default function InputDescription({
           placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
 Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCountDescription}/500`}
-        </p>
+        <p className="text-right text-slate-500 text-xs mt-1">
+  {`${charCountDescription}/500`}
+</p>
+
       </div>
 
       <div className="w-full h-full relative flex flex-col text-slate-gray">
