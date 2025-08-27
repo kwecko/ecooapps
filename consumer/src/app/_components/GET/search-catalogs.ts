@@ -7,18 +7,16 @@ interface SearchCatalogsRequest {
   page: number;
   product?: string;
 	available?: boolean;
-	remaining?: boolean;
 }
 
 export async function searchCatalogs({
   cycle_id,
   page,
   product,
-	available,
-	remaining
+	available
 }: SearchCatalogsRequest) {
   const response = ApiService.GET({
-    url: `/catalogs?page=${page}&cycle_id=${cycle_id}${product ? `&product=${product}` : ""}${available ? `&available=${available}` : ""}${remaining ? `&remaining=${remaining}` : ""}`
+    url: `/catalogs?page=${page}&cycle_id=${cycle_id}${product ? `&product=${product}` : ""}${available ? `&available=${available}` : ""}`
   });
   return response;
 }

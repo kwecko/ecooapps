@@ -7,16 +7,18 @@ interface FetchCatalogRequest {
   page: number;
   product?: string;
 	available?: boolean;
+	remaining?: boolean;
 }
 
 export async function fetchCatalog({
   catalog_id,
   page = 1,
   product,
-	available
+	available,
+	remaining
 }: FetchCatalogRequest) {
   const response = ApiService.GET({
-    url: `/catalogs/${catalog_id}?page=${page}${product ? `&product=${product}` : ""}${available ? `&available=${available}` : ""}`,
+    url: `/catalogs/${catalog_id}?page=${page}${product ? `&product=${product}` : ""}${available ? `&available=${available}` : ""}${remaining ? `&remaining=${remaining}` : ""}`,
   });
   return response;
 }
