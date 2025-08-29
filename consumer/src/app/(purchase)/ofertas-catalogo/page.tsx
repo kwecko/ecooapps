@@ -36,6 +36,7 @@ export default function OfertasCatalogo() {
         catalog_id: params.id as string,
         page: page,
 				available: true,
+				remaining: true
       });
       if (response.message) {
         handleError(response.message as string);
