@@ -1,10 +1,10 @@
 "use client";
 
 import { ModelPage } from "@shared/components/ModelPage";
-import CommercialInfoForm from "./components/CommercialInfoForm";
 import Button from "@shared/components/Button";
-import Link from "next/link";
 import Modal from "@shared/components/Modal";
+
+import CommercialInfoForm from "./components/CommercialInfoForm";
 import { useChangeComercialRegistrationForm } from "../components/ChangeComercialRegistrationForm/useChangeComercialRegistrationForm";
 
 export default function ComercialPage() {
@@ -25,7 +25,6 @@ export default function ComercialPage() {
     setIsModalOpen,
     confirmSubmission,
     handleSubmit,
-    handleSubmitForm,
   } = useChangeComercialRegistrationForm();
 
   return (
@@ -36,7 +35,7 @@ export default function ComercialPage() {
       subtitle="Atualize as informações comerciais da sua fazenda."
       subtitleClassName="px-9 leading-5.5"
     >
-      <form onSubmit={handleSubmit(handleSubmitForm)} className="h-full w-full flex flex-col overflow-y-hidden">
+      <form onSubmit={handleSubmit} className="h-full w-full flex flex-col overflow-y-hidden">
         <div className="gap-3.5 w-full overflow-y-auto flex flex-col items-center justify-between pb-16 pt-7.5">
           <CommercialInfoForm
             photo={photo}

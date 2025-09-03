@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-
 import { zodResolver } from "@hookform/resolvers/zod";
+
 import { deleteImage } from "@producer/_actions/farms/DELETE/delete-image";
 import { updateImage } from "@producer/_actions/farms/POST/update-image";
 import { updateFarm } from "@producer/_actions/farms/PATCH/update-farm";
@@ -15,30 +15,48 @@ import {
 
 type ImageItem = string | File;
 
+interface FarmData {
+  id: string;
+  name: string;
+  tally: string;
+  description: string;
+  photo?: string;
+  images?: string[];
+}
+
+interface ImageOperations {
+  toAdd: File[];
+  toRemove: string[];
+}
+
+interface FormState {
+  farmData: FarmData | null;
+  images: ImageItem[];
+  photo: string;
+  isModalOpen: boolean;
+  charCount: number;
+  isLoading: boolean;
+  imageOperations: ImageOperations;
+}
+
+const INITIAL_FORM_STATE: FormState = {
+  farmData: null,
+  images: [],
+  photo: "",
+  isModalOpen: false,
+  charCount: 0,
+  isLoading: false,
+  imageOperations: {
+    toAdd: [],
+    toRemove: [],
+  },
+};
+
 export const useChangeComercialRegistrationForm = () => {
-  const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
-  const [imagesFile, setImages] = useState<ImageItem[]>([]);
-  const [photo, setPhoto] = useState<string>("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [charCount, setCharCount] = useState(0);
-  const [farmId, setFarmId] = useState<string | null>(null);
-  const [isImageUplodaded, setIsImageUploaded] = useState(false);
+  const [state, setState] = useState<FormState>(INITIAL_FORM_STATE);
   const { handleError } = useHandleError();
 
-  // Estados para gerenciar imagens localmente
-  const [imagesToAdd, setImagesToAdd] = useState<File[]>([]);
-  const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
-  const [originalImages, setOriginalImages] = useState<string[]>([]);
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    getValues,
-    reset,
-    formState: { errors },
-    trigger,
-  } = useForm<ChangeComercialRegistrationSchema>({
+  const form = useForm<ChangeComercialRegistrationSchema>({
     resolver: zodResolver(changeComercialRegistrationSchema),
     mode: "onChange",
     defaultValues: {
@@ -49,174 +67,219 @@ export const useChangeComercialRegistrationForm = () => {
     },
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const farmResponse = await fetchUserFarm();
+  const { register, handleSubmit, control, getValues, reset, formState: { errors }, trigger } = form;
 
-        if (farmResponse.message) {
-          handleError(farmResponse.message);
-          return;
-        }
-
-        const data = { ...farmResponse.data };
-        setFarmId(data.id);
-        setIsImageUploaded(false);
-        
-        if (data.images && Array.isArray(data.images)) {
-          setImages(data.images);
-          setOriginalImages(data.images);
-        }
-
-        if (data.photo && typeof data.photo === "string") {
-          setPhoto(
-            data.photo.startsWith("file:///___/rest-api/src/test/storage/temp/users/")
-              ? `/api/image?file=${data.photo}`
-              : data.photo
-          );
-        }
-
-        setCharCount(data.description?.length || 0);
-        reset(data);
-      } catch (error) {
-        toast.error(error as string);
-      }
-    };
-    fetchData();
-  }, [reset, handleError, isImageUplodaded]);
-
-  const handleSubmitForm = (data: ChangeComercialRegistrationSchema) => {
-    setFormData(data);
-    setIsModalOpen(true);
-  };
-
-  const sendImage = (image: File) => {
-    // Adiciona a imagem à lista de imagens para adicionar
-    setImagesToAdd(prev => [...prev, image]);
+  const processPhotoUrl = useCallback((photo?: string): string => {
+    if (!photo) return "";
     
-    // Atualiza a lista de imagens visualmente
-    setImages(prev => [...prev, image]);
+    return photo.startsWith("file:///___/rest-api/src/test/storage/temp/users/")
+      ? `/api/image?file=${photo}`
+      : photo;
+  }, []);
+
+  const fetchFarmData = useCallback(async () => {
+    try {
+      setState(prev => ({ ...prev, isLoading: true }));
+      
+      const response = await fetchUserFarm();
+      
+      if (response.message) {
+        handleError(response.message);
+        return;
+      }
+
+      const farmData = response.data;
+      const processedPhoto = processPhotoUrl(farmData.photo);
+      
+      setState(prev => ({
+        ...prev,
+        farmData,
+        images: farmData.images || [],
+        photo: processedPhoto,
+        charCount: farmData.description?.length || 0,
+        isLoading: false,
+        imageOperations: { toAdd: [], toRemove: [] },
+      }));
+
+      reset(farmData);
+    } catch (error) {
+      toast.error(error as string);
+      setState(prev => ({ ...prev, isLoading: false }));
+    }
+  }, [handleError, reset, processPhotoUrl]);
+
+  const handleSubmitForm = useCallback((data: ChangeComercialRegistrationSchema) => {
+    setState(prev => ({ ...prev, isModalOpen: true }));
+  }, []);
+
+  const addImage = useCallback((image: File) => {
+    setState(prev => ({
+      ...prev,
+      imageOperations: {
+        ...prev.imageOperations,
+        toAdd: [...prev.imageOperations.toAdd, image]
+      },
+      images: [...prev.images, image]
+    }));
     
     toast.success("Imagem adicionada! Será enviada ao confirmar o formulário.");
-  };
+  }, []);
 
-  const removeImage = (image: ImageItem) => {
+  const removeImage = useCallback((image: ImageItem) => {
     if (typeof image === 'string') {
-      // Se é uma string, é uma imagem existente que deve ser removida
-      setImagesToRemove(prev => [...prev, image]);
-      setImages(prev => prev.filter(img => {
-        if (typeof img === 'string') {
-          return img !== image;
-        }
-        return true; // Mantém os Files
+      setState(prev => ({
+        ...prev,
+        imageOperations: {
+          ...prev.imageOperations,
+          toRemove: [...prev.imageOperations.toRemove, image]
+        },
+        images: prev.images.filter(img => {
+          if (typeof img === 'string') {
+            return img !== image;
+          }
+          return true;
+        })
       }));
-      toast.success("Imagem removida! A remoção será confirmada ao enviar o formulário.");
     } else {
-      // Se é um File, é uma imagem nova que foi adicionada mas não enviada
-      setImagesToAdd(prev => prev.filter(img => img !== image));
-      setImages(prev => prev.filter(img => {
-        if (img instanceof File && image instanceof File) {
-          return img !== image;
-        }
-        return true; // Mantém as strings
+      setState(prev => ({
+        ...prev,
+        imageOperations: {
+          ...prev.imageOperations,
+          toAdd: prev.imageOperations.toAdd.filter(img => img !== image)
+        },
+        images: prev.images.filter(img => {
+          if (img instanceof File && image instanceof File) {
+            return img !== image;
+          }
+          return true;
+        })
       }));
-      toast.success("Imagem removida!");
     }
-  };
+  }, []);
 
-  const confirmSubmission = async () => {
-    if (!formData || !farmId) return;
+  const processImageRemovals = useCallback(async () => {
+    for (const imageToRemove of state.imageOperations.toRemove) {
+      const encodedUrl = encodeURIComponent(encodeURIComponent(imageToRemove));
+      const response = await deleteImage({ 
+        farmId: state.farmData!.id, 
+        image: encodedUrl 
+      });
+      
+      if (response.message) {
+        throw new Error(response.message);
+      }
+    }
+  }, [state.imageOperations.toRemove, state.farmData]);
 
+  const processImageAdditions = useCallback(async () => {
+    for (const imageToAdd of state.imageOperations.toAdd) {
+      const formData = new FormData();
+      formData.append("image", imageToAdd as Blob);
+      
+      const response = await updateImage({ 
+        farmId: state.farmData!.id, 
+        data: formData 
+      });
+      
+      if (response.message) {
+        throw new Error(response.message);
+      }
+    }
+  }, [state.imageOperations.toAdd, state.farmData]);
+
+  const updateFarmData = useCallback(async (formData: ChangeComercialRegistrationSchema) => {
+    const farmData = new FormData();
+    farmData.append("name", formData.name || "");
+    farmData.append("tally", formData.tally || "");
+    farmData.append("description", formData.description || "");
+    if (formData.photo && formData.photo instanceof File) {
+      farmData.append("photo", formData.photo as Blob);
+    }
+
+    const response = await updateFarm({ farmId: state.farmData!.id, data: farmData });
+    
+    if (response.message) {
+      throw new Error(response.message);
+    }
+  }, [state.farmData]);
+
+  const confirmSubmission = useCallback(async () => {
+    if (!state.farmData?.id) {
+      toast.error("ID da fazenda não encontrado");
+      return;
+    }
+
+    const formData = getValues();
     const isValid = await trigger();
+    
     if (!isValid) {
       toast.error("Erro no formulário. Verifique os campos e tente novamente.");
       return;
     }
 
     try {
-      console.log("Imagens para remover:", imagesToRemove);
-      console.log("Imagens para adicionar:", imagesToAdd);
-      console.log("Imagens atuais:", imagesFile);
+      setState(prev => ({ ...prev, isLoading: true }));
 
-      // Primeiro, remove as imagens que devem ser removidas
-      for (const imageToRemove of imagesToRemove) {
-        console.log("Removendo imagem:", imageToRemove);
-        
-        // Codifica a URL como era feito antes
-        const encodedUrl = encodeURIComponent(encodeURIComponent(imageToRemove));
-        console.log("URL codificada:", encodedUrl);
-        
-        const response = await deleteImage({ farmId: farmId, image: encodedUrl });
-        if (response.message) {
-          handleError(response.message);
-          return;
-        }
-      }
-
-      // Depois, adiciona as novas imagens
-      for (const imageToAdd of imagesToAdd) {
-        console.log("Adicionando imagem:", imageToAdd);
-        const formData = new FormData();
-        formData.append("image", imageToAdd as Blob);
-        
-        const response = await updateImage({ farmId: farmId, data: formData });
-        if (response.message) {
-          handleError(response.message);
-          return;
-        }
-      }
-
-      // Por fim, atualiza os dados da fazenda
-      const { ...otherData } = formData;
-      const farmFormData = new FormData();
-      farmFormData.append("name", otherData.name || "");
-      farmFormData.append("tally", otherData.tally || "");
-      farmFormData.append("description", otherData.description || "");
-      if (otherData.photo) {
-        farmFormData.append("photo", otherData.photo);
-      }
-
-      const farmResponse = await updateFarm(farmId, farmFormData);
+      await processImageRemovals();
+      await processImageAdditions();
       
-      if (farmResponse.message) {
-        handleError(farmResponse.message);
-        return;
-      }
-
-      // Limpa os estados de controle de imagens
-      setImagesToAdd([]);
-      setImagesToRemove([]);
-      setIsImageUploaded(true);
+      await updateFarmData(formData);
+      
+      setState(prev => ({ 
+        ...prev, 
+        isModalOpen: false,
+        isLoading: false,
+        imageOperations: { toAdd: [], toRemove: [] }
+      }));
 
       toast.success("Cadastro atualizado com sucesso!");
-      // window.location.href = "/configuracoes";
+      await fetchFarmData();
     } catch (error) {
-      console.error("Erro no confirmSubmission:", error);
-      handleError(error as string);
-      toast.error("Erro ao atualizar o cadastro.");
-    } finally {
-      setIsModalOpen(false);
-      setFormData(null);
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      handleError(errorMessage);
+      setState(prev => ({ ...prev, isLoading: false }));
     }
-  };
+  }, [state.farmData, getValues, trigger, processImageRemovals, processImageAdditions, updateFarmData, handleError, fetchFarmData]);
+
+  useEffect(() => {
+    fetchFarmData();
+  }, [fetchFarmData]);
 
   return {
-    photo,
-    imagesFile,
-    setPhoto,
-    setImages,
-    isModalOpen,
-    sendImage,
-    removeImage,
-    setIsModalOpen,
-    getValues,
     register,
-    handleSubmit,
+    handleSubmit: handleSubmit(handleSubmitForm),
     handleSubmitForm,
     control,
+    getValues,
     errors,
     confirmSubmission,
-    charCount,
-    setCharCount,
+    
+    photo: state.photo,
+    imagesFile: state.images,
+    isModalOpen: state.isModalOpen,
+    charCount: state.charCount,
+    isLoading: state.isLoading,
+    
+    sendImage: addImage,
+    removeImage,
+    setPhoto: (photo: string | ((prev: string) => string)) => {
+      setState(prev => ({ 
+        ...prev, 
+        photo: typeof photo === 'function' ? photo(prev.photo) : photo 
+      }));
+    },
+    setImages: (images: ImageItem[] | ((prev: ImageItem[]) => ImageItem[])) => {
+      setState(prev => ({ 
+        ...prev, 
+        images: typeof images === 'function' ? images(prev.images) : images 
+      }));
+    },
+    setCharCount: (count: number | ((prev: number) => number)) => {
+      setState(prev => ({ 
+        ...prev, 
+        charCount: typeof count === 'function' ? count(prev.charCount) : count 
+      }));
+    },
+    setIsModalOpen: (isOpen: boolean) => setState(prev => ({ ...prev, isModalOpen: isOpen })),
   };
 };
