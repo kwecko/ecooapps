@@ -8,6 +8,7 @@ interface HeaderDetailProps {
   selectStatus?: ReactNode;
   time: string;
   isShipping?: boolean;
+  address?: string;
   totalAmount?: number;
   content?: ReactNode;
 }
@@ -19,6 +20,7 @@ function HeaderDetail({
   selectStatus,
   time,
   isShipping,
+  address,
   totalAmount,
   content,
 }: HeaderDetailProps) {
@@ -44,9 +46,18 @@ function HeaderDetail({
       title: "Modalidade:",
       value: isShipping ? "Delivery" : "Retirada",
     },
+    isShipping && {
+      title: "Endereço:",
+      value: address,
+    },
     {
       title: "Valor total:",
-      value: totalAmount ? `R$ ${totalAmount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : "R$ 0,00",
+      value: totalAmount
+        ? `R$ ${totalAmount.toLocaleString("pt-BR", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}`
+        : "R$ 0,00",
     },
     {
       title: "Conteúdo:",
