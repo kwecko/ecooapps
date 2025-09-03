@@ -2,6 +2,7 @@
 
 import { ModelPage } from "@shared/components/ModelPage";
 import Button from "@shared/components/Button";
+import Loader from "@shared/components/Loader";
 import Modal from "@shared/components/Modal";
 
 import CommercialInfoForm from "./components/CommercialInfoForm";
@@ -9,22 +10,24 @@ import { useChangeComercialRegistrationForm } from "../components/ChangeComercia
 
 export default function ComercialPage() {
   const {
+    register,
+    handleSubmit,
+    control,
+    getValues,
+    errors,
+    confirmSubmission,
+    
     photo,
     imagesFile,
+    isModalOpen,
+    charCount,
+    isLoading,
+    
     setPhoto,
-    setImages,
     sendImage,
     removeImage,
-    register,
-    errors,
-    charCount,
     setCharCount,
-    getValues,
-    control,
-    isModalOpen,
     setIsModalOpen,
-    confirmSubmission,
-    handleSubmit,
   } = useChangeComercialRegistrationForm();
 
   return (
@@ -43,7 +46,6 @@ export default function ComercialPage() {
             setPhoto={setPhoto}
             sendImage={sendImage}
             removeImage={removeImage}
-            setImages={setImages}
             register={register}
             errors={errors}
             charCount={charCount}
@@ -58,8 +60,9 @@ export default function ComercialPage() {
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"
             type="submit"
+            disabled={isLoading}
           >
-            Salvar
+            {isLoading ? <Loader loaderType="component" /> : "Salvar"}
           </Button>
           <Modal
             titleContentModal="Você tem certeza?"

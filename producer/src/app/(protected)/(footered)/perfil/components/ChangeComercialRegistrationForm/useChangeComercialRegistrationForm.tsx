@@ -268,12 +268,6 @@ export const useChangeComercialRegistrationForm = () => {
         photo: typeof photo === 'function' ? photo(prev.photo) : photo 
       }));
     },
-    setImages: (images: ImageItem[] | ((prev: ImageItem[]) => ImageItem[])) => {
-      setState(prev => ({ 
-        ...prev, 
-        images: typeof images === 'function' ? images(prev.images) : images 
-      }));
-    },
     setCharCount: (count: number | ((prev: number) => number)) => {
       setState(prev => ({ 
         ...prev, 

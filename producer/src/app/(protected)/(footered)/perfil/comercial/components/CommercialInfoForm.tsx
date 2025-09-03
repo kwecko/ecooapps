@@ -13,7 +13,6 @@ interface CommercialInfoFormProps {
   photo: string;
   images: ImageItem[];
   setPhoto: React.Dispatch<React.SetStateAction<string>>;
-  setImages: React.Dispatch<React.SetStateAction<ImageItem[]>>;
   sendImage: (image: File) => void;
   removeImage: (image: ImageItem) => void;
   register: UseFormRegister<ChangeComercialRegistrationSchema>;
@@ -28,7 +27,6 @@ const CommercialInfoForm: React.FC<CommercialInfoFormProps> = ({
   photo, 
   images, 
   setPhoto, 
-  setImages, 
   sendImage, 
   removeImage, 
   register, 
