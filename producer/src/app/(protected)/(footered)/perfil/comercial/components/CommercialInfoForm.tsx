@@ -7,13 +7,15 @@ import { ChangeComercialRegistrationSchema } from '@shared/schemas/change-comerc
 import { set } from 'lodash';
 import ProfilePhotoEditor from './ProfilePhotoEditor';
 
+type ImageItem = string | File;
+
 interface CommercialInfoFormProps {
   photo: string;
-  images: string[] | File[],
+  images: ImageItem[];
   setPhoto: React.Dispatch<React.SetStateAction<string>>;
-  setImages: React.Dispatch<React.SetStateAction<string[] | File[]>>;
-  sendImage: (image: File) => Promise<void>;
-  removeImage: (image: string) => Promise<void>;
+  setImages: React.Dispatch<React.SetStateAction<ImageItem[]>>;
+  sendImage: (image: File) => void;
+  removeImage: (image: ImageItem) => void;
   register: UseFormRegister<ChangeComercialRegistrationSchema>;
   errors: FieldErrors<ChangeComercialRegistrationSchema>;
   charCount: number;
@@ -76,8 +78,12 @@ function CommercialInfoForm({ photo, images, setPhoto, setImages, sendImage, rem
                 key={index}
                 className="w-20 h-20 cursor-pointer relative bg-white border border-theme-default rounded-lg flex items-center justify-center overflow-hidden"
                 onClick={() => {
-                  const encodedUrl = encodeURIComponent(encodeURIComponent(images[index].toString()));
-                  removeImage(encodedUrl);
+                  const image = images[index];
+                  if (typeof image === 'string') {
+                    removeImage(image);
+                  } else {
+                    removeImage(image);
+                  }
                 }}
               >
                 <Image

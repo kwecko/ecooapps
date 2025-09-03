@@ -13,9 +13,11 @@ import {
   changeComercialRegistrationSchema,
 } from "@shared/schemas/change-comercial-registration";
 
+type ImageItem = string | File;
+
 export const useChangeComercialRegistrationForm = () => {
   const [formData, setFormData] = useState<ChangeComercialRegistrationSchema | null>(null);
-  const [imagesFile, setImages] = useState<string[] | File[]>([]);
+  const [imagesFile, setImages] = useState<ImageItem[]>([]);
   const [photo, setPhoto] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [charCount, setCharCount] = useState(0);
@@ -23,6 +25,10 @@ export const useChangeComercialRegistrationForm = () => {
   const [isImageUplodaded, setIsImageUploaded] = useState(false);
   const { handleError } = useHandleError();
 
+  // Estados para gerenciar imagens localmente
+  const [imagesToAdd, setImagesToAdd] = useState<File[]>([]);
+  const [imagesToRemove, setImagesToRemove] = useState<string[]>([]);
+  const [originalImages, setOriginalImages] = useState<string[]>([]);
 
   const {
     register,
@@ -59,6 +65,7 @@ export const useChangeComercialRegistrationForm = () => {
         
         if (data.images && Array.isArray(data.images)) {
           setImages(data.images);
+          setOriginalImages(data.images);
         }
 
         if (data.photo && typeof data.photo === "string") {
@@ -83,39 +90,38 @@ export const useChangeComercialRegistrationForm = () => {
     setIsModalOpen(true);
   };
 
-  const sendImage = async (image: File) => {
-    const formData = new FormData();
-    formData.append("image", image as Blob);
-
-    if (!farmId) return;
-
-    updateImage({ farmId: farmId, data: formData })
-      .then((response) => {
-        if (response.message) return handleError(response.message);
-        setIsImageUploaded(true);
-        toast.success("Imagem enviada com sucesso!");
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
+  const sendImage = (image: File) => {
+    // Adiciona a imagem à lista de imagens para adicionar
+    setImagesToAdd(prev => [...prev, image]);
+    
+    // Atualiza a lista de imagens visualmente
+    setImages(prev => [...prev, image]);
+    
+    toast.success("Imagem adicionada! Será enviada ao confirmar o formulário.");
   };
 
-  const removeImage = async (image: string) => {
-    
-    const formData = new FormData();
-    formData.append("image", image);
-
-    if (!farmId) return;
-
-    deleteImage({ farmId: farmId, image: image })
-      .then((response) => {
-        if (response.message) return handleError(response.message);
-        setIsImageUploaded(true);
-        toast.success("Imagem removida com sucesso!");
-      })
-      .catch(() => {
-        toast.error("Erro desconhecido.");
-      });
+  const removeImage = (image: ImageItem) => {
+    if (typeof image === 'string') {
+      // Se é uma string, é uma imagem existente que deve ser removida
+      setImagesToRemove(prev => [...prev, image]);
+      setImages(prev => prev.filter(img => {
+        if (typeof img === 'string') {
+          return img !== image;
+        }
+        return true; // Mantém os Files
+      }));
+      toast.success("Imagem removida! A remoção será confirmada ao enviar o formulário.");
+    } else {
+      // Se é um File, é uma imagem nova que foi adicionada mas não enviada
+      setImagesToAdd(prev => prev.filter(img => img !== image));
+      setImages(prev => prev.filter(img => {
+        if (img instanceof File && image instanceof File) {
+          return img !== image;
+        }
+        return true; // Mantém as strings
+      }));
+      toast.success("Imagem removida!");
+    }
   };
 
   const confirmSubmission = async () => {
@@ -127,16 +133,49 @@ export const useChangeComercialRegistrationForm = () => {
       return;
     }
 
-    const { ...otherData } = formData;
-    const farmFormData = new FormData();
-    farmFormData.append("name", otherData.name || "");
-    farmFormData.append("tally", otherData.tally || "");
-    farmFormData.append("description", otherData.description || "");
-    if (otherData.photo) {
-      farmFormData.append("photo", otherData.photo);
-    }
-
     try {
+      console.log("Imagens para remover:", imagesToRemove);
+      console.log("Imagens para adicionar:", imagesToAdd);
+      console.log("Imagens atuais:", imagesFile);
+
+      // Primeiro, remove as imagens que devem ser removidas
+      for (const imageToRemove of imagesToRemove) {
+        console.log("Removendo imagem:", imageToRemove);
+        
+        // Codifica a URL como era feito antes
+        const encodedUrl = encodeURIComponent(encodeURIComponent(imageToRemove));
+        console.log("URL codificada:", encodedUrl);
+        
+        const response = await deleteImage({ farmId: farmId, image: encodedUrl });
+        if (response.message) {
+          handleError(response.message);
+          return;
+        }
+      }
+
+      // Depois, adiciona as novas imagens
+      for (const imageToAdd of imagesToAdd) {
+        console.log("Adicionando imagem:", imageToAdd);
+        const formData = new FormData();
+        formData.append("image", imageToAdd as Blob);
+        
+        const response = await updateImage({ farmId: farmId, data: formData });
+        if (response.message) {
+          handleError(response.message);
+          return;
+        }
+      }
+
+      // Por fim, atualiza os dados da fazenda
+      const { ...otherData } = formData;
+      const farmFormData = new FormData();
+      farmFormData.append("name", otherData.name || "");
+      farmFormData.append("tally", otherData.tally || "");
+      farmFormData.append("description", otherData.description || "");
+      if (otherData.photo) {
+        farmFormData.append("photo", otherData.photo);
+      }
+
       const farmResponse = await updateFarm(farmId, farmFormData);
       
       if (farmResponse.message) {
@@ -144,9 +183,15 @@ export const useChangeComercialRegistrationForm = () => {
         return;
       }
 
+      // Limpa os estados de controle de imagens
+      setImagesToAdd([]);
+      setImagesToRemove([]);
+      setIsImageUploaded(true);
+
       toast.success("Cadastro atualizado com sucesso!");
       // window.location.href = "/configuracoes";
     } catch (error) {
+      console.error("Erro no confirmSubmission:", error);
       handleError(error as string);
       toast.error("Erro ao atualizar o cadastro.");
     } finally {
