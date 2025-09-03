@@ -1,31 +1,33 @@
 "use client";
 
 import { ModelPage } from "@shared/components/ModelPage";
-import CommercialInfoForm from "./components/CommercialInfoForm";
 import Button from "@shared/components/Button";
-import Link from "next/link";
+import Loader from "@shared/components/Loader";
 import Modal from "@shared/components/Modal";
+
+import CommercialInfoForm from "./components/CommercialInfoForm";
 import { useChangeComercialRegistrationForm } from "../components/ChangeComercialRegistrationForm/useChangeComercialRegistrationForm";
 
 export default function ComercialPage() {
   const {
+    register,
+    handleSubmit,
+    control,
+    getValues,
+    errors,
+    confirmSubmission,
+    
     photo,
     imagesFile,
+    isModalOpen,
+    charCount,
+    isLoading,
+    
     setPhoto,
-    setImages,
     sendImage,
     removeImage,
-    register,
-    errors,
-    charCount,
     setCharCount,
-    getValues,
-    control,
-    isModalOpen,
     setIsModalOpen,
-    confirmSubmission,
-    handleSubmit,
-    handleSubmitForm,
   } = useChangeComercialRegistrationForm();
 
   return (
@@ -36,7 +38,7 @@ export default function ComercialPage() {
       subtitle="Atualize as informações comerciais da sua fazenda."
       subtitleClassName="px-9 leading-5.5"
     >
-      <form onSubmit={handleSubmit(handleSubmitForm)} className="h-full w-full flex flex-col overflow-y-hidden">
+      <form onSubmit={handleSubmit} className="h-full w-full flex flex-col overflow-y-hidden">
         <div className="gap-3.5 w-full overflow-y-auto flex flex-col items-center justify-between pb-16 pt-7.5">
           <CommercialInfoForm
             photo={photo}
@@ -44,7 +46,6 @@ export default function ComercialPage() {
             setPhoto={setPhoto}
             sendImage={sendImage}
             removeImage={removeImage}
-            setImages={setImages}
             register={register}
             errors={errors}
             charCount={charCount}
@@ -59,8 +60,9 @@ export default function ComercialPage() {
             className="w-full h-11 rounded-lg bg-theme-default font-semibold text-white"
             title="Salvar"
             type="submit"
+            disabled={isLoading}
           >
-            Salvar
+            {isLoading ? <Loader loaderType="component" /> : "Salvar"}
           </Button>
           <Modal
             titleContentModal="Você tem certeza?"

@@ -10,10 +10,10 @@ interface UpdateImageRequest {
 export async function updateImage({ farmId, data }: UpdateImageRequest) {
   const response = await ApiService.POST({
     url: `/farms/${farmId}/images`,
-    data,
     headers: {
       "Content-Type": "multipart/form-data",
     },
+    data,
   });
 
   return response;
