@@ -24,46 +24,55 @@ function HeaderDetail({
   totalAmount,
   content,
 }: HeaderDetailProps) {
-  const rows = [
-    {
-      title: "Pedido:",
-      value: id,
-    },
-    {
-      title: "Status:",
-      value: selectStatus ?? status,
-      className: selectStatus ? "!overflow-visible" : "",
-    },
-    {
-      title: "Consumidor:",
-      value: name,
-    },
-    {
-      title: "Prazo:",
-      value: time,
-    },
-    {
-      title: "Modalidade:",
-      value: isShipping ? "Delivery" : "Retirada",
-    },
-    isShipping && {
+  const rows: Array<{ title: string; value: any; className?: string }> = [];
+
+  rows.push({
+    title: "Pedido:",
+    value: id,
+  });
+
+  rows.push({
+    title: "Status:",
+    value: selectStatus ?? status,
+    className: selectStatus ? "!overflow-visible" : "",
+  });
+
+  rows.push({
+    title: "Consumidor:",
+    value: name,
+  });
+
+  rows.push({
+    title: "Prazo:",
+    value: time,
+  });
+
+  rows.push({
+    title: "Modalidade:",
+    value: isShipping ? "Delivery" : "Retirada",
+  });
+
+  if (isShipping) {
+    rows.push({
       title: "Endereço:",
       value: address,
-    },
-    {
-      title: "Valor total:",
-      value: totalAmount
-        ? `R$ ${totalAmount.toLocaleString("pt-BR", {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2,
-          })}`
-        : "R$ 0,00",
-    },
-    {
-      title: "Conteúdo:",
-      value: content,
-    },
-  ];
+    });
+  }
+
+  rows.push({
+    title: "Valor total:",
+    value: totalAmount
+      ? `R$ ${totalAmount.toLocaleString("pt-BR", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}`
+      : "R$ 0,00",
+  });
+
+  rows.push({
+    title: "Conteúdo:",
+    value: content,
+  });
 
   return (
     <MiniTable.Root>
