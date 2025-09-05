@@ -8,6 +8,7 @@ const PROTECTED_PAGES = [
   "/notificar",
   "/pedidos",
   "/produtores",
+  "/consumidores",
   "/produtos",
   "/relatorios",
   "/configuracoes",
