@@ -7,36 +7,39 @@ import PagingButton from '@shared/components/PagingButton';
 import TableSkeleton from '@admin/app/components/TableSkeleton';
 import SearchInput from '@shared/components/SearchInput';
 
+import useListUsers from '@admin/hooks/useListUsers';
 import useListBags from '@admin/hooks/useListBags';
 
 // import UpdateBagStatusModal from './UpdateBagStatusModal';
 
-import { BagDTO } from '@shared/interfaces/dtos';
+// import { BagDTO } from '@shared/interfaces/dtos';
+import { UserDTO } from '@shared/interfaces/dtos';
 import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi';
 
-export default function ListBagsTable() {
-  const [selectedRow, setSelectedRow] = useState<BagDTO>({} as BagDTO);
+export default function ListUsersTable() {
+  const [selectedRow, setSelectedRow] = useState<UserDTO>({} as UserDTO);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  const handleRowClick = (rowData: BagDTO, rowIndex: number) => {
+  const handleRowClick = (rowData: UserDTO, rowIndex: number) => {
     setSelectedRow(rowData);
     setIsOpen(true);
   };
   const [page, setPage] = useState(1);
-  const [bag, setBags] = useState<string | any>();
+  const [user, setUser] = useState<string | any>();
+
+  console.log(user);
 
   const {
-    data: bags,
-    updateData,
+    data: users = [],
     isLoading,
-  } = useListBags({ 
+  } = useListUsers({ 
     page,
-    ...(bag && { bag }),
+    first_name: user,
   });
 
   const nextPage = () => {
-    if (bags.length < 20) {
+    if (users.length < 20) {
       return;
     }
     setPage((prev) => prev + 1);
@@ -53,11 +56,11 @@ export default function ListBagsTable() {
       header: 'Nome', 
       key: 'name',
        colSpan: 3,
-      render: (row: BagDTO) => `${row.customer.first_name} ${row.customer.last_name ?? ''}`.trim(),     
+      render: (row: UserDTO) => `${row.first_name} ${row.last_name ?? ''}`.trim(),    
     },
-    { header: 'Email', key: 'customer.email', colSpan: 3 },
-    { header: 'CPF', key: 'customer.cpf', colSpan: 3 },
-    { header: 'Celular', key: 'customer.phone', colSpan: 4 },
+    { header: 'Email', key: 'email', colSpan: 3 },
+    { header: 'CPF', key: 'cpf', colSpan: 3 },
+    { header: 'Celular', key: 'phone', colSpan: 4 },
     {
       header: 'Ver',
       key: 'see',
@@ -91,27 +94,27 @@ export default function ListBagsTable() {
     <div className='w-full h-full flex flex-col justify-between items-center gap-6'>
       <div className='w-full flex items-center justify-end gap-4'>
         <SearchInput
-          placeholder='Filtrar por fazenda'
-          onChange={setBags}
-          value={bag}
+          placeholder='Filtrar por nome'
+          onChange={setUser}
+          value={user}
           type='secondary'
           className='self-end'
         />
       </div>
 
       {isLoading && <TableSkeleton />}
-      {!isLoading && bag && bags.length === 0 && <EmptyBox type='search' />}
-      {!isLoading && !bag && bags?.length === 0 && (
+      {!isLoading && user && users.length === 0 && <EmptyBox type='search' />}
+      {!isLoading && !user && users?.length === 0 && (
         <EmptyBox type='producer' />
       )}
-      {!isLoading && bags?.length > 0 && (
+      {!isLoading && users?.length > 0 && (
         <GenericTable
           gridColumns={16}
           columns={bagTableColumns}
-          data={bags}
+          data={users}
         />
       )}
-      {!isLoading && (bags.length > 0 || page !== 1) && (
+      {!isLoading && (users.length > 0 || page !== 1) && (
         <PagingButton value={page} nextPage={nextPage} backPage={prevPage} />
       )}
       {/* <UpdateBagStatusModal
