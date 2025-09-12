@@ -29,7 +29,7 @@ export default function Home() {
   const { handleError } = useHandleError();
 
   const minStep: number = 1;
-  const maxStep: number = 4;
+  const maxStep: number = 5;
 
   useEffect(() => {
     setIsLoading(true);
@@ -148,7 +148,7 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {/* {currentStep === 2 && offer.product.perishable === false && (
+            {currentStep === 2 && offer.product.perishable === false && (
               <InputExpirationDate
                 handleNextStep={handleNextStep}
                 expires_at={offer.expires_at ?? undefined}
@@ -156,16 +156,20 @@ export default function Home() {
                   setOffer({ ...offer, expires_at: expires_at })
                 }
               />
-            )} */}
-            {currentStep === 2 && (
+            )}
+
+            {(currentStep === 2 && offer.product.perishable === true) ||
+            (currentStep === 3 && offer.product.perishable === false) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
                 pricing={offer.product.pricing}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
               />
-            )}
-            {currentStep === 3 && (
+            ) : null}
+            
+            {(currentStep === 3 && offer.product.perishable === true) ||
+            (currentStep === 4 && offer.product.perishable === false) ? (
               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
@@ -177,8 +181,11 @@ export default function Home() {
                   setOffer({ ...offer, comment: comment })
                 }
               />
-            )}
-            {currentStep === 4 && (
+            ) : null}
+
+            
+            {(currentStep === 4 && offer.product.perishable === true) ||
+            (currentStep === 5 && offer.product.perishable === false) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -190,7 +197,7 @@ export default function Home() {
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 submitAction={onUpdateOffer}
               />
-            )}
+            ) : null}
           </div>
           <div className="h-footer w-full">
             <div

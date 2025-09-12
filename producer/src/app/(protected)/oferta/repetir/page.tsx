@@ -31,7 +31,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 4;
+  const maxStep = 5;
 
   useEffect(() => {
     setIsLoading(true);
@@ -125,24 +125,27 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {/* {currentStep === 2 && offer.product.perishable === false && (
+            {currentStep === 2 && offer.product.perishable === false && (
               <InputExpirationDate
                 handleNextStep={handleNextStep}
                 expires_at={offer.expires_at}
                 setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at: expires_at })
                 }
               />
-            )} */}
-            {currentStep === 2 && (
+            )}
+            {(currentStep === 2 && offer.product.perishable === true) ||
+            (currentStep === 3 && offer.product.perishable === false) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
                 pricing={offer.product.pricing}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
               />
-            )}
-            {currentStep === 3 && (
-              <InputDescription
+            ) : null}
+
+            {(currentStep === 3 && offer.product.perishable === true) ||
+            (currentStep === 4 && offer.product.perishable === false) ? (
+               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
                 setDescription={(description) =>
@@ -153,8 +156,10 @@ export default function Home() {
                   setOffer({ ...offer, comment: comment })
                 }
               />
-            )}
-            {currentStep === 4 && (
+            ) : null}
+
+            {(currentStep === 4 && offer.product.perishable === true) ||
+            (currentStep === 5 && offer.product.perishable === false) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -166,7 +171,8 @@ export default function Home() {
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
                 submitAction={submitOffer}
               />
-            )}
+            ) : null}
+
           </div>
           <div className="h-footer w-full">
             <div
