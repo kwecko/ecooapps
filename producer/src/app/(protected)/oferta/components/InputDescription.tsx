@@ -56,14 +56,14 @@ export default function InputDescription({
           Descrição para o Consumidor
         </label>
         <textarea
-          maxLength={200}
+          maxLength={500}
           value={description}
           onChange={handleChange}
           className="p-3 border border-theme-primary rounded-lg inter-font font-normal h-48"
           placeholder={`Escreva aqui as características do produto e demais informações que serão exibidas para o consumidor. 
 Ex.: Pote de geleia caseira de pimenta. Comercializado em um vidro de 400g. Produto artesanal e sem conservantes.`}
         />
-        <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/200`}
+        <p className="text-right text-slate-gray text-xs mt-1">{`${charCount}/500`}
         </p>
       </div>
       

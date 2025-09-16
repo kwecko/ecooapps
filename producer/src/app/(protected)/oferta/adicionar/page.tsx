@@ -13,6 +13,7 @@ import {
   InputDescription,
   InputComment,
   InputRecurrence,
+  InputExpirationDate,
   RenderProducts,
   ReviewOffer,
 } from "../components";
@@ -116,7 +117,18 @@ export default function Home() {
               setOffer({ ...offer, amount: amount })}
           />
         )}
-        {currentStep === 3 && (
+
+        {currentStep === 3 && offer.product.perishable === false && (
+          <InputExpirationDate
+            handleNextStep={handleNextStep}
+            expires_at={offer.expires_at}
+            setExpiresAt={(expires_at) =>
+              setOffer({ ...offer, expires_at: expires_at })
+            }
+          />
+        )}
+        {(currentStep === 3 && offer.product.perishable === true) ||
+        (currentStep === 4 && offer.product.perishable === false) ? (
           <InputPrice
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
@@ -124,8 +136,11 @@ export default function Home() {
             setPrice={(price) => 
               setOffer({ ...offer, price: price })}
           />
-        )}
-        {currentStep === 4 && (
+        ) : null}
+        
+
+        {(currentStep === 4 && offer.product.perishable === true) ||
+        (currentStep === 5 && offer.product.perishable === false) ? (
           <InputDescription
             handleNextStep={handleNextStep}
             description={offer.description ?? ""}
@@ -133,8 +148,9 @@ export default function Home() {
               setOffer({ ...offer, description: description })
             }
           />
-        )}
-        {currentStep === 5 && (
+        ) : null}
+        {(currentStep === 5 && offer.product.perishable === true) ||
+         (currentStep === 6 && offer.product.perishable === false) ? (
           <InputComment
             handleNextStep={handleNextStep}
             comment={offer.comment ?? ""}
@@ -142,8 +158,8 @@ export default function Home() {
               setOffer({ ...offer, comment: comment })
             }
           />
-        )}
-        {currentStep === 6 && offer.product.perishable === false && (
+        ) : null}
+        {currentStep === 7 && offer.product.perishable === false && (
           <InputRecurrence
             handleNextStep={handleNextStep}
             setRecurrence={(recurring) =>
@@ -151,7 +167,9 @@ export default function Home() {
             }
           />
         )}
-        {currentStep === 6 && offer.product.perishable === true && (
+      
+        {(currentStep === 7 && offer.product.perishable === true) ||
+        (currentStep === 8 && offer.product.perishable === false) ? (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -165,22 +183,7 @@ export default function Home() {
             closes_at={offer.closes_at}
             submitAction={submitOffer}
           />
-        )}
-        {currentStep === 7 && offer.product.perishable === false && (
-          <ReviewOffer
-            productId={offer.product.id ?? ""}
-            productName={offer.product.name ?? ""}
-            amount={offer.amount ?? 0}
-            price={offer.price ?? 0}
-            description={offer.description ?? ""}
-            comment={offer.comment ?? ""}
-            pricing={offer.product.pricing ?? "UNIT"}
-            expires_at={offer.product.perishable ? undefined : offer.expires_at}
-            recurring={offer.recurring ?? "false"}
-            closes_at={offer.closes_at}
-            submitAction={submitOffer}
-          />
-        )}
+        ) : null}
       </div>
       <div className="h-footer w-full">
         <div
