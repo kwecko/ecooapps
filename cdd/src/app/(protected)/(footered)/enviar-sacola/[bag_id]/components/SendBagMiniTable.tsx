@@ -8,6 +8,7 @@ import TableSkeleton from "@shared/components/TableSkeleton";
 
 import { BagStatus } from "@shared/types/bag-status";
 
+import { HandleBagRequest } from "@cdd/app/_actions/bags/PATCH/handle-bag";
 import useFetchBag from "@cdd/hooks/bags/useFetchBag";
 import useHandleBag from "@cdd/hooks/bags/useHandleBag";
 import GroupOrder from "@shared/components/GroupOrder";
@@ -49,7 +50,7 @@ export default function SendBagMiniTable() {
   const handleStatusBag = (bag_id: string, status: BagStatus["send"]) => {
     handleBag({
       bag_id,
-      status,
+      status: status as HandleBagRequest["status"],
       successMessage: `A sacola foi ${bagStatusOptions
         .find((option) => option.value === status)
         ?.label.toLowerCase()} com sucesso!`,
@@ -58,6 +59,10 @@ export default function SendBagMiniTable() {
   };
 
   const isLoading = isLoadingFetchBag || isLoadingHandleBag;
+
+  const isShipping = bag ? bag.shipping > 0 : false;
+
+  const address = (isShipping && bag && !!bag.address_id) ? `${bag.address.street}, ${bag.address.number}${bag.address.complement ? `, ${bag.address.complement}` : ""} | ${bag.address.postal_code}` : "Endereço não informado";
 
   return (
     <div className="w-full h-full flex flex-col justify-between items-center gap-3">
@@ -97,6 +102,9 @@ export default function SendBagMiniTable() {
             }
             name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
+            isShipping={isShipping}
+            address={address}
+            totalAmount={bag.total}
             content={<GroupOrder orders={bag.orders} />}
           />
           <TablePaginationControl />
@@ -112,7 +120,7 @@ export default function SendBagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag.code, "DISPATCHED");
+                  handleStatusBag(bag.id, "DISPATCHED");
                 }}
               />
             ) : bag.status && isStatusChanged && bagStatus !== bag.status ? (

@@ -1,3 +1,5 @@
+import { InfoIconModalProps } from "@shared/components/InfoIconModal";
+
 export type AdminReportActions = "sales";
 
 export type ReportActions =
@@ -9,8 +11,14 @@ export type ReportActions =
   | "offer-history"
   | "fetch-inbound";
 
-export type ReportButtonData = {
+type ReportButtonType = {
   name: string;
   onClick: ReportActions;
   disabled: boolean;
-}[];
+};
+
+export type ReportButtonData = ReportButtonType[];
+
+export interface ReportButton extends ReportButtonType {
+  information?: InfoIconModalProps;
+}

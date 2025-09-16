@@ -13,9 +13,12 @@ export interface BagDTO {
     | "VERIFIED"
     | "MOUNTED"
     | "CANCELLED"
+    | "REJECTED"
     | "RECEIVED"
     | "DISPATCHED"
-    | "DEFERRED";
+    | "DEFERRED"
+    | "FETCH"
+    | "FETCHED";
   paid: boolean;
   open: boolean;
   total: number;

@@ -11,6 +11,8 @@ import {
   InputPrice,
   InputDescription,
   ReviewOffer,
+  InputComment,
+  InputRecurrence,
 } from "../components";
 
 import { toast } from "sonner";
@@ -31,7 +33,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 5;
+  const maxStep = 7;
 
   useEffect(() => {
     setIsLoading(true);
@@ -85,6 +87,9 @@ export default function Home() {
       return `${day}-${month}-${year}`;
     };
 
+    const today = new Date();
+    const expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+
     const success = await createOffer({
       product_id: offer.product.id,
       amount:
@@ -92,7 +97,8 @@ export default function Home() {
       price: offer.price,
       description: offer.description ?? undefined,
       comment: offer.comment ?? undefined,
-      expires_at: formatDate(offer.expires_at),
+      recurring: offer.recurring ?? "false",
+      expires_at: formatDate(expiresAt),
     });
     if (!success) return;
     toast.success("Oferta cadastrada com sucesso");
@@ -133,6 +139,7 @@ export default function Home() {
                 }
               />
             )}
+            
             {(currentStep === 2 && offer.product.perishable === true) ||
             (currentStep === 3 && offer.product.perishable === false) ? (
               <InputPrice
@@ -151,24 +158,41 @@ export default function Home() {
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
-                comment={offer.comment ?? ""}
-                setComment={(comment) =>
-                  setOffer({ ...offer, comment: comment })
+              />
+            ) : null}
+            {(currentStep === 4 && offer.product.perishable === true) ||
+              (currentStep === 5 && offer.product.perishable === false) ? (
+                <InputComment
+                  handleNextStep={handleNextStep}
+                  comment={offer.comment ?? ""}
+                  setComment={(comment) =>
+                    setOffer({ ...offer, comment: comment })
+                  }
+                />
+              ) : null}
+
+            {(currentStep === 5 && offer.product.perishable === true) ||
+            (currentStep === 6 && offer.product.perishable === false) ? (
+              <InputRecurrence
+                handleNextStep={handleNextStep}
+                setRecurrence={(recurring) =>
+                  setOffer({ ...offer, recurring: String(recurring) })
                 }
               />
             ) : null}
-
-            {(currentStep === 4 && offer.product.perishable === true) ||
-            (currentStep === 5 && offer.product.perishable === false) ? (
+            {(currentStep === 6 && offer.product.perishable === true) ||
+            (currentStep === 7 && offer.product.perishable === false) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
                 amount={offer.amount ?? 0}
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
-                comment= {offer.comment ?? ""}
+                comment={offer.comment ?? ""}
                 pricing={offer.product.pricing ?? "UNIT"}
                 expires_at={offer.product.perishable ? undefined : offer.expires_at}
+                recurring={offer.recurring ?? "false"}
+                closes_at={offer.closes_at}
                 submitAction={submitOffer}
               />
             ) : null}

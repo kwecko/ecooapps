@@ -1,6 +1,6 @@
 "use client";
-import { fetchCategory } from "@consumer/app/_components/GET/fetch-categories";
-import RedirectCart from "@consumer/app/_components/redirectCart";
+import { fetchCategory } from "@consumer/app/_actions/api/GET/fetch-categories";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
@@ -16,7 +16,6 @@ export default function OfertasCategoria() {
 	const params = data ? JSON.parse(decodeURIComponent(data as string)) : null;
 
 	const [offers, setOffers] = useState([] as OfferDTO[]);
-	// const [farm, setFarm] = useState({} as FarmDTO);
 	const [page, setPage] = useState(1 as number);
 	const [isLoading, setIsLoading] = useState(false);
 	const [hasMore, setHasMore] = useState(true);
@@ -24,8 +23,7 @@ export default function OfertasCategoria() {
 	const { handleError } = useHandleError();
 
 	const LocalStorage = useLocalStorage();
-
-	const cycle = useMemo(() => LocalStorage.getFromStorage("selected-cycle"),[]);
+	const cycleId = useMemo(() => LocalStorage.getFromStorage("cycle_id"),[]);
 
 	const searchOffers = async () => {
 		setIsLoading(true);
@@ -34,7 +32,7 @@ export default function OfertasCategoria() {
 
 			const response = await fetchCategory({
 				category_id: params.id as string,
-				cycle_id: cycle.id as string,
+				cycle_id: cycleId,
 				page: page,
 				available: true
 			});
@@ -65,10 +63,10 @@ export default function OfertasCategoria() {
 	};
 
 	useEffect(() => {
-		if (inView || (inView && !isLoading)) {
+		if (inView && (inView && !isLoading) && hasMore ) {
 			searchOffers();
 		}
-	}, [inView, isLoading]);
+	}, [inView, isLoading, hasMore]);
 
 	return (
 		<div className="flex flex-col h-full">

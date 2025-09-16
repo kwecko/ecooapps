@@ -1,6 +1,6 @@
 "use client";
 
-import RedirectCart from "@consumer/app/_components/redirectCart";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import ModalV2 from "@shared/components/ModalV2";
 import { CatalogDTO } from "@shared/interfaces/dtos";
 import Image from "next/image";
@@ -68,7 +68,7 @@ export default function Produtor() {
           isOpen={showPhotos}
         />
         <Link
-          href={`/ofertas?data=${encodeURIComponent(
+          href={`/ofertas-catalogo?data=${encodeURIComponent(
             JSON.stringify({
               id: catalog.id,
               cycle_id: catalog.cycle_id,

@@ -1,63 +1,30 @@
 "use client";
-import { searchCategories } from "@consumer/app/_components/GET/search-categories";
-import RedirectCart from "@consumer/app/_components/redirectCart";
-import { listCycles } from "@shared/_actions/cycles/GET/list-cycles";
+import { searchCategories } from "@consumer/app/_actions/api/GET/search-categories";
+import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import { useHandleError } from "@shared/hooks/useHandleError";
-import { CycleDTO, CategoryDTO } from "@shared/interfaces/dtos";
-import { useEffect, useState } from "react";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
+import { CategoryDTO } from "@shared/interfaces/dtos";
+import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import CategoryCard from "./components/CategoryCard";
 
 export default function Categorias() {
-  const [cycles, setCycles] = useState([] as CycleDTO[]);
-  const [cycleId, setCycleId] = useState("" as string);
+
   const [categories, setCategories] = useState([] as any[]);
   const [page, setPage] = useState(1 as number);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+	const [hasMore, setHasMore] = useState(true);
   const { ref, inView } = useInView();
   const { handleError } = useHandleError();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setIsLoading(true);
-        const response = await listCycles();
-        if (response.message) {
-          handleError(response.message as string);
-        } else if (response.data) {
-          const cycles: CycleDTO[] = response.data;
-          setCycles(cycles);
-        }
-      } catch {
-        handleError("Erro desconhecido.");
-      } 
-    })();
-  }, []);
-
+	const LocalStorage = useLocalStorage();
+	const cycleId = useMemo(() => LocalStorage.getFromStorage("cycle_id"),[]);
+	
   const loadCategories = async () => {
-
-    const typeCycle = process.env.NEXT_PUBLIC_ENV
-      ? process.env.NEXT_PUBLIC_ENV === "dev" ||
-        process.env.NEXT_PUBLIC_ENV === "homolog"
-        ? "livre"
-        : "semanal"
-      : "livre";
-
-    const cycle = cycles.find(
-      (cycle) => cycle.alias.toLowerCase() == typeCycle
-    );
-
-    if (!cycle) {
-      setIsLoading(false);
-      return;
-    }
-
-    setCycleId(cycle.id as string);
-    localStorage.setItem("selected-cycle", JSON.stringify(cycle));
-
+		setIsLoading(true);
     try {
       const response = await searchCategories({
-        cycle_id: cycle.id as string,
+        cycle_id: cycleId,
         page: page,
 				available: true
       });
@@ -69,9 +36,8 @@ export default function Categorias() {
           return category;
         });
 
-        if (newCategories.length == 0) {
-          setIsLoading(false);
-          return;
+        if (newCategories.length == 0 || newCategories.length < 20) {
+          setHasMore(false);
         }
 
         setCategories((categories) => [...categories, ...newCategories]);
@@ -84,25 +50,32 @@ export default function Categorias() {
     }
   };
 
-  useEffect(() => {
-    if (inView) {
-      loadCategories();
-    }
-  }, [inView, cycles]);
+	useEffect(() => {
+		if (inView && (inView && !isLoading) && hasMore ) {
+			loadCategories();
+		}
+	}, [inView]);
 
   return (
     <div className="flex flex-col h-full">
       <div className="overflow-y-auto">
-        {categories && categories.length !== 0
-          ? categories.map((category) => {
+        {
+					categories && categories.length !== 0 ?
+          	categories.map((category) => {
               return (
                 <CategoryCard key={category.id} {...category}/>
               );
             })
-          : null}
-        <div>
-          {isLoading && cycles.length > 0 ? <div ref={ref}></div> : null}
-        </div>
+					:
+						(
+						<div className="w-full text-center p-2">
+							<p>Não há categorias com ofertas</p>
+						</div>
+						)
+				}
+       	<div className="w-full text-center p-2">
+					{hasMore && <div ref={ref}>Carregando...</div>}
+				</div>
       </div>
       <div className="min-h-17">
         <RedirectCart />

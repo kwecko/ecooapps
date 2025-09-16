@@ -1,5 +1,5 @@
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegisterReturn } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
 interface TextInputProps {
@@ -7,7 +7,7 @@ interface TextInputProps {
   label?: string;
   maxLength?: number;
   placeholder?: string;
-  register: UseFormRegister<any>;
+  register: UseFormRegisterReturn;
   defaultValue?: string;
   errorMessage?: string;
   showCharCount?: boolean;
@@ -31,6 +31,7 @@ function TextInput({
 
   function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
     setCharCount(e.target.value.length);
+    register.onChange(e);
   }
 
   return (
@@ -42,7 +43,7 @@ function TextInput({
       )}
       <textarea
         id={name}
-        {...register(name)}
+        {...register}
         maxLength={maxLength}
         placeholder={placeholder}
         defaultValue={defaultValue}

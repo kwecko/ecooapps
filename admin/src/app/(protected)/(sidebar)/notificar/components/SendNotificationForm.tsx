@@ -7,6 +7,7 @@ import CustomInput from "@shared/components/CustomInput";
 import CustomModal from "@shared/components/CustomModal";
 import Select from "@shared/components/SelectInput";
 import TextInput from "@shared/components/TextInput";
+import Loader from "@shared/components/Loader";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -26,7 +27,7 @@ export default function SendNotificationForm() {
   type SendNotificationFormSchema = z.infer<typeof sendNotificationFormSchema>;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [confirmSend, setConfirmSend] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<SendNotificationFormSchema | null>(
     null
   );
@@ -58,6 +59,7 @@ export default function SendNotificationForm() {
   const confirmSubmission = async () => {
     if (!formData) return;
     setClearOptions(false);
+    setIsLoading(true);
     const success = await sendNotification(formData);
     if (success) {
       setFormData(null);
@@ -65,6 +67,7 @@ export default function SendNotificationForm() {
       setClearOptions(true);
       toast.success("Notificação enviada com sucesso!");
     }
+    setIsLoading(false);
   };
 
   return (
@@ -97,7 +100,7 @@ export default function SendNotificationForm() {
         label="Escreva a sua mensagem"
         maxLength={2000}
         className="min-h-40"
-        register={register}
+        register={register("message")}
         errorMessage={errors.message?.message}
       />
       <ButtonV2
@@ -106,19 +109,20 @@ export default function SendNotificationForm() {
         className="bg-theme-highlight"
         disabled={!isValid}
       >
-        Enviar notificação
+        {isLoading ? <Loader loaderType="component" /> : "Enviar notificação"}
       </ButtonV2>
       <CustomModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         approveAction={confirmSubmission}
         rejectAction={() => setIsOpen(false)}
+        approveActionLoading={isLoading}
         titleConfirmModal="Enviar"
         bgConfirmModal="#00735E"
         titleCloseModal="Cancelar"
         bgCloseModal="#EEF1F4"
         titleContentModal="Atenção"
-        contentModal="Você confirma que quer enviar uma nova mensagem para o público “Clientes online”?"
+        contentModal={`Você confirma que quer enviar uma nova mensagem para o público alvo "${formData?.role === "USER" ? "Usuários online" : "Produtores online"}"?`}
       />
     </form>
   );

@@ -13,7 +13,7 @@ export async function searchCatalogs({
   cycle_id,
   page,
   product,
-	available,
+	available
 }: SearchCatalogsRequest) {
   const response = ApiService.GET({
     url: `/catalogs?page=${page}&cycle_id=${cycle_id}${product ? `&product=${product}` : ""}${available ? `&available=${available}` : ""}`

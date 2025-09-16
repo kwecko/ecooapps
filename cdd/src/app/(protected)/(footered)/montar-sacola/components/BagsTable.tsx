@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { BagStatus } from "@shared/types/bag-status";
 
@@ -8,12 +9,11 @@ import EmptyBox from "@shared/components/EmptyBox";
 import StatusFilterButtons from "@shared/components/StatusFilterButton";
 import { useDebounce } from "@shared/hooks/useDebounce";
 
-import useListCurrentBags from "@cdd/hooks/bags/useListCurrentBags";
+import { default as useListCurrentBags } from "@cdd/hooks/bags/useListCurrentBags";
 import GenericTable from "@shared/components/GenericTable";
 import TablePaginationControl from "@shared/components/TablePaginationControl";
-import TableSearchInput from "@shared/components/TableSearchInput";
-import { useGetStatus } from "@shared/hooks/useGetStatus";
-import usePageQueryParams from "@shared/hooks/usePageQueryParams";
+import { useGetStatusText } from "@shared/hooks/useGetStatus";
+// import usePageQueryParams from "@shared/hooks/usePageQueryParams";
 import { BagDTO } from "@shared/interfaces/dtos";
 
 type FilterStatus = {
@@ -30,37 +30,44 @@ const statuses: FilterStatus[] = [
 export default function BagsTable() {
   const router = useRouter();
 
-  const { getStatus } = useGetStatus();
+  const { getStatus } = useGetStatusText();
 
   const searchParams = useSearchParams();
-  const selectedStatus = searchParams.get("status") ?? "todas";
   const pathname = usePathname();
 
-  const { page, query } = usePageQueryParams();
-  const debounceSearch = useDebounce(query, 300);
+  const [selectedStatus, setSelectedStatus] = useState<string>(
+    searchParams.get("status") ?? "todas"
+  );
 
-  const setSelectedStatus = (status: string) => {
+  useEffect(() => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("status", status);
-    router.push(`${pathname}?${params.toString()}`);
+    params.set("status", selectedStatus);
+
+    if (selectedStatus === "todas") params.delete("status");
+    router.replace(`${pathname}?${params.toString()}`);
+  }, [selectedStatus]);
+
+  const page = Number(searchParams.get("p") ?? 1);
+  const search = searchParams.get("q") ?? "";
+  const debounceSearch = useDebounce(search, 300);
+
+  const updateStatus = (status: string) => {
+    setSelectedStatus(status);
   };
 
   const { data: bags, isLoading } = useListCurrentBags({
     page,
+    user: debounceSearch,
     statuses: statuses.find((status) => status.name === selectedStatus)
       ?.key as BagStatus["build"][],
-    user: debounceSearch,
   });
 
   const handleStatusFilterClick = (status: FilterStatus) => {
     if (status.name === selectedStatus) {
-      setSelectedStatus("todas");
+      updateStatus("todas");
       return;
     }
-
-    const statusName = status.name;
-
-    setSelectedStatus(statusName);
+    updateStatus(status.name);
   };
 
   const handleClick = (id: string) => {
@@ -70,11 +77,11 @@ export default function BagsTable() {
   return (
     <div className="flex flex-col gap-2.5 w-full items-center justify-between h-full">
       <div className="w-full flex flex-col gap-2.5 justify-start items-center">
-        <TableSearchInput
+        {/* <TableSearchInput
           placeholder={"Filtrar por cliente..."}
           icon="search"
           className="lg:self-end w-full"
-        />
+        /> */}
         <StatusFilterButtons
           statuses={statuses}
           selectedStatus={selectedStatus}
@@ -103,14 +110,14 @@ export default function BagsTable() {
                 {
                   header: "Cliente",
                   key: "customer.name",
-                  colSpan: 6,
+                  colSpan: 4,
                   render: (row: BagDTO) =>
                     `${row.customer.first_name} ${row.customer.last_name}`,
                 },
                 {
                   header: "Status",
                   key: "status",
-                  colSpan: 2,
+                  colSpan: 4,
                   className: "items-center justify-center w-full",
                   render: (row: BagDTO) =>
                     getStatus({

@@ -18,6 +18,7 @@ import {
   InputPrice,
   InputDescription,
   ReviewOffer,
+  InputComment,
 } from "../components";
 
 export default function Home() {
@@ -29,13 +30,14 @@ export default function Home() {
   const { handleError } = useHandleError();
 
   const minStep: number = 1;
-  const maxStep: number = 5;
+  const maxStep: number = 6;
 
   useEffect(() => {
     setIsLoading(true);
     const storedOfferData = sessionStorage.getItem("edit-offer-data");
     if (storedOfferData) {
       const offerData: OfferDTO = JSON.parse(storedOfferData);
+      console.log("offerData", offerData);
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
@@ -91,6 +93,12 @@ export default function Home() {
         return `${day}-${month}-${year}`;
       };
 
+      const today = new Date();
+      let expiresAt: Date | undefined = undefined;
+      if (!offer.product.perishable) {
+        expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+      }
+
       const data: any = {
         amount:
           offer.product.pricing === "UNIT"
@@ -98,7 +106,7 @@ export default function Home() {
         : offer.amount * 1000,
         price: offer.price,
         description: offer.description ?? undefined,
-        expires_at: formatDateToDDMMYYYY(offer.expires_at),
+        expires_at: formatDateToDDMMYYYY(expiresAt),
       };
 
       if (offer.comment) {
@@ -176,28 +184,35 @@ export default function Home() {
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
-                comment={offer.comment ?? ""}
-                setComment={(comment) =>
-                  setOffer({ ...offer, comment: comment })
-                }
               />
             ) : null}
-
-            
             {(currentStep === 4 && offer.product.perishable === true) ||
-            (currentStep === 5 && offer.product.perishable === false) ? (
-              <ReviewOffer
-                productId={offer.product.id ?? ""}
-                productName={offer.product.name ?? ""}
-                amount={offer.amount ?? 0}
-                price={offer.price ?? 0}
-                description={offer.description ?? ""}
-                comment={offer.comment ?? ""}
-                pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? undefined : offer.expires_at}
-                submitAction={onUpdateOffer}
-              />
-            ) : null}
+              (currentStep === 5 && offer.product.perishable === false) ? (
+                <InputComment
+                  handleNextStep={handleNextStep}
+                  comment={offer.comment ?? ""}
+                  setComment={(comment) =>
+                    setOffer({ ...offer, comment: comment })
+                  }
+                />
+              ) : null}
+            
+            {(currentStep === 5 && offer.product.perishable === true) ||
+            (currentStep === 6 && offer.product.perishable === false) ? (
+          <ReviewOffer
+            productId={offer.product.id ?? ""}
+            productName={offer.product.name ?? ""}
+            amount={offer.amount ?? 0}
+            price={offer.price ?? 0}
+            description={offer.description ?? ""}
+            comment={offer.comment ?? ""}
+            pricing={offer.product.pricing ?? "UNIT"}
+            expires_at={offer.product.perishable ? undefined : offer.expires_at}
+            recurring={offer.recurring ?? "false"}
+            closes_at={offer.closes_at}
+            submitAction={onUpdateOffer}
+          />
+        ) : null}
           </div>
           <div className="h-footer w-full">
             <div

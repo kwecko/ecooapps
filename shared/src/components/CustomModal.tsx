@@ -1,23 +1,26 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
-import { AiOutlineClose } from 'react-icons/ai'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
+import { AiOutlineClose } from "react-icons/ai";
+import Loader from "./Loader";
 
 interface ModalProps {
-  titleOpenModal?: string
-  titleContentModal?: string
-  subtitleContentModal?: string
-  contentModal?: string
-  titleConfirmModal?: string
-  titleCloseModal?: string
-  textCloseModal?: string
-  bgOpenModal?: string
-  bgConfirmModal?: string
-  bgCloseModal?: string
-  buttonOpenModal?: React.ReactNode
-  isOpen?: boolean
-  setIsOpen?: (value: boolean) => void
-  rejectAction?: () => void
-  approveAction?: () => void
+  titleOpenModal?: string;
+  titleContentModal?: string;
+  subtitleContentModal?: string;
+  contentModal?: string;
+  titleConfirmModal?: string;
+  titleCloseModal?: string;
+  textCloseModal?: string;
+  bgOpenModal?: string;
+  bgConfirmModal?: string;
+  bgCloseModal?: string;
+  colorConfirmModal?: string;
+  buttonOpenModal?: React.ReactNode;
+  isOpen?: boolean;
+  setIsOpen?: (value: boolean) => void;
+  rejectAction?: () => void;
+  approveAction?: () => void;
+  approveActionLoading?: boolean;
 }
 
 export default function CustomModal({
@@ -31,24 +34,26 @@ export default function CustomModal({
   bgOpenModal,
   bgConfirmModal,
   bgCloseModal,
+  colorConfirmModal,
   buttonOpenModal,
   isOpen: externalIsOpen,
   setIsOpen: externalSetIsOpen,
   rejectAction,
   approveAction,
+  approveActionLoading,
 }: ModalProps) {
-
   const [internalIsOpen, setInternalIsOpen] = useState(false);
 
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
-  const setIsOpen = externalSetIsOpen !== undefined ? externalSetIsOpen : setInternalIsOpen;
+  const setIsOpen =
+    externalSetIsOpen !== undefined ? externalSetIsOpen : setInternalIsOpen;
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   function openModal() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
 
   const handleRejectActionModal = () => {
@@ -64,14 +69,10 @@ export default function CustomModal({
   return (
     <>
       {buttonOpenModal ? (
-        <button
-          type="button"
-          onClick={openModal}
-        >
+        <button type="button" onClick={openModal}>
           {buttonOpenModal}
         </button>
-      ) : undefined
-      }
+      ) : undefined}
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child
@@ -98,13 +99,12 @@ export default function CustomModal({
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="w-full max-w-xs transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all relative">
-                  
-                <div className="h-7">
+                  <div className="h-7">
                     <button
                       className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
                       onClick={closeModal}
                     >
-                      <AiOutlineClose className="w-7 h-7"/>
+                      <AiOutlineClose className="w-7 h-7" />
                     </button>
                   </div>
 
@@ -129,7 +129,10 @@ export default function CustomModal({
                   <div className="flex justify-center gap-3 mt-8">
                     {rejectAction ? (
                       <button
-                        style={{ backgroundColor: bgCloseModal, color: textCloseModal }}
+                        style={{
+                          backgroundColor: bgCloseModal,
+                          color: textCloseModal,
+                        }}
                         type="button"
                         className={`w-full inline-flex justify-center rounded-md border border-transparent bg-gray-100 px-4 py-3 font-medium`}
                         onClick={handleRejectActionModal}
@@ -139,21 +142,29 @@ export default function CustomModal({
                     ) : null}
                     {approveAction ? (
                       <button
-                      style={{ backgroundColor: bgConfirmModal }}
-                      type="button"
-                      className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
-                      onClick={handleApproveActionModal}
-                    >
-                      {titleConfirmModal}
-                    </button>
+                        style={{ backgroundColor: bgConfirmModal }}
+                        type="button"
+                        className={`w-full text-white inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
+                        onClick={handleApproveActionModal}
+                      >
+                        {approveActionLoading ? (
+                          <Loader loaderType="component" />
+                        ) : (
+                          titleConfirmModal
+                        )}
+                      </button>
                     ) : null}
                     {!rejectAction && !approveAction && (
                       <button
+                        style={{
+                          backgroundColor: bgConfirmModal ?? "#EAE7E3",
+                          color: colorConfirmModal ?? "",
+                        }}
                         type="button"
-                        className={`w-full bg-[#EAE7E3] text-theme-primary inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
+                        className={`w-full text-theme-primary inline-flex justify-center rounded-md border border-transparent px-4 py-3 font-medium focusable-button`}
                         onClick={closeModal}
                       >
-                        Ok
+                        {titleConfirmModal ?? "Ok"}
                       </button>
                     )}
                   </div>
@@ -164,5 +175,5 @@ export default function CustomModal({
         </Dialog>
       </Transition>
     </>
-  )
+  );
 }

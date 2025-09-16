@@ -9,9 +9,11 @@ import { LuChevronLeft, LuX } from "react-icons/lu";
 import { toast } from "sonner";
 import {
   InputAmount,
-  InputExpirationDate,
   InputPrice,
   InputDescription,
+  InputComment,
+  InputRecurrence,
+  InputExpirationDate,
   RenderProducts,
   ReviewOffer,
 } from "../components";
@@ -26,7 +28,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 6;
+  const maxStep = 7;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -58,7 +60,10 @@ export default function Home() {
     };
 
     const today = new Date();
-    const expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+    let expiresAt: Date | undefined = undefined;
+    if (!offer.product.perishable) {
+      expiresAt = new Date(today.setMonth(today.getMonth() + 6));
+    }
 
     const offerPayload: any = {
       product_id: offer.product.id,
@@ -66,6 +71,7 @@ export default function Home() {
       offer.product.pricing === "UNIT" ? offer.amount : offer.amount * 1000,
       price: offer.price,
       expires_at: formatDate(expiresAt),
+      recurring: offer.recurring ?? "false"
     };
 
     if (offer.description) {
@@ -107,7 +113,8 @@ export default function Home() {
             handleNextStep={handleNextStep}
             pricing={offer.product.pricing ?? "UNIT"}
             amount={offer.amount ?? 0}
-            setAmount={(amount) => setOffer({ ...offer, amount: amount })}
+            setAmount={(amount) => 
+              setOffer({ ...offer, amount: amount })}
           />
         )}
 
@@ -126,7 +133,8 @@ export default function Home() {
             handleNextStep={handleNextStep}
             price={offer.price ?? 0}
             pricing={offer.product.pricing}
-            setPrice={(price) => setOffer({ ...offer, price: price })}
+            setPrice={(price) => 
+              setOffer({ ...offer, price: price })}
           />
         ) : null}
         
@@ -139,30 +147,29 @@ export default function Home() {
             setDescription={(description) =>
               setOffer({ ...offer, description: description })
             }
+          />
+        ) : null}
+        {(currentStep === 5 && offer.product.perishable === true) ||
+         (currentStep === 6 && offer.product.perishable === false) ? (
+          <InputComment
+            handleNextStep={handleNextStep}
             comment={offer.comment ?? ""}
             setComment={(comment) =>
               setOffer({ ...offer, comment: comment })
             }
           />
         ) : null}
-
-        {currentStep === 5 && (
-          <ReviewOffer
-            productId={offer.product.id ?? ""}
-            productName={offer.product.name ?? ""}
-            amount={offer.amount ?? 0}
-            price={offer.price ?? 0}
-            description={offer.description ?? ""}
-            comment={offer.comment ?? ""}
-            pricing={offer.product.pricing ?? "UNIT"}
-            expires_at={offer.product.perishable ? undefined : offer.expires_at}
-            submitAction={submitOffer}
+        {currentStep === 7 && offer.product.perishable === false && (
+          <InputRecurrence
+            handleNextStep={handleNextStep}
+            setRecurrence={(recurring) =>
+              setOffer({ ...offer, recurring: String(recurring) })
+            }
           />
         )}
-
-        
-        {(currentStep === 5 && offer.product.perishable === true) ||
-        (currentStep === 6 && offer.product.perishable === false) ? (
+      
+        {(currentStep === 7 && offer.product.perishable === true) ||
+        (currentStep === 8 && offer.product.perishable === false) ? (
           <ReviewOffer
             productId={offer.product.id ?? ""}
             productName={offer.product.name ?? ""}
@@ -172,6 +179,8 @@ export default function Home() {
             comment={offer.comment ?? ""}
             pricing={offer.product.pricing ?? "UNIT"}
             expires_at={offer.product.perishable ? undefined : offer.expires_at}
+            recurring={offer.recurring ?? "false"}
+            closes_at={offer.closes_at}
             submitAction={submitOffer}
           />
         ) : null}

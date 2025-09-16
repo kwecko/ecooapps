@@ -179,7 +179,7 @@ const BagDetailsPage = () => {
                                 title={
                                   item.status === 'RECEIVED'
                                     ? 'Entregue'
-                                    : item.status === 'CANCELLED'
+                                    : item.status === 'REJECTED'
                                     ? 'Retornado'
                                     : 'Pendente'
                                 }
@@ -187,13 +187,13 @@ const BagDetailsPage = () => {
                                   ${
                                     item.status === 'RECEIVED'
                                       ? 'bg-green-500'
-                                      : item.status === 'CANCELLED'
+                                      : item.status === 'REJECTED'
                                       ? 'bg-red-500'
                                       : 'bg-gray-400'
                                   }`}
                               >
                                 {item.status === 'RECEIVED' && '✔'}
-                                {item.status === 'CANCELLED' && '✖'}
+                                {item.status === 'REJECTED' && '✖'}
                               </div>
                             </div>
                           ))}

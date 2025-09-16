@@ -3,6 +3,8 @@ import InputAmount from "./InputAmount";
 import InputExpirationDate from "./InputExpirationDate";
 import InputPrice from "./InputPrice";
 import InputDescription from "./InputDescription";
+import InputComment from "./InputComment";
+import InputRecurrence from "./InputRecurrence";
 import ReviewOffer from "./ReviewOffer";
 
 export {
@@ -11,5 +13,7 @@ export {
   InputExpirationDate,
   InputPrice,
   InputDescription,
+  InputComment,
+  InputRecurrence,
   ReviewOffer,
 };

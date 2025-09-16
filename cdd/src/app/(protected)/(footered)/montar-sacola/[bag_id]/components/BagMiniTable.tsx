@@ -58,6 +58,10 @@ export default function BagMiniTable() {
 
   const isLoading = isLoadingFetchBag || isLoadingHandleBag;
 
+  const isShipping = bag ? bag.shipping > 0 : false;
+
+  const address = (isShipping && bag && !!bag.address_id) ? `${bag.address.street}, ${bag.address.number}${bag.address.complement ? `, ${bag.address.complement}` : ""} | ${bag.address.postal_code}` : "Endereço não informado";
+
   return (
     <div className="w-full h-full flex flex-col justify-between items-center gap-3">
       {isLoading && <TableSkeleton />}
@@ -73,6 +77,9 @@ export default function BagMiniTable() {
             status={convertStatus(bag.status)?.name}
             name={`${bag.customer.first_name} ${bag.customer.last_name}`}
             time={getNextSaturdayDate()}
+            isShipping={isShipping}
+            address={address}
+            totalAmount={bag.total}
             content={<GroupOrder orders={bag.orders} />}
           />
           <TablePaginationControl />
@@ -88,7 +95,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#00735E"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "VERIFIED");
+                  handleStatusBag(bag.id, "VERIFIED");
                 }}
               />
             ) : (
@@ -102,7 +109,7 @@ export default function BagMiniTable() {
                 bgConfirmModal="#FF7070"
                 bgCloseModal="#EEF1F4"
                 modalAction={() => {
-                  handleStatusBag(bag_id as string, "MOUNTED");
+                  handleStatusBag(bag.id, "MOUNTED");
                 }}
               />
             )}
