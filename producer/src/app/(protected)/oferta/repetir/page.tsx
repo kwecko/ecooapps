@@ -33,7 +33,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 6;
+  const maxStep = 7;
 
   useEffect(() => {
     setIsLoading(true);
@@ -131,41 +131,57 @@ export default function Home() {
                 setAmount={(amount) => setOffer({ ...offer, amount: amount })}
               />
             )}
-            {currentStep === 2 && (
+            {currentStep === 2 && offer.product.perishable === false && (
+              <InputExpirationDate
+                handleNextStep={handleNextStep}
+                expires_at={offer.expires_at}
+                setExpiresAt={(expires_at) => setOffer({ ...offer, expires_at: expires_at })
+                }
+              />
+            )}
+            
+            {(currentStep === 2 && offer.product.perishable === true) ||
+            (currentStep === 3 && offer.product.perishable === false) ? (
               <InputPrice
                 handleNextStep={handleNextStep}
                 price={offer.price ?? 0}
                 pricing={offer.product.pricing}
                 setPrice={(price) => setOffer({ ...offer, price: price })}
               />
-            )}
-            {currentStep === 3 && (
-              <InputDescription
+            ) : null}
+
+            {(currentStep === 3 && offer.product.perishable === true) ||
+            (currentStep === 4 && offer.product.perishable === false) ? (
+               <InputDescription
                 handleNextStep={handleNextStep}
                 description={offer.description ?? ""}
                 setDescription={(description) =>
                   setOffer({ ...offer, description: description })
                 }
               />
-            )}
-            {currentStep === 4 && (
-              <InputComment
-                handleNextStep={handleNextStep}
-                comment={offer.comment ?? ""}
-                setComment={(comment) =>
-                  setOffer({ ...offer, comment: comment })
-                }
-              />
-            )}
-            {currentStep === 5 && offer.product.perishable === false && (
+            ) : null}
+            {(currentStep === 4 && offer.product.perishable === true) ||
+              (currentStep === 5 && offer.product.perishable === false) ? (
+                <InputComment
+                  handleNextStep={handleNextStep}
+                  comment={offer.comment ?? ""}
+                  setComment={(comment) =>
+                    setOffer({ ...offer, comment: comment })
+                  }
+                />
+              ) : null}
+
+            {(currentStep === 5 && offer.product.perishable === true) ||
+            (currentStep === 6 && offer.product.perishable === false) ? (
               <InputRecurrence
                 handleNextStep={handleNextStep}
                 setRecurrence={(recurring) =>
                   setOffer({ ...offer, recurring: String(recurring) })
                 }
               />
-            )}
-            {currentStep === 5 && offer.product.perishable === true && (
+            ) : null}
+            {(currentStep === 6 && offer.product.perishable === true) ||
+            (currentStep === 7 && offer.product.perishable === false) ? (
               <ReviewOffer
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
@@ -179,22 +195,8 @@ export default function Home() {
                 closes_at={offer.closes_at}
                 submitAction={submitOffer}
               />
-            )}
-            {currentStep === 6 && offer.product.perishable === false && (
-              <ReviewOffer
-                productId={offer.product.id ?? ""}
-                productName={offer.product.name ?? ""}
-                amount={offer.amount ?? 0}
-                price={offer.price ?? 0}
-                description={offer.description ?? ""}
-                comment= {offer.comment ?? ""}
-                pricing={offer.product.pricing ?? "UNIT"}
-                expires_at={offer.product.perishable ? undefined : offer.expires_at}
-                recurring={offer.recurring ?? "false"}
-                closes_at={offer.closes_at}
-                submitAction={submitOffer}
-              />
-            )}
+            ) : null}
+
           </div>
           <div className="h-footer w-full">
             <div
