@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 
 import useBagDetailsPage from '@admin/app/(protected)/(sidebar)/pedidos/[bag_id]';
@@ -14,12 +15,13 @@ import TableSkeleton from '@admin/app/components/TableSkeleton';
 import EmptyBox from '@shared/components/EmptyBox';
 import GenericTable from '@shared/components/GenericTable';
 import PagingButton from '@shared/components/PagingButton';
-
+import Select from '@shared/components/SelectInput';
+import ModalV2 from '@shared/components/ModalV2';
+import Button from '@shared/components/Button';
 import EditPaymentModal from './components/EditPaymentModal';
 import CreatePaymentModal from './components/CreatePaymentModal';
 
 import { OrderDTO } from '@shared/interfaces/dtos';
-import Button from '@shared/components/Button';
 
 const BagDetailsPage = () => {
   const {
@@ -42,6 +44,8 @@ const BagDetailsPage = () => {
     startNewPayment,
   } = useBagDetailsPage();
 
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   if (!bagDetails) return null;
 
   return (
@@ -60,16 +64,40 @@ const BagDetailsPage = () => {
                     <p className='text-sm font-medium w-32'>Pedido:</p>
                     <p className='flex-1'>{bagDetails.code}</p>
                   </div>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-sm font-medium w-32'>Status:</p>
-                    <p
-                      className={`flex-1 font-semibold ${
-                        convertStatus(bagDetails.status).nameColor
-                      }`}
-                    >
-                      {convertStatus(bagDetails.status).name}
-                    </p>
-                  </div>
+                    <div className='flex justify-between items-center'>
+                      <p className='text-sm font-medium w-32'>Status:</p>
+                      <div className="flex w-full pl-4">
+                        <Select
+                          options={[
+                            { value: 'PENDING', label: convertStatus('PENDING').name },
+                            { value: 'VERIFIED', label: convertStatus('VERIFIED').name },
+                            { value: 'MOUNTED', label: convertStatus('MOUNTED').name },
+                            { value: 'CANCELLED', label: convertStatus('CANCELLED').name },
+                            { value: 'RECEIVED', label: convertStatus('RECEIVED').name },
+                            { value: 'DISPATCHED', label: convertStatus('DISPATCHED').name },
+                            { value: 'DEFERRED', label: convertStatus('DEFERRED').name },
+                          ]}
+                          defaultOption={{
+                            value: bagDetails.status,
+                            label: convertStatus(bagDetails.status).name,
+                          }}
+                          onChange={(value) => {
+                            setIsOpen(true);
+                          }}
+                          placeholder="Selecione..."
+                          disabled={false}
+                        />
+                        <ModalV2
+                          isOpen={isOpen}
+                          closeModal={() => setIsOpen(false)}
+                          className="w-152 text-coal-black"
+                          title="Alterar Status do Pedido"
+                          iconClose={false}
+                        >
+                          {bagDetails.status}
+                        </ModalV2>
+                      </div>
+                    </div>
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Cliente:</p>
                     <p className='flex-1'>
