@@ -1,6 +1,7 @@
 import React from "react";
 
 import { BagDTO } from "@shared/interfaces/dtos";
+import { formatPrice } from "@shared/utils/format-price";
 import { convertOfferAmount, convertUnit } from "../utils/convert-unit";
 
 export interface GroupOrderProps {
@@ -13,17 +14,34 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
   }
 
   const accepted: {
-    [key: string]: { amount: number; unit: string; farmName: string };
+    [key: string]: {
+      amount: number;
+      unit: string;
+      farmName: string;
+      price: number;
+    };
   } = {};
 
   const rejected: {
-    [key: string]: { amount: number; unit: string; farmName: string };
+    [key: string]: {
+      amount: number;
+      unit: string;
+      farmName: string;
+      price: number;
+    };
   } = {};
 
   orders.forEach((order) => {
     const unit = convertUnit(order.offer.product.pricing);
     const productKey = `${order.offer.product.name}-${order.offer.catalog.farm.name}-${unit}`;
-    const amount = convertOfferAmount(order.amount, order.offer.product.pricing);
+    const amount = convertOfferAmount(
+      order.amount,
+      order.offer.product.pricing
+    );
+    const price =
+      order.offer.product.pricing === "UNIT"
+        ? order.offer.price * order.amount
+        : (order.offer.price * order.amount) / 1000;
 
     const isRejected = order.status !== "RECEIVED";
     const target = isRejected ? rejected : accepted;
@@ -37,6 +55,7 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
         amount: parseFloat(amount.toFixed(1)),
         unit: unit,
         farmName: order.offer.catalog.farm.name,
+        price: price,
       };
     }
   });
@@ -50,7 +69,7 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
         >
           {`${descriptionOrder.amount} ${descriptionOrder.unit} - ${
             key.split("-")[0]
-          } `}
+          } - ${formatPrice(descriptionOrder.price)} `}
           <span className="text-sm leading-5.5 font-semibold text-theme-primary font-poppins">
             ({descriptionOrder.farmName})
           </span>
@@ -60,7 +79,10 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
 
       {Object.entries(rejected).length > 0 && (
         <div className="mt-2">
-          <h4 className="text-red-600 font-semibold mb-1"> Itens não entregues:</h4>
+          <h4 className="text-red-600 font-semibold mb-1">
+            {" "}
+            Itens não entregues:
+          </h4>
           {Object.entries(rejected).map(([key, descriptionOrder]) => (
             <div
               key={key}
