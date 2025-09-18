@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IoChevronBackOutline } from 'react-icons/io5';
 
 import useBagDetailsPage from '@admin/app/(protected)/(sidebar)/pedidos/[bag_id]';
@@ -11,10 +11,11 @@ import { formatDateToDateAndTime } from '@shared/utils/date-handlers';
 import { formatPrice } from '@shared/utils/format-price';
 import { convertStatus } from '@shared/utils/convert-status';
 
+import { HandleBagRequest } from "@admin/_actions/bags/handle-bag";
 import TableSkeleton from '@admin/app/components/TableSkeleton';
+
 import EmptyBox from '@shared/components/EmptyBox';
 import GenericTable from '@shared/components/GenericTable';
-import PagingButton from '@shared/components/PagingButton';
 import Select from '@shared/components/SelectInput';
 import ModalV2 from '@shared/components/ModalV2';
 import Button from '@shared/components/Button';
@@ -27,14 +28,12 @@ const BagDetailsPage = () => {
   const {
     bagDetails,
     isPending,
-    paymentsPage,
     createPaymentModalIsOpen,
     paymentModalIsOpen,
     selectedPayment,
     loadingCreatePayment,
     loadingUpdatePayment,
-    nextPaymentsPage,
-    prevPaymentsPage,
+    handleBagStatus,
     navigateToBagsList,
     selectBagPayment,
     createNewPayment,
@@ -45,6 +44,29 @@ const BagDetailsPage = () => {
   } = useBagDetailsPage();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
+
+  const options =
+    bagDetails?.status === 'PENDING' || bagDetails?.status === 'CANCELLED'
+      ? [
+          { value: 'CANCELLED', label: convertStatus('CANCELLED').name },
+        ]
+      : [
+          { value: 'PENDING', label: convertStatus('PENDING').name },
+          { value: 'VERIFIED', label: convertStatus('VERIFIED').name },
+          { value: 'MOUNTED', label: convertStatus('MOUNTED').name },
+          { value: 'CANCELLED', label: convertStatus('CANCELLED').name },
+          { value: 'RECEIVED', label: convertStatus('RECEIVED').name },
+          { value: 'DISPATCHED', label: convertStatus('DISPATCHED').name },
+          { value: 'DEFERRED', label: convertStatus('DEFERRED').name },
+        ];
+
+useEffect(() => {
+  if (bagDetails?.status) {
+    setSelectedStatus(bagDetails.status);
+  }
+}, [bagDetails?.status]);
+
 
   if (!bagDetails) return null;
 
@@ -66,37 +88,55 @@ const BagDetailsPage = () => {
                   </div>
                     <div className='flex justify-between items-center'>
                       <p className='text-sm font-medium w-32'>Status:</p>
-                      <div className="flex w-full pl-4">
-                        <Select
-                          options={[
-                            { value: 'PENDING', label: convertStatus('PENDING').name },
-                            { value: 'VERIFIED', label: convertStatus('VERIFIED').name },
-                            { value: 'MOUNTED', label: convertStatus('MOUNTED').name },
-                            { value: 'CANCELLED', label: convertStatus('CANCELLED').name },
-                            { value: 'RECEIVED', label: convertStatus('RECEIVED').name },
-                            { value: 'DISPATCHED', label: convertStatus('DISPATCHED').name },
-                            { value: 'DEFERRED', label: convertStatus('DEFERRED').name },
-                          ]}
-                          defaultOption={{
-                            value: bagDetails.status,
-                            label: convertStatus(bagDetails.status).name,
-                          }}
-                          onChange={(value) => {
-                            setIsOpen(true);
-                          }}
-                          placeholder="Selecione..."
-                          disabled={false}
-                        />
-                        <ModalV2
-                          isOpen={isOpen}
-                          closeModal={() => setIsOpen(false)}
-                          className="w-152 text-coal-black"
-                          title="Alterar Status do Pedido"
-                          iconClose={false}
-                        >
-                          {bagDetails.status}
-                        </ModalV2>
-                      </div>
+                      {bagDetails.status !== 'CANCELLED' ? (
+                        <div className="flex w-full pl-4">
+                          <Select
+                            options={options}
+                            defaultOption={{
+                              value: bagDetails.status,
+                              label: convertStatus(bagDetails.status).name,
+                            }}
+                            onChange={(value) => {
+                              setSelectedStatus(value);
+                              setIsOpen(true);
+                            }}
+                            placeholder="Selecione..."
+                            disabled={false}
+                          />
+                          <ModalV2
+                            isOpen={isOpen}
+                            closeModal={() => setIsOpen(false)}
+                            className="w-152 text-coal-black"
+                            title="Alterar Status do Pedido"
+                            iconClose={false}
+                          >
+                            <div className="rounded-lg lg:text-theme-primary">
+                              <div className="flex flex-col gap-2 pt-5 pb-5 pr-10 pl-10">
+                                Você confirma que quer trocar o status da sacola de "{convertStatus(bagDetails.status).name}" para "{convertStatus(selectedStatus as HandleBagRequest["status"]).name}"?
+                              </div>
+                            </div>
+                            <div className="flex gap-2 mt-4">
+                              <button
+                                className="w-full text-rain-forest justify-center rounded-md border border-transparent bg-white px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
+                                onClick={() => setIsOpen(false)}
+                              >
+                                Cancelar
+                              </button>
+                              <button
+                                className="w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2"
+                                onClick={() => {
+                                  handleBagStatus(selectedStatus as HandleBagRequest["status"]);
+                                  setIsOpen(false);
+                                }}
+                              >
+                                Salvar
+                              </button>
+                            </div>
+                          </ModalV2>
+                        </div>
+                      ) : (
+                        <span className="flex-1">{convertStatus(bagDetails.status).name}</span>
+                      )}
                     </div>
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Cliente:</p>
@@ -238,7 +278,7 @@ const BagDetailsPage = () => {
             <div className='rounded-lg bg-white lg:text-theme-primary h-72'>
               {isPending && <TableSkeleton />}
 
-              {!isPending && !bagDetails.payment && (
+              {!isPending && !bagDetails.payment && bagDetails.status !== 'CANCELLED' && (
                 <div className='flex-grow flex flex-col h-full pt-6'>
                   <EmptyBox type='payment' />
                   <div className='flex justify-center items-center h-full pr-18 pl-18'>
@@ -248,6 +288,16 @@ const BagDetailsPage = () => {
                     >
                       Adicionar forma de pagamento
                     </Button>
+                  </div>
+                </div>
+              )}
+
+              {!isPending && !bagDetails.payment && bagDetails.status === 'CANCELLED' && (
+                <div className='flex-grow flex flex-col h-full pt-6'>
+                  <div className='flex justify-center items-center h-full pr-18 pl-18'>
+                    <div className='text-center text-sm text-gray-500'>
+                      Pedido cancelado. Não é possível adicionar forma de pagamento.
+                    </div>
                   </div>
                 </div>
               )}
