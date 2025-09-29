@@ -28,7 +28,7 @@ export default function Home() {
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   const minStep = 1;
-  const maxStep = 7;
+  const maxStep = 8;
 
   const handleNextStep = () => {
     if (currentStep < maxStep) {
@@ -159,15 +159,15 @@ export default function Home() {
             }
           />
         ) : null}
-        {currentStep === 7 && offer.product.perishable === false && (
-          <InputRecurrence
-            handleNextStep={handleNextStep}
-            setRecurrence={(recurring) =>
-              setOffer({ ...offer, recurring: String(recurring) })
-            }
-          />
-        )}
-      
+        {(currentStep === 6 && offer.product.perishable === true) ||
+          (currentStep === 7 && offer.product.perishable === false) ? (
+            <InputRecurrence
+              handleNextStep={handleNextStep}
+              setRecurrence={(recurring) =>
+                setOffer({ ...offer, recurring: String(recurring) })
+              }
+            />
+          ) : null}
         {(currentStep === 7 && offer.product.perishable === true) ||
         (currentStep === 8 && offer.product.perishable === false) ? (
           <ReviewOffer
