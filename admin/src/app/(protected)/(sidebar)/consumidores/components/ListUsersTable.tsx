@@ -28,8 +28,6 @@ export default function ListUsersTable() {
   const [page, setPage] = useState(1);
   const [user, setUser] = useState<string | any>();
 
-  console.log(user);
-
   const {
     data: users = [],
     isLoading,
