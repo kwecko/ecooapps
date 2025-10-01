@@ -55,23 +55,14 @@ export default function ListUsersTable() {
       key: 'name',
        colSpan: 3,
       render: (row: UserDTO) => `${row.first_name} ${row.last_name ?? ''}`.trim(),    
-    },
+    },  
     { header: 'Email', key: 'email', colSpan: 3 },
     { header: 'CPF', key: 'cpf', colSpan: 3 },
     { header: 'Celular', key: 'phone', colSpan: 4 },
     {
-      header: 'Ver',
-      key: 'see',
-      colSpan: 1,
-      className: 'min-w-[120px] flex justify-end',
-      render: () => {
-        return <HiOutlineEye size={25} className='text-primary-500 mx-auto' />;
-      },
-    },
-    {
       header: 'Edit.',
       key: 'edit',
-      colSpan: 1,
+      colSpan: 2,
       className: 'min-w-[120px] flex justify-end',
       render: () => {
         return <HiOutlinePencil size={25} className='text-primary-500 mx-auto' />;
@@ -80,7 +71,7 @@ export default function ListUsersTable() {
     {
       header: 'Del.',
       key: 'delete',
-      colSpan: 1,
+      colSpan: 2,
       className: 'min-w-[120px] flex justify-end',
       render: () => {
         return <HiOutlineTrash size={25} className='text-primary-500 mx-auto' />;

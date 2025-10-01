@@ -86,7 +86,7 @@ export default function page() {
           Emitir relatório
         </Button>
 
-        <div className="mt-80 mr-25">
+        <div className="mt-80 mr-auto">
           <Copyright type="primary" />
         </div>
       </div>
