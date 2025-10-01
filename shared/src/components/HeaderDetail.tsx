@@ -1,3 +1,4 @@
+import { formatPrice } from "@shared/utils/format-price";
 import React, { ReactNode } from "react";
 import { MiniTable } from "./MiniTable";
 
@@ -62,10 +63,7 @@ function HeaderDetail({
   rows.push({
     title: "Valor total:",
     value: totalAmount
-      ? `R$ ${totalAmount.toLocaleString("pt-BR", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })}`
+      ? `${formatPrice(totalAmount)}`
       : "R$ 0,00",
   });
 
