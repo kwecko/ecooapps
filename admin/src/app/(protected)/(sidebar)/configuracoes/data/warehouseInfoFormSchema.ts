@@ -6,12 +6,12 @@ export const warehouseInfoFormSchema = z.object({
   manager: z.string().min(1, { message: "Responsável é obrigatório" }),
   email: z.string().email({ message: "Email inválido" }),
   phone: z.string().optional(),
-  // socials: z.array(
-  //   z.object({
-  //     platform: z.string().min(1, { message: "Plataforma é obrigatória" }),
-  //     value: z.string().min(1, { message: "Valor é obrigatório" }),
-  //   })
-  // ).optional(),
+  socials: z.array(
+    z.object({
+      platform: z.string().optional(),
+      value: z.string().optional(),
+    })
+  ).optional(),
   address: z.object({
     CEP: z.string().min(1, { message: "CEP é obrigatório" }),
     street: z.string().min(1, { message: "Logradouro é obrigatório" }),
@@ -20,7 +20,7 @@ export const warehouseInfoFormSchema = z.object({
     complement: z.string().optional(),
     city: z.string().min(1, { message: "Cidade é obrigatório" }),
     state: z.string().min(1, { message: "Estado é obrigatório" }),
-    link: z.string().url().optional(),
+    link: z.string().optional(),
   }),
   coverage: z.tuple([z.string().min(1, { message: "Área de cobertura é obrigatória" })]),
 });

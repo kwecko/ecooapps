@@ -8,12 +8,12 @@ interface updateWarehouseRequest {
   manager: string,
   email: string,
   phone?: string,
-  // socials?: [
-  //   {
-  //     platform?: string,
-  //     value?: string
-  //   }
-  // ],
+  socials?: [
+    {
+      platform?: string,
+      value?: string
+    }
+  ],
   address: {
     CEP: string,
     street: string,
@@ -27,16 +27,16 @@ interface updateWarehouseRequest {
   coverage: [string]
 }
 
-export async function updateWarehouse( data: updateWarehouseRequest ) {
+export async function updateWarehouse(data: any) {
+
+  console.log(data);
 
   const url = `/warehouse`;
 
   const response = ApiService.PATCH({
     url,
     data,
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
   });
+  console.log(response);
   return response;
 }
