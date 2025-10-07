@@ -49,7 +49,7 @@ export default function Home() {
   return (
     <div className="h-full overflow-hidden">
       <div className="grid grid-cols-10 h-full gap-14 overflow-y-auto">
-        <div className="flex flex-col h-full col-span-6 gap-12">
+        <div className="flex flex-col h-full col-span-6 gap-8">
           <Card
             title="Informações de acesso"
             className="w-full flex flex-col gap-4 justify-between items-stretch p-6"

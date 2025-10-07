@@ -8,7 +8,7 @@ export default function page() {
       <div className="flex flex-col h-full col-span-5 pt-18 overflow-hidden">
         <Title className="absolute top-0 pt-22.5">Enviar notificações</Title>
         <SendNotificationForm />
-        <Copyright type="primary" className="pl-8.5" />
+        <Copyright type="primary" className="pr-8 mb-3" />
       </div>
     </div>
   );

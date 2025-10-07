@@ -13,6 +13,7 @@ interface TextInputProps {
   showCharCount?: boolean;
   className?: string;
   disabled?: boolean;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function TextInput({
@@ -26,13 +27,9 @@ function TextInput({
   showCharCount = false,
   className,
   disabled,
+  onChange, 
 }: TextInputProps) {
   const [charCount, setCharCount] = React.useState(defaultValue.length);
-
-  function handleInputChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-    setCharCount(e.target.value.length);
-    register.onChange(e);
-  }
 
   return (
     <div className="flex flex-col gap-1.75">
@@ -41,19 +38,23 @@ function TextInput({
           {label}
         </label>
       )}
-      <textarea
+
+      <input
         id={name}
         {...register}
         maxLength={maxLength}
         placeholder={placeholder}
-        defaultValue={defaultValue}
-        onChange={handleInputChange}
+        onChange={(e) => {
+          setCharCount(e.target.value.length);
+          register.onChange?.(e);
+          onChange?.(e);
+        }}
         className={twMerge(
-          "resize-none",
           "w-full rounded-lg border border-theme-home-bg text-theme-home-bg px-3 h-12 focus:outline-none p-3 font-inter font-normal tracking-tight-2 lg:border-theme-primary lg:text-theme-primary",
           disabled && "bg-gray-100 cursor-not-allowed text-gray-500",
           className
         )}
+        disabled={disabled}
       />
 
       <div

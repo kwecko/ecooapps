@@ -12,6 +12,7 @@ export interface SelectProps {
   placeholder?: string;
   label?: string;
   onChange?: (value: any) => void;
+  className?: string;
   disabled?: boolean;
   defaultOption?: Option;
   register?: UseFormRegisterReturn;
@@ -25,6 +26,7 @@ export default function Select({
   options,
   label,
   onChange,
+  className,
   placeholder = "Selecione...",
   disabled = false,
   defaultOption,
@@ -85,7 +87,7 @@ export default function Select({
   return (
     <div
       ref={useUseRef ? selectRef : undefined}
-      className="relative w-full pt-2 lg:flex lg:flex-col lg:gap-1.75 text-theme-home-bg lg:text-theme-primary lg:font-inter"
+      className={`relative w-full lg:flex lg:flex-col lg:gap-1.75 text-theme-home-bg lg:text-theme-primary lg:font-inter${className ? ` ${className}` : " pt-2"}`}
       {...register}
     >
       {label && (
