@@ -352,7 +352,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="tiktok"
                   label="TikTok"
-                  placeholder="https://tiktok.com/@nomeusuario"
+                  placeholder="https://tiktok.com/nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.6.value")}
