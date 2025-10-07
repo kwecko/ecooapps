@@ -246,7 +246,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="telegram"
                   label="Telegram"
-                  placeholder="@nomeusuario"
+                  placeholder="https://telegram.me/nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.0.value")}
@@ -261,7 +261,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="instagram"
                   label="Instagram"
-                  placeholder="@nomeusuario"
+                  placeholder="https://instagram.com/nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.1.value")}
@@ -305,7 +305,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="facebook"
                   label="Facebook"
-                  placeholder="@nomeusuario"
+                  placeholder="https://facebook.com/nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.3.value")}
@@ -320,7 +320,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="youtube"
                   label="YouTube"
-                  placeholder="@nomeusuario"
+                  placeholder="https://youtube.com/nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.4.value")}
@@ -337,7 +337,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="X "
                   label="X (Antigo Twitter)"
-                  placeholder="@nomeusuario"
+                  placeholder="https://x.com/nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.5.value")}
@@ -352,7 +352,7 @@ export default function ListWarehouseInfo() {
                 <TextInput
                   name="tiktok"
                   label="TikTok"
-                  placeholder="@nomeusuario"
+                  placeholder="https://tiktok.com/@nomeusuario"
                   className="overflow-hidden"
                   maxLength={100}
                   register={register("socials.6.value")}
