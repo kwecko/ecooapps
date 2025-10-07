@@ -7,10 +7,12 @@ export default function SidebarLayout({
 }) {
   return (
     <>
-     <Sidebar />
-     <main className="w-full h-full p-15">
-      {children}
-     </main>
+      <div className="fixed left-0 top-0 h-full">
+        <Sidebar />
+      </div>
+      <main className="w-full ml-[300px] h-full p-15">
+        {children}
+      </main>
     </>
   );
 }

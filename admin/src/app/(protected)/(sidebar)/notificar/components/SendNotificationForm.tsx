@@ -52,6 +52,7 @@ export default function SendNotificationForm() {
 
   const handleSubmitForm = async (data: SendNotificationFormSchema) => {
     if (data.role === null) return;
+    console.log(data);
     setFormData(data);
     setIsOpen(true);
   };

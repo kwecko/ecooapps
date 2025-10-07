@@ -1,5 +1,6 @@
 interface HeaderDetailProps {
   id: string | undefined;
+  orders: number;
   name: string | undefined;
   status: string;
   time: string;
@@ -10,12 +11,12 @@ const styles = {
     "flex gap-10 items-start text-theme-primary border-b-[1px] border-theme-background p-3",
 };
 
-function HeaderDetail({ id, name, time, status }: HeaderDetailProps) {
+function HeaderDetail({ orders, name, time, status }: HeaderDetailProps) {
   return (
     <div className="w-full mx-auto bg-white rounded-lg">
       <div className={styles.containerDetail}>
-        <span className="w-1/5">Pedido:</span>
-        <span className="w-4/5">{id}</span>
+        <span className="w-1/5">Pedidos:</span>
+        <span className="w-4/5">{`${orders.toString()} ${orders === 1 ? "pedido" : "pedidos"}`}</span>
       </div>
       <div className={styles.containerDetail}>
         <span className="w-1/5">Status:</span>
