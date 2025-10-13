@@ -84,7 +84,7 @@ export default function InputExpirationDate({
               validateAndSetExpirationDate(e.target.valueAsDate);
             }
           }}
-          className="text-theme-primary text-sm"
+          className="text-theme-primary text-sm pl-8 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:left-3 [&::-webkit-calendar-picker-indicator]:top-1/2 [&::-webkit-calendar-picker-indicator]:transform [&::-webkit-calendar-picker-indicator]:-translate-y-1/2 [&::-webkit-calendar-picker-indicator]:cursor-pointer"
           type="date"
           value={formattedDate}
           label="Data de validade"
