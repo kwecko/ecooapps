@@ -72,3 +72,38 @@ a {
   --color-secondary: #eef1f4;
   --color-background: #f7f7f7;
 }
+
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  position: relative;
+  padding-left: 40px !important;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  opacity: 1;
+  cursor: pointer;
+  background: transparent;
+  z-index: 1;
+}
+
+input[type="date"]::-webkit-clear-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+input[type="date"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  display: none;
+}
+
+input[type="date"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  display: none;
+}
