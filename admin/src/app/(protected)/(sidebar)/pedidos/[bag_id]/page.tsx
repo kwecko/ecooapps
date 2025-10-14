@@ -7,20 +7,20 @@ import useBagDetailsPage from '@admin/app/(protected)/(sidebar)/pedidos/[bag_id]
 import Title from '@admin/app/components/Title';
 import { getBagDetailsTableColumns } from './config/table-config';
 
+import { convertStatus } from '@shared/utils/convert-status';
 import { formatDateToDateAndTime } from '@shared/utils/date-handlers';
 import { formatPrice } from '@shared/utils/format-price';
-import { convertStatus } from '@shared/utils/convert-status';
 
 import { HandleBagRequest } from "@admin/_actions/bags/handle-bag";
 import TableSkeleton from '@admin/app/components/TableSkeleton';
 
+import Button from '@shared/components/Button';
 import EmptyBox from '@shared/components/EmptyBox';
 import GenericTable from '@shared/components/GenericTable';
-import Select from '@shared/components/SelectInput';
 import ModalV2 from '@shared/components/ModalV2';
-import Button from '@shared/components/Button';
-import EditPaymentModal from './components/EditPaymentModal';
+import Select from '@shared/components/SelectInput';
 import CreatePaymentModal from './components/CreatePaymentModal';
+import EditPaymentModal from './components/EditPaymentModal';
 
 import { OrderDTO } from '@shared/interfaces/dtos';
 
@@ -278,26 +278,22 @@ useEffect(() => {
             <div className='rounded-lg bg-white lg:text-theme-primary h-72'>
               {isPending && <TableSkeleton />}
 
-              {!isPending && !bagDetails.payment && bagDetails.status !== 'CANCELLED' && (
+              {!isPending && !bagDetails.payment && (
                 <div className='flex-grow flex flex-col h-full pt-6'>
                   <EmptyBox type='payment' />
-                  <div className='flex justify-center items-center h-full pr-18 pl-18'>
+                  <div className='flex flex-col justify-center items-center h-full pr-18 pl-18 gap-3'>
                     <Button
                       onClick={() => startNewPayment()}
-                      className='w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2'
+                      disabled={bagDetails.status === 'CANCELLED'}
+                      className='w-full text-white justify-center rounded-md border border-transparent bg-rain-forest px-3 py-4 font-semibold h-12 flex items-center font-inter text-base leading-5.5 tracking-tight-2 disabled:bg-gray-400 disabled:cursor-not-allowed'
                     >
                       Adicionar forma de pagamento
                     </Button>
-                  </div>
-                </div>
-              )}
-
-              {!isPending && !bagDetails.payment && bagDetails.status === 'CANCELLED' && (
-                <div className='flex-grow flex flex-col h-full pt-6'>
-                  <div className='flex justify-center items-center h-full pr-18 pl-18'>
-                    <div className='text-center text-sm text-gray-500'>
-                      Pedido cancelado. Não é possível adicionar forma de pagamento.
-                    </div>
+                    {bagDetails.status === 'CANCELLED' && (
+                      <p className='text-sm text-gray-500 text-center'>
+                        Não é possível adicionar forma de pagamento para pedidos cancelados.
+                      </p>
+                    )}
                   </div>
                 </div>
               )}
