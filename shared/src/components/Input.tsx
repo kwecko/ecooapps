@@ -7,7 +7,6 @@ import {
 } from "react-hook-form";
 import { twMerge } from "tailwind-merge";
 
-
 interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   error?: string | FieldError | Merge<FieldError, FieldErrorsImpl<any>>;
   icon?: any;
@@ -28,7 +27,8 @@ interface InputProps extends React.HTMLAttributes<HTMLInputElement> {
   required?: boolean;
   autoComplete?: string;
   labelClassName?: string;
-  disabled?: boolean
+  disabled?: boolean;
+  iconPosition?: "left" | "right";
 }
 
 export default function Input({
@@ -50,6 +50,7 @@ export default function Input({
   autoComplete,
   labelClassName,
   disabled,
+  iconPosition = "right",
   ...rest
 }: InputProps) {
   const [showPassword, setShowPassword] = useState(false);
@@ -60,6 +61,9 @@ export default function Input({
   const handleIconClick = () => {
     setShowPassword(!showPassword);
   };
+
+  const isLeftIcon = icon && iconPosition === "left";
+  const isRightIcon = icon && iconPosition === "right";
 
   return (
     <div className="relative w-full flex flex-col text-theme-home-bg">
@@ -86,14 +90,23 @@ export default function Input({
           required={required}
           disabled={disabled}
         />
-        {icon ? (
+        
+        {isLeftIcon && (
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10">
+            {icon}
+          </div>
+        )}
+        
+        {isRightIcon && (
           <div
-            onClick={handleIconClick}
-            className="cursor-pointer absolute text-xl my-auto top-0 bottom-0 right-0 pr-3 flex items-center h-full z-50"
+            onClick={type === "password" ? handleIconClick : undefined}
+            className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10 ${
+              type === "password" ? "cursor-pointer" : ""
+            }`}
           >
             {icon}
           </div>
-        ) : (null)}
+        )}
       </div>
     </div>
   );
