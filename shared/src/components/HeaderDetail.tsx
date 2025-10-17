@@ -50,7 +50,7 @@ function HeaderDetail({
 
   rows.push({
     title: "Modalidade:",
-    value: isShipping ? "Delivery" : "Retirada",
+    value: isShipping ? "Retirada" : "Delivery",
   });
 
   if (isShipping) {

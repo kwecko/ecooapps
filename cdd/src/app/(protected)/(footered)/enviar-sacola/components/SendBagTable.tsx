@@ -67,6 +67,8 @@ export default function SendBagTable() {
     )?.key ?? []) as BagStatus["send"][],
   });
 
+  console.log("bags", bags);
+
   const handleStatusFilterClick = (status: FilterStatus) => {
     if (status.name === selectedStatus) {
       updateStatus("todas");

@@ -26,12 +26,6 @@ export default function SendBagMiniTable() {
   );
   const [isStatusChanged, setIsStatusChanged] = useState(false);
 
-  const bagStatusOptions = [
-    { value: "DISPATCHED", label: "Enviada" },
-    { value: "RECEIVED", label: "Entregue" },
-    { value: "DEFERRED", label: "Retornada" },
-  ];
-
   const { bag_id } = useParams();
 
   if (!bag_id) {
@@ -44,6 +38,17 @@ export default function SendBagMiniTable() {
     bag_id: bag_id.toString(),
     page,
   });
+
+  const bagStatusOptions = bag && bag.shipping > 0
+    ? [
+        { value: "DISPATCHED", label: "Retirada" },
+        { value: "MOUNTED", label: "Não retirada" },
+      ]
+    : [
+        { value: "DISPATCHED", label: "Enviada" },
+        { value: "RECEIVED", label: "Entregue" },
+        { value: "DEFERRED", label: "Retornada" },
+      ];
 
   const { handleBag, isLoading: isLoadingHandleBag } = useHandleBag();
 
@@ -109,9 +114,9 @@ export default function SendBagMiniTable() {
           />
           <TablePaginationControl />
           <div className="w-full h-[15%] flex justify-center items-end">
-            {bag.status === "MOUNTED" ? (
+            {bag.status === "MOUNTED" && !isStatusChanged? (
               <Modal
-                titleOpenModal="Marcar como enviada"
+                titleOpenModal={`Marcar como ${isShipping ? "retirada" : "enviada"}`}
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao alterar o status para enviada, o cliente será notificado que ela está a caminho."
                 bgOpenModal="#00735E"
@@ -144,7 +149,7 @@ export default function SendBagMiniTable() {
             ) : (
               <>
                 <span className="text-center mt-6 text-slate-gray">
-                  {`Sacola já ${bagStatusOptions
+                  {`Sacola ${bagStatusOptions
                     .find((option) =>
                       isStatusChanged
                         ? bagStatus === option.value
