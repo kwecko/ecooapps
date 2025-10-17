@@ -58,8 +58,16 @@ export default function InputRecurrence({
     handleNextStep();
   };
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleOpenModal = (option?: string) => {
+    const current = option ?? recurrenceValue;
+
+    if (current === "true") {
+      setIsModalOpen(true);
+      return;
+    }
+
+    setRecurrence(current);
+    handleNextStep();
   }
 
   return (
@@ -72,7 +80,7 @@ export default function InputRecurrence({
         <Button
           className="w-full h-12 bg-theme-default rounded-md text-white font-semibold text-base leading-5.5"
           type="submit"
-          onClick={handleOpenModal}
+          onClick={(e) => handleOpenModal(recurrenceValue)}
           title="Continuar"
         >
           Continuar
