@@ -186,6 +186,7 @@ export default function Home() {
                 productId={offer.product.id ?? ""}
                 productName={offer.product.name ?? ""}
                 amount={offer.amount ?? 0}
+                expiration_date={offer.product.perishable ? undefined : offer.expires_at}
                 price={offer.price ?? 0}
                 description={offer.description ?? ""}
                 comment={offer.comment ?? ""}
