@@ -11,7 +11,10 @@ import { createPayment } from "@admin/_actions/payment/create-bag-payment";
 import { useHandleError } from "@shared/hooks/useHandleError";
 
 import { BagDTO } from "@shared/interfaces/dtos";
+import { HandleBagRequest } from "@admin/_actions/bags/handle-bag";
 import { PaymentDTO, CreatePaymentDTO } from "@shared/interfaces/dtos/payment-dto";
+import convertStatus from "@shared/utils/convert-status";
+import useHandleBag from "@admin/hooks/useHandleBags";
 
 const useBagDetailsPage = () => {
   const [isPending, startTransition] = useTransition();
@@ -21,11 +24,13 @@ const useBagDetailsPage = () => {
   const [createPaymentModalIsOpen, setCreatePaymentModalIsOpen] = useState(false);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
   const [loadingCreatePayment, setLoadingCreatePayment] = useState(false);
+  const [loadingHandleBag, setLoadingHandleBag] = useState(false);
   const [loadingUpdatePayment, setLoadingUpdatePayment] = useState(false);
 
   const { bag_id } = useParams();
   const router = useRouter();
   const { handleError } = useHandleError();
+  const { handleBag, isLoading: isLoadingHandleBag } = useHandleBag();
 
   if (!bag_id) {
     notFound();
@@ -35,7 +40,7 @@ const useBagDetailsPage = () => {
     startTransition(() => {
       getBagDetails({ bagId: bag_id.toString(), paymentsPage });
     });
-  }, [paymentsPage, loadingCreatePayment]);
+  }, [paymentsPage, loadingCreatePayment, loadingHandleBag]);
 
   const getBagDetails = ({
     bagId,
@@ -84,6 +89,18 @@ const useBagDetailsPage = () => {
     setPaymentModalIsOpen(false);
     setCreatePaymentModalIsOpen(false);
     setSelectedPayment(null);
+  };
+
+  const handleBagStatus = (status: HandleBagRequest["status"]) => {
+    if (!bagDetails) return;
+    setLoadingHandleBag(true);
+    handleBag({
+      bag_id: bagDetails.id,
+      status: status,
+      successMessage: `O status da sacola foi alterado para ${convertStatus(status).name.toLocaleLowerCase()}!`,
+    }).finally(() => {
+      setLoadingHandleBag(false);
+    });
   };
 
   const editSelectedPayment = (key: string, value: string) => {
@@ -173,6 +190,8 @@ const useBagDetailsPage = () => {
     selectedPayment,
     loadingCreatePayment,
     loadingUpdatePayment,
+    loadingHandleBag,
+    handleBagStatus,
     nextPaymentsPage,
     prevPaymentsPage,
     navigateToBagsList,

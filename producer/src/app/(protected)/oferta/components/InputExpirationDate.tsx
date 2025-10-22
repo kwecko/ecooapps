@@ -5,7 +5,7 @@ import Input from "@shared/components/Input";
 import { toast } from "sonner";
 import { ModelPage } from "@shared/components/ModelPage";
 import pageSettings from "./page-settings";
-import { format } from "path";
+import { IoCalendarOutline } from "react-icons/io5";
 
 interface InputExpirationDateProps {
   handleNextStep: () => void;
@@ -84,10 +84,12 @@ export default function InputExpirationDate({
               validateAndSetExpirationDate(e.target.valueAsDate);
             }
           }}
-          className="text-theme-primary text-sm"
+          className="text-theme-primary text-sm pl-10"
           type="date"
           value={formattedDate}
           label="Data de validade"
+          icon={<IoCalendarOutline size={20} />}
+          iconPosition="left"
         />
         <span className="text-xs text-gray-500 pt-1 pl-2">
           Data de validade para produtos perecíveis

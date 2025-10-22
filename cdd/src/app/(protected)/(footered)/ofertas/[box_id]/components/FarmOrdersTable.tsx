@@ -96,7 +96,8 @@ export default function FarmOrdersTable() {
   return (
     <div className="w-full h-full flex flex-col justify-between gap-2 items-center">
       <HeaderDetail
-        id={farmOrders?.id.split("-", 1).toString().toUpperCase()}
+        id={farmOrders.id}
+        orders={farmOrders.orders.length}
         status={convertStatus(farmOrders.status).name}
         name={farmOrders.catalog.farm.name}
         time={getNextSaturdayDate()}
