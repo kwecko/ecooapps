@@ -137,8 +137,6 @@ export default function Home() {
               setOffer({ ...offer, price: price })}
           />
         ) : null}
-        
-
         {(currentStep === 4 && offer.product.perishable === true) ||
         (currentStep === 5 && offer.product.perishable === false) ? (
           <InputDescription
@@ -150,25 +148,24 @@ export default function Home() {
           />
         ) : null}
         {(currentStep === 5 && offer.product.perishable === true) ||
-         (currentStep === 6 && offer.product.perishable === false) ? (
-          <InputComment
-            handleNextStep={handleNextStep}
-            comment={offer.comment ?? ""}
-            setComment={(comment) =>
-              setOffer({ ...offer, comment: comment })
-            }
-          />
-        ) : null}
-        {(currentStep === 6 && offer.product.perishable === true) ||
-          (currentStep === 7 && offer.product.perishable === false) ? (
-            <InputRecurrence
+          (currentStep === 6 && offer.product.perishable === false) ? (
+            <InputComment
               handleNextStep={handleNextStep}
-              setRecurrence={(recurring) =>
-                setOffer({ ...offer, recurring: String(recurring) })
+              comment={offer.comment ?? ""}
+              setComment={(comment) =>
+                setOffer({ ...offer, comment: comment })
               }
             />
           ) : null}
-        {(currentStep === 7 && offer.product.perishable === true) ||
+        {(currentStep === 7 && offer.product.perishable === false) ? (
+          <InputRecurrence
+            handleNextStep={handleNextStep}
+            setRecurrence={(recurring) =>
+              setOffer({ ...offer, recurring: String(recurring) })
+            }
+          />
+        ) : null}
+        {(currentStep === 6 && offer.product.perishable === true) || (currentStep === 7 && offer.product.perishable === true) ||
         (currentStep === 8 && offer.product.perishable === false) ? (
           <ReviewOffer
             productId={offer.product.id ?? ""}
