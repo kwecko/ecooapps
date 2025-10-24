@@ -117,7 +117,6 @@ export default function Home() {
               setOffer({ ...offer, amount: amount })}
           />
         )}
-
         {currentStep === 3 && offer.product.perishable === false && (
           <InputExpirationDate
             handleNextStep={handleNextStep}
@@ -128,25 +127,25 @@ export default function Home() {
           />
         )}
         {(currentStep === 3 && offer.product.perishable === true) ||
-        (currentStep === 4 && offer.product.perishable === false) ? (
-          <InputPrice
-            handleNextStep={handleNextStep}
-            price={offer.price ?? 0}
-            pricing={offer.product.pricing}
-            setPrice={(price) => 
-              setOffer({ ...offer, price: price })}
-          />
+          (currentStep === 4 && offer.product.perishable === false) ? (
+            <InputPrice
+              handleNextStep={handleNextStep}
+              price={offer.price ?? 0}
+              pricing={offer.product.pricing}
+              setPrice={(price) => 
+                setOffer({ ...offer, price: price })}
+            />
         ) : null}
         {(currentStep === 4 && offer.product.perishable === true) ||
-        (currentStep === 5 && offer.product.perishable === false) ? (
-          <InputDescription
-            handleNextStep={handleNextStep}
-            description={offer.description ?? ""}
-            setDescription={(description) =>
-              setOffer({ ...offer, description: description })
-            }
-          />
-        ) : null}
+          (currentStep === 5 && offer.product.perishable === false) ? (
+            <InputDescription
+              handleNextStep={handleNextStep}
+              description={offer.description ?? ""}
+              setDescription={(description) =>
+                setOffer({ ...offer, description: description })
+              }
+            />
+          ) : null}
         {(currentStep === 5 && offer.product.perishable === true) ||
           (currentStep === 6 && offer.product.perishable === false) ? (
             <InputComment
@@ -165,22 +164,23 @@ export default function Home() {
             }
           />
         ) : null}
-        {(currentStep === 6 && offer.product.perishable === true) || (currentStep === 7 && offer.product.perishable === true) ||
-        (currentStep === 8 && offer.product.perishable === false) ? (
-          <ReviewOffer
-            productId={offer.product.id ?? ""}
-            productName={offer.product.name ?? ""}
-            amount={offer.amount ?? 0}
-            expiration_date={offer.product.perishable ? undefined : offer.expires_at}
-            price={offer.price ?? 0}
-            description={offer.description ?? ""}
-            comment={offer.comment ?? ""}
-            pricing={offer.product.pricing ?? "UNIT"}
-            expires_at={offer.product.perishable ? undefined : offer.expires_at}
-            recurring={offer.recurring ?? "false"}
-            closes_at={offer.closes_at}
-            submitAction={submitOffer}
-          />
+        {(currentStep === 6 && offer.product.perishable === true) || 
+          (currentStep === 7 && offer.product.perishable === true) ||
+          (currentStep === 8 && offer.product.perishable === false) ? (
+            <ReviewOffer
+              productId={offer.product.id ?? ""}
+              productName={offer.product.name ?? ""}
+              amount={offer.amount ?? 0}
+              expiration_date={offer.product.perishable ? undefined : offer.expires_at}
+              price={offer.price ?? 0}
+              description={offer.description ?? ""}
+              comment={offer.comment ?? ""}
+              pricing={offer.product.pricing ?? "UNIT"}
+              expires_at={offer.product.perishable ? undefined : offer.expires_at}
+              recurring={offer.recurring ?? "false"}
+              closes_at={offer.closes_at}
+              submitAction={submitOffer}
+            />
         ) : null}
       </div>
       <div className="h-footer w-full">
