@@ -9,6 +9,7 @@ interface ConversationIsActiveRequest {
 export async function fetchConversationIsActive({
 	chatId
 }: ConversationIsActiveRequest): Promise<{ isActive: boolean }> {
-	const response = await axios.get(`${process.env.API_CHAT_TELEGRAM_URL}/chat/conversation/isActive/${chatId}`);
+	const response = await axios.get(`${process.env.API_CHAT_SERVER_URL}/conversations/active/${chatId}`);
+
 	return response.data;
 }
