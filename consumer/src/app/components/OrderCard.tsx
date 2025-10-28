@@ -14,6 +14,9 @@ interface OrderCardProps {
 export default function OrderCard({ offer, farm, exclude = false }: OrderCardProps) {
   const [count, _setCount] = useState(0);
 
+	const calculateTotal = () => {
+		return ((farm.fee / 100) + 1 ) * offer.price;
+	}
   const setCount = (value: number) => {
     if (isNaN(value)) {
       _setCount(0);
@@ -92,7 +95,7 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
 
       <ProductCard.Footer>
         <ProductCard.CostAmount
-          price={offer.total}
+          price={offer.total ?? calculateTotal()}
           pricing={offer.product.pricing}
           amount={count}
         />
