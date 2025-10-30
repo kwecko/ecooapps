@@ -6,9 +6,10 @@ import { CatalogDTO } from "@shared/interfaces/dtos";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { HiOutlinePhotograph, HiOutlineShoppingBag } from "react-icons/hi";
 import FarmPhotos from "./components/FarmPhotos";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 
 export default function Produtor() {
   const searchParams = useSearchParams();
@@ -16,13 +17,13 @@ export default function Produtor() {
 
   const [showPhotos, setShowPhotos] = useState(false);
 
-  const catalogId: string = data
-    ? JSON.parse(decodeURIComponent(data as string)).catalogId
-    : null;
+  const catalogId: string = data ? JSON.parse(decodeURIComponent(data as string)).catalogId : null;
 	
-	const catalog: CatalogDTO = catalogId
-		? JSON.parse(localStorage.getItem(catalogId) as string): null
-	
+	const LocalStorage = useLocalStorage();
+	const cycleId = useMemo(() => LocalStorage.getFromStorage("cycle_id"),[]);
+
+	const catalog: CatalogDTO = catalogId ? JSON.parse(localStorage.getItem(catalogId) as string) : null;
+
 	useEffect(() => {
 			return () => {
 				if (catalogId) {
@@ -39,15 +40,15 @@ export default function Produtor() {
         <div className="w-25 h-25 z-10">
 					<Image
 						className="rounded-xl h-24 w-24"
-						src={catalog.farm.photo ?? "/produtor.jpg"}
+						src={catalog.photo ?? "/produtor.jpg"}
 						width={100}
 						height={100}
-						alt={`${catalog.farm.name.toLowerCase()}.jpg`}
+						alt={`${catalog.name.toLowerCase()}.jpg`}
 					/>
         </div>
         <div className="flex flex-col">
           <div className="pl-5 pt-10 text-xl text-white">
-            {catalog.farm.name}
+            {catalog.name}
           </div>
         </div>
       </div>
@@ -61,8 +62,8 @@ export default function Produtor() {
           <p>Ver Fotos</p>
         </button>
         <ModalV2
-          children={FarmPhotos(catalog.farm.images)}
-          title={`Fotos ${catalog.farm.name}`}
+          children={FarmPhotos(catalog.images)}
+          title={`Fotos ${catalog.name}`}
           className="flex flex-col w-full h-full overflow-y-auto"
           closeModal={() => setShowPhotos(false)}
           isOpen={showPhotos}
@@ -71,8 +72,8 @@ export default function Produtor() {
           href={`/ofertas-catalogo?data=${encodeURIComponent(
             JSON.stringify({
               id: catalog.id,
-              cycle_id: catalog.cycle_id,
-              title: catalog.farm.name,
+              cycle_id: cycleId,
+              title: catalog.name,
             })
           )}`}
         >
@@ -84,7 +85,7 @@ export default function Produtor() {
       </div>
 
       <div className="p-5 text-justify text-xs font-inter">
-        {catalog.farm.description}
+        {catalog.description}
       </div>
 
       <div className="min-h-17">
