@@ -1,4 +1,4 @@
-import { CatalogDTO, FarmDTO, ProductDTO } from "@shared/interfaces/dtos";
+import { CatalogDTO, ProductDTO } from "@shared/interfaces/dtos";
 
 export interface OfferDTO {
   id: string;
@@ -8,9 +8,8 @@ export interface OfferDTO {
 	total: number;
   description: string | null;
   comment: string | null;
-	farm_id: string;
-	farm: FarmDTO;
-	market_id: string | null;
+  catalog_id: string;
+  catalog: CatalogDTO;
   product_id: string;
   product: ProductDTO;
   created_at: Date;
