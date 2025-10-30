@@ -10,18 +10,18 @@ export default function ProducerCard(catalog: CatalogDTO) {
 	};
 
   return (
-    <Link onClick={setCatalogLocalStorage} href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalogId: catalog.id, title: catalog.name }))}`}>
+    <Link onClick={setCatalogLocalStorage} href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalogId: catalog.id, title: catalog.farm.name }))}`}>
       <div className="flex items-center justify-between h-25 bg-theme-background rounded-2xl m-2.5">
 				<Image
 					className="rounded-xl w-20 h-20 ml-2.5 mt-2.5 mb-2.5 mr-5"
-					src={catalog.photo ?? "/produtor.jpg"}
+					src={catalog.farm.photo ?? "/produtor.jpg"}
 					width={80}
 					height={80}
-					alt={`${catalog.name.toLowerCase()}.jpg`}
+					alt={`${catalog.farm.name.toLowerCase()}.jpg`}
 				/>
         <div className="mt-2 mb-2 flex-1">
           <span className="w-full text-left text-base text-theme-home-bg">
-            {catalog.name}
+            {catalog.farm.name}
           </span>
         </div>
         <div className="m-2">
