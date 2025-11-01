@@ -65,6 +65,18 @@ export default function Input({
   const isLeftIcon = icon && iconPosition === "left";
   const isRightIcon = icon && iconPosition === "right";
 
+  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    if (onFocus) onFocus(event);
+  };
+
+  const handleMouseDown = (event: React.MouseEvent<HTMLInputElement>) => {
+    if (type === "date") {
+      try {
+        (event.currentTarget as unknown as { showPicker?: () => void })?.showPicker?.();
+      } catch (err) {}
+    }
+  };
+
   return (
     <div className="relative w-full flex flex-col text-theme-home-bg">
       <label className={twMerge("text-sm leading-4.75 font-inter font-normal pb-1.75 flex flex-row items-center justify-start gap-2 tracking-tight-2", labelClassName)} htmlFor={label}>
@@ -79,7 +91,8 @@ export default function Input({
           className={`z-0 w-full h-12 px-3 border border-theme-primary rounded-lg font-inter font-normal box-border ${className}`}
           type={inputType}
           onChange={onChange}
-          onFocus={onFocus}
+          onFocus={handleFocus}
+          onMouseDown={handleMouseDown}
           defaultValue={defaultValue}
           value={value instanceof Date ? value.toISOString().split('T')[0] : value}
           maxLength={maxLength}
@@ -92,7 +105,7 @@ export default function Input({
         />
         
         {isLeftIcon && (
-          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10">
+          <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10 pointer-events-none">
             {icon}
           </div>
         )}
@@ -101,7 +114,7 @@ export default function Input({
           <div
             onClick={type === "password" ? handleIconClick : undefined}
             className={`absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10 ${
-              type === "password" ? "cursor-pointer" : ""
+              type === "password" ? "cursor-pointer" : "pointer-events-none"
             }`}
           >
             {icon}
