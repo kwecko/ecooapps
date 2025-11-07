@@ -33,7 +33,7 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
 
   orders.forEach((order) => {
     const unit = convertUnit(order.offer.product.pricing);
-    const productKey = `${order.offer.product.name}-${order.offer.catalog.farm.name}-${unit}`;
+    const productKey = `${order.offer.product.name}-${order.offer.farm.name}-${unit}`;
     const amount = convertOfferAmount(
       order.amount,
       order.offer.product.pricing
@@ -54,7 +54,7 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
       target[productKey] = {
         amount: parseFloat(amount.toFixed(1)),
         unit: unit,
-        farmName: order.offer.catalog.farm.name,
+        farmName: order.offer.farm.name,
         price: price,
       };
     }
