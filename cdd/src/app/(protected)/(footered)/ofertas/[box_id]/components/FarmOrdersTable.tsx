@@ -99,7 +99,7 @@ export default function FarmOrdersTable() {
         id={farmOrders.id}
         orders={farmOrders.orders.length}
         status={convertStatus(farmOrders.status).name}
-        name={farmOrders.catalog.farm.name}
+        name={farmOrders.farm.name}
         time={getNextSaturdayDate()}
       />
       {isOrdersLoading ? (

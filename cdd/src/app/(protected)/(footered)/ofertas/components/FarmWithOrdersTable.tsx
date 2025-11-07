@@ -139,7 +139,7 @@ export function FarmWithOrdersTable() {
                     );
                   },
                 },
-                { header: 'Produtor', key: 'catalog.farm.name', colSpan: 6 },
+                { header: 'Produtor', key: 'farm.name', colSpan: 6 },
                 {
                   header: 'Status',
                   key: 'status',

@@ -215,8 +215,8 @@ useEffect(() => {
                         items: OrderDTO[];
                       }[]
                     >((farms, item) => {
-                      const farmId = item.offer.catalog.farm.id;
-                      const farmName = item.offer.catalog.farm.name;
+                      const farmId = item.offer.farm.id;
+                      const farmName = item.offer.farm.name;
                       const farm = farms.find((farm) => farm.id === farmId);
 
                       if (farm) {
