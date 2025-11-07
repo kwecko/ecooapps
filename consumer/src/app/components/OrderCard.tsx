@@ -1,5 +1,5 @@
 import { useCartProvider } from "@consumer/context/cart";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 import { ProductCard } from "@consumer/app/components/ProductCard";
 import { FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
@@ -13,6 +13,13 @@ interface OrderCardProps {
 
 export default function OrderCard({ offer, farm, exclude = false }: OrderCardProps) {
   const [count, _setCount] = useState(0);
+
+
+	useEffect(() => {
+		if(!offer.total){
+			offer.total = ((farm.fee / 100) + 1 ) * offer.price;
+		}
+	}, [offer, farm.fee]);
 
   const setCount = (value: number) => {
     if (isNaN(value)) {
