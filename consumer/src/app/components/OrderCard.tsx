@@ -16,8 +16,8 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
 
 
 	useEffect(() => {
-		if(!offer.total){
-			offer.total = ((farm.fee / 100) + 1 ) * offer.price;
+		if(!offer.subtotal){
+			offer.subtotal = ((farm.fee / 100) + 1 ) * offer.price;
 		}
 	}, [offer, farm.fee]);
 
@@ -99,7 +99,7 @@ export default function OrderCard({ offer, farm, exclude = false }: OrderCardPro
 
       <ProductCard.Footer>
         <ProductCard.CostAmount
-          price={offer.total}
+          price={offer.subtotal}
           pricing={offer.product.pricing}
           amount={count}
         />
