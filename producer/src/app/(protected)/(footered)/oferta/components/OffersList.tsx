@@ -22,6 +22,7 @@ import OfferListHeading from "./OfferListHeading";
 interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   type: "last" | "current";
+  farm_id?: string;
   notFoundMessage: string;
   isOfferingDay: boolean;
   filterDuplicatesWithCurrent?: boolean; 
@@ -30,6 +31,7 @@ interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function OffersList({
   title,
   type,
+  farm_id,
   isOfferingDay,
   notFoundMessage,
   filterDuplicatesWithCurrent = false,
@@ -78,6 +80,7 @@ export default function OffersList({
         const response = await fetchCatalog({
           cycle_id: cycle.id,
           type,
+          farm_id: farm_id,
           since: formattedDDMMYYYY,
           page,
         });
@@ -85,32 +88,35 @@ export default function OffersList({
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
-          const dataOffers: CatalogDTO = response.data;
+          const dataOffers: CatalogDTO = response.data[0];
 
-          if (filterDuplicatesWithCurrent && type === "last") {
-            
-            const currentResponse = await fetchCatalog({
-              cycle_id: cycle.id,
-              type: "current",
-              since: formattedDDMMYYYY,
-              page: 1,
-            });
-            
-            const currentProductIds = (currentResponse.data?.offers || []).map(
-              (o: any) => o.product?.id 
-            );
-            dataOffers.offers = dataOffers.offers.filter(
-              (offer: any) => !currentProductIds.includes(offer.product?.id)
-            );
-          }
-          
+          console.log("Offers fetched:", dataOffers);
 
-          setCatalogId(dataOffers.id);
-          setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
-          setHasMore(dataOffers.offers.length > 0);
+          if (!dataOffers) {
+            setHasMore(false);
+            return;
+          } else if (filterDuplicatesWithCurrent && type === "last") {
+              const currentResponse = await fetchCatalog({
+                cycle_id: cycle.id,
+                type: "current",
+                farm_id: farm_id,
+                since: formattedDDMMYYYY,
+                page: 1,
+              });
+              
+              const currentProductIds = (currentResponse.data?.offers || []).map(
+                (o: any) => o.product?.id 
+              );
+              dataOffers.offers = dataOffers.offers.filter(
+                (offer: any) => !currentProductIds.includes(offer.product?.id)
+              );
+            }
+            setCatalogId(dataOffers.id);
+            setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
+            setHasMore(dataOffers.offers.length > 0);
         }
-      } catch {
-        console.log("Erro 2");
+      } catch (error) {
+        console.log("Erro 2", error);
         handleError("Erro desconhecido.");
       } finally {
         setIsLoading(false);
