@@ -3,12 +3,12 @@
 import ApiService from "@shared/service";
 
 interface FetchCurrentCatalogRequest {
-  cycle_id: string;
+  farm_id: string;
   page: number;
 }
 
 export async function fetchCurrentCatalog({
-  cycle_id,
+  farm_id,
   page = 1,
 }: FetchCurrentCatalogRequest) {
 
@@ -18,7 +18,7 @@ export async function fetchCurrentCatalog({
   params.append("available", "true");
 
   const response = ApiService.GET({
-    url: `/cycles/${cycle_id}/catalog?${params.toString()}`,
+    url: `/catalogs/${farm_id}?${params.toString()}`,
   });
   return response;
 }

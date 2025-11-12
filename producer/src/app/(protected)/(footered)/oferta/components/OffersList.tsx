@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
+import { fetchFarmsOwn } from "@producer/app/_actions/farms/GET/farms-own";
 import Loader from "@shared/components/Loader";
 import { first } from '@shared/utils/first';
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -36,6 +37,7 @@ export default function OffersList({
   ...rest
 }: OffersListProps) {
   const [offers, setOffers] = useState<OfferDTO[]>([] as OfferDTO[]);
+  const [farm_id, setFarmId] = useState<string>("");
   const [catalogId, setCatalogId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -53,12 +55,27 @@ export default function OffersList({
   );
 
   useEffect(() => {
+  if (!cycle) return;
+  const fetchFarms = async () => {
+    const response = await fetchFarmsOwn();
+    if (response.data && response.data.id) {
+      setFarmId(response.data.id);
+    } else {
+      handleError("Nenhuma fazenda encontrada para o usuário.");
+    }
+  };
+  fetchFarms();
+}, [cycle, handleError]);
+
+  useEffect(() => {
     if (!cycle) {
       setIsLoading(false);
       toast.error("Selecione um ciclo para acessar as ofertas!");
       router.push("/");
       return;
     }
+
+    if (!farm_id) return;
 
     const fetchListOffers = async () => {
       setIsLoading(true);
@@ -76,8 +93,8 @@ export default function OffersList({
       try {
 
         const response = await fetchCatalog({
-          cycle_id: cycle.id,
           type,
+          farm_id: farm_id,
           since: formattedDDMMYYYY,
           page,
         });
@@ -87,37 +104,37 @@ export default function OffersList({
         } else if (response.data) {
           const dataOffers: CatalogDTO = response.data;
 
-          if (filterDuplicatesWithCurrent && type === "last") {
-            
-            const currentResponse = await fetchCatalog({
-              cycle_id: cycle.id,
-              type: "current",
-              since: formattedDDMMYYYY,
-              page: 1,
-            });
-            
-            const currentProductIds = (currentResponse.data?.offers || []).map(
-              (o: any) => o.product?.id 
-            );
-            dataOffers.offers = dataOffers.offers.filter(
-              (offer: any) => !currentProductIds.includes(offer.product?.id)
-            );
-          }
-          
+          if (!dataOffers) {
+            setHasMore(false);
+            return;
+          } else if (filterDuplicatesWithCurrent && type === "last") {
+              const currentResponse = await fetchCatalog({
+                type: "current",
+                farm_id: farm_id,
+                since: formattedDDMMYYYY,
+                page: 1,
+              });
 
-          setCatalogId(dataOffers.id);
-          setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
-          setHasMore(dataOffers.offers.length > 0);
+              const currentProductIds = currentResponse.data?.offers?.product?.id
+                ? [currentResponse.data.offers.product.id]
+                : [];
+                    dataOffers.offers = dataOffers.offers.filter(
+                (offer: any) => !currentProductIds.includes(offer.product?.id)
+                    );
+            }
+            setCatalogId(dataOffers.id);
+            setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
+            setHasMore(dataOffers.offers.length > 0);
         }
-      } catch {
-        console.log("Erro 2");
+      } catch (error) {
+        console.log("Erro 2", error);
         handleError("Erro desconhecido.");
       } finally {
         setIsLoading(false);
       }
     };
     fetchListOffers();
-  }, [cycle, handleError, type]);
+  }, [cycle, handleError, type, farm_id]);
 
   const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {

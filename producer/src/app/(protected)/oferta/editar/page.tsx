@@ -37,7 +37,6 @@ export default function Home() {
     const storedOfferData = sessionStorage.getItem("edit-offer-data");
     if (storedOfferData) {
       const offerData: OfferDTO = JSON.parse(storedOfferData);
-      console.log("offerData", offerData);
       setOffer({
         ...offerData,
         amount: convertOfferAmount(offerData.amount, offerData.product.pricing),
@@ -115,7 +114,7 @@ export default function Home() {
 
       const response = await updateOffer({
         offer_id: offer.id,
-        data,
+        data: data,
       });
       if (response.message) {
         handleError(response.message as string);
