@@ -46,7 +46,7 @@ export default function Home() {
         />
         <OffersList
           title="Ofertas Anteriores"
-          type="last"
+          type="last" 
           className="h-2/5"
           notFoundMessage="Não há ofertas anteriores."
           isOfferingDay={isOfferingDay}

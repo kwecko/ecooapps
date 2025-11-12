@@ -46,7 +46,7 @@ function ProductsPage() {
 
         <div className="flex gap-3 items-center">
           <SearchInput
-            placeholder="Filtrar por nome ou categoria"
+            placeholder="Filtrar por nome"
             onChange={setName}
             value={name}
             type="secondary"

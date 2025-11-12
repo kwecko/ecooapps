@@ -13,7 +13,7 @@ interface TextInputProps {
   showCharCount?: boolean;
   className?: string;
   disabled?: boolean;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 function TextInput({
@@ -39,7 +39,7 @@ function TextInput({
         </label>
       )}
 
-      <input
+      <textarea
         id={name}
         {...register}
         maxLength={maxLength}
@@ -50,11 +50,12 @@ function TextInput({
           onChange?.(e);
         }}
         className={twMerge(
-          "w-full rounded-lg border border-theme-home-bg text-theme-home-bg px-3 h-12 focus:outline-none p-3 font-inter font-normal tracking-tight-2 lg:border-theme-primary lg:text-theme-primary",
+          "w-full rounded-lg border border-theme-home-bg text-theme-home-bg px-3 py-2 h-32 focus:outline-none font-inter font-normal tracking-tight-2 lg:border-theme-primary lg:text-theme-primary",
           disabled && "bg-gray-100 cursor-not-allowed text-gray-500",
           className
         )}
         disabled={disabled}
+        defaultValue={defaultValue}
       />
 
       <div
