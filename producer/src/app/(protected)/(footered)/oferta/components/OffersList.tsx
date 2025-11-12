@@ -1,6 +1,7 @@
 "use client";
 
 import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
+import { fetchFarmsOwn } from "@producer/app/_actions/farms/GET/farms-own";
 import Loader from "@shared/components/Loader";
 import { first } from '@shared/utils/first';
 import { useHandleError } from "@shared/hooks/useHandleError";
@@ -22,7 +23,6 @@ import OfferListHeading from "./OfferListHeading";
 interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
   type: "last" | "current";
-  farm_id?: string;
   notFoundMessage: string;
   isOfferingDay: boolean;
   filterDuplicatesWithCurrent?: boolean; 
@@ -31,13 +31,13 @@ interface OffersListProps extends React.HTMLAttributes<HTMLDivElement> {
 export default function OffersList({
   title,
   type,
-  farm_id,
   isOfferingDay,
   notFoundMessage,
   filterDuplicatesWithCurrent = false,
   ...rest
 }: OffersListProps) {
   const [offers, setOffers] = useState<OfferDTO[]>([] as OfferDTO[]);
+  const [farm_id, setFarmId] = useState<string>("");
   const [catalogId, setCatalogId] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
@@ -55,12 +55,27 @@ export default function OffersList({
   );
 
   useEffect(() => {
+  if (!cycle) return;
+  const fetchFarms = async () => {
+    const response = await fetchFarmsOwn();
+    if (response.data && response.data.id) {
+      setFarmId(response.data.id);
+    } else {
+      handleError("Nenhuma fazenda encontrada para o usuário.");
+    }
+  };
+  fetchFarms();
+}, [cycle, handleError]);
+
+  useEffect(() => {
     if (!cycle) {
       setIsLoading(false);
       toast.error("Selecione um ciclo para acessar as ofertas!");
       router.push("/");
       return;
     }
+
+    if (!farm_id) return;
 
     const fetchListOffers = async () => {
       setIsLoading(true);
@@ -78,7 +93,6 @@ export default function OffersList({
       try {
 
         const response = await fetchCatalog({
-          cycle_id: cycle.id,
           type,
           farm_id: farm_id,
           since: formattedDDMMYYYY,
@@ -88,28 +102,25 @@ export default function OffersList({
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
-          const dataOffers: CatalogDTO = response.data[0];
-
-          console.log("Offers fetched:", dataOffers);
+          const dataOffers: CatalogDTO = response.data;
 
           if (!dataOffers) {
             setHasMore(false);
             return;
           } else if (filterDuplicatesWithCurrent && type === "last") {
               const currentResponse = await fetchCatalog({
-                cycle_id: cycle.id,
                 type: "current",
                 farm_id: farm_id,
                 since: formattedDDMMYYYY,
                 page: 1,
               });
-              
-              const currentProductIds = (currentResponse.data?.offers || []).map(
-                (o: any) => o.product?.id 
-              );
-              dataOffers.offers = dataOffers.offers.filter(
+
+              const currentProductIds = currentResponse.data?.offers?.product?.id
+                ? [currentResponse.data.offers.product.id]
+                : [];
+                    dataOffers.offers = dataOffers.offers.filter(
                 (offer: any) => !currentProductIds.includes(offer.product?.id)
-              );
+                    );
             }
             setCatalogId(dataOffers.id);
             setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
@@ -123,7 +134,7 @@ export default function OffersList({
       }
     };
     fetchListOffers();
-  }, [cycle, handleError, type]);
+  }, [cycle, handleError, type, farm_id]);
 
   const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {

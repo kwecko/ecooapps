@@ -4,13 +4,11 @@ import { ModelPage } from "@shared/components/ModelPage";
 import AddProductButton from "./components/AddProductButton";
 import OffersList from "./components/OffersList";
 import { useCycleProvider } from "@shared/context/cycle";
-import { fetchFarmsOwn } from "@producer/app/_actions/farms/GET/farms-own";
 import { useEffect, useState } from "react";
 
 export default function Home() {
 
   const { cycle } = useCycleProvider();
-  const [farm_id, setFarmId] = useState<string>("");
 
   const [isOfferingDay, setIsOfferingDay] = useState<boolean>(false);
   
@@ -28,24 +26,6 @@ export default function Home() {
       }
     }, [cycle]);
 
-    useEffect(() => {
-      async function fetchFarms() {
-        try {
-          const response = await fetchFarmsOwn();
-          if (response.message) {
-            console.log("Erro ao buscar fazendas:", response.message);
-          } else {
-            console.log("Fazendas próprias:", response.data.id);
-            setFarmId(response.data.id);
-          }
-        } catch (error) {
-          console.log("Erro na requisição de fazendas próprias:", error);
-        }
-      }
-  
-      fetchFarms();
-    }, []);
-
   const subtitle = isOfferingDay ? "Adicione produtos a sua oferta" : "Visualize as suas ofertas ativas";
 
   return (
@@ -60,15 +40,13 @@ export default function Home() {
         <OffersList
           title="Ofertas Atuais"
           type="current"
-          farm_id={farm_id}
           className="h-3/5"
           notFoundMessage="Nenhuma oferta encontrada! Faça uma nova oferta."
           isOfferingDay={isOfferingDay}
         />
         <OffersList
           title="Ofertas Anteriores"
-          type="last"
-          farm_id={farm_id}
+          type="last" 
           className="h-2/5"
           notFoundMessage="Não há ofertas anteriores."
           isOfferingDay={isOfferingDay}
