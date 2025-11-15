@@ -10,6 +10,7 @@ const PROTECTED_PAGES = [
   "/produtores",
   "/consumidores",
   "/produtos",
+  "/feiras-do-dia",
   "/relatorios",
   "/configuracoes",
 ];

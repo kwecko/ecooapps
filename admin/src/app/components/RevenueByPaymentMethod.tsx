@@ -43,7 +43,7 @@ export default function RevenueByPaymentMethod({ stats }: Stats) {
         day: "2-digit",
         month: "2-digit",
       })
-    ), // Convertendo as datas para o formato "DD/MM"
+    ),
     datasets: [
       {
         label: "",

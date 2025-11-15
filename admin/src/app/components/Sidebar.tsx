@@ -8,11 +8,16 @@ import {
   HiOutlineCollection,
   HiOutlineDocumentReport,
   HiOutlineLogin,
+  HiOutlineShoppingBag,
   HiOutlineUser,
+  HiOutlineCube,
+  HiOutlineShoppingCart,
+  HiOutlineViewGridAdd,
 } from "react-icons/hi";
 
 import { useRouter } from "next/navigation";
 import Navlink from "./Navlink";
+import ExpandableNavlink from "./ExpandableNavlink";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -39,6 +44,29 @@ export default function Sidebar() {
         <Navlink href="/produtos" icon={<HiOutlineCollection />}>
           Produtos
         </Navlink>
+        <ExpandableNavlink
+          href="/feiras-do-dia"
+          icon={<HiOutlineShoppingBag />}
+          subItems={[
+            {
+              href: "/feiras-do-dia/[market_id]/painel",
+              label: "Painel da Feira",
+              icon: <HiOutlineViewGridAdd />,
+            },
+            {
+              href: "/feiras-do-dia/[market_id]/estoque",
+              label: "Estoque",
+              icon: <HiOutlineCube />,
+            },
+            {
+              href: "/feiras-do-dia/[market_id]/vendas",
+              label: "Vendas",
+              icon: <HiOutlineShoppingCart />,
+            },
+          ]}
+        >
+          Feiras do dia
+        </ExpandableNavlink>
         <Navlink href="/notificar" icon={<HiOutlineAnnotation />}>
           Enviar notificações
         </Navlink>

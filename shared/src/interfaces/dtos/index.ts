@@ -4,6 +4,7 @@ import { BoxDTO } from "./box-dto";
 import { CatalogDTO } from "./catalog-dto";
 import { CycleDTO } from "./cycle-dto";
 import { FarmDTO } from "./farm-dto";
+import { MarketDTO } from "./market-dto";
 import { OfferDTO } from "./offer-dto";
 import { OrderDTO } from "./order-dto";
 import { PaymentDTO } from "./payment-dto";
@@ -17,6 +18,7 @@ export {
   type CatalogDTO,
   type CycleDTO,
   type FarmDTO,
+  type MarketDTO,
   type OfferDTO,
   type OrderDTO,
   type PaymentDTO,
