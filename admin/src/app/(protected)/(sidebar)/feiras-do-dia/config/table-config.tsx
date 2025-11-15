@@ -24,7 +24,6 @@ export const getMarketsTableColumns = ({
       key: "sales",
       colSpan: 2,
       render: function renderSales(row: MarketDTO) {
-        // Usando o número de bags como vendas
         return row.bags?.length || 0;
       },
     },
@@ -33,7 +32,6 @@ export const getMarketsTableColumns = ({
       key: "revenue",
       colSpan: 3,
       render: function renderRevenue(row: MarketDTO) {
-        // Calculando faturamento a partir das bags (vendas reais)
         const revenue = row.bags?.reduce((sum, bag) => sum + (bag.subtotal || 0), 0) || 0;
         return formatPrice(revenue);
       },
@@ -43,7 +41,6 @@ export const getMarketsTableColumns = ({
       key: "profit",
       colSpan: 3,
       render: function renderProfit(row: MarketDTO) {
-        // Calculando lucro a partir das taxas das bags
         const profit = row.bags?.reduce((sum, bag) => sum + (bag.fee || 0), 0) || 0;
         return formatPrice(profit);
       },
@@ -51,19 +48,20 @@ export const getMarketsTableColumns = ({
     {
       header: "Status",
       key: "status",
-      colSpan: 2,
+      colSpan: 3,
       render: function renderStatus(row: MarketDTO) {
         return (
           <button
             type="button"
             onClick={() => navigateToMarketDetails(row.id)}
-            className={`px-4 py-2 rounded-lg font-semibold text-sm transition-colors ${
+            className={`px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg font-semibold text-xs sm:text-sm transition-colors whitespace-nowrap w-full ${
               row.open
                 ? "bg-theme-highlight text-white hover:bg-opacity-90"
                 : "bg-gray-200 text-gray-600 hover:bg-gray-300"
             }`}
           >
-            {row.open ? "Visualizar Feira" : "Finalizada"}
+            <span className="hidden sm:inline">{row.open ? "Visualizar Feira" : "Finalizada"}</span>
+            <span className="sm:hidden">{row.open ? "Visualizar" : "Finalizada"}</span>
           </button>
         );
       },

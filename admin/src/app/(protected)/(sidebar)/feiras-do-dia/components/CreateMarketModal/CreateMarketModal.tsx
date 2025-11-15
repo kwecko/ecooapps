@@ -4,6 +4,7 @@ import Loader from "@shared/components/Loader";
 import ModalV2 from "@shared/components/ModalV2";
 import ButtonV2 from "@shared/components/ButtonV2";
 import Input from "@shared/components/CustomInput";
+import SelectInput from "@shared/components/SelectInput";
 
 import useCreateMarketModal from "./index";
 
@@ -22,6 +23,8 @@ export default function CreateMarketModal({
     errors,
     isPending,
     onSubmit,
+    cycleOptions,
+    setValue,
   } = useCreateMarketModal({ closeModal });
 
   return (
@@ -56,6 +59,22 @@ export default function CreateMarketModal({
             <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
           )}
         </div>
+
+        <SelectInput
+          label="Importar estoque de um ciclo (opcional)"
+          options={cycleOptions}
+          defaultOption={cycleOptions.find((opt) => opt.value === "") || cycleOptions[0]}
+          onChange={(value) => {
+            setValue("cycle_id", value);
+          }}
+          register={register("cycle_id")}
+          errorMessage={errors.cycle_id?.message}
+        />
+        {cycleOptions.length > 1 && (
+          <p className="text-xs text-gray-600 -mt-3">
+            Selecione um ciclo para importar todos os itens não vendidos do estoque.
+          </p>
+        )}
 
         <div className="flex justify-between items-center gap-4">
           <ButtonV2

@@ -49,17 +49,17 @@ export default function Sidebar() {
           icon={<HiOutlineShoppingBag />}
           subItems={[
             {
-              href: "/feiras-do-dia/painel",
+              href: "/feiras-do-dia/[market_id]/painel",
               label: "Painel da Feira",
               icon: <HiOutlineViewGridAdd />,
             },
             {
-              href: "/feiras-do-dia/estoque",
+              href: "/feiras-do-dia/[market_id]/estoque",
               label: "Estoque",
               icon: <HiOutlineCube />,
             },
             {
-              href: "/feiras-do-dia/vendas",
+              href: "/feiras-do-dia/[market_id]/vendas",
               label: "Vendas",
               icon: <HiOutlineShoppingCart />,
             },

@@ -15,7 +15,6 @@ export type ModalKeys =
   | "isArchivedProductModal";
 
 export default function useProductsPage() {
-  // States
   const [page, setPage] = useState(1);
   const [name, setName] = useState("");
   const [archived, setArchived] = useState<boolean | undefined>(undefined);
@@ -37,7 +36,6 @@ export default function useProductsPage() {
     null
   );
 
-  // Consts
   const debounceSearch = useDebounce(name);
 
   const { handleError } = useHandleError();
@@ -57,7 +55,6 @@ export default function useProductsPage() {
     });
   }, [debounceSearch, page, archived]);
 
-  // Functions
   function getProducts({ page, product, archived }: { page: number; product: string; archived: boolean | undefined }) {
     listProducts({ page, product, archived })
       .then((response) => {
@@ -101,7 +98,6 @@ export default function useProductsPage() {
     setSelectedProduct(null);
   };
 
-  // Returns
   return {
     name,
     setName,

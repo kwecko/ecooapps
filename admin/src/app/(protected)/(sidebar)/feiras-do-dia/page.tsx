@@ -7,6 +7,7 @@ import ListMarketsTable from "./components/ListMarketsTable";
 import Button from "@shared/components/ButtonV2";
 import CreateMarketModal from "./components/CreateMarketModal/CreateMarketModal";
 import useMarketsPage from "./index";
+import { HiOutlinePlus } from "react-icons/hi";
 
 function MarketsPage() {
   const { toggleModal, isOpenCreateMarketModal } = useMarketsPage();
@@ -22,6 +23,7 @@ function MarketsPage() {
           onClick={() => toggleModal("isOpenCreateMarketModal")}
         >
           Nova feira
+          <HiOutlinePlus className="text-xl" />
         </Button>
       </div>
       <ListMarketsTable />

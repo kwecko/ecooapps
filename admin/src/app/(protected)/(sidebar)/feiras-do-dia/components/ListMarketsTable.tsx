@@ -37,9 +37,7 @@ export default function ListMarketsTable() {
   };
 
   const navigateToMarketDetails = (id: string) => {
-    // Por enquanto, apenas navega para a página de detalhes
-    // router.push(`/feiras-do-dia/${id}`);
-    console.log("Navigate to market:", id);
+    router.push(`/feiras-do-dia/${id}/painel`);
   };
 
   return (
