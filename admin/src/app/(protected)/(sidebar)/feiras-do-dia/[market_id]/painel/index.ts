@@ -26,7 +26,7 @@ export default function usePainelPage() {
 
   const totalSales = market?.bags?.length || 0;
   const totalRevenue = market?.bags?.reduce((sum, bag) => sum + (bag.subtotal || bag.total || 0), 0) || 0;
-  const totalStock = market?.offers?.reduce((sum, offer) => sum + (offer.amount || 0), 0) || 0;
+  const totalStock = market?.offers?.length || 0;
 
   const latestBags = market?.bags
     ? [...market.bags]
@@ -51,7 +51,7 @@ export default function usePainelPage() {
   };
 
   const handleAddStock = () => {
-    toast.info("Funcionalidade em desenvolvimento");
+    router.push(`/feiras-do-dia/${market_id}/estoque?openModal=true`);
   };
 
   return {

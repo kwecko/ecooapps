@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams, useRouter } from "next/navigation";
 
 import { listOffers } from "@admin/_actions/offers/GET/list-offers";
 import { useDebounce } from "@shared/hooks/useDebounce";
@@ -11,6 +11,8 @@ import { OfferDTO } from "@shared/interfaces/dtos";
 
 export default function useEstoquePage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const market_id = params?.market_id as string;
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -63,6 +65,14 @@ export default function useEstoquePage() {
   }
 
   const [isOpenAddStockModal, setIsOpenAddStockModal] = useState(false);
+
+  useEffect(() => {
+    const openModal = searchParams.get("openModal");
+    if (openModal === "true") {
+      setIsOpenAddStockModal(true);
+      router.replace(`/feiras-do-dia/${market_id}/estoque`);
+    }
+  }, [searchParams, market_id, router]);
 
   function handleAddStock() {
     setIsOpenAddStockModal(true);
