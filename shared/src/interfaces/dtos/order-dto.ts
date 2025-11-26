@@ -10,4 +10,7 @@ export interface OrderDTO {
   offer: OfferDTO;
   created_at: Date;
   updated_at: Date | null;
+  total: number;
+  subtotal: number;
+  fee: number;
 }
