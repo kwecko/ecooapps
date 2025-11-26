@@ -34,7 +34,7 @@ function ModalV2({
       closeTimeoutMS={200}
       ariaHideApp={false}
     >
-      <div className="relative mb-5">
+      <div className="relative mb-3">
         <h1
           className={twMerge(
             "text-center font-semibold text-xl text-text-heading",

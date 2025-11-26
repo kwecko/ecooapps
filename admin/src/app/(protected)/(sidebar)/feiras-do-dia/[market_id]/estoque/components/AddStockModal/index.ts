@@ -11,6 +11,7 @@ import { listProducts } from "@shared/_actions/products/GET/list-products";
 import { listFarms } from "@admin/_actions/farms/GET/list-farms";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { addTaxToPrice } from "@shared/utils/convert-tax";
+import { convertUnitToLabel } from "@shared/utils/convert-unit";
 import { ProductDTO, FarmDTO } from "@shared/interfaces/dtos";
 
 const addStockSchema = z.object({
@@ -85,9 +86,7 @@ export default function useAddStockModal({
 
   const searchFarms = async (search: string): Promise<{ value: string; label: string }[]> => {
     try {
-        console.log("EU CAI AQUI NO LOG DE SEARCH FARMS", search);
       const response = await listFarms({ page: 1, farm: search });
-      console.log("EU CAI AQUI NO LOG DE RESPONSE FARMS", response);
       if (response.message) {
         handleError(response.message);
         return [];
@@ -117,12 +116,17 @@ export default function useAddStockModal({
         expiresAt = `${day}-${month}-${year}`;
       }
 
+      const finalAmount = selectedProductData?.pricing === "UNIT" 
+        ? data.amount 
+        : data.amount * 1000;
+
       const priceWithTax = addTaxToPrice(data.price, 0.2);
 
       registerOffer({
         product_id: selectedProduct.value,
+        farm_id: selectedFarm.value,
         market_id,
-        amount: data.amount,
+        amount: finalAmount,
         price: priceWithTax,
         expires_at: expiresAt,
         comment: data.comment,

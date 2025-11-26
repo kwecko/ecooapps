@@ -33,7 +33,7 @@ function EstoquePage() {
   return (
     <div className="w-full flex flex-col h-full gap-4 overflow-y-hidden items-stretch relative">
       <div className="flex justify-between items-center w-full">
-        <Title>Estoque</Title>
+      <Title>Estoque</Title>
 
         <div className="flex gap-3 items-center">
           <SearchInput
