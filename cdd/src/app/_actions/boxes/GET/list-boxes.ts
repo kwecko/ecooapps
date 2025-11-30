@@ -15,16 +15,21 @@ export async function listBoxes({
   farm = '',
   since = '',
 }: ListBoxesRequest) {
-  let url = `/boxes?cycle_id=${cycle_id}&page=${page}`;
+
+  const params = new URLSearchParams();
+
+  params.append('cycle_id', cycle_id);
+  params.append('page', page.toString());
 
   if (farm) {
-    url += `&farm=${farm}`;
+    params.append('farm', farm);
   }
   if (since) {
-    url += `&since=${since}`;
+    params.append('since', since);
   }
+
   const response = ApiService.GET({
-    url,
+    url: `/boxes?${params.toString()}`,
   });
 
   return response;

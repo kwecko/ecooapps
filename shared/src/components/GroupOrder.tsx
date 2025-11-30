@@ -40,8 +40,8 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
     );
     const price =
       order.offer.product.pricing === "UNIT"
-        ? order.total * order.amount
-        : (order.total * order.amount) / 1000;
+        ? order.total
+        : order.total / 1000;
 
     const isRejected = order.status !== "RECEIVED";
     const target = isRejected ? rejected : accepted;

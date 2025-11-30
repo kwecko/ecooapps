@@ -127,12 +127,12 @@ export default function SendBagTable() {
                   render: (row: BagDTO) => {
                     let status = row.status;
 
-                    if (status === "MOUNTED" && row.shipping > 0)
+                    if (status === "MOUNTED" && row.shipping === 0)
                       status = "FETCH";
 
                     if (
                       (status === "DISPATCHED" || status === "RECEIVED") &&
-                      row.shipping > 0
+                      row.shipping === 0
                     )
                       status = "FETCHED";
 
