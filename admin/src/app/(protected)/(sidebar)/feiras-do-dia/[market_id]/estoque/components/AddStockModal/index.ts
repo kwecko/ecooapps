@@ -15,12 +15,33 @@ import { convertUnitToLabel } from "@shared/utils/convert-unit";
 import { ProductDTO, FarmDTO } from "@shared/interfaces/dtos";
 
 const addStockSchema = z.object({
-  product_id: z.string().min(1, "Produto é obrigatório"),
-  farm_id: z.string().min(1, "Produtor é obrigatório"),
-  amount: z.number().min(1, "Quantidade deve ser maior que zero"),
-  price: z.number().min(0.01, "Preço deve ser maior que zero"),
+  product_id: z
+    .string({ required_error: "Produto é obrigatório" })
+    .min(1, "Produto é obrigatório"),
+  farm_id: z
+    .string({ required_error: "Produtor é obrigatório" })
+    .min(1, "Produtor é obrigatório"),
+  amount: z
+    .number({
+      required_error: "Quantidade é obrigatória",
+      invalid_type_error: "Quantidade deve ser um número",
+    })
+    .min(1, "Quantidade deve ser maior que zero"),
+  price: z
+    .number({
+      required_error: "Preço é obrigatório",
+      invalid_type_error: "Preço deve ser um número",
+    })
+    .min(0.01, "Preço deve ser maior que zero"),
   expires_at: z.string().optional(),
-  comment: z.string().optional(),
+  description: z
+    .string()
+    .max(200, "Descrição deve ter no máximo 200 caracteres")
+    .optional(),
+  comment: z
+    .string()
+    .max(200, "Comentário deve ter no máximo 200 caracteres")
+    .optional(),
 });
 
 type AddStockFormData = z.infer<typeof addStockSchema>;
@@ -47,11 +68,13 @@ export default function useAddStockModal({
     register,
     handleSubmit,
     setValue,
+    trigger,
     watch,
     formState: { errors },
     reset,
   } = useForm<AddStockFormData>({
     resolver: zodResolver(addStockSchema),
+    mode: "onChange",
   });
 
   const [productsCache, setProductsCache] = useState<Map<string, ProductDTO>>(new Map());
@@ -129,6 +152,7 @@ export default function useAddStockModal({
         amount: finalAmount,
         price: priceWithTax,
         expires_at: expiresAt,
+        description: data.description,
         comment: data.comment,
       })
         .then((response) => {
@@ -155,6 +179,7 @@ export default function useAddStockModal({
     register,
     handleSubmit,
     setValue,
+    trigger,
     errors,
     isPending,
     onSubmit,

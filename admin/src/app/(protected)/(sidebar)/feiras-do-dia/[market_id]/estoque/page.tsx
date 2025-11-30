@@ -1,11 +1,14 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useState } from "react";
 
 import useEstoquePage from "./index";
 import Title from "@admin/app/components/Title";
 import { getOfferTableColumns } from "./config/table-config";
 import AddStockModal from "./components/AddStockModal/AddStockModal";
+import UpdateOfferModal from "./components/UpdateOfferModal/UpdateOfferModal";
+import DeleteOfferModal from "./components/DeleteOfferModal/DeleteOfferModal";
 
 import TableSkeleton from "@admin/app/components/TableSkeleton";
 import Button from "@shared/components/ButtonV2";
@@ -13,6 +16,7 @@ import EmptyBox from "@shared/components/EmptyBox";
 import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
 import SearchInput from "@shared/components/SearchInput";
+import { OfferDTO } from "@shared/interfaces/dtos";
 
 function EstoquePage() {
   const {
@@ -30,6 +34,30 @@ function EstoquePage() {
     reloadOffers,
   } = useEstoquePage();
 
+  const [isOpenUpdateOfferModal, setIsOpenUpdateOfferModal] = useState(false);
+  const [isOpenDeleteOfferModal, setIsOpenDeleteOfferModal] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState<OfferDTO | null>(null);
+
+  function handleEditOffer(offer: OfferDTO) {
+    setSelectedOffer(offer);
+    setIsOpenUpdateOfferModal(true);
+  }
+
+  function handleDeleteOffer(offer: OfferDTO) {
+    setSelectedOffer(offer);
+    setIsOpenDeleteOfferModal(true);
+  }
+
+  function handleCloseUpdateModal() {
+    setIsOpenUpdateOfferModal(false);
+    setSelectedOffer(null);
+  }
+
+  function handleCloseDeleteModal() {
+    setIsOpenDeleteOfferModal(false);
+    setSelectedOffer(null);
+  }
+
   return (
     <div className="w-full flex flex-col h-full gap-4 overflow-y-hidden items-stretch relative">
       <div className="flex justify-between items-center w-full">
@@ -37,7 +65,7 @@ function EstoquePage() {
 
         <div className="flex gap-3 items-center">
           <SearchInput
-            placeholder="Filtrar por nome ou categoria"
+            placeholder="Filtrar pelo nome do produto"
             onChange={setSearch}
             value={search}
             type="secondary"
@@ -60,7 +88,10 @@ function EstoquePage() {
         {!isPending && offers.length > 0 && (
           <GenericTable
             data={offers}
-            columns={getOfferTableColumns()}
+            columns={getOfferTableColumns({
+              onEdit: handleEditOffer,
+              onDelete: handleDeleteOffer,
+            })}
             gridColumns={16}
           />
         )}
@@ -75,6 +106,24 @@ function EstoquePage() {
           isOpen={isOpenAddStockModal}
           closeModal={() => setIsOpenAddStockModal(false)}
           market_id={market_id}
+          reloadOffers={reloadOffers}
+        />
+      )}
+
+      {isOpenUpdateOfferModal && selectedOffer && (
+        <UpdateOfferModal
+          isOpen={isOpenUpdateOfferModal}
+          closeModal={handleCloseUpdateModal}
+          offer={selectedOffer}
+          reloadOffers={reloadOffers}
+        />
+      )}
+
+      {isOpenDeleteOfferModal && selectedOffer && (
+        <DeleteOfferModal
+          isOpen={isOpenDeleteOfferModal}
+          closeModal={handleCloseDeleteModal}
+          offer={selectedOffer}
           reloadOffers={reloadOffers}
         />
       )}

@@ -3,8 +3,17 @@ import Image from "next/image";
 import { LuPencil, LuTrash2 } from "react-icons/lu";
 
 import { OfferDTO } from "@shared/interfaces/dtos";
+import { convertOfferAmount, convertUnit } from "@shared/utils/convert-unit";
 
-export function getOfferTableColumns() {
+interface GetOfferTableColumnsProps {
+  onEdit?: (offer: OfferDTO) => void;
+  onDelete?: (offer: OfferDTO) => void;
+}
+
+export function getOfferTableColumns({
+  onEdit,
+  onDelete,
+}: GetOfferTableColumnsProps = {}) {
   return [
     {
       header: "Imagem",
@@ -46,11 +55,19 @@ export function getOfferTableColumns() {
       key: "amount",
       colSpan: 2,
       render: function renderAmount(row: OfferDTO) {
-        return row.amount || 0;
+        if (!row.product?.pricing) {
+          return row.amount || 0;
+        }
+        const convertedAmount = convertOfferAmount(
+          row.amount,
+          row.product.pricing
+        );
+        const unit = convertUnit(row.product.pricing);
+        return `${convertedAmount} ${unit}`;
       },
     },
     {
-      header: "Preço de Ve",
+      header: "Preço",
       key: "price",
       colSpan: 2,
       render: function renderPrice(row: OfferDTO) {
@@ -77,8 +94,9 @@ export function getOfferTableColumns() {
           <button
             type="button"
             className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
-            onClick={() => {
-              // TODO: Implementar edição
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(row);
             }}
           >
             <LuPencil size={20} />
@@ -95,8 +113,9 @@ export function getOfferTableColumns() {
           <button
             type="button"
             className="flex justify-center items-center hover:text-red-500 transition-colors delay-150"
-            onClick={() => {
-              // TODO: Implementar exclusão
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(row);
             }}
           >
             <LuTrash2 size={20} />
