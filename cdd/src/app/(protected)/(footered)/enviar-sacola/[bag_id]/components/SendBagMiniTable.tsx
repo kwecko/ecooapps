@@ -41,13 +41,13 @@ export default function SendBagMiniTable() {
 
   const bagStatusOptions = bag && bag.shipping > 0
     ? [
-        { value: "DISPATCHED", label: "Retirada" },
-        { value: "MOUNTED", label: "Não retirada" },
-      ]
-    : [
         { value: "DISPATCHED", label: "Enviada" },
         { value: "RECEIVED", label: "Entregue" },
         { value: "DEFERRED", label: "Retornada" },
+      ]
+    : [
+        { value: "DISPATCHED", label: "Retirada" },
+        { value: "MOUNTED", label: "Não retirada" },
       ];
 
   const { handleBag, isLoading: isLoadingHandleBag } = useHandleBag();
@@ -116,7 +116,7 @@ export default function SendBagMiniTable() {
           <div className="w-full h-[15%] flex justify-center items-end">
             {bag.status === "MOUNTED" && !isStatusChanged? (
               <Modal
-                titleOpenModal={`Marcar como ${isShipping ? "retirada" : "enviada"}`}
+                titleOpenModal={`Marcar como ${isShipping ? "enviada" : "retirada"}`}
                 titleContentModal="Você tem certeza?"
                 contentModal="Ao alterar o status para enviada, o cliente será notificado que ela está a caminho."
                 bgOpenModal="#00735E"

@@ -98,7 +98,7 @@ const getStatusInfo: StatusInfo = {
   enviar: {
     MOUNTED: {
       content: <FaExclamation size={10} color="white" />,
-      color: "bg-[#00735E]",
+      color: "bg-[#4F4743]",
       text: "Enviar",
       textColor: "text-[#FFFFFF]",
     },
