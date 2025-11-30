@@ -8,56 +8,66 @@ import Loader from "@shared/components/Loader";
 import ModalV2 from "@shared/components/ModalV2";
 import ButtonV2 from "@shared/components/ButtonV2";
 import Input from "@shared/components/Input";
-import SearchableSelect from "../SearchableSelect";
 import { addTaxToPrice } from "@shared/utils/convert-tax";
 import { formatPrice } from "@shared/utils/format-price";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
-import useAddStockModal from "./index";
+import { OfferDTO } from "@shared/interfaces/dtos";
+import useUpdateOfferModal from "./index";
 
-interface AddStockModalProps {
+interface UpdateOfferModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  market_id: string;
+  offer: OfferDTO | null;
   reloadOffers: () => void;
 }
 
-export default function AddStockModal({
+export default function UpdateOfferModal({
   isOpen,
   closeModal,
-  market_id,
+  offer,
   reloadOffers,
-}: AddStockModalProps) {
+}: UpdateOfferModalProps) {
   const {
     register,
     handleSubmit,
     setValue,
-    trigger,
     errors,
     isPending,
     onSubmit,
-    selectedProduct,
-    setSelectedProduct,
-    selectedProductData,
-    setSelectedProductData,
-    selectedFarm,
-    setSelectedFarm,
-    searchProducts,
-    searchFarms,
-    getProductData,
     price,
     setPrice,
-  } = useAddStockModal({ market_id, closeModal, reloadOffers });
+  } = useUpdateOfferModal({ offer, closeModal, reloadOffers });
 
   const [amountInputValue, setAmountInputValue] = useState<string>("");
+  const [expiresAtValue, setExpiresAtValue] = useState<string>("");
 
   useEffect(() => {
-    if (selectedProduct?.value) {
-      const product = getProductData(selectedProduct.value);
-      setSelectedProductData(product);
+    if (offer) {
+      const convertedAmount =
+        offer.product?.pricing === "UNIT"
+          ? offer.amount
+          : offer.amount / 1000;
+      setAmountInputValue(convertedAmount.toString());
+
+      if (offer.expires_at) {
+        const date = new Date(offer.expires_at);
+        if (!isNaN(date.getTime())) {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          const dateString = `${year}-${month}-${day}`;
+          setExpiresAtValue(dateString);
+        } else {
+          setExpiresAtValue("");
+        }
+      } else {
+        setExpiresAtValue("");
+      }
     } else {
-      setSelectedProductData(null);
+      setAmountInputValue("");
+      setExpiresAtValue("");
     }
-  }, [selectedProduct, getProductData, setSelectedProductData]);
+  }, [offer]);
 
   const processPrice = (inputValue: string): number => {
     const numericValue = parseFloat(inputValue.replace(/[^0-9]/g, ""));
@@ -67,7 +77,7 @@ export default function AddStockModal({
   const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPrice = processPrice(e.target.value);
     setPrice(newPrice);
-    setValue("price", newPrice, { shouldValidate: true });
+    setValue("price", newPrice);
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -75,16 +85,10 @@ export default function AddStockModal({
     setAmountInputValue(value);
 
     const cleaned = value.replace(/\s+/g, "");
-    
-    if (cleaned === "" || cleaned === "0") {
-      setValue("amount", 0, { shouldValidate: true });
-    } else {
-      const parsed = parseInt(cleaned, 10);
-      if (!isNaN(parsed) && parsed > 0) {
-        setValue("amount", parsed, { shouldValidate: true });
-      } else {
-        setValue("amount", 0, { shouldValidate: true });
-      }
+    const parsed = parseFloat(cleaned);
+
+    if (!isNaN(parsed) && parsed > 0) {
+      setValue("amount", parsed);
     }
   };
 
@@ -94,57 +98,28 @@ export default function AddStockModal({
     }
   };
 
-  const unitLabel = selectedProductData?.pricing 
-    ? convertUnitToLabel(selectedProductData.pricing)
+  const unitLabel = offer?.product?.pricing
+    ? convertUnitToLabel(offer.product.pricing)
     : "Quantidade";
 
   const priceWithTax = addTaxToPrice(price, 0.2);
+
+  if (!offer) {
+    return null;
+  }
 
   return (
     <ModalV2
       isOpen={isOpen}
       closeModal={closeModal}
       className="w-152 bg-white text-coal-black"
-      title="Adicionar ao estoque"
+      title="Editar oferta"
       iconClose={true}
     >
       <form
         onSubmit={handleSubmit(onSubmit)}
-        noValidate
         className="flex flex-col gap-3 max-h-[calc(95vh-140px)] overflow-y-auto pr-2"
       >
-        <SearchableSelect
-          label="Qual o produto?"
-          placeholder="Digite para buscar o produto..."
-          value={selectedProduct}
-          onSearch={searchProducts}
-          onChange={(option) => {
-            setSelectedProduct(option);
-            const value = option?.value || "";
-            setValue("product_id", value, { shouldValidate: true });
-            if (!value) {
-              trigger("product_id");
-            }
-          }}
-          errorMessage={errors.product_id?.message}
-        />
-
-        <SearchableSelect
-          label="Quem é o produtor?"
-          placeholder="Digite para buscar o produtor..."
-          value={selectedFarm}
-          onSearch={searchFarms}
-          onChange={(option) => {
-            setSelectedFarm(option);
-            const value = option?.value || "";
-            setValue("farm_id", value, { shouldValidate: true });
-            if (!value) {
-              trigger("farm_id");
-            }
-          }}
-          errorMessage={errors.farm_id?.message}
-        />
-
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
             Descrição (opcional)
@@ -157,7 +132,9 @@ export default function AddStockModal({
             maxLength={200}
           />
           {errors.description && (
-            <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+            <p className="text-red-500 text-sm mt-1">
+              {errors.description.message}
+            </p>
           )}
         </div>
 
@@ -197,43 +174,30 @@ export default function AddStockModal({
             <Input
               className="text-theme-primary w-full text-sm"
               type="text"
-              value={selectedProductData?.pricing === "WEIGHT" ? "kg" : "unidade"}
+              value={
+                offer.product?.pricing === "WEIGHT" ? "kg" : "unidade"
+              }
               label="Unidade"
               disabled={true}
             />
           </div>
         </div>
 
-        {selectedProductData && !selectedProductData.perishable && (
+        {offer.product && !offer.product.perishable && (
           <div className="w-full flex flex-col items-stretch justify-start">
             <Input
-              onChange={(e) => {
-                if (e.target.valueAsDate) {
-                  const date = e.target.valueAsDate;
-                  const adjustedDate = new Date(date);
-                  adjustedDate.setMinutes(
-                    adjustedDate.getMinutes() + adjustedDate.getTimezoneOffset()
-                  );
-
-                  if (adjustedDate < new Date()) {
-                    toast.error(
-                      "A data não pode estar no passado. Por favor, insira uma data válida."
-                    );
-                    return;
-                  }
-
-                  const day = String(date.getDate()).padStart(2, "0");
-                  const month = String(date.getMonth() + 1).padStart(2, "0");
-                  const year = date.getFullYear();
-                  setValue("expires_at", `${year}-${month}-${day}`);
-                }
-              }}
+              {...register("expires_at")}
               className="text-theme-primary text-sm pl-10"
               type="date"
               label="Data de validade"
               icon={<IoCalendarOutline size={20} />}
               iconPosition="left"
               error={errors.expires_at?.message}
+              value={expiresAtValue}
+              onChange={(e) => {
+                setExpiresAtValue(e.target.value);
+                setValue("expires_at", e.target.value);
+              }}
             />
             <span className="text-xs text-gray-500 pt-1 pl-2">
               Data de validade para produtos não perecíveis
@@ -256,7 +220,7 @@ export default function AddStockModal({
             <Input
               className="text-theme-primary w-full text-sm"
               type="text"
-              value={selectedProductData?.pricing === "WEIGHT" ? "kg" : "unidade"}
+              value={offer.product?.pricing === "WEIGHT" ? "kg" : "unidade"}
               label="Unidade"
               disabled={true}
             />
