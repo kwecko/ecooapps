@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { useRouter } from "next/navigation";
 
 import useVendasPage from "./index";
 import Title from "@admin/app/components/Title";
@@ -10,9 +11,11 @@ import TableSkeleton from "@admin/app/components/TableSkeleton";
 import EmptyBox from "@shared/components/EmptyBox";
 import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
+import Button from "@shared/components/ButtonV2";
 import { BagDTO } from "@shared/interfaces/dtos";
 
 function VendasPage() {
+  const router = useRouter();
   const {
     market_id,
     page,
@@ -34,10 +37,21 @@ function VendasPage() {
     // TODO: Implementar funcionalidade de deletar
   }
 
+  function handleVender() {
+    router.push(`/feiras-do-dia/${market_id}/vendas/vender`);
+  }
+
   return (
     <div className="w-full flex flex-col h-full gap-4 overflow-y-hidden items-stretch relative">
       <div className="flex justify-between items-center w-full">
         <Title>Vendas</Title>
+        <Button
+          variant="default"
+          className="flex w-32 justify-center items-center gap-3 bg-rain-forest"
+          onClick={handleVender}
+        >
+          Vender
+        </Button>
       </div>
       <div className="w-full h-full flex flex-col gap-5 overflow-auto justify-between items-center">
         {isPending && <TableSkeleton />}

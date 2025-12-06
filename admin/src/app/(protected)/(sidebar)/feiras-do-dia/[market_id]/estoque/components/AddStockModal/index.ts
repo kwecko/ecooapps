@@ -11,7 +11,6 @@ import { listProducts } from "@shared/_actions/products/GET/list-products";
 import { listFarms } from "@admin/_actions/farms/GET/list-farms";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { addTaxToPrice } from "@shared/utils/convert-tax";
-import { convertUnitToLabel } from "@shared/utils/convert-unit";
 import { ProductDTO, FarmDTO } from "@shared/interfaces/dtos";
 
 const addStockSchema = z.object({
@@ -152,8 +151,8 @@ export default function useAddStockModal({
         amount: finalAmount,
         price: priceWithTax,
         expires_at: expiresAt,
-        description: data.description,
-        comment: data.comment,
+        description: data.description?.trim() || undefined,
+        comment: data.comment?.trim() || undefined,
       })
         .then((response) => {
           if (response.message) {
