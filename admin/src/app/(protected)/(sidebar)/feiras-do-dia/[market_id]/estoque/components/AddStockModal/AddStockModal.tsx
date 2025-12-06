@@ -48,7 +48,7 @@ export default function AddStockModal({
     setPrice,
   } = useAddStockModal({ market_id, closeModal, reloadOffers });
 
-  const [amountInputValue, setAmountInputValue] = useState<string>("");
+  const [amountInputValue, setAmountInputValue] = useState<string>("0");
 
   useEffect(() => {
     if (selectedProduct?.value) {
@@ -71,15 +71,21 @@ export default function AddStockModal({
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    let value = e.target.value;
+    
+    const cleaned = value.replace(/\s+/g, "");
+    if (cleaned.length > 1 && cleaned.startsWith("0") && /^0+[1-9]/.test(cleaned)) {
+      value = cleaned.replace(/^0+/, "");
+    }
+    
     setAmountInputValue(value);
 
-    const cleaned = value.replace(/\s+/g, "");
+    const finalCleaned = value.replace(/\s+/g, "");
     
-    if (cleaned === "" || cleaned === "0") {
+    if (finalCleaned === "" || finalCleaned === "0") {
       setValue("amount", 0, { shouldValidate: true });
     } else {
-      const parsed = parseInt(cleaned, 10);
+      const parsed = parseInt(finalCleaned, 10);
       if (!isNaN(parsed) && parsed > 0) {
         setValue("amount", parsed, { shouldValidate: true });
       } else {
@@ -91,6 +97,19 @@ export default function AddStockModal({
   const handleAmountKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === " ") {
       e.preventDefault();
+    }
+  };
+
+  const handleAmountFocus = () => {
+    if (amountInputValue === "0") {
+      setAmountInputValue("");
+    }
+  };
+
+  const handleAmountBlur = () => {
+    if (amountInputValue === "" || amountInputValue === "0") {
+      setAmountInputValue("0");
+      setValue("amount", 0, { shouldValidate: true });
     }
   };
 
@@ -182,6 +201,8 @@ export default function AddStockModal({
             <Input
               onChange={handleAmountChange}
               onKeyDown={handleAmountKeyDown}
+              onFocus={handleAmountFocus}
+              onBlur={handleAmountBlur}
               className="text-theme-primary w-full text-sm"
               type="number"
               value={amountInputValue}
