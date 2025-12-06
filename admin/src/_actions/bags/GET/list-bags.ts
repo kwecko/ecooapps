@@ -2,24 +2,26 @@
 
 import ApiService from "@shared/service";
 
-export interface ListFarmsRequest {
+interface ListBagsRequest {
   page: number;
-  farm?: string;
+  market_id: string;
 }
 
-export async function listFarms({ page, farm }: ListFarmsRequest) {
+export async function listBags({
+  page,
+  market_id,
+}: ListBagsRequest) {
   const params = new URLSearchParams();
 
   params.append("page", page.toString());
-  if (farm) {
-    params.append("farm", farm);
-  }
+  params.append("market_id", market_id);
 
   const queryString = params.toString();
-  const url = `/farms${queryString ? `?${queryString}` : ""}`;
+  const url = `/bags${queryString ? `?${queryString}` : ""}`;
 
   const response = ApiService.GET({
     url,
   });
+
   return response;
 }
