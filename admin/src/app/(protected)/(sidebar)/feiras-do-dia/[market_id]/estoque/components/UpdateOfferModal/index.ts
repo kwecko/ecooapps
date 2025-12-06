@@ -93,11 +93,11 @@ export default function useUpdateOfferModal({
       }
 
       if (data.description !== undefined) {
-        updateData.description = data.description.trim() || null;
+        updateData.description = data.description.trim() || undefined;
       }
 
       if (data.comment !== undefined) {
-        updateData.comment = data.comment.trim() || null;
+        updateData.comment = data.comment.trim() || undefined;
       }
 
       if (data.expires_at) {
