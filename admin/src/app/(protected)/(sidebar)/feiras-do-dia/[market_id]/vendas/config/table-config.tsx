@@ -32,6 +32,9 @@ export function getBagsTableColumns({
       key: "user",
       colSpan: 4,
       render: function renderUser(row: BagDTO) {
+        if (!row.customer) {
+          return "Consumidor avulso";
+        }
         return row.customer.first_name + " " + row.customer.last_name;
       },
     },

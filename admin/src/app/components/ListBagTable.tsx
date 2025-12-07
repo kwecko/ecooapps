@@ -29,6 +29,13 @@ export default function ListBagsTable() {
       key: "client",
       className: "h-12",
       render: (row: BagDTO) => {
+        if (!row.customer) {
+          return (
+            <div>
+              Consumidor avulso
+            </div>
+          );
+        }
         return (
           <div>
             {`${row.customer.first_name} ${row.customer.last_name}`}

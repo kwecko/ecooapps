@@ -10,10 +10,16 @@ import Title from "@admin/app/components/Title";
 import Button from "@shared/components/ButtonV2";
 import SearchInput from "@shared/components/SearchInput";
 import FinalizeSaleModal from "./components/FinalizeSaleModal";
+import CreatePaymentModal from "./components/CreatePaymentModal";
 import { formatPrice } from "@shared/utils/format-price";
 import { addTaxToPrice } from "@shared/utils/convert-tax";
 import { convertUnitToLabel } from "@shared/utils/convert-unit";
 import { OfferDTO } from "@shared/interfaces/dtos";
+import { CreatePaymentDTO } from "@shared/interfaces/dtos/payment-dto";
+import { createPayment } from "@admin/_actions/payment/create-bag-payment";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { toast } from "sonner";
+import { useTransition } from "react";
 
 interface CartItem {
   offer: OfferDTO;
@@ -32,6 +38,10 @@ function VenderPage() {
 
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [bagId, setBagId] = useState<string>("");
+  const [isPendingPayment, startPaymentTransition] = useTransition();
+  const { handleError } = useHandleError();
 
   const handleAddToCart = (offer: OfferDTO) => {
     const existingItem = cart.find((item) => item.offer.id === offer.id);
@@ -93,6 +103,37 @@ function VenderPage() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleOrderCreated = (bag_id: string) => {
+    setBagId(bag_id);
+    setIsPaymentModalOpen(true);
+  };
+
+  const handleClosePaymentModal = () => {
+    setIsPaymentModalOpen(false);
+    setBagId("");
+    router.push(`/feiras-do-dia/${market_id}/vendas`);
+  };
+
+  const handleCreatePayment = (payment: CreatePaymentDTO) => {
+    startPaymentTransition(async () => {
+      const response = await createPayment({
+        data: {
+          bag_id: payment.bag_id,
+          method: payment.method,
+          flag: payment.flag,
+        },
+      });
+
+      if (response.message) {
+        handleError(response.message);
+        return;
+      }
+
+      toast.success("Pagamento criado com sucesso!");
+      handleClosePaymentModal();
+    });
   };
 
   const handleBack = () => {
@@ -281,6 +322,18 @@ function VenderPage() {
           subtotal={calculateSubtotal()}
           tax={calculateTax()}
           total={calculateTotal()}
+          onOrderCreated={handleOrderCreated}
+        />
+      )}
+
+      {isPaymentModalOpen && bagId && (
+        <CreatePaymentModal
+          isOpen={isPaymentModalOpen}
+          bag_id={bagId}
+          total={calculateTotal()}
+          loading={isPendingPayment}
+          createNewPayment={handleCreatePayment}
+          closeModal={handleClosePaymentModal}
         />
       )}
     </div>

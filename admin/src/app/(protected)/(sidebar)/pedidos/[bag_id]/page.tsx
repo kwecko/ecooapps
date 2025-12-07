@@ -141,23 +141,29 @@ useEffect(() => {
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Cliente:</p>
                     <p className='flex-1'>
-                      {bagDetails.customer.first_name +
-                        ' ' +
-                        bagDetails.customer.last_name}
+                      {bagDetails.customer
+                        ? bagDetails.customer.first_name +
+                          ' ' +
+                          bagDetails.customer.last_name
+                        : 'Consumidor avulso'}
                     </p>
                   </div>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-sm font-medium w-32'>Email:</p>
-                    <p className='flex-1'>{bagDetails.customer.email}</p>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-sm font-medium w-32'>Cpf:</p>
-                    <p className='flex-1'>{bagDetails.customer.cpf}</p>
-                  </div>
-                  <div className='flex justify-between items-center'>
-                    <p className='text-sm font-medium w-32'>Telefone:</p>
-                    <p className='flex-1'>{bagDetails.customer.phone}</p>
-                  </div>
+                  {bagDetails.customer && (
+                    <>
+                      <div className='flex justify-between items-center'>
+                        <p className='text-sm font-medium w-32'>Email:</p>
+                        <p className='flex-1'>{bagDetails.customer.email}</p>
+                      </div>
+                      <div className='flex justify-between items-center'>
+                        <p className='text-sm font-medium w-32'>Cpf:</p>
+                        <p className='flex-1'>{bagDetails.customer.cpf}</p>
+                      </div>
+                      <div className='flex justify-between items-center'>
+                        <p className='text-sm font-medium w-32'>Telefone:</p>
+                        <p className='flex-1'>{bagDetails.customer.phone}</p>
+                      </div>
+                    </>
+                  )}
                   <div className='flex justify-between items-center'>
                     <p className='text-sm font-medium w-32'>Data:</p>
                     <p className='flex-1'>
