@@ -6,6 +6,7 @@ export const updateUserSchema = z.object({
   email: z.string().email("Email inválido"),
   cpf: z.string().min(11, "O CPF é obrigatório"),
   phone: z.string().min(10, "O telefone é obrigatório").max(12, "O telefone deve ter no máximo 12 caracteres"),
+  active: z.boolean()
 });
 
 export type UpdateUserSchema = z.infer<typeof updateUserSchema>;

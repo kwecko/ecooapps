@@ -25,6 +25,9 @@ export async function updateUser({ user_id, data }: UpdateUserRequest) {
   if (data.get("phone")) {
     formData.phone = data.get("phone");
   }
+  if (data.get("active")) {
+    formData.active = data.get("active");
+  }
   const response = await ApiService.PATCH({
     url: `/users/${user_id}`,
     data: formData

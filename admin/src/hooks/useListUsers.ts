@@ -13,26 +13,45 @@ export default function useListUsers({ page, first_name }: UseListUsersProps) {
 
   const [isLoading, setIsLoading] = useState(false);
   const { handleError } = useHandleError();
+  
   useEffect(() => {
-    (() => {
+    const fetchUsers = async () => {
       setIsLoading(true);
-      listUsers({
+      try {
+      const response = await listUsers({
         page: page,
         first_name: first_name,
         roles: "USER",
-      }).then((response) => {
-        if (response.message) {
-          handleError(response.message);
-        }
-        setData(response.data);
-        setIsLoading(false);
       });
-    })();
+      if (response.message) {
+        handleError(response.message);
+      }
+      setData(response.data);
+      } catch (error) {
+      handleError(error instanceof Error ? error.message : String(error));
+      } finally {
+      setIsLoading(false);
+      }
+    };
+
+    fetchUsers();
   }, [page, first_name]);
 
   const updateData = (newData: UserDTO[]) => {
     setData(newData);
   };
 
-  return { data, updateData, isLoading };
+  const reloadData = async () => {
+    const response = await listUsers({
+      page: page,
+      first_name: first_name,
+      roles: "USER",
+    });
+    if (response.message) {
+      handleError(response.message);
+    }
+    setData(response.data);
+  };
+
+  return { data, updateData, isLoading, reloadData };
 }

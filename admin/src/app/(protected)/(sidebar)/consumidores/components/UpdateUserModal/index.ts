@@ -45,6 +45,7 @@ export default function useUpdateUserModal({
       email: "",
       cpf: "",
       phone: "",
+      active: true,
     },
   });
 
@@ -57,6 +58,7 @@ export default function useUpdateUserModal({
       setValue("email", user.email ?? "");
       setValue("cpf", user.cpf?.replace(/[.\-]/g, "") ?? "");
       setValue("phone", user.phone?.replace(/[()\s\-]/g, "") ?? "");
+      setValue("active", user.active ?? true);
     }
   }, [user, setValue]);
 
@@ -68,6 +70,7 @@ export default function useUpdateUserModal({
         email: user.email ?? "",
         cpf: user.cpf?.replace(/[.\-]/g, "") ?? "",
         phone: user.phone?.replace(/[()\s\-]/g, "") ?? "",
+        active: user.active ?? true,
       };
     }
   }, [user]);
@@ -78,6 +81,7 @@ export default function useUpdateUserModal({
     email,
     cpf,
     phone,
+    active
   }: UpdateUserSchema) => {
     startTransition(async () => {
 
@@ -100,13 +104,17 @@ export default function useUpdateUserModal({
           if (phone !== originalUserData.current.phone) {
             dataForm.append("phone", phone);
           }
+          if (active !== originalUserData.current.active) {
+            dataForm.append("active", String(active));
+          }
         }
 
         if (dataForm.get("first_name") === null &&
             dataForm.get("last_name") === null &&
             dataForm.get("email") === null &&
             dataForm.get("cpf") === null &&
-            dataForm.get("phone") === null
+            dataForm.get("phone") === null &&
+            dataForm.get("active") === null
           ) {
           closeModal();
           return;

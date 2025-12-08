@@ -4,6 +4,7 @@ import Loader from "@shared/components/Loader";
 import ModalV2 from "@shared/components/ModalV2";
 import ButtonV2 from "@shared/components/ButtonV2";
 import Input from "@shared/components/CustomInput";
+import SelectInput from "@shared/components/SelectInput";
 
 import { UserDTO } from "@shared/interfaces/dtos";
 import useUpdateUserModal from ".";
@@ -29,6 +30,11 @@ export default function UpdateUserModal({
     isPending,
     onSubmit,
   } = useUpdateUserModal({ closeModal, reloadUsers, user });
+
+  const isActive = [
+    { value: true, label: 'Sim' },
+    { value: false, label: 'Não' },
+  ];
 
   return (
     <ModalV2
@@ -79,6 +85,16 @@ export default function UpdateUserModal({
           type="text"
           errorMessage={errors.phone?.message}
         />
+        <SelectInput
+          label="Usuário ativo?"
+          options={isActive}
+          defaultOption={
+            isActive.find(
+              (option) => option.value === user?.active
+            ) ?? isActive[0]
+          }
+          onChange={(value) => setValue("active", value)}
+        />
         
         <div className="flex justify-between items-center gap-4">
           <ButtonV2
@@ -93,6 +109,9 @@ export default function UpdateUserModal({
             variant="default"
             type="submit"
             className="bg-rain-forest border-none"
+            onClick={() => {
+              reloadUsers();
+            }}
           >
             {isPending && <Loader loaderType="login" />}
             {!isPending && "Salvar alterações"}

@@ -28,12 +28,14 @@ export default function ListUsersTable() {
 
   const {
     data: users = [],
+    updateData,
     isLoading,
-  } = useListUsers({ 
+    reloadData,
+  } = useListUsers({
     page,
     first_name: name,
   });
-
+  
   const nextPage = () => {
     if (users.length < 20) {
       return;
@@ -57,6 +59,36 @@ export default function ListUsersTable() {
     { header: 'Email', key: 'email', colSpan: 4 },
     { header: 'CPF', key: 'cpf', colSpan: 4 },
     { header: 'Celular', key: 'phone', colSpan: 4 },
+    { header: 'Edit.', key: 'edit', colSpan: 2,
+      render: (row: UserDTO) => (
+        <div className='w-full flex justify-center'>
+          <Button
+            className='hover:text-rain-forest'
+            onClick={() => {
+              setSelectedRow(row);
+              setIsOpen(true);
+            }}
+          >
+            <HiOutlinePencil size={22} />
+          </Button>
+        </div>
+      ),
+    },
+    // { header: 'Del.', key: 'delete', colSpan: 2,
+    //   render: (row: UserDTO) => (
+    //     <div className='w-full flex justify-center'>
+    //       <Button
+    //         className='hover:text-error'
+    //         onClick={() => {
+    //           setSelectedRow(row);
+    //           setIsOpen(true);
+    //         }}
+    //       >
+    //         <HiOutlineTrash size={22} />
+    //       </Button>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (
@@ -78,7 +110,6 @@ export default function ListUsersTable() {
       )}
       {!isLoading && users?.length > 0 && (
         <GenericTable
-          onRowClick={handleRowClick}
           gridColumns={16}
           columns={bagTableColumns}
           data={users}
@@ -90,7 +121,7 @@ export default function ListUsersTable() {
       <UpdateUserModal
         isOpen={isOpen}
         closeModal={() => setIsOpen(false)}
-        reloadUsers={() => {}}
+        reloadUsers={() => reloadData()}
         user={selectedRow}
       />
     </div>
