@@ -6,12 +6,12 @@ export const updateUserSchema = z.object({
   email: z.string().email("Email inválido"),
   cpf: z
     .string()
-    .min(11, "O CPF é obrigatório")
+    .length(11, "O CPF deve ter exatamente 11 caracteres")
     .regex(/^\d+$/, "O CPF deve conter apenas números"),
   phone: z
     .string()
-    .min(10, "O telefone é obrigatório")
-    .max(12, "O telefone deve ter no máximo 12 caracteres")
+    .min(11, "O telefone é obrigatório e deve ter no mínimo 11 caracteres")
+    .max(13, "O telefone deve ter no máximo 13 caracteres")
     .regex(/^\d+$/, "O telefone deve conter apenas números"),
   active: z.boolean()
 });
