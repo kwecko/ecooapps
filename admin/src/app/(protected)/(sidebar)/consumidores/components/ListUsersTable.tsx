@@ -1,5 +1,4 @@
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import EmptyBox from '@shared/components/EmptyBox';
 import GenericTable from '@shared/components/GenericTable';
@@ -10,7 +9,7 @@ import SearchInput from '@shared/components/SearchInput';
 import useListUsers from '@admin/hooks/useListUsers';
 
 import { UserDTO } from '@shared/interfaces/dtos';
-import { HiOutlineEye, HiOutlinePencil, HiOutlineTrash } from 'react-icons/hi';
+import { HiOutlinePencil } from 'react-icons/hi';
 import UpdateUserModal from './UpdateUserModal/UpdateUserModal';
 import Button from '@shared/components/Button';
 
@@ -18,17 +17,11 @@ export default function ListUsersTable() {
   const [selectedRow, setSelectedRow] = useState<UserDTO>({} as UserDTO);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
-
-  const handleRowClick = (rowData: UserDTO, rowIndex: number) => {
-    setSelectedRow(rowData);
-    setIsOpen(true);
-  };
   const [page, setPage] = useState(1);
   const [name, setName] = useState<string | any>();
 
   const {
     data: users = [],
-    updateData,
     isLoading,
     reloadData,
   } = useListUsers({
@@ -74,21 +67,6 @@ export default function ListUsersTable() {
         </div>
       ),
     },
-    // { header: 'Del.', key: 'delete', colSpan: 2,
-    //   render: (row: UserDTO) => (
-    //     <div className='w-full flex justify-center'>
-    //       <Button
-    //         className='hover:text-error'
-    //         onClick={() => {
-    //           setSelectedRow(row);
-    //           setIsOpen(true);
-    //         }}
-    //       >
-    //         <HiOutlineTrash size={22} />
-    //       </Button>
-    //     </div>
-    //   ),
-    // },
   ];
 
   return (

@@ -2,7 +2,7 @@
 
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
-import { useTransition, useEffect, useState, useRef } from "react";
+import { useTransition, useEffect, useRef } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -33,7 +33,6 @@ export default function useUpdateUserModal({
     register,
     handleSubmit,
     setValue,
-    trigger,
     reset,
     formState: { errors },
   } = useForm<UpdateUserSchema>({

@@ -2,17 +2,14 @@
 
 import ApiService from "@shared/service";
 
-interface UpdateUserRequest {
-  user_id: string;
+interface UpdateProducerRequest {
+  producer_id: string;
   data: FormData
 }
 
-export async function updateUser({ user_id, data }: UpdateUserRequest) {
-
-  console.log(data);
-
+export async function updateProducer({ producer_id, data }: UpdateProducerRequest) {
   const response = await ApiService.PATCH({
-    url: `/users/${user_id}`,
+    url: `/producers/${producer_id}`,
     data,
     headers: {
       "Content-Type": "multipart/form-data",

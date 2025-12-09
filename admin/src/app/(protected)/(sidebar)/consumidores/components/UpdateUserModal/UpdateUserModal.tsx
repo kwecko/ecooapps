@@ -41,7 +41,7 @@ export default function UpdateUserModal({
       isOpen={isOpen}
       closeModal={closeModal}
       className="w-152 bg-white text-coal-black"
-      title="Editar Consumidor"
+      title="Editar consumidor"
       iconClose={true}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
