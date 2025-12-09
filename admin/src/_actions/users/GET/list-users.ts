@@ -46,7 +46,7 @@ export async function listUsers({
   const queryString = params.toString();
   const url = `/users${queryString ? `?${queryString}` : ""}`;
 
-  console.log(url);
+  console.log('list-users', url);
 
   const response = ApiService.GET({
     url,
