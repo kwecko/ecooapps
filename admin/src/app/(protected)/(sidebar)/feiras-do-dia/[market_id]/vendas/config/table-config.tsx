@@ -1,5 +1,5 @@
 import { GrView } from "react-icons/gr";
-import { LuPencil, LuTrash2 } from "react-icons/lu";
+import { LuTrash2 } from "react-icons/lu";
 
 import { convertStatus } from "@shared/utils/convert-status";
 import { formatPrice } from "@shared/utils/format-price";
@@ -9,13 +9,11 @@ import { BagDTO } from "@shared/interfaces/dtos";
 
 interface GetBagsTableColumnsProps {
   onView?: (bag: BagDTO) => void;
-  onEdit?: (bag: BagDTO) => void;
   onDelete?: (bag: BagDTO) => void;
 }
 
 export function getBagsTableColumns({
   onView,
-  onEdit,
   onDelete,
 }: GetBagsTableColumnsProps = {}) {
   return [
@@ -91,25 +89,6 @@ export function getBagsTableColumns({
             className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
           >
             <GrView size={20} />
-          </button>
-        );
-      },
-    },
-    {
-      header: "Edit.",
-      key: "edit",
-      colSpan: 0.5,
-      render: function renderEdit(row: BagDTO) {
-        return (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit?.(row);
-            }}
-            className="flex justify-center items-center hover:text-rain-forest transition-colors delay-150"
-          >
-            <LuPencil size={20} />
           </button>
         );
       },

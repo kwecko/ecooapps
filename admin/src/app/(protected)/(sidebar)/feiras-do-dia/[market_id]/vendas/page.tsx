@@ -42,10 +42,6 @@ function VendasPage() {
     router.push(`/pedidos/${bag.id}`);
   }
 
-  function handleEditBag(bag: BagDTO) {
-    // TODO: Implementar funcionalidade de editar
-  }
-
   function handleDeleteBag(bag: BagDTO) {
     setSelectedBag(bag);
     setIsDeleteModalOpen(true);
@@ -104,7 +100,6 @@ function VendasPage() {
             data={bags}
             columns={getBagsTableColumns({
               onView: handleViewBag,
-              onEdit: handleEditBag,
               onDelete: handleDeleteBag,
             })}
             gridColumns={16}
