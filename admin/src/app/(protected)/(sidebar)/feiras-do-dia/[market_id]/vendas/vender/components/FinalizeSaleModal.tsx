@@ -29,6 +29,7 @@ interface FinalizeSaleModalProps {
   subtotal: number;
   tax: number;
   total: number;
+  onOrderCreated: (bag_id: string) => void;
 }
 
 export default function FinalizeSaleModal({
@@ -39,6 +40,7 @@ export default function FinalizeSaleModal({
   subtotal,
   tax,
   total,
+  onOrderCreated,
 }: FinalizeSaleModalProps) {
   const router = useRouter();
   const [isCasualClient, setIsCasualClient] = useState(true);
@@ -114,9 +116,15 @@ export default function FinalizeSaleModal({
         return;
       }
 
+      const bag_id = response.data?.id || response.data?.bag_id;
+      if (!bag_id) {
+        handleError("Erro ao criar venda. ID da sacola não encontrado.");
+        return;
+      }
+
       toast.success("Venda realizada com sucesso!");
       closeModal();
-      router.push(`/feiras-do-dia/${market_id}/vendas`);
+      onOrderCreated(bag_id);
     });
   };
 

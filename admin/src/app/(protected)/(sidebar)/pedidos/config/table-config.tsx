@@ -11,11 +11,15 @@ export const getBagsTableColumns = ({
 }: {
   navigateToBagDetails: (id: string) => void;
 }) => {
+  const isFromMarket = (row: BagDTO): boolean => {
+    return !row.cycle_id;
+  };
+
   return [
     {
       header: "Data da venda",
       key: "sales_date",
-      colSpan: 4,
+      colSpan: 3,
       render: function renderDate(row: BagDTO) {
         return formatDateToDateAndTime(row.created_at);
       },
@@ -23,9 +27,31 @@ export const getBagsTableColumns = ({
     {
       header: "Cliente",
       key: "user",
-      colSpan: 4,
+      colSpan: 3,
       render: function renderUser(row: BagDTO) {
+        if (!row.customer) {
+          return "Consumidor avulso";
+        }
         return row.customer.first_name + " " + row.customer.last_name;
+      },
+    },
+    {
+      header: "Origem",
+      key: "origin",
+      colSpan: 2,
+      render: function renderOrigin(row: BagDTO) {
+        const fromMarket = isFromMarket(row);
+        return (
+          <span
+            className={`px-2 py-1 rounded-md text-xs font-semibold ${
+              fromMarket
+                ? "bg-blue-100 text-blue-800"
+                : "bg-gray-100 text-gray-800"
+            }`}
+          >
+            {fromMarket ? "Feira do dia" : "Ciclo"}
+          </span>
+        );
       },
     },
     {
