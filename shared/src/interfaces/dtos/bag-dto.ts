@@ -1,6 +1,7 @@
 import {
   AddressDTO,
   CycleDTO,
+  MarketDTO,
   OrderDTO,
   PaymentDTO,
   UserDTO,
@@ -28,6 +29,8 @@ export interface BagDTO {
   code: string;
   cycle_id: string;
   cycle: CycleDTO;
+  market_id: string;
+  market: MarketDTO;
   address_id: string;
   address: AddressDTO;
   customer_id: string;

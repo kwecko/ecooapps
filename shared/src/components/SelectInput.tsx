@@ -121,7 +121,7 @@ export default function Select({
       )}
 
       {!disabled && isOpen && (
-        <ul className="absolute mt-1 lg:top-full w-full bg-white border border-slate-gray lg:border-theme-primary rounded-lg shadow-lg max-h-48 overflow-auto z-10">
+        <ul className="absolute mt-1 lg:top-full w-full bg-white border border-slate-gray lg:border-theme-primary rounded-lg shadow-lg max-h-48 overflow-auto z-50">
           {options.map((option) => (
             <li
               key={String(option.value)}

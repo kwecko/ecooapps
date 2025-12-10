@@ -19,7 +19,7 @@ import useHandleBag from "@admin/hooks/useHandleBags";
 const useBagDetailsPage = () => {
   const [isPending, startTransition] = useTransition();
   const [bagDetails, setBagDetails] = useState<BagDTO>();
-  const [paymentsPage, setPaymentsPage] = useState(1);
+  const [ordersPage, setOrdersPage] = useState(1);
   const [selectedPayment, setSelectedPayment] = useState<PaymentDTO | null>();
   const [createPaymentModalIsOpen, setCreatePaymentModalIsOpen] = useState(false);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
@@ -38,18 +38,18 @@ const useBagDetailsPage = () => {
 
   useEffect(() => {
     startTransition(() => {
-      getBagDetails({ bagId: bag_id.toString(), paymentsPage });
+      getBagDetails({ bagId: bag_id.toString(), ordersPage });
     });
-  }, [paymentsPage, loadingCreatePayment, loadingHandleBag]);
+  }, [ordersPage, loadingCreatePayment, loadingHandleBag]);
 
   const getBagDetails = ({
     bagId,
-    paymentsPage,
+    ordersPage,
   }: {
     bagId: string;
-    paymentsPage: number;
+    ordersPage: number;
   }) => {
-    getBagById({ bagId, paymentsPage })
+    getBagById({ bagId, paymentsPage: ordersPage })
       .then((response) => {
         if (response.message) return handleError(response.message);
         setBagDetails(response.data);
@@ -59,16 +59,16 @@ const useBagDetailsPage = () => {
       });
   };
 
-  const nextPaymentsPage = () => {
-    if (bagDetails && bagDetails.payment) {
+  const nextOrdersPage = () => {
+    if (bagDetails && bagDetails.orders && bagDetails.orders.length < 20) {
       return;
     }
-    setPaymentsPage((prev) => prev + 1);
+    setOrdersPage((prev) => prev + 1);
   };
 
-  const prevPaymentsPage = () => {
-    if (paymentsPage > 1) {
-      setPaymentsPage((prev) => prev - 1);
+  const prevOrdersPage = () => {
+    if (ordersPage > 1) {
+      setOrdersPage((prev) => prev - 1);
     }
   };
 
@@ -184,7 +184,7 @@ const useBagDetailsPage = () => {
   return {
     bagDetails,
     isPending,
-    paymentsPage,
+    ordersPage,
     createPaymentModalIsOpen,
     paymentModalIsOpen,
     selectedPayment,
@@ -192,8 +192,8 @@ const useBagDetailsPage = () => {
     loadingUpdatePayment,
     loadingHandleBag,
     handleBagStatus,
-    nextPaymentsPage,
-    prevPaymentsPage,
+    nextOrdersPage,
+    prevOrdersPage,
     navigateToBagsList,
     selectBagPayment,
     createNewPayment,

@@ -1,10 +1,13 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { toast } from "sonner";
 
 import useFetchMarket from "@admin/hooks/useFetchMarket";
+import { listBags } from "@admin/_actions/bags/GET/list-bags";
+import { useHandleError } from "@shared/hooks/useHandleError";
+import { BagDTO } from "@shared/interfaces/dtos";
 
 export default function usePainelPage() {
   const params = useParams();
@@ -13,6 +16,9 @@ export default function usePainelPage() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [isOpenEndMarketModal, setIsOpenEndMarketModal] = useState(false);
+  const [latestBags, setLatestBags] = useState<BagDTO[]>([]);
+  const [isLoadingBags, startBagsTransition] = useTransition();
+  const { handleError } = useHandleError();
 
   const { data: market, isLoading, updateData } = useFetchMarket({
     market_id,
@@ -24,15 +30,28 @@ export default function usePainelPage() {
     setTime(new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }));
   }, []);
 
-  const totalSales = market?.bags?.length || 0;
-  const totalRevenue = market?.bags?.reduce((sum, bag) => sum + (bag.subtotal || bag.total || 0), 0) || 0;
-  const totalStock = market?.offers?.length || 0;
+  useEffect(() => {
+    if (market_id) {
+      startBagsTransition(() => {
+        listBags({ page: 1, market_id })
+          .then((response) => {
+            if (response.message) {
+              handleError(response.message);
+              return;
+            }
+            const bags = response.data || [];
+            setLatestBags(bags.slice(0, 8));
+          })
+          .catch(() => {
+            toast.error("Erro ao carregar vendas.");
+          });
+      });
+    }
+  }, [market_id]);
 
-  const latestBags = market?.bags
-    ? [...market.bags]
-        .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-        .slice(0, 8)
-    : [];
+  const totalSales = market?.bags_total || 0;
+  const totalRevenue = latestBags.reduce((sum, bag) => sum + (bag.subtotal || bag.total || 0), 0);
+  const totalStock = market?.offers_total || 0;
 
   const handleEndMarket = () => {
     setIsOpenEndMarketModal(true);
@@ -43,7 +62,7 @@ export default function usePainelPage() {
   };
 
   const handleSell = () => {
-    toast.info("Funcionalidade em desenvolvimento");
+    router.push(`/feiras-do-dia/${market_id}/vendas/vender`);
   };
 
   const handleManageStock = () => {
@@ -57,7 +76,7 @@ export default function usePainelPage() {
   return {
     market_id,
     market,
-    isLoading,
+    isLoading: isLoading || isLoadingBags,
     time,
     date,
     totalSales,
