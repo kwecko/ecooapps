@@ -29,9 +29,20 @@ export default function useListFarms({ page, farm }: UseListFarmsProps) {
     })();
   }, [page, farm]);
 
+  const reloadData = async () => {
+    const response = await listFarms({
+      page: page,
+      farm: farm,
+    });
+    if (response.message) {
+      handleError(response.message);
+    }
+    setData(response.data);
+  };
+
   const updateData = (newData: FarmDTO[]) => {
     setData(newData);
   };
 
-  return { data, updateData, isLoading };
+  return { data, updateData, reloadData, isLoading };
 }

@@ -40,7 +40,7 @@ export async function listBags({
   const queryString = params.toString();
   const url = `/bags${queryString ? `?${queryString}` : ""}`;
 
-  console.log(url);
+  console.log('list-bags', url);
 
   const response = ApiService.GET({
     url,

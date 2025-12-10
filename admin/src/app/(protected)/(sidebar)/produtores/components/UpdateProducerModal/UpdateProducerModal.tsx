@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { FiPaperclip } from "react-icons/fi";
 import Image from "next/image";
 
 import Loader from "@shared/components/Loader";
@@ -10,126 +8,100 @@ import ButtonV2 from "@shared/components/ButtonV2";
 import Input from "@shared/components/CustomInput";
 import SelectInput from "@shared/components/SelectInput";
 
-import { useHandleError } from "@shared/hooks/useHandleError";
+import { ProducerDTO } from "@shared/interfaces/dtos/producer-dto";
+import { FarmDTO } from "@shared/interfaces/dtos";
 
-import { ProductDTO } from "@shared/interfaces/dtos";
-import { commercializationOptions, perishableOptions } from "./data";
-import useUpdateProductModal from ".";
+import useUpdateProducerModal from ".";
+import { FiPaperclip } from "react-icons/fi";
 
-import { listCategories } from "@admin/_actions/categories/GET/list-categories";
-
-interface UpdateProductModalProps {
+interface UpdateProducerModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  product: ProductDTO | null;
-  reloadProducts: () => void;
+  producer: ProducerDTO;
+  reloadProducers: () => void;
+  producer_id: string;
 }
 
-export default function UpdateProductModal({
+export default function UpdateProducerModal({
   isOpen,
   closeModal,
-  product,
-  reloadProducts,
-}: UpdateProductModalProps) {
+  producer,
+  producer_id,
+  reloadProducers,
+}: UpdateProducerModalProps) {
   const {
     register,
-    setValue,
     handleSubmit,
     errors,
     isPending,
     previewImage,
     handleFileChange,
     onSubmit,
-  } = useUpdateProductModal({ closeModal, reloadProducts, product });
-
-  const [categoryOptions, setCategoryOptions] = useState<
-    { value: string; label: string }[]
-  >([]);
-  const { handleError } = useHandleError();
-
-  useEffect(() => {
-    async function fetchCategories() {
-      try {
-        const response = await listCategories({ page: 1 });
-
-        if (response.message) {
-          handleError(response.message);
-          return;
-        }
-
-        const options = response.data.map(
-          ({ id, name }: { id: string; name: string }) => ({
-            value: id,
-            label: name,
-          })
-        );
-
-        setCategoryOptions(options);
-      } catch (error) {
-        handleError("Erro ao buscar categorias.");
-      }
-    }
-
-    fetchCategories();
-  }, []);
+  } = useUpdateProducerModal({ closeModal, reloadProducers, producer, producer_id });
 
   return (
     <ModalV2
       isOpen={isOpen}
       closeModal={closeModal}
       className="w-152 bg-white text-coal-black"
-      title="Atualizar Produto"
+      title="Editar produtor"
       iconClose={true}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <div className="grid grid-cols-2 gap-4">
+          <Input
+            label="Nome"
+            placeholder="Fulano"
+            register={{ ...register("first_name") }}
+            type="text"
+            errorMessage={errors.first_name?.message}
+          />
+          <Input
+            label="Sobrenome"
+            placeholder="da Silva"
+            register={{ ...register("last_name") }}
+            type="text"
+            errorMessage={errors.last_name?.message}
+          />
+        </div>
+
         <Input
-          label="Nome do Produto"
-          placeholder="Morango Orgânico"
+          label="CPF"
+          placeholder="123.456.789-00"
+          register={{ ...register("cpf") }}
+          type="text"
+          errorMessage={errors.cpf?.message}
+        />
+        <Input
+          label="Negócio"
+          placeholder="Sítio do Fulano"
           register={{ ...register("name") }}
           type="text"
           errorMessage={errors.name?.message}
         />
-
-        <SelectInput
-          label="Categoria"
-          options={categoryOptions}
-          defaultOption={
-            categoryOptions.find(
-              (option) => option.value === product?.category.id
-            ) ?? categoryOptions[0]
-          }
-          onChange={(value) => {
-            setValue("category", value);
-          }}
+        <Input
+          label="Talão"
+          placeholder="123456"
+          register={{ ...register("tally") }}
+          type="text"
+          errorMessage={errors.tally?.message}
+        />
+        <Input
+          label="Email"
+          placeholder="fulano@sitiodofulano.com.br"
+          register={{ ...register("email") }}
+          type="text"
+          errorMessage={errors.email?.message}
         />
 
-        <div className="grid grid-cols-2 gap-4">
-          <SelectInput
-            label="Produto perecível?"
-            options={perishableOptions}
-            defaultOption={
-              perishableOptions.find(
-                (option) => option.value === product?.perishable
-              ) ?? perishableOptions[0]
-            }
-            onChange={(value) => setValue("perishable", value)}
-          />
-
-          <SelectInput
-            label="Comercialização"
-            options={commercializationOptions}
-            defaultOption={
-              commercializationOptions.find(
-                (option) => option.value === product?.pricing
-              ) ?? commercializationOptions[0]
-            }
-            onChange={(value) => setValue("pricing", value)}
-          />
-          {errors.pricing && (
-            <p className="text-red-500 text-sm">{errors.pricing.message}</p>
-          )}
-        </div>
-
+        <Input
+          label="Celular"
+          placeholder="(00) 9 9999-9999"
+          register={{ ...register("phone") }}
+          type="text"
+          errorMessage={errors.phone?.message}
+        />
+        
         <div>
           <label
             htmlFor="file-upload"
@@ -148,9 +120,9 @@ export default function UpdateProductModal({
             className="hidden"
             accept="image/png, image/jpeg"
           />
-          {errors.image?.message && (
+          {errors.photo?.message && (
             <p className="text-red-500 text-sm mt-1">
-              {String(errors.image.message)}
+              {String(errors.photo.message)}
             </p>
           )}
         </div>
@@ -187,6 +159,9 @@ export default function UpdateProductModal({
             variant="default"
             type="submit"
             className="bg-rain-forest border-none"
+            onClick={() => {
+              reloadProducers();
+            }}
           >
             {isPending && <Loader loaderType="login" />}
             {!isPending && "Salvar alterações"}

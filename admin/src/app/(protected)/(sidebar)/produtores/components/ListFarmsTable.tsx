@@ -19,15 +19,36 @@ import UpdateFarmStatusModal from './UpdateFarmStatusModal';
 import { FarmDTO } from '@shared/interfaces/dtos';
 
 import producer from '@shared/assets/images/producer.png';
+import Button from '@shared/components/Button';
+import ButtonV2 from "@shared/components/ButtonV2";
+import { HiOutlinePencil, HiPlus } from 'react-icons/hi';
+import UpdateProducerModal from './UpdateProducerModal/UpdateProducerModal';
+import { ProducerDTO } from '@shared/interfaces/dtos/producer-dto';
+import CreateProducerModal from './CreateProducerModal/CreateProducerModal';
 
 export default function ListFarmsTable() {
   const [selectedRow, setSelectedRow] = useState<FarmDTO>({} as FarmDTO);
+  const [selectedRowProducer, setSelectedRowProducer] = useState<ProducerDTO>({} as ProducerDTO);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenUpdateProducer, setIsOpenUpdateProducer] = useState<boolean>(false);
+  const [isOpenCreateProducer, setIsOpenCreateProducer] = useState<boolean>(false);
 
-  const handleRowClick = (rowData: FarmDTO, rowIndex: number) => {
-    setSelectedRow(rowData);
-    setIsOpen(true);
+  const handleRowClick = (rowData: FarmDTO, rowId: string) => {
+    const producerData = {
+      id: rowData.id,
+      first_name: rowData.admin?.first_name,
+      last_name: rowData.admin?.last_name,
+      email: rowData.admin?.email,
+      cpf: rowData.admin?.cpf,
+      phone: rowData.admin?.phone,
+      name: rowData.name,
+      tally: rowData.tally,
+      photo: rowData.admin?.photo,
+    };
+    console.log(rowData);
+    setSelectedRowProducer(producerData);
+    setIsOpenUpdateProducer(true);
   };
   const [page, setPage] = useState(1);
   const [farm, setFarm] = useState<string | any>();
@@ -35,6 +56,7 @@ export default function ListFarmsTable() {
   const {
     data: farms,
     updateData,
+    reloadData,
     isLoading,
   } = useListFarms({
     page,
@@ -62,7 +84,7 @@ export default function ListFarmsTable() {
       render: (row: FarmDTO) => {
         return (
           <Image
-            src={producer}
+            src={row.admin?.photo ?? producer}
             width={68}
             height={68}
             alt='Foto do produtor'
@@ -83,12 +105,41 @@ export default function ListFarmsTable() {
         {
           header: 'Status',
           key: 'status',
-          colSpan: 2,
-          className: 'min-w-[120px] flex justify-end',
+          colSpan: 3,
+          className: 'w-full flex justify-center',
           render: (row: FarmDTO) => {
-        return <FarmStatusChip row={row} />;
-      },
-    },
+            return (
+              <Button 
+                onClick={() => {
+                  setSelectedRow(row);
+                  setIsOpen(true);
+                }}
+              >
+                <FarmStatusChip row={row} />
+              </Button>
+
+            );
+          },
+        },
+        {
+          header: 'Edit.',
+          key: 'edit',
+          colSpan: 2,
+          className: 'w-full flex justify-center',
+          render: (row: FarmDTO) => {
+            return (
+              <Button
+                className='hover:text-rain-forest'
+                onClick={() => {
+                  handleRowClick(row, row.id);
+                  setIsOpenUpdateProducer(true);
+                }}
+              >
+                <HiOutlinePencil size={22} />
+              </Button>
+            );
+          },
+        },
   ];
 
   return (
@@ -101,6 +152,13 @@ export default function ListFarmsTable() {
           type='secondary'
           className='self-end'
         />
+        <ButtonV2
+          variant="default"
+          className="flex w-64 justify-center items-center gap-3 bg-rain-forest"
+          onClick={() => setIsOpenCreateProducer(true)}
+        >
+          Cadastrar produtor <HiPlus size={20} />
+        </ButtonV2>
       </div>
 
       {isLoading && <TableSkeleton />}
@@ -110,7 +168,6 @@ export default function ListFarmsTable() {
       )}
       {!isLoading && farms?.length > 0 && (
         <GenericTable
-          onRowClick={handleRowClick}
           gridColumns={16}
           columns={farmTableColumns}
           data={farms}
@@ -125,6 +182,18 @@ export default function ListFarmsTable() {
         farm={selectedRow}
         farms={farms}
         updateData={updateData}
+      />
+      <UpdateProducerModal
+        isOpen={isOpenUpdateProducer}
+        closeModal={() => setIsOpenUpdateProducer(false)}
+        producer={selectedRowProducer}
+        producer_id={selectedRowProducer.id!}
+        reloadProducers={() => reloadData()}
+      />
+      <CreateProducerModal
+        isOpen={isOpenCreateProducer}
+        closeModal={() => setIsOpenCreateProducer(false)}
+        reloadProducers={() => reloadData()}
       />
     </div>
   );
