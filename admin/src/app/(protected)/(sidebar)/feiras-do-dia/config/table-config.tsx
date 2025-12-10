@@ -24,7 +24,7 @@ export const getMarketsTableColumns = ({
       key: "sales",
       colSpan: 2,
       render: function renderSales(row: MarketDTO) {
-        return row.bags?.length || 0;
+        return row.bags_total || 0;
       },
     },
     {
@@ -32,8 +32,9 @@ export const getMarketsTableColumns = ({
       key: "revenue",
       colSpan: 3,
       render: function renderRevenue(row: MarketDTO) {
-        const revenue = row.bags?.reduce((sum, bag) => sum + (bag.subtotal || 0), 0) || 0;
-        return formatPrice(revenue);
+        // Revenue não está mais disponível no market response
+        // Será necessário buscar de outra fonte se necessário
+        return formatPrice(0);
       },
     },
     {
@@ -41,8 +42,9 @@ export const getMarketsTableColumns = ({
       key: "profit",
       colSpan: 3,
       render: function renderProfit(row: MarketDTO) {
-        const profit = row.bags?.reduce((sum, bag) => sum + (bag.fee || 0), 0) || 0;
-        return formatPrice(profit);
+        // Profit não está mais disponível no market response
+        // Será necessário buscar de outra fonte se necessário
+        return formatPrice(0);
       },
     },
     {

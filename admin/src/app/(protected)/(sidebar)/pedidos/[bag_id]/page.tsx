@@ -19,21 +19,25 @@ import EmptyBox from '@shared/components/EmptyBox';
 import GenericTable from '@shared/components/GenericTable';
 import ModalV2 from '@shared/components/ModalV2';
 import Select from '@shared/components/SelectInput';
+import PagingButton from '@shared/components/PagingButton';
 import CreatePaymentModal from './components/CreatePaymentModal';
 import EditPaymentModal from './components/EditPaymentModal';
 
-import { OrderDTO } from '@shared/interfaces/dtos';
+import { OrderDTO, PaymentDTO } from '@shared/interfaces/dtos';
 
 const BagDetailsPage = () => {
   const {
     bagDetails,
     isPending,
+    ordersPage,
     createPaymentModalIsOpen,
     paymentModalIsOpen,
     selectedPayment,
     loadingCreatePayment,
     loadingUpdatePayment,
     handleBagStatus,
+    nextOrdersPage,
+    prevOrdersPage,
     navigateToBagsList,
     selectBagPayment,
     createNewPayment,
@@ -69,7 +73,7 @@ useEffect(() => {
 
 
   if (!bagDetails) return null;
-
+  console.log("bagDetails", bagDetails);
   return (
     <>
       <div className='w-full h-[105%] overflow-auto flex flex-col gap-6'>
@@ -210,72 +214,79 @@ useEffect(() => {
             <h3 className='text-lg font-medium mb-2 ml-2'>
               Conteúdo da Sacola
             </h3>
-            <div className='rounded-lg bg-white lg:text-theme-primary h-72'>
-              <div className='p-6'>
-                <div className='h-56 overflow-y-auto pr-6'>
-                  {bagDetails.orders
-                    .reduce<
-                      {
-                        id: string;
-                        name: string;
-                        items: OrderDTO[];
-                      }[]
-                    >((farms, item) => {
-                      const farmId = item.offer.farm.id;
-                      const farmName = item.offer.farm.name;
-                      const farm = farms.find((farm) => farm.id === farmId);
+            <div className='rounded-lg bg-white lg:text-theme-primary h-72 flex flex-col'>
+              <div className='p-6 flex-1 overflow-y-auto pr-6'>
+                {bagDetails.orders
+                  .reduce<
+                    {
+                      id: string;
+                      name: string;
+                      items: OrderDTO[];
+                    }[]
+                  >((farms, item) => {
+                    const farmId = item.offer.farm.id;
+                    const farmName = item.offer.farm.name;
+                    const farm = farms.find((farm) => farm.id === farmId);
 
-                      if (farm) {
-                        farm.items.push(item);
-                      } else {
-                        farms.push({
-                          id: farmId,
-                          name: farmName,
-                          items: [item],
-                        });
-                      }
+                    if (farm) {
+                      farm.items.push(item);
+                    } else {
+                      farms.push({
+                        id: farmId,
+                        name: farmName,
+                        items: [item],
+                      });
+                    }
 
-                      return farms;
-                    }, [])
-                    .map((farm) => (
-                      <div key={farm.id} className='mb-4'>
-                        <h3 className='font-semibold mb-2'>{farm.name}</h3>
-                        <div className='flex flex-col gap-2'>
-                          {farm.items.map((item, index) => (
-                            <div key={index} className='flex items-start'>
-                              <span className='flex-1 text-sm leading-tight mr-2'>
-                                {item.offer.product.pricing === 'UNIT'
-                                  ? `${item.amount}un`
-                                  : `${item.amount}g`}{' '}
-                                - {item.offer.product.name}
-                              </span>
-                              <div
-                                title={
+                    return farms;
+                  }, [])
+                  .map((farm) => (
+                    <div key={farm.id} className='mb-4'>
+                      <h3 className='font-semibold mb-2'>{farm.name}</h3>
+                      <div className='flex flex-col gap-2'>
+                        {farm.items.map((item, index) => (
+                          <div key={index} className='flex items-start'>
+                            <span className='flex-1 text-sm leading-tight mr-2'>
+                              {item.offer.product.pricing === 'UNIT'
+                                ? `${item.amount}un`
+                                : `${item.amount}g`}{' '}
+                              - {item.offer.product.name}
+                            </span>
+                            <div
+                              title={
+                                item.status === 'RECEIVED'
+                                  ? 'Entregue'
+                                  : item.status === 'REJECTED'
+                                  ? 'Retornado'
+                                  : 'Pendente'
+                              }
+                              className={`w-5 h-5 flex items-center justify-center rounded-full text-white text-xs flex-shrink-0
+                                ${
                                   item.status === 'RECEIVED'
-                                    ? 'Entregue'
+                                    ? 'bg-green-500'
                                     : item.status === 'REJECTED'
-                                    ? 'Retornado'
-                                    : 'Pendente'
-                                }
-                                className={`w-5 h-5 flex items-center justify-center rounded-full text-white text-xs flex-shrink-0
-                                  ${
-                                    item.status === 'RECEIVED'
-                                      ? 'bg-green-500'
-                                      : item.status === 'REJECTED'
-                                      ? 'bg-red-500'
-                                      : 'bg-gray-400'
-                                  }`}
-                              >
-                                {item.status === 'RECEIVED' && '✔'}
-                                {item.status === 'REJECTED' && '✖'}
-                              </div>
+                                    ? 'bg-red-500'
+                                    : 'bg-gray-400'
+                                }`}
+                            >
+                              {item.status === 'RECEIVED' && '✔'}
+                              {item.status === 'REJECTED' && '✖'}
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                </div>
+                    </div>
+                  ))}
               </div>
+              {bagDetails.orders.length > 0 && (
+                <div className='flex justify-center items-center py-3 px-6 border-t border-gray-200'>
+                  <PagingButton
+                    value={ordersPage}
+                    nextPage={nextOrdersPage}
+                    backPage={prevOrdersPage}
+                  />
+                </div>
+              )}
             </div>
           </div>
 
@@ -304,15 +315,59 @@ useEffect(() => {
                 </div>
               )}
 
-              {!isPending && bagDetails.payment && (
-                <GenericTable
-                  data={[bagDetails.payment]}
-                  columns={getBagDetailsTableColumns({
-                    selectBagPayment,
-                  })}
-                  gridColumns={1}
-                />
-              )}
+              {!isPending && bagDetails.payment && (() => {
+                const payment = bagDetails.payment as any;
+                
+                const getValue = (val: any): any => {
+                  if (val === null || val === undefined) return val;
+                  if (typeof val === 'object' && val !== null && '_value' in val) {
+                    return val._value;
+                  }
+                  return val;
+                };
+                
+                let paymentData: any;
+                if (payment._props) {
+                  const props = payment._props;
+                  paymentData = {
+                    id: props.id?._value || props.id || '',
+                    method: props.method?._value || props.method || 'CASH',
+                    status: props.status?._value || props.status || 'PENDING',
+                    flag: props.flag?._value !== undefined ? props.flag._value : (props.flag !== undefined ? props.flag : null),
+                    bag_id: props.bag_id?._value || props.bag_id || '',
+                    expired: props.expired?._value !== undefined ? props.expired._value : props.expired,
+                    expires_at: props.expires_at?._value !== undefined ? props.expires_at._value : props.expires_at,
+                    created_at: props.created_at?._value || props.created_at || '',
+                    updated_at: props.updated_at?._value !== undefined ? props.updated_at._value : props.updated_at,
+                  };
+                } else {
+                  try {
+                    paymentData = JSON.parse(JSON.stringify(payment));
+                  } catch {
+                    paymentData = {
+                      id: getValue(payment.id) || '',
+                      method: getValue(payment.method) || payment.method || 'CASH',
+                      status: getValue(payment.status) || payment.status || 'PENDING',
+                      flag: getValue(payment.flag) !== undefined ? getValue(payment.flag) : payment.flag,
+                      bag_id: getValue(payment.bag_id) || '',
+                      expired: getValue(payment.expired) !== undefined ? getValue(payment.expired) : payment.expired,
+                      expires_at: getValue(payment.expires_at) !== undefined ? getValue(payment.expires_at) : payment.expires_at,
+                      created_at: getValue(payment.created_at) || payment.created_at || '',
+                      updated_at: getValue(payment.updated_at) !== undefined ? getValue(payment.updated_at) : payment.updated_at,
+                    };
+                  }
+                }
+                
+                return (
+                  <GenericTable
+                    data={[paymentData]}
+                    columns={getBagDetailsTableColumns({
+                      selectBagPayment: () => selectBagPayment(bagDetails.payment!),
+                    })}
+                    gridColumns={1}
+                  />
+                );
+              })()}
             </div>
           </div>
         </div>
