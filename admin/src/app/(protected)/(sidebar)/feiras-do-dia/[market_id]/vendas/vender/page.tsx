@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { HiOutlineMinus, HiOutlinePlus } from "react-icons/hi";
+import { LuTrash2 } from "react-icons/lu";
 
 import useVenderPage from "./index";
 import Title from "@admin/app/components/Title";
@@ -13,7 +14,7 @@ import FinalizeSaleModal from "./components/FinalizeSaleModal";
 import CreatePaymentModal from "./components/CreatePaymentModal";
 import { formatPrice } from "@shared/utils/format-price";
 import { addTaxToPrice } from "@shared/utils/convert-tax";
-import { convertUnitToLabel } from "@shared/utils/convert-unit";
+import { convertUnitToLabel, convertPricingToQuantityInGrams } from "@shared/utils/convert-unit";
 import { OfferDTO } from "@shared/interfaces/dtos";
 import { CreatePaymentDTO } from "@shared/interfaces/dtos/payment-dto";
 import { createPayment } from "@admin/_actions/payment/create-bag-payment";
@@ -45,27 +46,33 @@ function VenderPage() {
 
   const handleAddToCart = (offer: OfferDTO) => {
     const existingItem = cart.find((item) => item.offer.id === offer.id);
+    const increment = convertPricingToQuantityInGrams(offer.product.pricing) / 1000; // 0.5 para WEIGHT, 1 para UNIT
+    
     if (existingItem) {
       setCart(
         cart.map((item) =>
           item.offer.id === offer.id
-            ? { ...item, quantity: item.quantity + 1 }
+            ? { ...item, quantity: item.quantity + increment }
             : item
         )
       );
     } else {
-      setCart([...cart, { offer, quantity: 1 }]);
+      setCart([...cart, { offer, quantity: increment }]);
     }
   };
 
   const handleUpdateQuantity = (offerId: string, delta: number) => {
     setCart(
       cart
-        .map((item) =>
-          item.offer.id === offerId
-            ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-            : item
-        )
+        .map((item) => {
+          if (item.offer.id === offerId) {
+            const increment = convertPricingToQuantityInGrams(item.offer.product.pricing) / 1000; // 0.5 para WEIGHT, 1 para UNIT
+            const minQuantity = increment; // 0.5 para WEIGHT, 1 para UNIT
+            const newQuantity = item.quantity + (delta * increment);
+            return { ...item, quantity: Math.max(minQuantity, newQuantity) };
+          }
+          return item;
+        })
         .filter((item) => item.quantity > 0)
     );
   };
@@ -249,14 +256,21 @@ function VenderPage() {
                       >
                         <HiOutlineMinus size={16} />
                       </button>
-                      <span className="text-sm font-medium text-center min-w-[60px]">
-                        {item.quantity} {convertUnitToLabel(item.offer.product.pricing)}
+                      <span className="text-sm font-medium text-center min-w-[80px]">
+                        {item.quantity % 1 === 0 ? item.quantity : item.quantity.toFixed(1)} {item.offer.product.pricing === "WEIGHT" ? "kg" : "un."}
                       </span>
                       <button
                         onClick={() => handleUpdateQuantity(item.offer.id, 1)}
                         className="w-8 h-8 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors"
                       >
                         <HiOutlinePlus size={16} />
+                      </button>
+                      <button
+                        onClick={() => handleRemoveFromCart(item.offer.id)}
+                        className="w-8 h-8 rounded-full bg-red-100 hover:bg-red-200 flex items-center justify-center transition-colors text-red-600"
+                        title="Remover produto"
+                      >
+                        <LuTrash2 size={16} />
                       </button>
                     </div>
                   </div>
