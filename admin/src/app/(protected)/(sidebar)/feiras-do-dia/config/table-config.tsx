@@ -20,11 +20,19 @@ export const getMarketsTableColumns = ({
       },
     },
     {
+      header: "Estoque",
+      key: "stock",
+      colSpan: 2,
+      render: function renderStock(row: MarketDTO) {
+        return row.offers_count || 0;
+      },
+    },
+    {
       header: "Vendas",
       key: "sales",
       colSpan: 2,
       render: function renderSales(row: MarketDTO) {
-        return row.bags_total || 0;
+        return row.bags_count || 0;
       },
     },
     {
@@ -32,9 +40,7 @@ export const getMarketsTableColumns = ({
       key: "revenue",
       colSpan: 3,
       render: function renderRevenue(row: MarketDTO) {
-        // Revenue não está mais disponível no market response
-        // Será necessário buscar de outra fonte se necessário
-        return formatPrice(0);
+        return formatPrice(row.revenue || 0);
       },
     },
     {
@@ -42,9 +48,7 @@ export const getMarketsTableColumns = ({
       key: "profit",
       colSpan: 3,
       render: function renderProfit(row: MarketDTO) {
-        // Profit não está mais disponível no market response
-        // Será necessário buscar de outra fonte se necessário
-        return formatPrice(0);
+        return formatPrice(row.fee || 0);
       },
     },
     {

@@ -49,9 +49,9 @@ export default function usePainelPage() {
     }
   }, [market_id]);
 
-  const totalSales = market?.bags_total || 0;
+  const totalSales = market?.bags_count || 0;
   const totalRevenue = latestBags.reduce((sum, bag) => sum + (bag.subtotal || bag.total || 0), 0);
-  const totalStock = market?.offers_total || 0;
+  const totalStock = market?.offers_count || 0;
 
   const handleEndMarket = () => {
     setIsOpenEndMarketModal(true);

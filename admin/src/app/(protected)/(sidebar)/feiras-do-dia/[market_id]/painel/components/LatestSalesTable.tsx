@@ -2,7 +2,6 @@
 
 import GenericTable from "@shared/components/GenericTable";
 import { BagDTO } from "@shared/interfaces/dtos";
-import { convertPaymentType } from "@shared/utils/convert-payment";
 import { formatPrice } from "@shared/utils/format-price";
 import { formatDateToDDMMYYYY } from "@shared/utils/date-handlers";
 
@@ -12,25 +11,6 @@ interface LatestSalesTableProps {
 
 export default function LatestSalesTable({ bags }: LatestSalesTableProps) {
   const columns = [
-    {
-      header: "Cliente",
-      colSpan: 4,
-      key: "client",
-      render: (row: BagDTO) => {
-        const firstName = row.customer?.first_name || "";
-        const lastName = row.customer?.last_name || "";
-        const fullName = `${firstName} ${lastName}`.trim();
-        return fullName || "Consumidor avulso";
-      },
-    },
-    {
-      header: "Valor",
-      colSpan: 3,
-      key: "value",
-      render: (row: BagDTO) => {
-        return formatPrice(row.subtotal || row.total || 0);
-      },
-    },
     {
       header: "Data da venda",
       colSpan: 4,
@@ -42,12 +22,30 @@ export default function LatestSalesTable({ bags }: LatestSalesTableProps) {
       },
     },
     {
-      header: "Pagamento",
-      colSpan: 5,
-      key: "payment",
+      header: "Cliente",
+      colSpan: 6,
+      key: "client",
       render: (row: BagDTO) => {
-        if (!row.payment) return "-";
-        return convertPaymentType(row.payment.method).name;
+        const firstName = row.customer?.first_name || "";
+        const lastName = row.customer?.last_name || "";
+        const fullName = `${firstName} ${lastName}`.trim();
+        return fullName || "Consumidor avulso";
+      },
+    },
+    {
+      header: "Preço",
+      colSpan: 4,
+      key: "price",
+      render: (row: BagDTO) => {
+        return formatPrice(row.subtotal || row.total || 0);
+      },
+    },
+    {
+      header: "Taxas",
+      colSpan: 4,
+      key: "fees",
+      render: (row: BagDTO) => {
+        return formatPrice(row.fee || 0);
       },
     },
   ];
