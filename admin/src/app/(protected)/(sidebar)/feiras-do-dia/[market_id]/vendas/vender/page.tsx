@@ -147,9 +147,6 @@ function VenderPage() {
     router.back();
   };
 
-  const filteredOffers = offers.filter((offer) =>
-    offer.product.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   const isProductInCart = (offerId: string) => {
     return cart.some((item) => item.offer.id === offerId);
@@ -172,7 +169,7 @@ function VenderPage() {
 
       <div className="w-full flex flex-col gap-4 h-full overflow-y-auto">
 
-        {filteredOffers.length > 0 && (
+        {offers.length > 0 && (
           <div className="w-full border border-gray-200 rounded-lg overflow-hidden">
             <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
               <div className="grid grid-cols-5 gap-4 text-sm font-semibold text-gray-700">
@@ -184,7 +181,7 @@ function VenderPage() {
               </div>
             </div>
             <div className="max-h-64 overflow-y-auto">
-              {filteredOffers.map((offer) => (
+              {offers.map((offer) => (
                 <div
                   key={offer.id}
                   className="grid grid-cols-5 gap-4 px-4 py-3 border-b border-gray-100 hover:bg-gray-50 items-center"
@@ -302,7 +299,7 @@ function VenderPage() {
           </div>
         )}
 
-        {!isPending && filteredOffers.length === 0 && search && (
+        {!isPending && offers.length === 0 && search && (
           <div className="text-center py-8 text-gray-500">
             Nenhum produto encontrado
           </div>

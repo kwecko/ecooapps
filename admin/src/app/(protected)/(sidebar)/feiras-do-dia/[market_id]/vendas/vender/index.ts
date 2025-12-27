@@ -21,18 +21,20 @@ export default function useVenderPage() {
 
   useEffect(() => {
     startTransition(() => {
-      getOffers({ market_id, available: true });
+      getOffers({ market_id, available: true, product: debounceSearch });
     });
-  }, [market_id]);
+  }, [market_id, debounceSearch]);
 
   function getOffers({
     market_id,
     available,
+    product,
   }: {
     market_id: string;
     available?: boolean;
+    product?: string;
   }) {
-    listOffers({ page: 1, market_id, available })
+    listOffers({ page: 1, market_id, available, product })
       .then((response) => {
         if (response.message) return handleError(response.message);
         setOffers(response.data || []);
