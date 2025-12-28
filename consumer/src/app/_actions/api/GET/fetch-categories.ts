@@ -6,7 +6,7 @@ interface FetchCategoryRequest {
   category_id: string;
 	cycle_id: string;
   page: number;
-	available: boolean;
+	available: 'MARKET' | 'CYCLE';
 }
 
 export async function fetchCategory({

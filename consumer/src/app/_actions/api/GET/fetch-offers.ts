@@ -4,7 +4,7 @@ import ApiService from "@shared/service";
 
 interface FetchOffersRequest {
   page: number;
-	available: boolean;
+	available: 'MARKET' | 'CYCLE';
 	cycle_id: string;
 	product?: string;
 	category_id?: string;

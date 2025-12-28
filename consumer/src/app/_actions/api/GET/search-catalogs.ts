@@ -6,7 +6,7 @@ interface SearchCatalogsRequest {
   cycle_id: string;
   page: number;
   product?: string;
-	available?: boolean;
+	available?: 'MARKET' | 'CYCLE';
 }
 
 export async function searchCatalogs({
