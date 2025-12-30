@@ -6,7 +6,7 @@ interface FetchCatalogRequest {
   catalog_id: string;
   page: number;
   product?: string;
-	available?: boolean;
+	available?: 'MARKET' | 'CYCLE';
 	remaining?: boolean;
 }
 
