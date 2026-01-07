@@ -26,7 +26,7 @@ export default function Produtores() {
       const response = await searchCatalogs({
         cycle_id: cycleId,
         page: page,
-				available: true
+				available: 'CYCLE'
       });
       if (response.message) {
         handleError(response.message as string);
