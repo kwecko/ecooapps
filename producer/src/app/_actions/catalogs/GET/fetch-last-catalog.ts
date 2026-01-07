@@ -17,7 +17,7 @@ export async function fetchLastCatalog({
   const params = new URLSearchParams();
 
   params.append("page", page.toString());
-  params.append("available", "false");
+  params.append("available", "CYCLE");
 
   if (since) params.append("since", since);
 

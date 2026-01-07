@@ -21,7 +21,7 @@ export default function useVenderPage() {
 
   useEffect(() => {
     startTransition(() => {
-      getOffers({ market_id, available: true, product: debounceSearch });
+      getOffers({ market_id, available: 'MARKET', product: debounceSearch });
     });
   }, [market_id, debounceSearch]);
 
@@ -31,7 +31,7 @@ export default function useVenderPage() {
     product,
   }: {
     market_id: string;
-    available?: boolean;
+    available?: 'MARKET' | 'CYCLE';
     product?: string;
   }) {
     listOffers({ page: 1, market_id, available, product })

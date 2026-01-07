@@ -15,7 +15,7 @@ export async function fetchCurrentCatalog({
   const params = new URLSearchParams();
 
   params.append("page", page.toString());
-  params.append("available", "true");
+  params.append("available", "CYCLE");
 
   const response = ApiService.GET({
     url: `/catalogs/${farm_id}?${params.toString()}`,
