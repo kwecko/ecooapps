@@ -5,7 +5,7 @@ import ApiService from "@shared/service";
 interface SearchCategoriesRequest {
 	cycle_id: string;
 	page: number;
-	available: boolean;
+	available: 'MARKET' | 'CYCLE';
 }
 
 export async function searchCategories({
