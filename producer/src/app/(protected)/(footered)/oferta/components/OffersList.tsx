@@ -127,7 +127,6 @@ export default function OffersList({
             setHasMore(dataOffers.offers.length > 0);
         }
       } catch (error) {
-        console.log("Erro 2", error);
         handleError("Erro desconhecido.");
       } finally {
         setIsLoading(false);
