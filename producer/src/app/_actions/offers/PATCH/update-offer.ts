@@ -10,6 +10,7 @@ export interface UpdateOfferRequest {
     description?: string;
     comment?: string;
     expires_at?: string;
+    market_id?: string | null;
   };
 }
 

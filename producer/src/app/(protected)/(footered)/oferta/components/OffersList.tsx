@@ -113,7 +113,6 @@ export default function OffersList({
           page,
         });
 
-
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
