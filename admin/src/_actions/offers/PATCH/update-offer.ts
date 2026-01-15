@@ -11,6 +11,7 @@ interface UpdateOfferRequest {
     comment?: string;
     active?: boolean;
     expires_at?: string;
+    market_id?: string | null;
   };
 }
 

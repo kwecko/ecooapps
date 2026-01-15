@@ -8,7 +8,7 @@ interface ListOffersRequest {
   cycle_id?: string;
   product?: string;
   category_id?: string;
-  available?: boolean;
+  available?: 'MARKET' | 'CYCLE';
   since?: string;
   before?: string;
 }

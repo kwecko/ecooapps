@@ -18,12 +18,17 @@ export default function useDeleteOfferModal({
   const [isPending, startTransition] = useTransition();
   const { handleError } = useHandleError();
 
-  const handleDelete = (offerId: string) => {
+  const handleDelete = (offerId: string, setIsOpenDisableModal?: React.Dispatch<React.SetStateAction<boolean>>) => {
     startTransition(async () => {
       if (!offerId) return;
 
       deleteOffer({ offer_id: offerId })
         .then((response) => {
+
+          if (response.message === "A oferta já possui pedidos associados e não pode ser alterada ou removida.") {
+            setIsOpenDisableModal?.(true);
+          }
+
           if (response.message) return handleError(response.message);
 
           toast.success("Oferta deletada com sucesso!");

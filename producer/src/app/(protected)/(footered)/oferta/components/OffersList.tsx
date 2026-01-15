@@ -3,7 +3,7 @@
 import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
 import { fetchFarmsOwn } from "@producer/app/_actions/farms/GET/farms-own";
 import Loader from "@shared/components/Loader";
-import { first } from '@shared/utils/first';
+import { first } from '@shared/utils/first'; 
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogDTO, OfferDTO } from "@shared/interfaces/dtos";
@@ -90,12 +90,26 @@ export default function OffersList({
         })
         .replace(/\//g, '-');
 
+      const currentTypeSinceReference = new Date();
+      const dayOfWeek = currentTypeSinceReference.getDay();
+      const diff = -dayOfWeek;
+      currentTypeSinceReference.setDate(currentTypeSinceReference.getDate() + diff);
+      currentTypeSinceReference.setHours(0, 0, 0, 0);
+      const formattedBeforeDDMMYYYY = currentTypeSinceReference
+        .toLocaleDateString('pt-BR', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        })
+        .replace(/\//g, '-');
+
       try {
 
         const response = await fetchCatalog({
           type,
           farm_id: farm_id,
           since: formattedDDMMYYYY,
+          before: formattedBeforeDDMMYYYY,
           page,
         });
 
