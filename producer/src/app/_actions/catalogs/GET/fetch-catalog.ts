@@ -7,6 +7,7 @@ interface FetchCatalogRequest {
   type: "last" | "current";
   farm_id: string;
   since?: string;
+  before?: string;
   page: number;
 }
 
@@ -14,6 +15,7 @@ export async function fetchCatalog({
   type,
   farm_id,
   since,
+  before,
   page,
 }: FetchCatalogRequest) {
   const types: Record<string, Function> = {
@@ -21,5 +23,5 @@ export async function fetchCatalog({
     current: fetchCurrentCatalog,
   };
 
-  return types[type]({ farm_id, page, since });
+  return types[type]({ farm_id, page, since, before });
 }
