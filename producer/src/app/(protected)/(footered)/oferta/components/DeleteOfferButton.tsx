@@ -12,7 +12,7 @@ import { toast } from "sonner";
 
 
 interface DeleteOfferButtonProps {
-  offer?: OfferDTO
+  offer?: OfferDTO;
   offerId: string;
   productName: string;
   onDeleteCard: (offerId: string) => void;
