@@ -23,5 +23,5 @@ export async function fetchCatalog({
     current: fetchCurrentCatalog,
   };
 
-  return types[type]({ farm_id, page, since });
+  return types[type]({ farm_id, page, since, before });
 }

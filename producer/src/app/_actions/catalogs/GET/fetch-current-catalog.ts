@@ -4,14 +4,14 @@ import ApiService from "@shared/service";
 
 interface FetchCurrentCatalogRequest {
   farm_id: string;
-  page: number;
   before?: string;
+  page: number;
 }
 
 export async function fetchCurrentCatalog({
   farm_id,
-  page = 1,
   before,
+  page = 1,
 }: FetchCurrentCatalogRequest) {
 
   const params = new URLSearchParams();
