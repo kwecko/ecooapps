@@ -99,6 +99,8 @@ export default function OffersList({
           page,
         });
 
+        console.log(response.data);
+
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {

@@ -6,15 +6,18 @@ import { useHandleError } from "@shared/hooks/useHandleError";
 import Loader from "@shared/components/Loader";
 
 import { deleteOffer } from "@producer/_actions/offers/DELETE/delete-offer";
+import { OfferDTO } from "@shared/interfaces/dtos";
 
 
 interface DeleteOfferButtonProps {
+  offer?: OfferDTO
   offerId: string;
   productName: string;
   onDeleteCard: (offerId: string) => void;
 }
 
 export default function DeleteOfferButton({
+  offer,
   offerId,
   productName,
   onDeleteCard,
@@ -28,6 +31,7 @@ export default function DeleteOfferButton({
     setIsModalOpen(true);
   };
 
+  //comecei a passar offer para deleteofferbutton, agora basta fazer as checagens que o Timóteo pediu
   const DeleteOffer = async () => {
     setIsLoading(true);
     try {

@@ -65,6 +65,7 @@ const OfferCard = React.forwardRef<HTMLDivElement, OfferCardProps>(
         <div className="flex flex-row h-full justify-end shrink-0 grow-0 basis-16 gap-2.5 align-start grayscale-0">
           {onDeleteCard && (
             <DeleteOfferButton
+              offer={offer}
               offerId={offer.id}
               productName={offer.product.name}
               onDeleteCard={onDeleteCard}
