@@ -2,6 +2,7 @@
 
 import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import ModalV2 from "@shared/components/ModalV2";
+import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogDTO } from "@shared/interfaces/dtos";
 import Image from "next/image";
 import Link from "next/link";

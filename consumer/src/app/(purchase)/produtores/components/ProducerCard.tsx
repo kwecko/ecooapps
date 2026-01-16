@@ -8,7 +8,6 @@ export default function ProducerCard(catalog: CatalogDTO) {
 	const setCatalogLocalStorage = () => {
 		localStorage.setItem(catalog.id, JSON.stringify(catalog));
 	};
-
   return (
     <Link onClick={setCatalogLocalStorage} href={`/produtor?data=${encodeURIComponent(JSON.stringify({ catalogId: catalog.id, title: catalog.farm.name }))}`}>
       <div className="flex items-center justify-between h-25 bg-theme-background rounded-2xl m-2.5">

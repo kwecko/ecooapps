@@ -1,6 +1,7 @@
 import { CatalogDTO, ProductDTO, FarmDTO } from "@shared/interfaces/dtos";
 
 export interface OfferDTO {
+	
   id: string;
   amount: number;
   price: number;
