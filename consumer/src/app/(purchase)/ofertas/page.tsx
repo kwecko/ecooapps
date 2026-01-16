@@ -76,7 +76,7 @@ export default function Ofertas() {
 							<OrderCard
 								key={index}
 								offer={offer}
-								farm={offer.catalog.farm}
+								farm={offer.farm}
 								exclude={false}
 							/>
 						);

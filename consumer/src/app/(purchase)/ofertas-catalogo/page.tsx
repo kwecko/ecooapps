@@ -42,7 +42,7 @@ export default function OfertasCatalogo() {
         handleError(response.message as string);
       } else if (response.data) {
         const responseFarmCatalogs: CatalogDTO = response.data;
-        setFarm(responseFarmCatalogs.farm as FarmDTO);
+        setFarm(responseFarmCatalogs as FarmDTO);
         let offersFarm: OfferDTO[] = responseFarmCatalogs?.offers ?? [];
         offersFarm = offersFarm.filter(
           (offer: OfferDTO) =>
