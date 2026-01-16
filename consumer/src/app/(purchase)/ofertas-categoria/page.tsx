@@ -29,6 +29,7 @@ export default function OfertasCategoria() {
 		setIsLoading(true);
 
 		try {
+
 			const response = await fetchCategory({
 				category_id: params.id as string,
 				cycle_id: cycleId,
@@ -76,7 +77,7 @@ export default function OfertasCategoria() {
 							<OrderCard
 								key={index}
 								offer={offer}
-								farm={offer.catalog.farm}
+								farm={offer.farm}
 								exclude={false}
 							/>
 						);

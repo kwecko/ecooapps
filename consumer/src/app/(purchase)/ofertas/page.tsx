@@ -4,7 +4,7 @@ import RedirectCart from "@consumer/app/_components/telegram/redirect-cart";
 import OrderCard from "@consumer/app/components/OrderCard";
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
-import { OfferDTO } from "@shared/interfaces/dtos";
+import { CatalogDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -76,7 +76,7 @@ export default function Ofertas() {
 							<OrderCard
 								key={index}
 								offer={offer}
-								farm={offer.catalog.farm}
+								farm={offer.farm}
 								exclude={false}
 							/>
 						);

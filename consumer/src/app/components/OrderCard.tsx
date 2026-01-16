@@ -1,5 +1,6 @@
 import { useCartProvider } from "@consumer/context/cart";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
+
 import { ProductCard } from "@consumer/app/components/ProductCard";
 import { FarmDTO, OfferDTO } from "@shared/interfaces/dtos";
 import { FaRegTrashCan } from "react-icons/fa6";
@@ -12,6 +13,7 @@ interface OrderCardProps {
 
 export default function OrderCard({ offer, farm, exclude = false }: OrderCardProps) {
   const [count, _setCount] = useState(0);
+
 
 	useEffect(() => {
 		if(!offer.subtotal){
