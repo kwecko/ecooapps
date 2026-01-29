@@ -46,7 +46,7 @@ function VenderPage() {
 
   const handleAddToCart = (offer: OfferDTO) => {
     const existingItem = cart.find((item) => item.offer.id === offer.id);
-    const increment = convertPricingToQuantityInGrams(offer.product.pricing) / 1000; // 0.5 para WEIGHT, 1 para UNIT
+    const increment = offer.product.pricing === "WEIGHT" ? 0.5 : 1;
     
     if (existingItem) {
       setCart(
@@ -66,7 +66,7 @@ function VenderPage() {
       cart
         .map((item) => {
           if (item.offer.id === offerId) {
-            const increment = convertPricingToQuantityInGrams(item.offer.product.pricing) / 1000; // 0.5 para WEIGHT, 1 para UNIT
+            const increment = item.offer.product.pricing === "WEIGHT" ? 0.5 : 1;
             const minQuantity = increment; // 0.5 para WEIGHT, 1 para UNIT
             const newQuantity = item.quantity + (delta * increment);
             return { ...item, quantity: Math.max(minQuantity, newQuantity) };

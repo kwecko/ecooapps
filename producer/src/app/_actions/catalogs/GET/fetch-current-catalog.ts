@@ -20,8 +20,6 @@ export async function fetchCurrentCatalog({
 
   params.append("available", "CYCLE");
 
-  if (before) params.append("since", before);
-
   const response = ApiService.GET({
     url: `/catalogs/${farm_id}?${params.toString()}`,
   });
