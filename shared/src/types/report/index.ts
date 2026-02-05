@@ -2,6 +2,8 @@ import { InfoIconModalProps } from "@shared/components/InfoIconModal";
 
 export type AdminReportActions = "sales";
 
+export type AdminReportConfigType = "cycle" | "market";
+
 export type ReportActions =
   | "list-bags"
   | "list-bags-withdrawn"

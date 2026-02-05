@@ -13,10 +13,10 @@ export function useReportGenerator() {
 
   const adminReportActions: Record<
     AdminReportActions,
-    (date_from?: string, date_to?: string) => Promise<any>
+    (date_from?: string, date_to?: string, cycle_id?: string, market_id?: string) => Promise<any>
   > = {
-    sales: (date_from?: string, date_to?: string) =>
-      fetchSalesReport({ date_from, date_to }),
+    sales: (date_from?: string, date_to?: string, cycle_id?: string, market_id?: string) =>
+      fetchSalesReport({ date_from, date_to, cycle_id, market_id }),
   };
 
   const reportActions: Record<
@@ -44,7 +44,9 @@ export function useReportGenerator() {
   const generateAdminReport = async (
     type: AdminReportActions,
     date_from?: string,
-    date_to?: string
+    date_to?: string,
+    cycle_id?: string,
+    market_id?: string
   ) => {
     try {
       const action = adminReportActions[type];
@@ -54,7 +56,7 @@ export function useReportGenerator() {
         return;
       }
 
-      const response = await action(date_from, date_to);
+      const response = await action(date_from, date_to, cycle_id, market_id);
 
       if (response?.message) {
         const messageError = response.message as string;
