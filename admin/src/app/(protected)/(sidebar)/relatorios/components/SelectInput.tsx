@@ -60,7 +60,7 @@ export default function Select({ options, label, onChange, defaultOption, disabl
       </div>
 
       {isOpen && (
-      <ul className="absolute mt-1 w-full bg-white border border-slate-gray font-inter rounded-md text-theme-primary shadow-lg max-h-48 overflow-auto z-10">
+      <ul className="absolute mt-1 w-full bg-white border border-slate-gray font-inter rounded-md text-theme-primary shadow-lg max-h-48 overflow-auto z-20">
         {options.map((option) => (
         <li
           key={typeof option.value === 'boolean' ? option.value.toString() : option.value}

@@ -4,11 +4,15 @@ import ApiService from "@shared/service";
 interface FetchSalesReportRequest {
   date_from?: string;
   date_to?: string;
+  cycle_id?: string;
+  market_id?: string;
 }
 
 export async function fetchSalesReport({
   date_from,
   date_to,
+  cycle_id,
+  market_id,
 }: FetchSalesReportRequest) {
   try {
     const params = new URLSearchParams();
@@ -20,6 +24,14 @@ export async function fetchSalesReport({
 
     if (date_to) {
       params.append("before", date_to);
+    }
+
+    if (cycle_id) {
+      params.append("cycle_id", cycle_id);
+    }
+
+    if (market_id) {
+      params.append("market_id", market_id);
     }
 
     const queryString = params.toString();
