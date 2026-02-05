@@ -1,11 +1,12 @@
-import { CatalogDTO, OrderDTO } from "@shared/interfaces/dtos";
+import { OrderDTO, FarmDTO } from "@shared/interfaces/dtos";
 
 export interface BoxDTO {
   id: string;
   status: "PENDING" | "CANCELLED" | "VERIFIED" | "REJECTED";
   verified: number;
-  catalog_id: string;
-  catalog: CatalogDTO;
+  cycle_id: string;
+  farm_id: string;
+  farm: FarmDTO;
   orders: OrderDTO[];
   created_at: Date;
   updated_at: Date | null;

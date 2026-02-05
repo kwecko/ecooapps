@@ -35,14 +35,14 @@ export default function OfertasCatalogo() {
       const response = await fetchCatalog({
         catalog_id: params.id as string,
         page: page,
-				available: true,
+				available: 'CYCLE',
 				remaining: true
       });
       if (response.message) {
         handleError(response.message as string);
       } else if (response.data) {
         const responseFarmCatalogs: CatalogDTO = response.data;
-        setFarm(responseFarmCatalogs.farm as FarmDTO);
+        setFarm(responseFarmCatalogs as FarmDTO);
         let offersFarm: OfferDTO[] = responseFarmCatalogs?.offers ?? [];
         offersFarm = offersFarm.filter(
           (offer: OfferDTO) =>

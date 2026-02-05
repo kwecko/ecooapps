@@ -33,15 +33,15 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
 
   orders.forEach((order) => {
     const unit = convertUnit(order.offer.product.pricing);
-    const productKey = `${order.offer.product.name}-${order.offer.catalog.farm.name}-${unit}`;
+    const productKey = `${order.offer.product.name}-${order.offer.farm.name}-${unit}`;
     const amount = convertOfferAmount(
       order.amount,
       order.offer.product.pricing
     );
     const price =
       order.offer.product.pricing === "UNIT"
-        ? order.offer.price * order.amount
-        : (order.offer.price * order.amount) / 1000;
+        ? order.total
+        : order.total / 1000;
 
     const isRejected = order.status !== "RECEIVED";
     const target = isRejected ? rejected : accepted;
@@ -54,7 +54,7 @@ export default function GroupOrder({ orders }: GroupOrderProps) {
       target[productKey] = {
         amount: parseFloat(amount.toFixed(1)),
         unit: unit,
-        farmName: order.offer.catalog.farm.name,
+        farmName: order.offer.farm.name,
         price: price,
       };
     }

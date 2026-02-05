@@ -22,7 +22,7 @@ interface UpdateBagByIdRequest {
 }
 
 export async function updateBagById({ bagId, data }: UpdateBagByIdRequest) {
-  const url = `/bags/${bagId}/handle`;
+  const url = `/bags/${bagId}`;
 
   const response = ApiService.PATCH({
     url,

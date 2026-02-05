@@ -67,8 +67,6 @@ export default function SendBagTable() {
     )?.key ?? []) as BagStatus["send"][],
   });
 
-  console.log("bags", bags);
-
   const handleStatusFilterClick = (status: FilterStatus) => {
     if (status.name === selectedStatus) {
       updateStatus("todas");
@@ -129,12 +127,12 @@ export default function SendBagTable() {
                   render: (row: BagDTO) => {
                     let status = row.status;
 
-                    if (status === "MOUNTED" && row.shipping > 0)
+                    if (status === "MOUNTED" && row.shipping === 0)
                       status = "FETCH";
 
                     if (
                       (status === "DISPATCHED" || status === "RECEIVED") &&
-                      row.shipping > 0
+                      row.shipping === 0
                     )
                       status = "FETCHED";
 

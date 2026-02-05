@@ -18,6 +18,7 @@ import EmptyBox from "@shared/components/EmptyBox";
 import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
 import SearchInput from "@shared/components/SearchInput";
+import { HiPlus } from "react-icons/hi";
 
 function ProductsPage() {
   const {
@@ -46,7 +47,7 @@ function ProductsPage() {
 
         <div className="flex gap-3 items-center">
           <SearchInput
-            placeholder="Filtrar por nome ou categoria"
+            placeholder="Filtrar por nome"
             onChange={setName}
             value={name}
             type="secondary"
@@ -57,7 +58,7 @@ function ProductsPage() {
             className="flex w-64 justify-center items-center gap-3 bg-rain-forest"
             onClick={() => toggleModal("isOpenCreateProductModal")}
           >
-            Cadastrar produto
+            Cadastrar produto <HiPlus size={20} />
           </Button>
         </div>
       </div>

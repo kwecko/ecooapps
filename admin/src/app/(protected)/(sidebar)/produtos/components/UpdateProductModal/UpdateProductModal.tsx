@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FiPaperclip, FiX } from "react-icons/fi";
+import { FiPaperclip } from "react-icons/fi";
 import Image from "next/image";
 
 import Loader from "@shared/components/Loader";

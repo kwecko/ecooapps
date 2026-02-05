@@ -33,7 +33,7 @@ export default function Ofertas() {
 			const response = await fetchOffers({
 				page: page,
 				cycle_id: cycleId,
-				available: true,
+				available: 'CYCLE',
 				category_id: params?.category_id
 			});
 
@@ -76,7 +76,7 @@ export default function Ofertas() {
 							<OrderCard
 								key={index}
 								offer={offer}
-								farm={offer.catalog.farm}
+								farm={offer.farm}
 								exclude={false}
 							/>
 						);

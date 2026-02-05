@@ -1,14 +1,11 @@
 import OldButton from "@shared/components/OldButton";
 import Image from "next/image";
 import Link from "next/link";
-import React from 'react';
 import { isAndroid, isIOS } from 'react-device-detect';
 
 export default async function telegram() {
     
-
     const createLinkTelegram = () => {
-
         if(isAndroid)
             return "https://play.google.com/store/apps/details?id=org.telegram.messenger&pcampaignid=web_share"
         else if(isIOS)
@@ -43,7 +40,7 @@ export default async function telegram() {
                 </div>
 
                 <div className="w-auto">
-                    <Link href={`${process.env["BOT_URL"]}?start=token`}>
+                    <Link href={`${process.env["BOT_URL"]}`}>
                         <OldButton
                         title="Abrir o Telegram"
                         className="bg-theme-highlight rounded-md font-inter font-semibold text-white h-auto"

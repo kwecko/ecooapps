@@ -14,7 +14,8 @@ import { SlArrowRight } from "react-icons/sl";
 import { useSearchParams } from "next/navigation";
 import RedirectCart from "../../_components/telegram/redirect-cart";
 import ModalBlock from "./components/modal-block";
-import { fetchConversationIsActive } from "@consumer/app/_actions/api-chat-telegram/fetch-conversation-is-active";
+import { fetchConversationIsActive } from "@consumer/app/_actions/api-chat-server/fetch-conversation-is-active";
+import { createLog } from "@consumer/app/_actions/api-chat-server/create-log";
 
 
 export default function Inicio() {
@@ -28,7 +29,7 @@ export default function Inicio() {
 	const [daysWeekOrder, setDaysWeekOrder] = useState([] as string[]);
 	const tg = useTelegram();
 	const searchParams = useSearchParams();
-	
+
 
 	const mapDaysWeek: Record<number, string> = {
 		1: "Domingo",
@@ -45,13 +46,25 @@ export default function Inicio() {
 			try {
 				// Obter chatId dos parâmetros da URL
 				const chatIdFromUrl = searchParams.get('chatId');
-				
+
 				if (chatIdFromUrl) {
 					setChatId(chatIdFromUrl);
-					
+
+					try {
+
+						await createLog({ 
+							chatId: chatIdFromUrl,
+							action: 'OPEN_MINI_APP',
+							description: 'O mini app foi aberto'
+						});
+
+					} catch (error) {
+						console.error("Erro ao adicionar log:", error);
+					}
+
 					try {
 						const conversationResponse = await fetchConversationIsActive({ chatId: chatIdFromUrl });
-						
+
 						if (!conversationResponse.isActive) {
 							setShowExpiredModal(true);
 							// Fechar o mini app após 5 segundos
@@ -64,6 +77,7 @@ export default function Inicio() {
 						console.error("Erro ao verificar conversa:", error);
 						// Se houver erro na verificação, continua normalmente
 					}
+
 				}
 
 				const response = await listCycles();
@@ -95,13 +109,13 @@ export default function Inicio() {
 		})();
 	}, [searchParams]);
 
-	const onCloseModal = async () => { 
-			await tg.sendData(JSON.stringify([]));
+	const onCloseModal = async () => {
+		await tg.sendData(JSON.stringify([]));
 	}
 
-	if(loading)
+	if (loading)
 		return (<div className="text-center">Carregando...</div>)
-	
+
 	return (
 		<>
 			<div className="flex flex-col w-full h-screen">
@@ -181,30 +195,30 @@ export default function Inicio() {
 			</div>
 
 			<ModalV2
-					title="Informativo"
-          children={ModalBlock(daysWeekOrder)}
-					iconClose={true}
-					className="m-1.5"
-          closeModal={onCloseModal}
-          isOpen={showBlock}
-        />
+				title="Informativo"
+				children={ModalBlock(daysWeekOrder)}
+				iconClose={true}
+				className="m-1.5"
+				closeModal={onCloseModal}
+				isOpen={showBlock}
+			/>
 
 			<ModalV2
-					title="Conversa Expirada"
-          children={
-						<div className="p-4 text-center">
-							<p className="text-sm text-gray-700">
-								A conversa foi expirada por motivos de segurança. O mini app será fechado e a conversa será reiniciada!
-							</p>
-						</div>
-					}
-					iconClose={false}
-					className="m-1.5"
-          closeModal={() => {}}
-          isOpen={showExpiredModal}
-        />
+				title="Conversa Expirada"
+				children={
+					<div className="p-4 text-center">
+						<p className="text-sm text-gray-700">
+							A conversa foi expirada por motivos de segurança. O mini app será fechado e a conversa será reiniciada!
+						</p>
+					</div>
+				}
+				iconClose={false}
+				className="m-1.5"
+				closeModal={() => { }}
+				isOpen={showExpiredModal}
+			/>
 
-			{ !showBlock && !showExpiredModal ? <RedirectCart /> : <CloseMiniApp /> }
+			{!showBlock && !showExpiredModal ? <RedirectCart /> : <CloseMiniApp />}
 
 		</>
 	);

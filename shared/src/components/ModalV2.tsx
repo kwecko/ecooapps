@@ -28,13 +28,13 @@ function ModalV2({
       onRequestClose={closeModal}
       overlayClassName="fixed z-10 inset-0 bg-black/50 flex items-center justify-center"
       className={twMerge(
-        "w-full max-w-lg max-h-95dvh bg-theme-background p-10 rounded-2xl relative m-2 overflow-y-auto inline-block",
+        "w-full max-w-lg max-h-95dvh bg-theme-background p-10 rounded-2xl relative m-2 overflow-hidden inline-block flex flex-col",
         className
       )}
       closeTimeoutMS={200}
       ariaHideApp={false}
     >
-      <div className="relative mb-5">
+      <div className="relative mb-3 flex-shrink-0">
         <h1
           className={twMerge(
             "text-center font-semibold text-xl text-text-heading",
@@ -49,7 +49,9 @@ function ModalV2({
           </button>
         )}
       </div>
-      {children}
+      <div className="flex-1 overflow-y-auto">
+        {children}
+      </div>
     </Modal>
   );
 }

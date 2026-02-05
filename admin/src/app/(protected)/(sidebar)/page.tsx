@@ -12,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 
 import useListStats from "@admin/hooks/useListStats";
+import { listWarehouse } from "@admin/_actions/warehouse/GET/list-warehouse";
 
 import { HiOutlineInformationCircle } from "react-icons/hi";
 
@@ -37,13 +38,19 @@ export default function Home() {
   const [time, setTime] = useState("");
   const [date, setDate] = useState("");
   const [selectedGraph, setSelectedGraph] = useState("Vendas nos últimos meses");
-
+  const [warehouse, setWarehouse] = useState<{ name?: string } | null>(null);
 
   const { data: stats } = useListStats();
 
   useEffect(() => {
     setDate(new Date().toLocaleDateString("pt-BR"));
     setTime(new Date().toLocaleTimeString("pt-BR"));
+
+    listWarehouse().then((response) => {
+      if (response.data) {
+        setWarehouse(response.data);
+      }
+    });
   }, []);
 
   return (
@@ -57,7 +64,7 @@ export default function Home() {
           >
             <div className="text-xs font-inter">Unidade:</div>
             <div className="text-4xl font-semibold text-slate-blue">
-              Armazém FURG
+              {warehouse?.name || "Armazém do eCOO"}
             </div>
             <div className="text-xs font-inter mt-12">
               Acessado dia: <span className="font-bold"> {date} </span>| Hora:{" "}

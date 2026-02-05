@@ -3,16 +3,20 @@
 import { useState, useEffect } from "react";
 
 import { useReportGenerator } from "@shared/hooks/useReportGenerator";
+import useListCycles from "@shared/hooks/cycles/useListCycles";
+import useListMarkets from "@admin/hooks/useListMarkets";
 
 import Title from "@admin/app/components/Title";
 import SelectInput from "./components/SelectInput";
 import DateInput from "@shared/components/DateInput";
 import Button from "@shared/components/Button";
 import Copyright from "@admin/app/components/Copyright";
-import { AdminReportActions } from "@shared/types/report";
+import { AdminReportActions, AdminReportConfigType } from "@shared/types/report";
 
 export default function page() {
   const { generateAdminReport } = useReportGenerator();
+  const { data: cycles, listCycles } = useListCycles();
+  const { data: markets } = useListMarkets({ page: 1 });
 
   const reportTypeOptions: {
     value: AdminReportActions;
@@ -22,11 +26,32 @@ export default function page() {
     reportTypeOptions[0].value
   );
 
+  const configTypeOptions: {
+    value: AdminReportConfigType;
+    label: string;
+  }[] = [
+    { value: "cycle", label: "Ciclo" },
+    { value: "market", label: "Feira do dia" },
+  ];
+  const [configType, setConfigType] = useState<AdminReportConfigType | undefined>(undefined);
+
+  const [selectedCycleId, setSelectedCycleId] = useState<string | undefined>(undefined);
+  const [selectedMarketId, setSelectedMarketId] = useState<string | undefined>(undefined);
+
   const [initialDate, setInitialDate] = useState<Date | undefined>(undefined);
   const [finalDate, setFinalDate] = useState<Date | undefined>(undefined);
 
   const handleChangeInitialDate = (value: Date) => setInitialDate(value);
   const handleChangeFinalDate = (value: Date) => setFinalDate(value);
+
+  useEffect(() => {
+    if (configType === "cycle") {
+      listCycles();
+      setSelectedMarketId(undefined);
+    } else if (configType === "market") {
+      setSelectedCycleId(undefined);
+    }
+  }, [configType]);
 
   const handleGenerateReport = () => {
     const formatDate = (date?: Date) =>
@@ -39,7 +64,13 @@ export default function page() {
     const formattedInitialDate = formatDate(initialDate);
     const formattedFinalDate = formatDate(finalDate);
 
-    generateAdminReport(reportType, formattedInitialDate, formattedFinalDate);
+    generateAdminReport(
+      reportType,
+      formattedInitialDate,
+      formattedFinalDate,
+      selectedCycleId,
+      selectedMarketId
+    );
   };
 
   return (
@@ -57,14 +88,49 @@ export default function page() {
 
         <SelectInput
           label="Configurações adicionais"
-          options={reportTypeOptions}
-          onChange={() => {}}
-          disabled={true}
+          options={configTypeOptions}
+          onChange={(value) => {
+            setConfigType(value as AdminReportConfigType);
+          }}
           defaultOption={{
-            value: "No options",
-            label: "Sem opções disponíveis",
+            value: "",
+            label: "Selecione uma opção",
           }}
         />
+
+        {configType === "cycle" && (
+          <SelectInput
+            label="Selecione o ciclo"
+            options={cycles.map((cycle) => ({
+              value: cycle.id,
+              label: cycle.alias,
+            }))}
+            onChange={(value) => {
+              setSelectedCycleId(value);
+            }}
+            defaultOption={{
+              value: "",
+              label: "Selecione um ciclo",
+            }}
+          />
+        )}
+
+        {configType === "market" && (
+          <SelectInput
+            label="Selecione a feira do dia"
+            options={markets.map((market) => ({
+              value: market.id,
+              label: market.name,
+            }))}
+            onChange={(value) => {
+              setSelectedMarketId(value);
+            }}
+            defaultOption={{
+              value: "",
+              label: "Selecione uma feira",
+            }}
+          />
+        )}
 
         <div className="flex gap-4">
           <DateInput

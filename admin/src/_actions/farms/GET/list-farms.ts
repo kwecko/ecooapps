@@ -18,6 +18,8 @@ export async function listFarms({ page, farm }: ListFarmsRequest) {
   const queryString = params.toString();
   const url = `/farms${queryString ? `?${queryString}` : ""}`;
 
+  console.log("list-farms", url);
+
   const response = ApiService.GET({
     url,
   });

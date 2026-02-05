@@ -34,7 +34,7 @@ export default function OfertasCategoria() {
 				category_id: params.id as string,
 				cycle_id: cycleId,
 				page: page,
-				available: true
+				available: 'CYCLE'
 			});
 
 			if (response.message) {
@@ -77,7 +77,7 @@ export default function OfertasCategoria() {
 							<OrderCard
 								key={index}
 								offer={offer}
-								farm={offer.catalog.farm}
+								farm={offer.farm}
 								exclude={false}
 							/>
 						);
