@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
@@ -20,6 +20,7 @@ import Button from "@shared/components/ButtonV2";
 import { BagDTO } from "@shared/interfaces/dtos";
 import { updateBagById } from "@admin/_actions/bags/update-bag-by-id";
 import { useHandleError } from "@shared/hooks/useHandleError";
+import { fetchMarket } from "@admin/_actions/markets/GET/fetch-market";
 
 function VendasPage() {
   const router = useRouter();
@@ -37,6 +38,22 @@ function VendasPage() {
   const [selectedBag, setSelectedBag] = useState<BagDTO | null>(null);
   const [isPendingCancel, startCancelTransition] = useTransition();
   const { handleError } = useHandleError();
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    fetchMarket({ market_id })
+      .then((response) => {
+        if (response.message) {
+          console.error("Erro ao carregar o mercado:", response.message);
+        } else {
+          setIsOpen(response.data.open);
+          console.log("Mercado carregado:", response.data);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro desconhecido ao carregar o mercado:", error);
+      });
+  }, [market_id]);
 
   function handleViewBag(bag: BagDTO) {
     router.push(`/pedidos/${bag.id}`);
@@ -86,6 +103,7 @@ function VendasPage() {
           variant="default"
           className="flex w-32 justify-center items-center gap-3 bg-rain-forest"
           onClick={handleVender}
+          disabled={isOpen === false}
         >
           Vender
         </Button>
