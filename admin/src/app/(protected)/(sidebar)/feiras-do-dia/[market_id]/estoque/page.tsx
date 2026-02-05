@@ -48,7 +48,6 @@ function EstoquePage() {
           console.error("Erro ao carregar o mercado:", response.message);
         } else {
           setIsOpen(response.data.open);
-          console.log("Mercado carregado:", response.data);
         }
       })
       .catch((error) => {
