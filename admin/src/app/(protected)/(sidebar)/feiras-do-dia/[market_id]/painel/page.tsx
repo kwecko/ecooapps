@@ -129,6 +129,7 @@ export default function PainelPage() {
               {
                 label: "Gerenciar o estoque",
                 onClick: handleManageStock,
+                disabled: !market.open,
               },
               {
                 label: "Adicionar ao estoque",
