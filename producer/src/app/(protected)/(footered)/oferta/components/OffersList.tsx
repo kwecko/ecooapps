@@ -139,16 +139,17 @@ export default function OffersList({
             setCatalogId(dataOffers.id);
             setOffers((prevOffers) => [...prevOffers, ...dataOffers.offers]);
             setHasMore(dataOffers.offers.length > 0);
+        } else {
+          setHasMore(false);
         }
       } catch (error) {
-        console.log("Erro 2", error);
         handleError("Erro desconhecido.");
       } finally {
         setIsLoading(false);
       }
     };
     fetchListOffers();
-  }, [cycle, handleError, type, farm_id]);
+  }, [cycle, handleError, type, farm_id, page]);
 
   const loadMore = useCallback(() => {
     if (!isLoading && hasMore) {
