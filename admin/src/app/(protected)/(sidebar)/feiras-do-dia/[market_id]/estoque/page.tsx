@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import useEstoquePage from "./index";
 import Title from "@admin/app/components/Title";
@@ -17,6 +17,8 @@ import GenericTable from "@shared/components/GenericTable";
 import PagingButton from "@shared/components/PagingButton";
 import SearchInput from "@shared/components/SearchInput";
 import { OfferDTO } from "@shared/interfaces/dtos";
+
+import { fetchMarket } from "@admin/_actions/markets/GET/fetch-market";
 
 function EstoquePage() {
   const {
@@ -37,6 +39,21 @@ function EstoquePage() {
   const [isOpenUpdateOfferModal, setIsOpenUpdateOfferModal] = useState(false);
   const [isOpenDeleteOfferModal, setIsOpenDeleteOfferModal] = useState(false);
   const [selectedOffer, setSelectedOffer] = useState<OfferDTO | null>(null);
+  const [isOpen, setIsOpen] = useState(false);  
+
+  useEffect(() => {
+    fetchMarket({ market_id })
+      .then((response) => {
+        if (response.message) {
+          console.error("Erro ao carregar o mercado:", response.message);
+        } else {
+          setIsOpen(response.data.open);
+        }
+      })
+      .catch((error) => {
+        console.error("Erro desconhecido ao carregar o mercado:", error);
+      });
+  }, [market_id]);
 
   function handleEditOffer(offer: OfferDTO) {
     setSelectedOffer(offer);
@@ -71,13 +88,14 @@ function EstoquePage() {
             type="secondary"
             className="w-86"
           />
-          <Button
+            <Button
             variant="default"
             className="flex w-64 justify-center items-center gap-3 bg-rain-forest"
             onClick={handleAddStock}
-          >
+            disabled={isOpen === false}
+            >
             Adicionar ao estoque +
-          </Button>
+            </Button>
         </div>
       </div>
       <div className="w-full h-full flex flex-col gap-5 overflow-auto justify-between items-center">
