@@ -4,13 +4,13 @@ import ApiService from "@shared/service";
 
 interface FetchCurrentCatalogRequest {
   farm_id: string;
-  before?: string;
+  since?: string;
   page: number;
 }
 
 export async function fetchCurrentCatalog({
   farm_id,
-  before,
+  since,
   page = 1,
 }: FetchCurrentCatalogRequest) {
 
@@ -19,6 +19,8 @@ export async function fetchCurrentCatalog({
   params.append("page", page.toString());
 
   params.append("available", "CYCLE");
+
+  if (since) params.append("since", since)
 
   const response = ApiService.GET({
     url: `/catalogs/${farm_id}?${params.toString()}`,
