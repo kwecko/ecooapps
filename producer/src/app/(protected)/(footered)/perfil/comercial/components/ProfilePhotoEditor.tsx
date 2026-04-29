@@ -3,18 +3,18 @@
 import type React from "react"
 import { useState } from "react"
 import Image from "next/image"
-import { type Control, Controller } from "react-hook-form"
+import { type Control, Controller, type FieldValues, type FieldErrors, type Path } from "react-hook-form"
 import { HiOutlinePencil, HiX } from "react-icons/hi"
 import Cropper, { type Point, type Area } from "react-easy-crop"
 
-interface ProfilePhotoEditorProps {
+interface ProfilePhotoEditorProps<T extends FieldValues> {
   photo: string
   setPhoto: React.Dispatch<React.SetStateAction<string>>
-  control: Control<any>
-  errors: any
+  control: Control<T>
+  errors: FieldErrors<T>
 }
 
-function ProfilePhotoEditor({ photo, setPhoto, control, errors }: ProfilePhotoEditorProps) {
+function ProfilePhotoEditor<T extends FieldValues>({ photo, setPhoto, control, errors }: ProfilePhotoEditorProps<T>) {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 })
   const [croppedArea, setCroppedArea] = useState<Area | null>(null)
   const [showEditor, setShowEditor] = useState(false)
@@ -129,7 +129,7 @@ const handleSave = async (onChangeForm: (file: File) => void) => {
           <label className="cursor-pointer w-full h-full relative flex items-center justify-center">
             <HiOutlinePencil className="text-white h-6 w-6" />
             <Controller
-              name="photo"
+              name={"photo" as Path<T>}
               control={control}
               render={({ field: { ref, name, onBlur, onChange } }) => (
                 <input
@@ -183,7 +183,7 @@ const handleSave = async (onChangeForm: (file: File) => void) => {
                 Cancelar
               </button>
               <Controller
-                name="photo"
+                name={"photo" as Path<T>}
                 control={control}
                 render={({ field: { onChange } }) => (
                   <button

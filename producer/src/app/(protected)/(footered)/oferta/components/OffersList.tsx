@@ -3,7 +3,7 @@
 import { fetchCatalog } from "@producer/_actions/catalogs/GET/fetch-catalog";
 import { fetchFarmsOwn } from "@producer/app/_actions/farms/GET/farms-own";
 import Loader from "@shared/components/Loader";
-import { first } from '@shared/utils/first'; 
+import { first } from '@shared/utils/first';
 import { useHandleError } from "@shared/hooks/useHandleError";
 import { useLocalStorage } from "@shared/hooks/useLocalStorage";
 import { CatalogDTO, OfferDTO } from "@shared/interfaces/dtos";
@@ -80,9 +80,11 @@ export default function OffersList({
     const fetchListOffers = async () => {
       setIsLoading(true);
 
-      const lastTypeSinceReference = first(cycle.offer);
-      lastTypeSinceReference.setDate(lastTypeSinceReference.getDate() - 7);
-      const formattedDDMMYYYY = lastTypeSinceReference
+      const cycleStartReference = new Date(first(cycle.offer));
+      const cycleStartDay = cycleStartReference.getDay();
+      cycleStartReference.setDate(cycleStartReference.getDate() - cycleStartDay);
+      cycleStartReference.setHours(0, 0, 0, 0);
+      const formattedSinceDDMMYYYY = cycleStartReference
         .toLocaleDateString('pt-BR', {
           day: '2-digit',
           month: '2-digit',
@@ -90,12 +92,9 @@ export default function OffersList({
         })
         .replace(/\//g, '-');
 
-      const currentTypeSinceReference = new Date();
-      const dayOfWeek = currentTypeSinceReference.getDay();
-      const diff = -dayOfWeek;
-      currentTypeSinceReference.setDate(currentTypeSinceReference.getDate() + diff);
-      currentTypeSinceReference.setHours(0, 0, 0, 0);
-      const formattedBeforeDDMMYYYY = currentTypeSinceReference
+      const beforeReference = new Date(cycleStartReference);
+      beforeReference.setDate(beforeReference.getDate() + 7);
+      const formattedBeforeDDMMYYYY = beforeReference
         .toLocaleDateString('pt-BR', {
           day: '2-digit',
           month: '2-digit',
@@ -108,7 +107,7 @@ export default function OffersList({
         const response = await fetchCatalog({
           type,
           farm_id: farm_id,
-          since: formattedDDMMYYYY,
+          since: formattedSinceDDMMYYYY,
           before: formattedBeforeDDMMYYYY,
           page,
         });
@@ -125,7 +124,7 @@ export default function OffersList({
               const currentResponse = await fetchCatalog({
                 type: "current",
                 farm_id: farm_id,
-                since: formattedDDMMYYYY,
+                since: formattedSinceDDMMYYYY,
                 page: 1,
               });
 
