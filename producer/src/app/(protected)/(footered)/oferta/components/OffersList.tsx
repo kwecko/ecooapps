@@ -112,10 +112,6 @@ export default function OffersList({
           page,
         });
 
-        console.log("since", formattedSinceDDMMYYYY)
-        console.log("before", formattedBeforeDDMMYYYY)
-
-
         if (response.message) {
           handleError(response.message as string);
         } else if (response.data) {
